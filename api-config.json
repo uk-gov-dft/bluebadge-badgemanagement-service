@@ -1,0 +1,485 @@
+{
+  "spec": {
+    "swagger" : "2.0",
+    "info" : {
+      "title" : "Blue Badge Management Service",
+      "description" : "External API for local authorities to manage blue badges",
+      "version" : "1.0.0",
+      "contact" : {
+        "email" : "rob.smallwood@does.not.exist"
+      },
+      "license" : {
+        "name" : "Apache 2.0",
+        "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "tags" : [ {
+      "name" : "badge",
+      "description" : "Badge related operations"
+    } ],
+    "paths" : {
+      "/badges/{badgeNumber}" : {
+        "parameters" : [ {
+          "$ref" : "#/parameters/BadgeNumberPathParam"
+        } ],
+        "get" : {
+          "tags" : [ "badge" ],
+          "summary" : "Retrieve a blue badge given the blue badge number parameter.",
+          "operationId" : "retrieveBlueBadge",
+          "description" : "Retrieves a blue-badge given the blueBadgeNumber.\n",
+          "produces" : [ "application/json" ],
+          "responses" : {
+            "200" : {
+              "description" : "Response when blue badge can be retrieved.\n",
+              "schema" : {
+                "$ref" : "#/definitions/BadgeResponse"
+              }
+            },
+            "404" : {
+              "description" : "A blue badge cannot be found given the parameters specified"
+            },
+            "default" : {
+              "description" : "Unexpected error",
+              "schema" : {
+                "$ref" : "#/definitions/CommonResponse"
+              }
+            }
+          }
+        }
+      },
+      "/badges" : {
+        "get" : {
+          "tags" : [ "badge" ],
+          "summary" : "Find a blue badge given the specified query parameters",
+          "operationId" : "findBlueBadge",
+          "description" : "By passing in appropriate options, you can search for\navailable badges in the system.  Options are a partial match\nand all submitted options must be matched. At least 1 parameter\nmust be provided.\n",
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+            "$ref" : "#/parameters/BadgeNumberParam"
+          }, {
+            "$ref" : "#/parameters/NameParam"
+          }, {
+            "$ref" : "#/parameters/NationalInsuranceParam"
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Response when blue badges can be found.\n",
+              "schema" : {
+                "$ref" : "#/definitions/BadgesResponse"
+              }
+            },
+            "404" : {
+              "description" : "A blue badge cannot be found given the parameters specified"
+            },
+            "default" : {
+              "description" : "Unexpected error",
+              "schema" : {
+                "$ref" : "#/definitions/CommonResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions" : {
+      "CommonResponse" : {
+        "type" : "object",
+        "properties" : {
+          "apiVersion" : {
+            "type" : "string"
+          },
+          "context" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "method" : {
+            "type" : "string"
+          },
+          "error" : {
+            "$ref" : "#/definitions/Error"
+          }
+        }
+      },
+      "Data" : {
+        "type" : "object",
+        "properties" : {
+          "totalItems" : {
+            "type" : "integer"
+          }
+        },
+        "required" : [ "responseType" ]
+      },
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "errors" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "field" : {
+                  "type" : "string"
+                },
+                "reason" : {
+                  "type" : "string"
+                },
+                "message" : {
+                  "type" : "string"
+                },
+                "location" : {
+                  "type" : "string"
+                },
+                "locationType" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BadgesResponse" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/definitions/CommonResponse"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/definitions/BadgesData"
+            }
+          }
+        } ]
+      },
+      "BadgeResponse" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/definitions/CommonResponse"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/definitions/BadgeData"
+            }
+          }
+        } ]
+      },
+      "BadgesData" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/definitions/Data"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "badges" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/BadgeSummary"
+              }
+            }
+          }
+        } ]
+      },
+      "BadgeData" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/definitions/Data"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "badge" : {
+              "$ref" : "#/definitions/Badge"
+            }
+          }
+        } ]
+      },
+      "BadgeSummary" : {
+        "type" : "object",
+        "properties" : {
+          "badgeNumber" : {
+            "$ref" : "#/definitions/BadgeNumberField"
+          },
+          "partyType" : {
+            "$ref" : "#/definitions/PartyTypeField"
+          },
+          "name" : {
+            "$ref" : "#/definitions/NameField"
+          },
+          "nationalInsurance" : {
+            "$ref" : "#/definitions/NationalInsuranceField"
+          },
+          "localAuthorityName" : {
+            "$ref" : "#/definitions/LocalAuthorityNameField"
+          },
+          "expiryDate" : {
+            "$ref" : "#/definitions/ExpiryDateField"
+          },
+          "status" : {
+            "$ref" : "#/definitions/StatusField"
+          }
+        },
+        "example" : {
+          "badgeNumber" : "0957X1215",
+          "partyType" : "Person",
+          "name" : "Henry McBoatface",
+          "nationalInsurance" : "JL086542B",
+          "localAuthorityName" : "Shropshire County Council",
+          "expiryDate" : "2019-12-31",
+          "status" : "Active"
+        }
+      },
+      "Badge" : {
+        "type" : "object",
+        "properties" : {
+          "badgeNumber" : {
+            "$ref" : "#/definitions/BadgeNumberField"
+          },
+          "partyType" : {
+            "$ref" : "#/definitions/PartyTypeField"
+          },
+          "nationalInsurance" : {
+            "$ref" : "#/definitions/NationalInsuranceField"
+          },
+          "name" : {
+            "$ref" : "#/definitions/NameField"
+          },
+          "homeAddress" : {
+            "$ref" : "#/definitions/HomeAddressField"
+          },
+          "contactNumber" : {
+            "$ref" : "#/definitions/ContactNumberField"
+          },
+          "emailAddress" : {
+            "$ref" : "#/definitions/EmailAddressField"
+          },
+          "dob" : {
+            "$ref" : "#/definitions/DobField"
+          },
+          "localAuthorityName" : {
+            "$ref" : "#/definitions/LocalAuthorityNameField"
+          },
+          "localAuthorityId" : {
+            "$ref" : "#/definitions/LocalAuthorityIdField"
+          },
+          "localAuthorityRef" : {
+            "$ref" : "#/definitions/LocalAuthorityRefField"
+          },
+          "applicationDate" : {
+            "$ref" : "#/definitions/ApplicationDateField"
+          },
+          "applicationSource" : {
+            "$ref" : "#/definitions/ApplicationSourceField"
+          },
+          "orderDate" : {
+            "$ref" : "#/definitions/OrderDateField"
+          },
+          "startDate" : {
+            "$ref" : "#/definitions/StartDateField"
+          },
+          "expiryDate" : {
+            "$ref" : "#/definitions/ExpiryDateField"
+          },
+          "eligibility" : {
+            "$ref" : "#/definitions/EligibilityField"
+          },
+          "thumbNail" : {
+            "$ref" : "#/definitions/ThumbNailField"
+          },
+          "status" : {
+            "$ref" : "#/definitions/StatusField"
+          }
+        },
+        "example" : {
+          "badgeNumber" : "0957X1215",
+          "partyType" : "Person",
+          "nationalInsurance" : "JL086542B",
+          "name" : "David Baines",
+          "contactNumber" : "01234 567890",
+          "emailAddress" : "nodoby@nowhere.com",
+          "dob" : "1970-05-29",
+          "localAuthorityName" : "Shropshire County Council",
+          "localAuthorityId" : 2,
+          "localAuthorityRef" : "ABCD123",
+          "applicationDate" : "2017-11-30",
+          "applicationSource" : "Online",
+          "orderDate" : "2017-12-18",
+          "startDate" : "2018-01-01",
+          "expiryDate" : "2019-01-01",
+          "eligibility" : "Armed Forces Compensation scheme",
+          "thumbNail" : "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "status" : "Active"
+        }
+      },
+      "BadgeNumberField" : {
+        "type" : "string",
+        "example" : "0957X1215",
+        "description" : "The unique badge number for this badge"
+      },
+      "PartyTypeField" : {
+        "type" : "string",
+        "enum" : [ "Person", "Organisation" ]
+      },
+      "NameField" : {
+        "type" : "string",
+        "example" : "David Baines",
+        "description" : "The name of the badge holder Organisation or Person"
+      },
+      "NationalInsuranceField" : {
+        "type" : "string",
+        "example" : "JL086542B",
+        "description" : "The badgeholders national insurance number"
+      },
+      "DobField" : {
+        "type" : "string",
+        "format" : "date",
+        "example" : "2016-08-29",
+        "description" : "The badgeholders date of birth"
+      },
+      "LocalAuthorityNameField" : {
+        "type" : "string",
+        "example" : "Shropshire County Council",
+        "description" : "Display name of the Local Authority"
+      },
+      "LocalAuthorityIdField" : {
+        "type" : "integer",
+        "example" : 1,
+        "description" : "Id of Local Authority"
+      },
+      "ExpiryDateField" : {
+        "type" : "string",
+        "format" : "date",
+        "example" : "2020-12-31",
+        "description" : "The date the blue bagde expires"
+      },
+      "StatusField" : {
+        "type" : "string",
+        "enum" : [ "Active" ],
+        "example" : "Active",
+        "description" : "The current status of the blue bage"
+      },
+      "HomeAddressField" : {
+        "type" : "object",
+        "properties" : {
+          "buildingStreet" : {
+            "type" : "string",
+            "example" : "65 Basil Chambers"
+          },
+          "line2" : {
+            "type" : "string",
+            "example" : "Northern Quarter"
+          },
+          "townCity" : {
+            "type" : "string",
+            "example" : "Manchester"
+          },
+          "postCode" : {
+            "type" : "string",
+            "example" : "SK6 8GH"
+          }
+        }
+      },
+      "ContactNumberField" : {
+        "type" : "string",
+        "example" : "07971 626772"
+      },
+      "EmailAddressField" : {
+        "type" : "string",
+        "example" : "aperson@nowhere.com"
+      },
+      "LocalAuthorityRefField" : {
+        "type" : "string",
+        "example" : "123ABC3924"
+      },
+      "ApplicationDateField" : {
+        "type" : "string",
+        "format" : "date",
+        "example" : "2017-11-01"
+      },
+      "ApplicationSourceField" : {
+        "type" : "string",
+        "enum" : [ "Online", "Paper", "Phone", "In person" ],
+        "example" : "Online"
+      },
+      "OrderDateField" : {
+        "type" : "string",
+        "format" : "date",
+        "example" : "2018-11-01"
+      },
+      "StartDateField" : {
+        "type" : "string",
+        "format" : "date",
+        "example" : "2018-01-01"
+      },
+      "EligibilityField" : {
+        "type" : "string",
+        "enum" : [ "PIP", "DLA", "Armed Forces Compensation scheme", "War Pensioners' Mobility Supplement", "Registered blind", "Walking ability", "Disability in both arms", "Child under 3 with bulky medical equipment", "Child under 3 who needs to be near a vehicle", "Terminal illness" ],
+        "example" : "Registered blind",
+        "description" : "Reason for badge"
+      },
+      "ThumbNailField" : {
+        "type" : "string",
+        "format" : "byte",
+        "description" : "A small photo of the badge holder",
+        "example" : "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+      }
+    },
+    "parameters" : {
+      "BadgeNumberParam" : {
+        "in" : "query",
+        "name" : "badgeNumber",
+        "type" : "string",
+        "description" : "A valid badge number."
+      },
+      "BadgeNumberPathParam" : {
+        "in" : "path",
+        "name" : "badgeNumber",
+        "type" : "string",
+        "description" : "A valid badge number.",
+        "required" : true
+      },
+      "NameParam" : {
+        "in" : "query",
+        "name" : "name",
+        "type" : "string",
+        "description" : "Search the badge holders name"
+      },
+      "NationalInsuranceParam" : {
+        "in" : "query",
+        "name" : "ni",
+        "type" : "string",
+        "description" : "A valid National Insurance number"
+      }
+    },
+    "host" : "virtserver.swaggerhub.com",
+    "basePath" : "/uk-gov-dft/blue-badge/1.0.0",
+    "schemes" : [ "https" ]
+  },
+  "options": {
+    "java8" : true,
+    "sortParamsByRequiredFlag" : false,
+    "modelPackage" : "uk.gov.dft.bluebadge.model.badgemanagement",
+    "apiPackage" : "uk.gov.dft.bluebadge.service.badgemanagement.controller",
+    "groupId" : "uk.gov.dft.bluebadge",
+    "artifactId" : "badge-management-service",
+    "artifactVersion" : "1.0.0-SNAPSHOT",
+    "sourceFolder" : "generated/src/main/java",
+    "dateLibrary" : "java8-localdatetime",
+    "delegatePattern" : false,
+    "title" : "process-sample",
+    "configPackage" : "uk.gov.dft.bluebadge.service.badgemanagement.config.swagger",
+    "basePackage" : "uk.gov.dft.bluebadge.dontneed.badgemanagement.application",
+    "useBeanValidation" : false,
+    "performBeanValidation" : false,
+    "useOptional" : false,
+    "useTags" : true,
+    "hideGenerationTimestamp" : true,
+    "appVersion" : "1.0"
+  }
+}

@@ -1,0 +1,9 @@
+usermanagementservice:
+  servicehost:
+    host: localhost
+    port: 8280
+    scheme: http
+    connectiontimeout: 6000
+    requesttimeout: 6000
+    contextpath: /uk-gov-dft/badge-management-service/1.0.0
+

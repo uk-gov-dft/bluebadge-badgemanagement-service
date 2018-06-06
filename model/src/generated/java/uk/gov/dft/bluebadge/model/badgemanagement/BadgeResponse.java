@@ -11,9 +11,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class BadgeResponse extends CommonResponse {
   @JsonProperty("data")
-  private BadgeData data = null;
+  private Badge data = null;
 
-  public BadgeResponse data(BadgeData data) {
+  public BadgeResponse data(Badge data) {
     this.data = data;
     return this;
   }
@@ -25,11 +25,11 @@ public class BadgeResponse extends CommonResponse {
    */
   @ApiModelProperty(value = "")
   @Valid
-  public BadgeData getData() {
+  public Badge getData() {
     return data;
   }
 
-  public void setData(BadgeData data) {
+  public void setData(Badge data) {
     this.data = data;
   }
 

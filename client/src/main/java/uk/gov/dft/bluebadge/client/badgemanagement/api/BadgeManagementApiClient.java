@@ -4,13 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import uk.gov.dft.bluebadge.client.badgemanagement.httpclient.RestTemplateFactory;
+import uk.gov.dft.bluebadge.model.badgemanagement.Badge;
 import uk.gov.dft.bluebadge.model.badgemanagement.BadgeResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeSummary;
 import uk.gov.dft.bluebadge.model.badgemanagement.BadgesResponse;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
-public class BadgeManagementService {
+public class BadgeManagementApiClient {
 
   class Endpoints {
     // static final String GET_USER_BY_EMAIL_ENDPOINT = "/users?emailAddress={emailAddress}";
@@ -21,12 +24,12 @@ public class BadgeManagementService {
   // private ServiceConfiguration serviceConfiguration;
 
   @Autowired
-  public BadgeManagementService(RestTemplateFactory restTemplateFactory) {
+  public BadgeManagementApiClient(RestTemplateFactory restTemplateFactory) {
     // this.serviceConfiguration = serviceConfiguration;
     this.restTemplateFactory = restTemplateFactory;
   }
 
-  public BadgesResponse searchBadges(String name, String niNumber, String badgeNumber) {
+  public List<BadgeSummary> searchBadges(String name, String niNumber, String badgeNumber) {
 
     // TODO mock version.
     HttpHeaders headers = new HttpHeaders();
@@ -42,10 +45,10 @@ public class BadgeManagementService {
                 HttpMethod.GET,
                 entity,
                 BadgesResponse.class);
-    return response.getBody();
+    return response.getBody().getData();
   }
 
-  public BadgeResponse retrieveBadge(String badgeNumber) {
+  public Badge retrieveBadge(String badgeNumber) {
 
     // TODO mock version.
     HttpHeaders headers = new HttpHeaders();
@@ -62,6 +65,6 @@ public class BadgeManagementService {
                 entity,
                 BadgeResponse.class,
                 "abc");
-    return response.getBody();
+    return response.getBody().getData();
   }
 }

@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.model.badgemanagement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -13,8 +14,11 @@ public class BadgeSummary {
   @JsonProperty("badgeNumber")
   private String badgeNumber = null;
 
-  @JsonProperty("partyType")
-  private PartyTypeField partyType = null;
+  @JsonProperty("partyTypeCode")
+  private String partyTypeCode = null;
+
+  @JsonProperty("partyTypeDescription")
+  private String partyTypeDescription = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -22,14 +26,20 @@ public class BadgeSummary {
   @JsonProperty("nationalInsurance")
   private String nationalInsurance = null;
 
+  @JsonProperty("localAuthorityId")
+  private Integer localAuthorityId = null;
+
   @JsonProperty("localAuthorityName")
   private String localAuthorityName = null;
 
   @JsonProperty("expiryDate")
-  private String expiryDate = null;
+  private LocalDate expiryDate = null;
 
-  @JsonProperty("status")
-  private StatusField status = null;
+  @JsonProperty("statusCode")
+  private String statusCode = null;
+
+  @JsonProperty("statusDescription")
+  private String statusDescription = null;
 
   public BadgeSummary badgeNumber(String badgeNumber) {
     this.badgeNumber = badgeNumber;
@@ -37,11 +47,11 @@ public class BadgeSummary {
   }
 
   /**
-   * Get badgeNumber
+   * The unique badge number for this badge
    *
    * @return badgeNumber
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The unique badge number for this badge")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -50,24 +60,42 @@ public class BadgeSummary {
     this.badgeNumber = badgeNumber;
   }
 
-  public BadgeSummary partyType(PartyTypeField partyType) {
-    this.partyType = partyType;
+  public BadgeSummary partyTypeCode(String partyTypeCode) {
+    this.partyTypeCode = partyTypeCode;
     return this;
   }
 
   /**
-   * Get partyType
+   * Get partyTypeCode
    *
-   * @return partyType
+   * @return partyTypeCode
    */
   @ApiModelProperty(value = "")
-  @Valid
-  public PartyTypeField getPartyType() {
-    return partyType;
+  public String getPartyTypeCode() {
+    return partyTypeCode;
   }
 
-  public void setPartyType(PartyTypeField partyType) {
-    this.partyType = partyType;
+  public void setPartyTypeCode(String partyTypeCode) {
+    this.partyTypeCode = partyTypeCode;
+  }
+
+  public BadgeSummary partyTypeDescription(String partyTypeDescription) {
+    this.partyTypeDescription = partyTypeDescription;
+    return this;
+  }
+
+  /**
+   * Get partyTypeDescription
+   *
+   * @return partyTypeDescription
+   */
+  @ApiModelProperty(value = "")
+  public String getPartyTypeDescription() {
+    return partyTypeDescription;
+  }
+
+  public void setPartyTypeDescription(String partyTypeDescription) {
+    this.partyTypeDescription = partyTypeDescription;
   }
 
   public BadgeSummary name(String name) {
@@ -76,11 +104,11 @@ public class BadgeSummary {
   }
 
   /**
-   * Get name
+   * The name of the badge holder Organisation or Person
    *
    * @return name
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The name of the badge holder Organisation or Person")
   public String getName() {
     return name;
   }
@@ -95,11 +123,11 @@ public class BadgeSummary {
   }
 
   /**
-   * Get nationalInsurance
+   * The badgeholders national insurance number
    *
    * @return nationalInsurance
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The badgeholders national insurance number")
   public String getNationalInsurance() {
     return nationalInsurance;
   }
@@ -108,17 +136,36 @@ public class BadgeSummary {
     this.nationalInsurance = nationalInsurance;
   }
 
+  public BadgeSummary localAuthorityId(Integer localAuthorityId) {
+    this.localAuthorityId = localAuthorityId;
+    return this;
+  }
+
+  /**
+   * Get localAuthorityId
+   *
+   * @return localAuthorityId
+   */
+  @ApiModelProperty(value = "")
+  public Integer getLocalAuthorityId() {
+    return localAuthorityId;
+  }
+
+  public void setLocalAuthorityId(Integer localAuthorityId) {
+    this.localAuthorityId = localAuthorityId;
+  }
+
   public BadgeSummary localAuthorityName(String localAuthorityName) {
     this.localAuthorityName = localAuthorityName;
     return this;
   }
 
   /**
-   * Get localAuthorityName
+   * Display name of the Local Authority
    *
    * @return localAuthorityName
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "Display name of the Local Authority")
   public String getLocalAuthorityName() {
     return localAuthorityName;
   }
@@ -127,43 +174,62 @@ public class BadgeSummary {
     this.localAuthorityName = localAuthorityName;
   }
 
-  public BadgeSummary expiryDate(String expiryDate) {
+  public BadgeSummary expiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
     return this;
   }
 
   /**
-   * Get expiryDate
+   * The date the blue bagde expires
    *
    * @return expiryDate
    */
-  @ApiModelProperty(value = "")
-  public String getExpiryDate() {
+  @ApiModelProperty(value = "The date the blue bagde expires")
+  @Valid
+  public LocalDate getExpiryDate() {
     return expiryDate;
   }
 
-  public void setExpiryDate(String expiryDate) {
+  public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
   }
 
-  public BadgeSummary status(StatusField status) {
-    this.status = status;
+  public BadgeSummary statusCode(String statusCode) {
+    this.statusCode = statusCode;
     return this;
   }
 
   /**
-   * Get status
+   * The current status of the blue bage
    *
-   * @return status
+   * @return statusCode
    */
-  @ApiModelProperty(value = "")
-  @Valid
-  public StatusField getStatus() {
-    return status;
+  @ApiModelProperty(value = "The current status of the blue bage")
+  public String getStatusCode() {
+    return statusCode;
   }
 
-  public void setStatus(StatusField status) {
-    this.status = status;
+  public void setStatusCode(String statusCode) {
+    this.statusCode = statusCode;
+  }
+
+  public BadgeSummary statusDescription(String statusDescription) {
+    this.statusDescription = statusDescription;
+    return this;
+  }
+
+  /**
+   * Status full description
+   *
+   * @return statusDescription
+   */
+  @ApiModelProperty(value = "Status full description")
+  public String getStatusDescription() {
+    return statusDescription;
+  }
+
+  public void setStatusDescription(String statusDescription) {
+    this.statusDescription = statusDescription;
   }
 
   @Override
@@ -176,18 +242,30 @@ public class BadgeSummary {
     }
     BadgeSummary badgeSummary = (BadgeSummary) o;
     return Objects.equals(this.badgeNumber, badgeSummary.badgeNumber)
-        && Objects.equals(this.partyType, badgeSummary.partyType)
+        && Objects.equals(this.partyTypeCode, badgeSummary.partyTypeCode)
+        && Objects.equals(this.partyTypeDescription, badgeSummary.partyTypeDescription)
         && Objects.equals(this.name, badgeSummary.name)
         && Objects.equals(this.nationalInsurance, badgeSummary.nationalInsurance)
+        && Objects.equals(this.localAuthorityId, badgeSummary.localAuthorityId)
         && Objects.equals(this.localAuthorityName, badgeSummary.localAuthorityName)
         && Objects.equals(this.expiryDate, badgeSummary.expiryDate)
-        && Objects.equals(this.status, badgeSummary.status);
+        && Objects.equals(this.statusCode, badgeSummary.statusCode)
+        && Objects.equals(this.statusDescription, badgeSummary.statusDescription);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        badgeNumber, partyType, name, nationalInsurance, localAuthorityName, expiryDate, status);
+        badgeNumber,
+        partyTypeCode,
+        partyTypeDescription,
+        name,
+        nationalInsurance,
+        localAuthorityId,
+        localAuthorityName,
+        expiryDate,
+        statusCode,
+        statusDescription);
   }
 
   @Override
@@ -196,12 +274,17 @@ public class BadgeSummary {
     sb.append("class BadgeSummary {\n");
 
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
-    sb.append("    partyType: ").append(toIndentedString(partyType)).append("\n");
+    sb.append("    partyTypeCode: ").append(toIndentedString(partyTypeCode)).append("\n");
+    sb.append("    partyTypeDescription: ")
+        .append(toIndentedString(partyTypeDescription))
+        .append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    nationalInsurance: ").append(toIndentedString(nationalInsurance)).append("\n");
+    sb.append("    localAuthorityId: ").append(toIndentedString(localAuthorityId)).append("\n");
     sb.append("    localAuthorityName: ").append(toIndentedString(localAuthorityName)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
+    sb.append("    statusDescription: ").append(toIndentedString(statusDescription)).append("\n");
     sb.append("}");
     return sb.toString();
   }

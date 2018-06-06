@@ -1,34 +1,36 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
-/** Data */
+/** Returns a badge number. */
+@ApiModel(description = "Returns a badge number.")
 @Validated
-public class Data {
-  @JsonProperty("totalItems")
-  private Integer totalItems = null;
+public class BadgeNumberResponse extends CommonResponse {
+  @JsonProperty("data")
+  private String data = null;
 
-  public Data totalItems(Integer totalItems) {
-    this.totalItems = totalItems;
+  public BadgeNumberResponse data(String data) {
+    this.data = data;
     return this;
   }
 
   /**
-   * Get totalItems
+   * The unique badge number for this badge
    *
-   * @return totalItems
+   * @return data
    */
-  @ApiModelProperty(value = "")
-  public Integer getTotalItems() {
-    return totalItems;
+  @ApiModelProperty(example = "0957X1215", value = "The unique badge number for this badge")
+  public String getData() {
+    return data;
   }
 
-  public void setTotalItems(Integer totalItems) {
-    this.totalItems = totalItems;
+  public void setData(String data) {
+    this.data = data;
   }
 
   @Override
@@ -39,21 +41,21 @@ public class Data {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Data data = (Data) o;
-    return Objects.equals(this.totalItems, data.totalItems);
+    BadgeNumberResponse badgeNumberResponse = (BadgeNumberResponse) o;
+    return Objects.equals(this.data, badgeNumberResponse.data) && super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalItems);
+    return Objects.hash(data, super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Data {\n");
-
-    sb.append("    totalItems: ").append(toIndentedString(totalItems)).append("\n");
+    sb.append("class BadgeNumberResponse {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

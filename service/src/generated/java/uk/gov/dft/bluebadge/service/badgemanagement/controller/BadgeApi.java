@@ -16,9 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeCancelRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeNumberResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeNumbersResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.BadgesResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
@@ -41,6 +47,49 @@ public interface BadgeApi {
   }
 
   @ApiOperation(
+    value = "Request cancel badge",
+    nickname = "cancelBlueBadge",
+    notes = "Request cancellation of a badge.",
+    tags = {
+      "badge",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge replacement requested.")})
+  @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
+  default ResponseEntity<Void> cancelBlueBadge(
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+          String badgeNumber,
+      @ApiParam(value = "") @Valid @RequestBody BadgeCancelRequest badgeCancel) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Delete a badge",
+    nickname = "deleteBlueBadge",
+    notes = "Delete a Blue Badge.",
+    tags = {
+      "badge",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
+  @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
+  default ResponseEntity<Void> deleteBlueBadge(
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+          String badgeNumber) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
     value = "Find a blue badge given the specified query parameters",
     nickname = "findBlueBadge",
     notes =
@@ -54,12 +103,8 @@ public interface BadgeApi {
     value = {
       @ApiResponse(
         code = 200,
-        message = "Response when blue badges can be found. ",
+        message = "Response when blue badges can (or can not) be found. ",
         response = BadgesResponse.class
-      ),
-      @ApiResponse(
-        code = 404,
-        message = "A blue badge cannot be found given the parameters specified"
       ),
       @ApiResponse(code = 200, message = "Unexpected error", response = CommonResponse.class)
     }
@@ -70,23 +115,99 @@ public interface BadgeApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgesResponse> findBlueBadge(
-      @ApiParam(value = "A valid badge number.")
-          @Valid
-          @RequestParam(value = "badgeNumber", required = false)
-          Optional<String> badgeNumber,
       @ApiParam(value = "Search the badge holders name")
           @Valid
           @RequestParam(value = "name", required = false)
           Optional<String> name,
-      @ApiParam(value = "A valid National Insurance number")
+      @ApiParam(value = "A valid postcode with or without spaces")
           @Valid
-          @RequestParam(value = "ni", required = false)
-          Optional<String> ni) {
+          @RequestParam(value = "postCode", required = false)
+          Optional<String> postCode) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {
         try {
           return new ResponseEntity<>(
               getObjectMapper().get().readValue("\"\"", BadgesResponse.class),
+              HttpStatus.NOT_IMPLEMENTED);
+        } catch (IOException e) {
+          log.error("Couldn't serialize response for content type application/json", e);
+          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Order badges",
+    nickname = "orderBlueBadges",
+    notes = "Order One or more badges.",
+    response = BadgeNumbersResponse.class,
+    tags = {
+      "badge",
+    }
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(code = 200, message = "Badges created.", response = BadgeNumbersResponse.class)
+    }
+  )
+  @RequestMapping(
+    value = "/badges",
+    produces = {"application/json"},
+    method = RequestMethod.POST
+  )
+  default ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
+      @ApiParam(value = "") @Valid @RequestBody BadgeOrderRequest badgeOrder) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        try {
+          return new ResponseEntity<>(
+              getObjectMapper().get().readValue("\"\"", BadgeNumbersResponse.class),
+              HttpStatus.NOT_IMPLEMENTED);
+        } catch (IOException e) {
+          log.error("Couldn't serialize response for content type application/json", e);
+          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Request replacement badge",
+    nickname = "replaceBlueBadge",
+    notes = "Request a replacement badge.",
+    response = BadgeNumberResponse.class,
+    tags = {
+      "badge",
+    }
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        code = 200,
+        message = "Badge replacement complete.  New badge number returned. ",
+        response = BadgeNumberResponse.class
+      )
+    }
+  )
+  @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
+  default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+          String badgeNumber,
+      @ApiParam(value = "") @Valid @RequestBody BadgeReplaceRequest badgeReplace) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        try {
+          return new ResponseEntity<>(
+              getObjectMapper().get().readValue("\"\"", BadgeNumberResponse.class),
               HttpStatus.NOT_IMPLEMENTED);
         } catch (IOException e) {
           log.error("Couldn't serialize response for content type application/json", e);
@@ -119,8 +240,7 @@ public interface BadgeApi {
       @ApiResponse(
         code = 404,
         message = "A blue badge cannot be found given the parameters specified"
-      ),
-      @ApiResponse(code = 200, message = "Unexpected error", response = CommonResponse.class)
+      )
     }
   )
   @RequestMapping(

@@ -26,7 +26,7 @@ public class BadgeCancelRequest {
    * @return badgeNumber
    */
   @ApiModelProperty(
-    example = "0957X1215",
+    example = "095715",
     required = true,
     value = "The unique badge number for this badge"
   )

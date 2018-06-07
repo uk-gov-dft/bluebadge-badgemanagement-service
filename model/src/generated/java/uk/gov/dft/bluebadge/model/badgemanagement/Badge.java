@@ -24,7 +24,7 @@ public class Badge {
   private String name = null;
 
   @JsonProperty("homeAddress")
-  private AddressField homeAddress = null;
+  private Address homeAddress = null;
 
   @JsonProperty("contactNumber")
   private String contactNumber = null;
@@ -75,7 +75,7 @@ public class Badge {
    *
    * @return badgeNumber
    */
-  @ApiModelProperty(example = "0957X1215", value = "The unique badge number for this badge")
+  @ApiModelProperty(example = "091215", value = "The unique badge number for this badge")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -141,7 +141,7 @@ public class Badge {
     this.name = name;
   }
 
-  public Badge homeAddress(AddressField homeAddress) {
+  public Badge homeAddress(Address homeAddress) {
     this.homeAddress = homeAddress;
     return this;
   }
@@ -153,11 +153,11 @@ public class Badge {
    */
   @ApiModelProperty(value = "")
   @Valid
-  public AddressField getHomeAddress() {
+  public Address getHomeAddress() {
     return homeAddress;
   }
 
-  public void setHomeAddress(AddressField homeAddress) {
+  public void setHomeAddress(Address homeAddress) {
     this.homeAddress = homeAddress;
   }
 

@@ -14,7 +14,7 @@
       }
     },
     "tags" : [ {
-      "name" : "badge",
+      "name" : "badges",
       "description" : "Badge related operations"
     } ],
     "paths" : {
@@ -23,7 +23,7 @@
           "$ref" : "#/parameters/BadgeNumberPathParam"
         } ],
         "get" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Retrieve a blue badge given the blue badge number parameter.",
           "operationId" : "retrieveBlueBadge",
           "description" : "Retrieves a blue-badge given the blueBadgeNumber.\n",
@@ -41,7 +41,7 @@
           }
         },
         "delete" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Delete a badge",
           "operationId" : "deleteBlueBadge",
           "description" : "Delete a Blue Badge.",
@@ -57,7 +57,7 @@
           "$ref" : "#/parameters/BadgeNumberPathParam"
         } ],
         "post" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Request replacement badge",
           "operationId" : "replaceBlueBadge",
           "description" : "Request a replacement badge.",
@@ -83,7 +83,7 @@
           "$ref" : "#/parameters/BadgeNumberPathParam"
         } ],
         "post" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Request cancel badge",
           "operationId" : "cancelBlueBadge",
           "description" : "Request cancellation of a badge.",
@@ -103,7 +103,7 @@
       },
       "/badges" : {
         "get" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Find a blue badge given the specified query parameters",
           "operationId" : "findBlueBadge",
           "description" : "By passing in appropriate options, you can search for\navailable badges in the system.  Options are a partial match\nand all submitted options must be matched. At least 1 parameter\nmust be provided.\n",
@@ -129,7 +129,7 @@
           }
         },
         "post" : {
-          "tags" : [ "badge" ],
+          "tags" : [ "badges" ],
           "summary" : "Order badges",
           "operationId" : "orderBlueBadges",
           "description" : "Order One or more badges.",
@@ -217,7 +217,7 @@
           "properties" : {
             "data" : {
               "type" : "string",
-              "example" : "0957X1215",
+              "example" : "095715",
               "description" : "The unique badge number for this badge"
             }
           }
@@ -228,7 +228,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "example" : "0957X1215",
+            "example" : "095715",
             "description" : "The unique badge number for this badge"
           },
           "cancelReasonCode" : {
@@ -240,7 +240,7 @@
         "required" : [ "badgeNumber", "cancelReasonCode" ],
         "example" : {
           "badgeNumber" : "72B9HA",
-          "cancelReason" : "Deceased"
+          "cancelReasonCode" : "DECEASED"
         }
       },
       "BadgeReplaceRequest" : {
@@ -248,7 +248,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "example" : "0957X1215",
+            "example" : "095215",
             "description" : "The unique badge number for this badge"
           },
           "replaceReasonCode" : {
@@ -270,9 +270,9 @@
         "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ],
         "example" : {
           "badgeNumber" : "72B9HA",
-          "replaceReasonCode" : "Stolen",
-          "deliverToCode" : "Home address",
-          "deliveryOptionCode" : "Standard"
+          "replaceReasonCode" : "STOLEN",
+          "deliverToCode" : "LA",
+          "deliveryOptionCode" : "STANDARD"
         }
       },
       "BadgeNumbersResponse" : {
@@ -287,7 +287,7 @@
               "type" : "array",
               "items" : {
                 "type" : "string",
-                "example" : "0957X1215",
+                "example" : "095215",
                 "description" : "The unique badge number for this badge"
               }
             }
@@ -366,7 +366,7 @@
           }
         },
         "example" : {
-          "badgeNumber" : "0957X1215",
+          "badgeNumber" : "091215",
           "partyTypeCode" : "P",
           "partyTypeDescription" : "Person",
           "name" : "Henry McBoatface",
@@ -383,7 +383,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "example" : "0957X1215",
+            "example" : "091215",
             "description" : "The unique badge number for this badge"
           },
           "partyTypeCode" : {
@@ -399,7 +399,7 @@
             "description" : "The name of the badge holder Organisation or Person"
           },
           "homeAddress" : {
-            "$ref" : "#/definitions/AddressField"
+            "$ref" : "#/definitions/Address"
           },
           "contactNumber" : {
             "type" : "string"
@@ -454,7 +454,7 @@
           }
         },
         "example" : {
-          "badgeNumber" : "0957X1215",
+          "badgeNumber" : "095215",
           "partyTypeCode" : "ORG",
           "nationalInsurance" : "JL089942B",
           "name" : "John Smith",
@@ -464,13 +464,13 @@
           "localAuthorityId" : 2,
           "localAuthorityRef" : "ABCD123",
           "applicationDate" : "2017-11-30",
-          "applicationSourceCode" : "Online",
+          "applicationSourceCode" : "ONLINE",
           "orderDate" : "2017-12-18",
           "startDate" : "2018-01-01",
           "expiryDate" : "2019-01-01",
           "eligibilityCode" : "AFCS",
           "imageLink" : "http://adomain.com:1234/myimages?id=hhjjsskkddjj66ssskk",
-          "statusCode" : "Active"
+          "statusCode" : "ACTIVE"
         }
       },
       "BadgeOrderRequest" : {
@@ -492,7 +492,7 @@
             "description" : "The name of the badge holder Organisation or Person"
           },
           "homeAddress" : {
-            "$ref" : "#/definitions/AddressField"
+            "$ref" : "#/definitions/Address"
           },
           "contactNumber" : {
             "type" : "string",
@@ -562,7 +562,7 @@
         "example" : {
           "partyTypeCode" : "PERS",
           "nationalInsurance" : "JL089942B",
-          "name" : "David Baines",
+          "name" : "John Smith",
           "contactNumber" : "01234 567890",
           "emailAddress" : "nodoby@nowhere.com",
           "dob" : "1970-05-29",
@@ -579,7 +579,7 @@
           "numberOfBadges" : 1
         }
       },
-      "AddressField" : {
+      "Address" : {
         "type" : "object",
         "properties" : {
           "buildingStreet" : {

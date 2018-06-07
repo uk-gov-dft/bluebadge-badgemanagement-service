@@ -29,10 +29,10 @@ import uk.gov.dft.bluebadge.model.badgemanagement.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.BadgesResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
 
-@Api(value = "Badge", description = "the Badge API")
-public interface BadgeApi {
+@Api(value = "Badges", description = "the Badges API")
+public interface BadgesApi {
 
-  Logger log = LoggerFactory.getLogger(BadgeApi.class);
+  Logger log = LoggerFactory.getLogger(BadgesApi.class);
 
   default Optional<ObjectMapper> getObjectMapper() {
     return Optional.empty();
@@ -51,7 +51,7 @@ public interface BadgeApi {
     nickname = "cancelBlueBadge",
     notes = "Request cancellation of a badge.",
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge replacement requested.")})
@@ -63,7 +63,7 @@ public interface BadgeApi {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
@@ -73,7 +73,7 @@ public interface BadgeApi {
     nickname = "deleteBlueBadge",
     notes = "Delete a Blue Badge.",
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
@@ -84,7 +84,7 @@ public interface BadgeApi {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
@@ -96,7 +96,7 @@ public interface BadgeApi {
         "By passing in appropriate options, you can search for available badges in the system.  Options are a partial match and all submitted options must be matched. At least 1 parameter must be provided. ",
     response = BadgesResponse.class,
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(
@@ -136,7 +136,7 @@ public interface BadgeApi {
       }
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
@@ -147,7 +147,7 @@ public interface BadgeApi {
     notes = "Order One or more badges.",
     response = BadgeNumbersResponse.class,
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(
@@ -175,7 +175,7 @@ public interface BadgeApi {
       }
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
@@ -186,7 +186,7 @@ public interface BadgeApi {
     notes = "Request a replacement badge.",
     response = BadgeNumberResponse.class,
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(
@@ -216,7 +216,7 @@ public interface BadgeApi {
       }
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
@@ -227,7 +227,7 @@ public interface BadgeApi {
     notes = "Retrieves a blue-badge given the blueBadgeNumber. ",
     response = BadgeResponse.class,
     tags = {
-      "badge",
+      "badges",
     }
   )
   @ApiResponses(
@@ -264,7 +264,7 @@ public interface BadgeApi {
       }
     } else {
       log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgeApi interface so no example is generated");
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }

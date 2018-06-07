@@ -6,9 +6,9 @@ import java.util.Objects;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
-/** AddressField */
+/** Address */
 @Validated
-public class AddressField {
+public class Address {
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
@@ -21,7 +21,7 @@ public class AddressField {
   @JsonProperty("postCode")
   private String postCode = null;
 
-  public AddressField buildingStreet(String buildingStreet) {
+  public Address buildingStreet(String buildingStreet) {
     this.buildingStreet = buildingStreet;
     return this;
   }
@@ -42,7 +42,7 @@ public class AddressField {
     this.buildingStreet = buildingStreet;
   }
 
-  public AddressField line2(String line2) {
+  public Address line2(String line2) {
     this.line2 = line2;
     return this;
   }
@@ -62,7 +62,7 @@ public class AddressField {
     this.line2 = line2;
   }
 
-  public AddressField townCity(String townCity) {
+  public Address townCity(String townCity) {
     this.townCity = townCity;
     return this;
   }
@@ -83,7 +83,7 @@ public class AddressField {
     this.townCity = townCity;
   }
 
-  public AddressField postCode(String postCode) {
+  public Address postCode(String postCode) {
     this.postCode = postCode;
     return this;
   }
@@ -115,11 +115,11 @@ public class AddressField {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AddressField addressField = (AddressField) o;
-    return Objects.equals(this.buildingStreet, addressField.buildingStreet)
-        && Objects.equals(this.line2, addressField.line2)
-        && Objects.equals(this.townCity, addressField.townCity)
-        && Objects.equals(this.postCode, addressField.postCode);
+    Address address = (Address) o;
+    return Objects.equals(this.buildingStreet, address.buildingStreet)
+        && Objects.equals(this.line2, address.line2)
+        && Objects.equals(this.townCity, address.townCity)
+        && Objects.equals(this.postCode, address.postCode);
   }
 
   @Override
@@ -130,7 +130,7 @@ public class AddressField {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AddressField {\n");
+    sb.append("class Address {\n");
 
     sb.append("    buildingStreet: ").append(toIndentedString(buildingStreet)).append("\n");
     sb.append("    line2: ").append(toIndentedString(line2)).append("\n");

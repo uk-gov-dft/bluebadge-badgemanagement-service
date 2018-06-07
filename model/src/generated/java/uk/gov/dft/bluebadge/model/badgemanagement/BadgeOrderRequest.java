@@ -21,7 +21,7 @@ public class BadgeOrderRequest {
   private String name = null;
 
   @JsonProperty("homeAddress")
-  private AddressField homeAddress = null;
+  private Address homeAddress = null;
 
   @JsonProperty("contactNumber")
   private String contactNumber = null;
@@ -130,7 +130,7 @@ public class BadgeOrderRequest {
     this.name = name;
   }
 
-  public BadgeOrderRequest homeAddress(AddressField homeAddress) {
+  public BadgeOrderRequest homeAddress(Address homeAddress) {
     this.homeAddress = homeAddress;
     return this;
   }
@@ -142,11 +142,11 @@ public class BadgeOrderRequest {
    */
   @ApiModelProperty(value = "")
   @Valid
-  public AddressField getHomeAddress() {
+  public Address getHomeAddress() {
     return homeAddress;
   }
 
-  public void setHomeAddress(AddressField homeAddress) {
+  public void setHomeAddress(Address homeAddress) {
     this.homeAddress = homeAddress;
   }
 

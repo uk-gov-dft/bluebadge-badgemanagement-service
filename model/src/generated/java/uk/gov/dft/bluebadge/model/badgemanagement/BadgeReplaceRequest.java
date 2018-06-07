@@ -32,7 +32,7 @@ public class BadgeReplaceRequest {
    * @return badgeNumber
    */
   @ApiModelProperty(
-    example = "0957X1215",
+    example = "095215",
     required = true,
     value = "The unique badge number for this badge"
   )

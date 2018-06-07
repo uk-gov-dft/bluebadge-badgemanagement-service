@@ -24,7 +24,7 @@ public class BadgeNumberResponse extends CommonResponse {
    *
    * @return data
    */
-  @ApiModelProperty(example = "0957X1215", value = "The unique badge number for this badge")
+  @ApiModelProperty(example = "095715", value = "The unique badge number for this badge")
   public String getData() {
     return data;
   }

@@ -8,8 +8,7 @@ plugins {
 allprojects {
     apply plugin: 'java'
     group = 'uk.gov.dft.bluebadge'
-    version = 'NOT_SET'
-
+    version = rootProject.file('VERSION').text.trim()
     sourceCompatibility = 1.8
     repositories {
         mavenCentral()

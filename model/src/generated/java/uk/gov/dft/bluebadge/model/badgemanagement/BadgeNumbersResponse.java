@@ -7,49 +7,49 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import uk.gov.dft.bluebadge.model.badgemanagement.BadgeSummary;
-import uk.gov.dft.bluebadge.model.badgemanagement.Data;
+import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.Error;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * BadgesData
+ * Contains a list of Badge numbers.
  */
+@ApiModel(description = "Contains a list of Badge numbers.")
 @Validated
 
-public class BadgesData extends Data  {
-  @JsonProperty("badges")
+public class BadgeNumbersResponse extends CommonResponse  {
+  @JsonProperty("data")
   @Valid
-  private List<BadgeSummary> badges = null;
+  private List<String> data = null;
 
-  public BadgesData badges(List<BadgeSummary> badges) {
-    this.badges = badges;
+  public BadgeNumbersResponse data(List<String> data) {
+    this.data = data;
     return this;
   }
 
-  public BadgesData addBadgesItem(BadgeSummary badgesItem) {
-    if (this.badges == null) {
-      this.badges = new ArrayList<>();
+  public BadgeNumbersResponse addDataItem(String dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
     }
-    this.badges.add(badgesItem);
+    this.data.add(dataItem);
     return this;
   }
 
   /**
-   * Get badges
-   * @return badges
+   * Get data
+   * @return data
   **/
   @ApiModelProperty(value = "")
 
-  @Valid
 
-  public List<BadgeSummary> getBadges() {
-    return badges;
+  public List<String> getData() {
+    return data;
   }
 
-  public void setBadges(List<BadgeSummary> badges) {
-    this.badges = badges;
+  public void setData(List<String> data) {
+    this.data = data;
   }
 
 
@@ -61,22 +61,22 @@ public class BadgesData extends Data  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BadgesData badgesData = (BadgesData) o;
-    return Objects.equals(this.badges, badgesData.badges) &&
+    BadgeNumbersResponse badgeNumbersResponse = (BadgeNumbersResponse) o;
+    return Objects.equals(this.data, badgeNumbersResponse.data) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(badges, super.hashCode());
+    return Objects.hash(data, super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BadgesData {\n");
+    sb.append("class BadgeNumbersResponse {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    badges: ").append(toIndentedString(badges)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

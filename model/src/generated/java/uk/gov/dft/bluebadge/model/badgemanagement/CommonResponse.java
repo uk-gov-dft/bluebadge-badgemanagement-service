@@ -1,15 +1,21 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import uk.gov.dft.bluebadge.model.badgemanagement.Error;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.springframework.validation.annotation.Validated;
 
-/** CommonResponse */
+/**
+ * CommonResponse
+ */
 @Validated
-public class CommonResponse {
+
+public class CommonResponse   {
   @JsonProperty("apiVersion")
   private String apiVersion = null;
 
@@ -32,10 +38,11 @@ public class CommonResponse {
 
   /**
    * Get apiVersion
-   *
    * @return apiVersion
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getApiVersion() {
     return apiVersion;
   }
@@ -51,10 +58,11 @@ public class CommonResponse {
 
   /**
    * Get context
-   *
    * @return context
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getContext() {
     return context;
   }
@@ -70,10 +78,11 @@ public class CommonResponse {
 
   /**
    * Get id
-   *
    * @return id
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getId() {
     return id;
   }
@@ -89,10 +98,11 @@ public class CommonResponse {
 
   /**
    * Get method
-   *
    * @return method
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getMethod() {
     return method;
   }
@@ -108,11 +118,12 @@ public class CommonResponse {
 
   /**
    * Get error
-   *
    * @return error
-   */
+  **/
   @ApiModelProperty(value = "")
+
   @Valid
+
   public Error getError() {
     return error;
   }
@@ -120,6 +131,7 @@ public class CommonResponse {
   public void setError(Error error) {
     this.error = error;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -130,11 +142,11 @@ public class CommonResponse {
       return false;
     }
     CommonResponse commonResponse = (CommonResponse) o;
-    return Objects.equals(this.apiVersion, commonResponse.apiVersion)
-        && Objects.equals(this.context, commonResponse.context)
-        && Objects.equals(this.id, commonResponse.id)
-        && Objects.equals(this.method, commonResponse.method)
-        && Objects.equals(this.error, commonResponse.error);
+    return Objects.equals(this.apiVersion, commonResponse.apiVersion) &&
+        Objects.equals(this.context, commonResponse.context) &&
+        Objects.equals(this.id, commonResponse.id) &&
+        Objects.equals(this.method, commonResponse.method) &&
+        Objects.equals(this.error, commonResponse.error);
   }
 
   @Override
@@ -146,7 +158,7 @@ public class CommonResponse {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CommonResponse {\n");
-
+    
     sb.append("    apiVersion: ").append(toIndentedString(apiVersion)).append("\n");
     sb.append("    context: ").append(toIndentedString(context)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
@@ -157,7 +169,8 @@ public class CommonResponse {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -166,3 +179,4 @@ public class CommonResponse {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

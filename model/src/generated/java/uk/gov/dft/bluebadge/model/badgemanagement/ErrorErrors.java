@@ -1,14 +1,20 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
-/** ErrorErrors */
+/**
+ * ErrorErrors
+ */
 @Validated
-public class ErrorErrors {
+
+public class ErrorErrors   {
   @JsonProperty("field")
   private String field = null;
 
@@ -31,10 +37,11 @@ public class ErrorErrors {
 
   /**
    * Get field
-   *
    * @return field
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getField() {
     return field;
   }
@@ -50,10 +57,11 @@ public class ErrorErrors {
 
   /**
    * Get reason
-   *
    * @return reason
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getReason() {
     return reason;
   }
@@ -69,10 +77,11 @@ public class ErrorErrors {
 
   /**
    * Get message
-   *
    * @return message
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getMessage() {
     return message;
   }
@@ -88,10 +97,11 @@ public class ErrorErrors {
 
   /**
    * Get location
-   *
    * @return location
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getLocation() {
     return location;
   }
@@ -107,10 +117,11 @@ public class ErrorErrors {
 
   /**
    * Get locationType
-   *
    * @return locationType
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getLocationType() {
     return locationType;
   }
@@ -118,6 +129,7 @@ public class ErrorErrors {
   public void setLocationType(String locationType) {
     this.locationType = locationType;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -128,11 +140,11 @@ public class ErrorErrors {
       return false;
     }
     ErrorErrors errorErrors = (ErrorErrors) o;
-    return Objects.equals(this.field, errorErrors.field)
-        && Objects.equals(this.reason, errorErrors.reason)
-        && Objects.equals(this.message, errorErrors.message)
-        && Objects.equals(this.location, errorErrors.location)
-        && Objects.equals(this.locationType, errorErrors.locationType);
+    return Objects.equals(this.field, errorErrors.field) &&
+        Objects.equals(this.reason, errorErrors.reason) &&
+        Objects.equals(this.message, errorErrors.message) &&
+        Objects.equals(this.location, errorErrors.location) &&
+        Objects.equals(this.locationType, errorErrors.locationType);
   }
 
   @Override
@@ -144,7 +156,7 @@ public class ErrorErrors {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ErrorErrors {\n");
-
+    
     sb.append("    field: ").append(toIndentedString(field)).append("\n");
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
@@ -155,7 +167,8 @@ public class ErrorErrors {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -164,3 +177,4 @@ public class ErrorErrors {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

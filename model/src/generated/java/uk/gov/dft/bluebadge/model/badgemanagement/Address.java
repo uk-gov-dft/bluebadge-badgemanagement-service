@@ -10,11 +10,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * HomeAddressField
+ * Address
  */
 @Validated
 
-public class HomeAddressField   {
+public class Address   {
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
@@ -27,7 +27,7 @@ public class HomeAddressField   {
   @JsonProperty("postCode")
   private String postCode = null;
 
-  public HomeAddressField buildingStreet(String buildingStreet) {
+  public Address buildingStreet(String buildingStreet) {
     this.buildingStreet = buildingStreet;
     return this;
   }
@@ -36,9 +36,10 @@ public class HomeAddressField   {
    * Get buildingStreet
    * @return buildingStreet
   **/
-  @ApiModelProperty(example = "65 Basil Chambers", value = "")
+  @ApiModelProperty(example = "65 Basil Chambers", required = true, value = "")
+  @NotNull
 
-
+@Size(max=100) 
   public String getBuildingStreet() {
     return buildingStreet;
   }
@@ -47,7 +48,7 @@ public class HomeAddressField   {
     this.buildingStreet = buildingStreet;
   }
 
-  public HomeAddressField line2(String line2) {
+  public Address line2(String line2) {
     this.line2 = line2;
     return this;
   }
@@ -58,7 +59,7 @@ public class HomeAddressField   {
   **/
   @ApiModelProperty(example = "Northern Quarter", value = "")
 
-
+@Size(max=100) 
   public String getLine2() {
     return line2;
   }
@@ -67,7 +68,7 @@ public class HomeAddressField   {
     this.line2 = line2;
   }
 
-  public HomeAddressField townCity(String townCity) {
+  public Address townCity(String townCity) {
     this.townCity = townCity;
     return this;
   }
@@ -76,9 +77,10 @@ public class HomeAddressField   {
    * Get townCity
    * @return townCity
   **/
-  @ApiModelProperty(example = "Manchester", value = "")
+  @ApiModelProperty(example = "Manchester", required = true, value = "")
+  @NotNull
 
-
+@Size(max=100) 
   public String getTownCity() {
     return townCity;
   }
@@ -87,7 +89,7 @@ public class HomeAddressField   {
     this.townCity = townCity;
   }
 
-  public HomeAddressField postCode(String postCode) {
+  public Address postCode(String postCode) {
     this.postCode = postCode;
     return this;
   }
@@ -96,9 +98,10 @@ public class HomeAddressField   {
    * Get postCode
    * @return postCode
   **/
-  @ApiModelProperty(example = "SK6 8GH", value = "")
+  @ApiModelProperty(example = "SK6 8GH", required = true, value = "")
+  @NotNull
 
-
+@Pattern(regexp="^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$") 
   public String getPostCode() {
     return postCode;
   }
@@ -116,11 +119,11 @@ public class HomeAddressField   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    HomeAddressField homeAddressField = (HomeAddressField) o;
-    return Objects.equals(this.buildingStreet, homeAddressField.buildingStreet) &&
-        Objects.equals(this.line2, homeAddressField.line2) &&
-        Objects.equals(this.townCity, homeAddressField.townCity) &&
-        Objects.equals(this.postCode, homeAddressField.postCode);
+    Address address = (Address) o;
+    return Objects.equals(this.buildingStreet, address.buildingStreet) &&
+        Objects.equals(this.line2, address.line2) &&
+        Objects.equals(this.townCity, address.townCity) &&
+        Objects.equals(this.postCode, address.postCode);
   }
 
   @Override
@@ -131,7 +134,7 @@ public class HomeAddressField   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class HomeAddressField {\n");
+    sb.append("class Address {\n");
     
     sb.append("    buildingStreet: ").append(toIndentedString(buildingStreet)).append("\n");
     sb.append("    line2: ").append(toIndentedString(line2)).append("\n");

@@ -18,12 +18,12 @@ public class BadgeManagementServiceTest {
   @Test
   public void searchBadges() {
     BadgesResponse response = badgeManagementService.searchBadges("", "", "");
-    Assert.notNull(response.getData().getBadges(), "");
+    Assert.notNull(response.getData(), "");
   }
 
   @Test
   public void retrieveBadge() {
     BadgeResponse response = badgeManagementService.retrieveBadge("");
-    Assert.notNull(response.getData().getBadge(), "");
+    Assert.notNull(response.getData(), "");
   }
 }

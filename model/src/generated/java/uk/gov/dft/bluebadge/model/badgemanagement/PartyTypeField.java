@@ -1,13 +1,20 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** Gets or Sets PartyTypeField */
-public enum PartyTypeField {
-  PERSON("Person"),
+import com.fasterxml.jackson.annotation.JsonCreator;
 
+/**
+ * Gets or Sets PartyTypeField
+ */
+public enum PartyTypeField {
+  
+  PERSON("Person"),
+  
   ORGANISATION("Organisation");
 
   private String value;
@@ -32,3 +39,4 @@ public enum PartyTypeField {
     return null;
   }
 }
+

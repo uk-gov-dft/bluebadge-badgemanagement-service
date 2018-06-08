@@ -1,15 +1,22 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import uk.gov.dft.bluebadge.model.badgemanagement.Badge;
+import uk.gov.dft.bluebadge.model.badgemanagement.Data;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.springframework.validation.annotation.Validated;
 
-/** BadgeData */
+/**
+ * BadgeData
+ */
 @Validated
-public class BadgeData extends Data {
+
+public class BadgeData extends Data  {
   @JsonProperty("badge")
   private Badge badge = null;
 
@@ -20,11 +27,12 @@ public class BadgeData extends Data {
 
   /**
    * Get badge
-   *
    * @return badge
-   */
+  **/
   @ApiModelProperty(value = "")
+
   @Valid
+
   public Badge getBadge() {
     return badge;
   }
@@ -32,6 +40,7 @@ public class BadgeData extends Data {
   public void setBadge(Badge badge) {
     this.badge = badge;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -42,7 +51,8 @@ public class BadgeData extends Data {
       return false;
     }
     BadgeData badgeData = (BadgeData) o;
-    return Objects.equals(this.badge, badgeData.badge) && super.equals(o);
+    return Objects.equals(this.badge, badgeData.badge) &&
+        super.equals(o);
   }
 
   @Override
@@ -61,7 +71,8 @@ public class BadgeData extends Data {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -70,3 +81,4 @@ public class BadgeData extends Data {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

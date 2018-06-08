@@ -1,29 +1,37 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
+import io.swagger.annotations.ApiModel;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** Reason for badge */
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+/**
+ * Reason for badge
+ */
 public enum EligibilityField {
+  
   PIP("PIP"),
-
+  
   DLA("DLA"),
-
+  
   ARMED_FORCES_COMPENSATION_SCHEME("Armed Forces Compensation scheme"),
-
+  
   WAR_PENSIONERS_MOBILITY_SUPPLEMENT("War Pensioners' Mobility Supplement"),
-
+  
   REGISTERED_BLIND("Registered blind"),
-
+  
   WALKING_ABILITY("Walking ability"),
-
+  
   DISABILITY_IN_BOTH_ARMS("Disability in both arms"),
-
+  
   CHILD_UNDER_3_WITH_BULKY_MEDICAL_EQUIPMENT("Child under 3 with bulky medical equipment"),
-
+  
   CHILD_UNDER_3_WHO_NEEDS_TO_BE_NEAR_A_VEHICLE("Child under 3 who needs to be near a vehicle"),
-
+  
   TERMINAL_ILLNESS("Terminal illness");
 
   private String value;
@@ -48,3 +56,4 @@ public enum EligibilityField {
     return null;
   }
 }
+

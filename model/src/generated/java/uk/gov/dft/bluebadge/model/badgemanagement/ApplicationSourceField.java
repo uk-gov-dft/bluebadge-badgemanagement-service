@@ -1,17 +1,24 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** Gets or Sets ApplicationSourceField */
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+/**
+ * Gets or Sets ApplicationSourceField
+ */
 public enum ApplicationSourceField {
+  
   ONLINE("Online"),
-
+  
   PAPER("Paper"),
-
+  
   PHONE("Phone"),
-
+  
   IN_PERSON("In person");
 
   private String value;
@@ -36,3 +43,4 @@ public enum ApplicationSourceField {
     return null;
   }
 }
+

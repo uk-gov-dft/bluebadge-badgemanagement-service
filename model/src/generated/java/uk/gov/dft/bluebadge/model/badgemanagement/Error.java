@@ -1,17 +1,23 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import uk.gov.dft.bluebadge.model.badgemanagement.ErrorErrors;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import org.springframework.validation.annotation.Validated;
 
-/** Error */
+/**
+ * Error
+ */
 @Validated
-public class Error {
+
+public class Error   {
   @JsonProperty("code")
   private Integer code = null;
 
@@ -29,10 +35,11 @@ public class Error {
 
   /**
    * Get code
-   *
    * @return code
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public Integer getCode() {
     return code;
   }
@@ -48,10 +55,11 @@ public class Error {
 
   /**
    * Get message
-   *
    * @return message
-   */
+  **/
   @ApiModelProperty(value = "")
+
+
   public String getMessage() {
     return message;
   }
@@ -75,11 +83,12 @@ public class Error {
 
   /**
    * Get errors
-   *
    * @return errors
-   */
+  **/
   @ApiModelProperty(value = "")
+
   @Valid
+
   public List<ErrorErrors> getErrors() {
     return errors;
   }
@@ -87,6 +96,7 @@ public class Error {
   public void setErrors(List<ErrorErrors> errors) {
     this.errors = errors;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -97,9 +107,9 @@ public class Error {
       return false;
     }
     Error error = (Error) o;
-    return Objects.equals(this.code, error.code)
-        && Objects.equals(this.message, error.message)
-        && Objects.equals(this.errors, error.errors);
+    return Objects.equals(this.code, error.code) &&
+        Objects.equals(this.message, error.message) &&
+        Objects.equals(this.errors, error.errors);
   }
 
   @Override
@@ -111,7 +121,7 @@ public class Error {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Error {\n");
-
+    
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    errors: ").append(toIndentedString(errors)).append("\n");
@@ -120,7 +130,8 @@ public class Error {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -129,3 +140,4 @@ public class Error {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

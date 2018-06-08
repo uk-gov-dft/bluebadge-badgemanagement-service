@@ -1,11 +1,19 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
+import io.swagger.annotations.ApiModel;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/** The current status of the blue bage */
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+/**
+ * The current status of the blue bage
+ */
 public enum StatusField {
+  
   ACTIVE("Active");
 
   private String value;
@@ -30,3 +38,4 @@ public enum StatusField {
     return null;
   }
 }
+

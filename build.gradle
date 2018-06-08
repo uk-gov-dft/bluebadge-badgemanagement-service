@@ -8,7 +8,7 @@ plugins {
 allprojects {
     apply plugin: 'java'
     group = 'uk.gov.dft.bluebadge'
-    version = '0.0.2-SNAPSHOT'
+    version = 'NOT_SET'
 
     sourceCompatibility = 1.8
     repositories {

@@ -21,9 +21,10 @@ node {
         // Tool name from Jenkins configuration
         rtGradle.tool = "Gradle-4.6"
         // Set Artifactory repositories for dependencies resolution and artifacts deployment.
-            
+        rtGradle.deployer.deployMavenDescriptors = true    
         rtGradle.deployer repo:'gradle-release-local', server: server
         rtGradle.resolver repo:'gradle-release', server: server
+        rtGradle.deployer.artifactPattern = '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
     }
     
 
@@ -34,19 +35,19 @@ node {
         "files": [
         {
           "pattern": "client/build/libs/*.jar",
-          "target": "gradle-release-local/",
+          "target": "gradle-release-local",
           "regexp": "false",
           "recursive": "false"
         },
         {
           "pattern": "model/build/libs/*.jar",
-          "target": "gradle-release-local/",
+          "target": "gradle-release-local",
           "regexp": "false",
           "recursive": "false"
         },
         {
           "pattern": "service/build/libs/*.jar",
-          "target": "gradle-release-local/",
+          "target": "gradle-release-local",
           "regexp": "false",
           "recursive": "false"
         }

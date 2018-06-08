@@ -1,12 +1,9 @@
 import groovy.json.JsonSlurper
 
-plugins {
-    id "com.jfrog.artifactory" version "4.5.4"
-}
-
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'
     group = 'uk.gov.dft.bluebadge'
     version = rootProject.file('VERSION').text.trim()
     sourceCompatibility = 1.8

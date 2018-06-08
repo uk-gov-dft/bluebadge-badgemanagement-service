@@ -24,8 +24,6 @@ apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 //apply plugin: 'findbugs'
 
-group 'uk.gov.dft.bluebadge'
-version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {

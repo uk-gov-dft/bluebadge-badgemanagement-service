@@ -1,22 +1,16 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
-import uk.gov.dft.bluebadge.model.badgemanagement.Address;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * BadgeOrderRequest
- */
+/** BadgeOrderRequest */
 @Validated
-
-public class BadgeOrderRequest   {
+public class BadgeOrderRequest {
   @JsonProperty("partyTypeCode")
   private String partyTypeCode = null;
 
@@ -77,13 +71,13 @@ public class BadgeOrderRequest   {
   }
 
   /**
-   * Code for Person or Organisation 
+   * Code for Person or Organisation
+   *
    * @return partyTypeCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for Person or Organisation ")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getPartyTypeCode() {
     return partyTypeCode;
   }
@@ -99,11 +93,14 @@ public class BadgeOrderRequest   {
 
   /**
    * The badgeholders national insurance number
+   *
    * @return nationalInsurance
-  **/
+   */
   @ApiModelProperty(value = "The badgeholders national insurance number")
-
-@Pattern(regexp="^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$") 
+  @Pattern(
+    regexp =
+        "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$"
+  )
   public String getNationalInsurance() {
     return nationalInsurance;
   }
@@ -119,12 +116,12 @@ public class BadgeOrderRequest   {
 
   /**
    * The name of the badge holder Organisation or Person
+   *
    * @return name
-  **/
+   */
   @ApiModelProperty(required = true, value = "The name of the badge holder Organisation or Person")
   @NotNull
-
-@Size(max=100) 
+  @Size(max = 100)
   public String getName() {
     return name;
   }
@@ -140,12 +137,11 @@ public class BadgeOrderRequest   {
 
   /**
    * Get homeAddress
+   *
    * @return homeAddress
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Address getHomeAddress() {
     return homeAddress;
   }
@@ -161,12 +157,15 @@ public class BadgeOrderRequest   {
 
   /**
    * Get contactNumber
+   *
    * @return contactNumber
-  **/
+   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-@Pattern(regexp="^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$") 
+  @Pattern(
+    regexp =
+        "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$"
+  )
   public String getContactNumber() {
     return contactNumber;
   }
@@ -182,11 +181,14 @@ public class BadgeOrderRequest   {
 
   /**
    * Get emailAddress
+   *
    * @return emailAddress
-  **/
+   */
   @ApiModelProperty(value = "")
-
-@Pattern(regexp="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") 
+  @Pattern(
+    regexp =
+        "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
+  )
   public String getEmailAddress() {
     return emailAddress;
   }
@@ -202,12 +204,11 @@ public class BadgeOrderRequest   {
 
   /**
    * The badgeholders date of birth
+   *
    * @return dob
-  **/
+   */
   @ApiModelProperty(value = "The badgeholders date of birth")
-
   @Valid
-
   public LocalDate getDob() {
     return dob;
   }
@@ -223,12 +224,11 @@ public class BadgeOrderRequest   {
 
   /**
    * Id of Local Authority
+   *
    * @return localAuthorityId
-  **/
+   */
   @ApiModelProperty(required = true, value = "Id of Local Authority")
   @NotNull
-
-
   public Integer getLocalAuthorityId() {
     return localAuthorityId;
   }
@@ -244,11 +244,11 @@ public class BadgeOrderRequest   {
 
   /**
    * Get localAuthorityRef
+   *
    * @return localAuthorityRef
-  **/
+   */
   @ApiModelProperty(value = "")
-
-@Size(max=100) 
+  @Size(max = 100)
   public String getLocalAuthorityRef() {
     return localAuthorityRef;
   }
@@ -264,13 +264,12 @@ public class BadgeOrderRequest   {
 
   /**
    * Get applicationDate
+   *
    * @return applicationDate
-  **/
+   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
   @Valid
-
   public LocalDate getApplicationDate() {
     return applicationDate;
   }
@@ -285,13 +284,13 @@ public class BadgeOrderRequest   {
   }
 
   /**
-   * Code for Online, Paper, Phone or In person 
+   * Code for Online, Paper, Phone or In person
+   *
    * @return applicationSourceCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for Online, Paper, Phone or In person ")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getApplicationSourceCode() {
     return applicationSourceCode;
   }
@@ -307,13 +306,12 @@ public class BadgeOrderRequest   {
 
   /**
    * Get startDate
+   *
    * @return startDate
-  **/
+   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
   @Valid
-
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -329,13 +327,12 @@ public class BadgeOrderRequest   {
 
   /**
    * The date the blue bagde expires
+   *
    * @return expiryDate
-  **/
+   */
   @ApiModelProperty(required = true, value = "The date the blue bagde expires")
   @NotNull
-
   @Valid
-
   public LocalDate getExpiryDate() {
     return expiryDate;
   }
@@ -351,11 +348,11 @@ public class BadgeOrderRequest   {
 
   /**
    * Reason for badge
+   *
    * @return eligibilityCode
-  **/
+   */
   @ApiModelProperty(value = "Reason for badge")
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getEligibilityCode() {
     return eligibilityCode;
   }
@@ -371,11 +368,11 @@ public class BadgeOrderRequest   {
 
   /**
    * Base64 encoded image
+   *
    * @return imageFile
-  **/
+   */
   @ApiModelProperty(value = "Base64 encoded image")
-
-@Pattern(regexp="^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") 
+  @Pattern(regexp = "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")
   public byte[] getImageFile() {
     return imageFile;
   }
@@ -391,12 +388,12 @@ public class BadgeOrderRequest   {
 
   /**
    * Code for either Home address or LA address
+   *
    * @return deliverToCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for either Home address or LA address")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getDeliverToCode() {
     return deliverToCode;
   }
@@ -412,12 +409,12 @@ public class BadgeOrderRequest   {
 
   /**
    * Code for either Standard or Fast track
+   *
    * @return deliveryOptionCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for either Standard or Fast track")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getDeliveryOptionCode() {
     return deliveryOptionCode;
   }
@@ -432,14 +429,13 @@ public class BadgeOrderRequest   {
   }
 
   /**
-   * Get numberOfBadges
-   * minimum: 1
+   * Get numberOfBadges minimum: 1
+   *
    * @return numberOfBadges
-  **/
+   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
-
-@Min(1)
+  @Min(1)
   public Integer getNumberOfBadges() {
     return numberOfBadges;
   }
@@ -447,7 +443,6 @@ public class BadgeOrderRequest   {
   public void setNumberOfBadges(Integer numberOfBadges) {
     this.numberOfBadges = numberOfBadges;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -458,36 +453,54 @@ public class BadgeOrderRequest   {
       return false;
     }
     BadgeOrderRequest badgeOrderRequest = (BadgeOrderRequest) o;
-    return Objects.equals(this.partyTypeCode, badgeOrderRequest.partyTypeCode) &&
-        Objects.equals(this.nationalInsurance, badgeOrderRequest.nationalInsurance) &&
-        Objects.equals(this.name, badgeOrderRequest.name) &&
-        Objects.equals(this.homeAddress, badgeOrderRequest.homeAddress) &&
-        Objects.equals(this.contactNumber, badgeOrderRequest.contactNumber) &&
-        Objects.equals(this.emailAddress, badgeOrderRequest.emailAddress) &&
-        Objects.equals(this.dob, badgeOrderRequest.dob) &&
-        Objects.equals(this.localAuthorityId, badgeOrderRequest.localAuthorityId) &&
-        Objects.equals(this.localAuthorityRef, badgeOrderRequest.localAuthorityRef) &&
-        Objects.equals(this.applicationDate, badgeOrderRequest.applicationDate) &&
-        Objects.equals(this.applicationSourceCode, badgeOrderRequest.applicationSourceCode) &&
-        Objects.equals(this.startDate, badgeOrderRequest.startDate) &&
-        Objects.equals(this.expiryDate, badgeOrderRequest.expiryDate) &&
-        Objects.equals(this.eligibilityCode, badgeOrderRequest.eligibilityCode) &&
-        Objects.equals(this.imageFile, badgeOrderRequest.imageFile) &&
-        Objects.equals(this.deliverToCode, badgeOrderRequest.deliverToCode) &&
-        Objects.equals(this.deliveryOptionCode, badgeOrderRequest.deliveryOptionCode) &&
-        Objects.equals(this.numberOfBadges, badgeOrderRequest.numberOfBadges);
+    return Objects.equals(this.partyTypeCode, badgeOrderRequest.partyTypeCode)
+        && Objects.equals(this.nationalInsurance, badgeOrderRequest.nationalInsurance)
+        && Objects.equals(this.name, badgeOrderRequest.name)
+        && Objects.equals(this.homeAddress, badgeOrderRequest.homeAddress)
+        && Objects.equals(this.contactNumber, badgeOrderRequest.contactNumber)
+        && Objects.equals(this.emailAddress, badgeOrderRequest.emailAddress)
+        && Objects.equals(this.dob, badgeOrderRequest.dob)
+        && Objects.equals(this.localAuthorityId, badgeOrderRequest.localAuthorityId)
+        && Objects.equals(this.localAuthorityRef, badgeOrderRequest.localAuthorityRef)
+        && Objects.equals(this.applicationDate, badgeOrderRequest.applicationDate)
+        && Objects.equals(this.applicationSourceCode, badgeOrderRequest.applicationSourceCode)
+        && Objects.equals(this.startDate, badgeOrderRequest.startDate)
+        && Objects.equals(this.expiryDate, badgeOrderRequest.expiryDate)
+        && Objects.equals(this.eligibilityCode, badgeOrderRequest.eligibilityCode)
+        && Objects.equals(this.imageFile, badgeOrderRequest.imageFile)
+        && Objects.equals(this.deliverToCode, badgeOrderRequest.deliverToCode)
+        && Objects.equals(this.deliveryOptionCode, badgeOrderRequest.deliveryOptionCode)
+        && Objects.equals(this.numberOfBadges, badgeOrderRequest.numberOfBadges);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(partyTypeCode, nationalInsurance, name, homeAddress, contactNumber, emailAddress, dob, localAuthorityId, localAuthorityRef, applicationDate, applicationSourceCode, startDate, expiryDate, eligibilityCode, imageFile, deliverToCode, deliveryOptionCode, numberOfBadges);
+    return Objects.hash(
+        partyTypeCode,
+        nationalInsurance,
+        name,
+        homeAddress,
+        contactNumber,
+        emailAddress,
+        dob,
+        localAuthorityId,
+        localAuthorityRef,
+        applicationDate,
+        applicationSourceCode,
+        startDate,
+        expiryDate,
+        eligibilityCode,
+        imageFile,
+        deliverToCode,
+        deliveryOptionCode,
+        numberOfBadges);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BadgeOrderRequest {\n");
-    
+
     sb.append("    partyTypeCode: ").append(toIndentedString(partyTypeCode)).append("\n");
     sb.append("    nationalInsurance: ").append(toIndentedString(nationalInsurance)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
@@ -498,7 +511,9 @@ public class BadgeOrderRequest   {
     sb.append("    localAuthorityId: ").append(toIndentedString(localAuthorityId)).append("\n");
     sb.append("    localAuthorityRef: ").append(toIndentedString(localAuthorityRef)).append("\n");
     sb.append("    applicationDate: ").append(toIndentedString(applicationDate)).append("\n");
-    sb.append("    applicationSourceCode: ").append(toIndentedString(applicationSourceCode)).append("\n");
+    sb.append("    applicationSourceCode: ")
+        .append(toIndentedString(applicationSourceCode))
+        .append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
     sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");
@@ -511,8 +526,7 @@ public class BadgeOrderRequest   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -521,4 +535,3 @@ public class BadgeOrderRequest   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

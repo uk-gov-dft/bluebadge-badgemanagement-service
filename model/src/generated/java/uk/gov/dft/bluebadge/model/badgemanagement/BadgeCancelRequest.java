@@ -1,20 +1,14 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.util.Objects;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * BadgeCancelRequest
- */
+/** BadgeCancelRequest */
 @Validated
-
-public class BadgeCancelRequest   {
+public class BadgeCancelRequest {
   @JsonProperty("badgeNumber")
   private String badgeNumber = null;
 
@@ -28,12 +22,15 @@ public class BadgeCancelRequest   {
 
   /**
    * The unique badge number for this badge
+   *
    * @return badgeNumber
-  **/
-  @ApiModelProperty(example = "095715", required = true, value = "The unique badge number for this badge")
+   */
+  @ApiModelProperty(
+    example = "095715",
+    required = true,
+    value = "The unique badge number for this badge"
+  )
   @NotNull
-
-
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -48,13 +45,13 @@ public class BadgeCancelRequest   {
   }
 
   /**
-   * Code for Deceased, No longer needed or Revoked 
+   * Code for Deceased, No longer needed or Revoked
+   *
    * @return cancelReasonCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for Deceased, No longer needed or Revoked ")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getCancelReasonCode() {
     return cancelReasonCode;
   }
@@ -62,7 +59,6 @@ public class BadgeCancelRequest   {
   public void setCancelReasonCode(String cancelReasonCode) {
     this.cancelReasonCode = cancelReasonCode;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -73,8 +69,8 @@ public class BadgeCancelRequest   {
       return false;
     }
     BadgeCancelRequest badgeCancelRequest = (BadgeCancelRequest) o;
-    return Objects.equals(this.badgeNumber, badgeCancelRequest.badgeNumber) &&
-        Objects.equals(this.cancelReasonCode, badgeCancelRequest.cancelReasonCode);
+    return Objects.equals(this.badgeNumber, badgeCancelRequest.badgeNumber)
+        && Objects.equals(this.cancelReasonCode, badgeCancelRequest.cancelReasonCode);
   }
 
   @Override
@@ -86,7 +82,7 @@ public class BadgeCancelRequest   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BadgeCancelRequest {\n");
-    
+
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    cancelReasonCode: ").append(toIndentedString(cancelReasonCode)).append("\n");
     sb.append("}");
@@ -94,8 +90,7 @@ public class BadgeCancelRequest   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -104,4 +99,3 @@ public class BadgeCancelRequest   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

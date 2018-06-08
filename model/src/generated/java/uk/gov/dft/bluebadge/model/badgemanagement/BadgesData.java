@@ -1,24 +1,17 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import uk.gov.dft.bluebadge.model.badgemanagement.BadgeSummary;
-import uk.gov.dft.bluebadge.model.badgemanagement.Data;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * BadgesData
- */
+/** BadgesData */
 @Validated
-
-public class BadgesData extends Data  {
+public class BadgesData extends Data {
   @JsonProperty("badges")
   @Valid
   private List<BadgeSummary> badges = null;
@@ -38,12 +31,11 @@ public class BadgesData extends Data  {
 
   /**
    * Get badges
+   *
    * @return badges
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public List<BadgeSummary> getBadges() {
     return badges;
   }
@@ -51,7 +43,6 @@ public class BadgesData extends Data  {
   public void setBadges(List<BadgeSummary> badges) {
     this.badges = badges;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -62,8 +53,7 @@ public class BadgesData extends Data  {
       return false;
     }
     BadgesData badgesData = (BadgesData) o;
-    return Objects.equals(this.badges, badgesData.badges) &&
-        super.equals(o);
+    return Objects.equals(this.badges, badgesData.badges) && super.equals(o);
   }
 
   @Override
@@ -82,8 +72,7 @@ public class BadgesData extends Data  {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -92,4 +81,3 @@ public class BadgesData extends Data  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

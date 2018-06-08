@@ -1,22 +1,16 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
-import uk.gov.dft.bluebadge.model.badgemanagement.Address;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * Badge
- */
+/** Badge */
 @Validated
-
-public class Badge   {
+public class Badge {
   @JsonProperty("badgeNumber")
   private String badgeNumber = null;
 
@@ -78,11 +72,10 @@ public class Badge   {
 
   /**
    * The unique badge number for this badge
+   *
    * @return badgeNumber
-  **/
+   */
   @ApiModelProperty(example = "091215", value = "The unique badge number for this badge")
-
-
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -97,12 +90,11 @@ public class Badge   {
   }
 
   /**
-   * Code for Person or Organisation 
+   * Code for Person or Organisation
+   *
    * @return partyTypeCode
-  **/
+   */
   @ApiModelProperty(value = "Code for Person or Organisation ")
-
-
   public String getPartyTypeCode() {
     return partyTypeCode;
   }
@@ -118,11 +110,10 @@ public class Badge   {
 
   /**
    * The badgeholders national insurance number
+   *
    * @return nationalInsurance
-  **/
+   */
   @ApiModelProperty(value = "The badgeholders national insurance number")
-
-
   public String getNationalInsurance() {
     return nationalInsurance;
   }
@@ -138,11 +129,10 @@ public class Badge   {
 
   /**
    * The name of the badge holder Organisation or Person
+   *
    * @return name
-  **/
+   */
   @ApiModelProperty(value = "The name of the badge holder Organisation or Person")
-
-
   public String getName() {
     return name;
   }
@@ -158,12 +148,11 @@ public class Badge   {
 
   /**
    * Get homeAddress
+   *
    * @return homeAddress
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public Address getHomeAddress() {
     return homeAddress;
   }
@@ -179,11 +168,10 @@ public class Badge   {
 
   /**
    * Get contactNumber
+   *
    * @return contactNumber
-  **/
+   */
   @ApiModelProperty(value = "")
-
-
   public String getContactNumber() {
     return contactNumber;
   }
@@ -199,11 +187,10 @@ public class Badge   {
 
   /**
    * Get emailAddress
+   *
    * @return emailAddress
-  **/
+   */
   @ApiModelProperty(value = "")
-
-
   public String getEmailAddress() {
     return emailAddress;
   }
@@ -219,12 +206,11 @@ public class Badge   {
 
   /**
    * The badgeholders date of birth
+   *
    * @return dob
-  **/
+   */
   @ApiModelProperty(value = "The badgeholders date of birth")
-
   @Valid
-
   public LocalDate getDob() {
     return dob;
   }
@@ -240,11 +226,10 @@ public class Badge   {
 
   /**
    * Id of Local Authority
+   *
    * @return localAuthorityId
-  **/
+   */
   @ApiModelProperty(value = "Id of Local Authority")
-
-
   public Integer getLocalAuthorityId() {
     return localAuthorityId;
   }
@@ -260,11 +245,10 @@ public class Badge   {
 
   /**
    * Get localAuthorityRef
+   *
    * @return localAuthorityRef
-  **/
+   */
   @ApiModelProperty(value = "")
-
-
   public String getLocalAuthorityRef() {
     return localAuthorityRef;
   }
@@ -280,12 +264,11 @@ public class Badge   {
 
   /**
    * Get applicationDate
+   *
    * @return applicationDate
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public LocalDate getApplicationDate() {
     return applicationDate;
   }
@@ -300,12 +283,11 @@ public class Badge   {
   }
 
   /**
-   * Code for Online, Paper, Phone or In person 
+   * Code for Online, Paper, Phone or In person
+   *
    * @return applicationSourceCode
-  **/
+   */
   @ApiModelProperty(value = "Code for Online, Paper, Phone or In person ")
-
-
   public String getApplicationSourceCode() {
     return applicationSourceCode;
   }
@@ -321,12 +303,11 @@ public class Badge   {
 
   /**
    * Get orderDate
+   *
    * @return orderDate
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public LocalDate getOrderDate() {
     return orderDate;
   }
@@ -342,12 +323,11 @@ public class Badge   {
 
   /**
    * Get startDate
+   *
    * @return startDate
-  **/
+   */
   @ApiModelProperty(value = "")
-
   @Valid
-
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -363,12 +343,11 @@ public class Badge   {
 
   /**
    * The date the blue bagde expires
+   *
    * @return expiryDate
-  **/
+   */
   @ApiModelProperty(value = "The date the blue bagde expires")
-
   @Valid
-
   public LocalDate getExpiryDate() {
     return expiryDate;
   }
@@ -384,11 +363,10 @@ public class Badge   {
 
   /**
    * Reason for badge
+   *
    * @return eligibilityCode
-  **/
+   */
   @ApiModelProperty(value = "Reason for badge")
-
-
   public String getEligibilityCode() {
     return eligibilityCode;
   }
@@ -404,11 +382,10 @@ public class Badge   {
 
   /**
    * Link to photo of badge holder if applicable
+   *
    * @return imageLink
-  **/
+   */
   @ApiModelProperty(value = "Link to photo of badge holder if applicable")
-
-
   public String getImageLink() {
     return imageLink;
   }
@@ -424,11 +401,10 @@ public class Badge   {
 
   /**
    * The current status of the blue bage
+   *
    * @return statusCode
-  **/
+   */
   @ApiModelProperty(value = "The current status of the blue bage")
-
-
   public String getStatusCode() {
     return statusCode;
   }
@@ -436,7 +412,6 @@ public class Badge   {
   public void setStatusCode(String statusCode) {
     this.statusCode = statusCode;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -447,36 +422,54 @@ public class Badge   {
       return false;
     }
     Badge badge = (Badge) o;
-    return Objects.equals(this.badgeNumber, badge.badgeNumber) &&
-        Objects.equals(this.partyTypeCode, badge.partyTypeCode) &&
-        Objects.equals(this.nationalInsurance, badge.nationalInsurance) &&
-        Objects.equals(this.name, badge.name) &&
-        Objects.equals(this.homeAddress, badge.homeAddress) &&
-        Objects.equals(this.contactNumber, badge.contactNumber) &&
-        Objects.equals(this.emailAddress, badge.emailAddress) &&
-        Objects.equals(this.dob, badge.dob) &&
-        Objects.equals(this.localAuthorityId, badge.localAuthorityId) &&
-        Objects.equals(this.localAuthorityRef, badge.localAuthorityRef) &&
-        Objects.equals(this.applicationDate, badge.applicationDate) &&
-        Objects.equals(this.applicationSourceCode, badge.applicationSourceCode) &&
-        Objects.equals(this.orderDate, badge.orderDate) &&
-        Objects.equals(this.startDate, badge.startDate) &&
-        Objects.equals(this.expiryDate, badge.expiryDate) &&
-        Objects.equals(this.eligibilityCode, badge.eligibilityCode) &&
-        Objects.equals(this.imageLink, badge.imageLink) &&
-        Objects.equals(this.statusCode, badge.statusCode);
+    return Objects.equals(this.badgeNumber, badge.badgeNumber)
+        && Objects.equals(this.partyTypeCode, badge.partyTypeCode)
+        && Objects.equals(this.nationalInsurance, badge.nationalInsurance)
+        && Objects.equals(this.name, badge.name)
+        && Objects.equals(this.homeAddress, badge.homeAddress)
+        && Objects.equals(this.contactNumber, badge.contactNumber)
+        && Objects.equals(this.emailAddress, badge.emailAddress)
+        && Objects.equals(this.dob, badge.dob)
+        && Objects.equals(this.localAuthorityId, badge.localAuthorityId)
+        && Objects.equals(this.localAuthorityRef, badge.localAuthorityRef)
+        && Objects.equals(this.applicationDate, badge.applicationDate)
+        && Objects.equals(this.applicationSourceCode, badge.applicationSourceCode)
+        && Objects.equals(this.orderDate, badge.orderDate)
+        && Objects.equals(this.startDate, badge.startDate)
+        && Objects.equals(this.expiryDate, badge.expiryDate)
+        && Objects.equals(this.eligibilityCode, badge.eligibilityCode)
+        && Objects.equals(this.imageLink, badge.imageLink)
+        && Objects.equals(this.statusCode, badge.statusCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(badgeNumber, partyTypeCode, nationalInsurance, name, homeAddress, contactNumber, emailAddress, dob, localAuthorityId, localAuthorityRef, applicationDate, applicationSourceCode, orderDate, startDate, expiryDate, eligibilityCode, imageLink, statusCode);
+    return Objects.hash(
+        badgeNumber,
+        partyTypeCode,
+        nationalInsurance,
+        name,
+        homeAddress,
+        contactNumber,
+        emailAddress,
+        dob,
+        localAuthorityId,
+        localAuthorityRef,
+        applicationDate,
+        applicationSourceCode,
+        orderDate,
+        startDate,
+        expiryDate,
+        eligibilityCode,
+        imageLink,
+        statusCode);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Badge {\n");
-    
+
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    partyTypeCode: ").append(toIndentedString(partyTypeCode)).append("\n");
     sb.append("    nationalInsurance: ").append(toIndentedString(nationalInsurance)).append("\n");
@@ -488,7 +481,9 @@ public class Badge   {
     sb.append("    localAuthorityId: ").append(toIndentedString(localAuthorityId)).append("\n");
     sb.append("    localAuthorityRef: ").append(toIndentedString(localAuthorityRef)).append("\n");
     sb.append("    applicationDate: ").append(toIndentedString(applicationDate)).append("\n");
-    sb.append("    applicationSourceCode: ").append(toIndentedString(applicationSourceCode)).append("\n");
+    sb.append("    applicationSourceCode: ")
+        .append(toIndentedString(applicationSourceCode))
+        .append("\n");
     sb.append("    orderDate: ").append(toIndentedString(orderDate)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
@@ -500,8 +495,7 @@ public class Badge   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -510,4 +504,3 @@ public class Badge   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

@@ -1,20 +1,14 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.util.Objects;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * HomeAddressField
- */
+/** HomeAddressField */
 @Validated
-
-public class HomeAddressField   {
+public class HomeAddressField {
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
@@ -34,11 +28,10 @@ public class HomeAddressField   {
 
   /**
    * Get buildingStreet
+   *
    * @return buildingStreet
-  **/
+   */
   @ApiModelProperty(example = "65 Basil Chambers", value = "")
-
-
   public String getBuildingStreet() {
     return buildingStreet;
   }
@@ -54,11 +47,10 @@ public class HomeAddressField   {
 
   /**
    * Get line2
+   *
    * @return line2
-  **/
+   */
   @ApiModelProperty(example = "Northern Quarter", value = "")
-
-
   public String getLine2() {
     return line2;
   }
@@ -74,11 +66,10 @@ public class HomeAddressField   {
 
   /**
    * Get townCity
+   *
    * @return townCity
-  **/
+   */
   @ApiModelProperty(example = "Manchester", value = "")
-
-
   public String getTownCity() {
     return townCity;
   }
@@ -94,11 +85,10 @@ public class HomeAddressField   {
 
   /**
    * Get postCode
+   *
    * @return postCode
-  **/
+   */
   @ApiModelProperty(example = "SK6 8GH", value = "")
-
-
   public String getPostCode() {
     return postCode;
   }
@@ -106,7 +96,6 @@ public class HomeAddressField   {
   public void setPostCode(String postCode) {
     this.postCode = postCode;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -117,10 +106,10 @@ public class HomeAddressField   {
       return false;
     }
     HomeAddressField homeAddressField = (HomeAddressField) o;
-    return Objects.equals(this.buildingStreet, homeAddressField.buildingStreet) &&
-        Objects.equals(this.line2, homeAddressField.line2) &&
-        Objects.equals(this.townCity, homeAddressField.townCity) &&
-        Objects.equals(this.postCode, homeAddressField.postCode);
+    return Objects.equals(this.buildingStreet, homeAddressField.buildingStreet)
+        && Objects.equals(this.line2, homeAddressField.line2)
+        && Objects.equals(this.townCity, homeAddressField.townCity)
+        && Objects.equals(this.postCode, homeAddressField.postCode);
   }
 
   @Override
@@ -132,7 +121,7 @@ public class HomeAddressField   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class HomeAddressField {\n");
-    
+
     sb.append("    buildingStreet: ").append(toIndentedString(buildingStreet)).append("\n");
     sb.append("    line2: ").append(toIndentedString(line2)).append("\n");
     sb.append("    townCity: ").append(toIndentedString(townCity)).append("\n");
@@ -142,8 +131,7 @@ public class HomeAddressField   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -152,4 +140,3 @@ public class HomeAddressField   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

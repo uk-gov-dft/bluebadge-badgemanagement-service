@@ -1,20 +1,14 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.util.Objects;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * BadgeReplaceRequest
- */
+/** BadgeReplaceRequest */
 @Validated
-
-public class BadgeReplaceRequest   {
+public class BadgeReplaceRequest {
   @JsonProperty("badgeNumber")
   private String badgeNumber = null;
 
@@ -34,12 +28,15 @@ public class BadgeReplaceRequest   {
 
   /**
    * The unique badge number for this badge
+   *
    * @return badgeNumber
-  **/
-  @ApiModelProperty(example = "095215", required = true, value = "The unique badge number for this badge")
+   */
+  @ApiModelProperty(
+    example = "095215",
+    required = true,
+    value = "The unique badge number for this badge"
+  )
   @NotNull
-
-
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -55,12 +52,12 @@ public class BadgeReplaceRequest   {
 
   /**
    * Code for Lost, Stolen or Damaged
+   *
    * @return replaceReasonCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for Lost, Stolen or Damaged")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getReplaceReasonCode() {
     return replaceReasonCode;
   }
@@ -76,12 +73,12 @@ public class BadgeReplaceRequest   {
 
   /**
    * Code for either Home address or LA address
+   *
    * @return deliverToCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for either Home address or LA address")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getDeliverToCode() {
     return deliverToCode;
   }
@@ -97,12 +94,12 @@ public class BadgeReplaceRequest   {
 
   /**
    * Code for either Standard or Fast track
+   *
    * @return deliveryOptionCode
-  **/
+   */
   @ApiModelProperty(required = true, value = "Code for either Standard or Fast track")
   @NotNull
-
-@Size(max=10) 
+  @Size(max = 10)
   public String getDeliveryOptionCode() {
     return deliveryOptionCode;
   }
@@ -110,7 +107,6 @@ public class BadgeReplaceRequest   {
   public void setDeliveryOptionCode(String deliveryOptionCode) {
     this.deliveryOptionCode = deliveryOptionCode;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -121,10 +117,10 @@ public class BadgeReplaceRequest   {
       return false;
     }
     BadgeReplaceRequest badgeReplaceRequest = (BadgeReplaceRequest) o;
-    return Objects.equals(this.badgeNumber, badgeReplaceRequest.badgeNumber) &&
-        Objects.equals(this.replaceReasonCode, badgeReplaceRequest.replaceReasonCode) &&
-        Objects.equals(this.deliverToCode, badgeReplaceRequest.deliverToCode) &&
-        Objects.equals(this.deliveryOptionCode, badgeReplaceRequest.deliveryOptionCode);
+    return Objects.equals(this.badgeNumber, badgeReplaceRequest.badgeNumber)
+        && Objects.equals(this.replaceReasonCode, badgeReplaceRequest.replaceReasonCode)
+        && Objects.equals(this.deliverToCode, badgeReplaceRequest.deliverToCode)
+        && Objects.equals(this.deliveryOptionCode, badgeReplaceRequest.deliveryOptionCode);
   }
 
   @Override
@@ -136,7 +132,7 @@ public class BadgeReplaceRequest   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BadgeReplaceRequest {\n");
-    
+
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    replaceReasonCode: ").append(toIndentedString(replaceReasonCode)).append("\n");
     sb.append("    deliverToCode: ").append(toIndentedString(deliverToCode)).append("\n");
@@ -146,8 +142,7 @@ public class BadgeReplaceRequest   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -156,4 +151,3 @@ public class BadgeReplaceRequest   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

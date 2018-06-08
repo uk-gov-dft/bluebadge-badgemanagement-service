@@ -1,20 +1,14 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.util.Objects;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * Address
- */
+/** Address */
 @Validated
-
-public class Address   {
+public class Address {
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
@@ -34,12 +28,12 @@ public class Address   {
 
   /**
    * Get buildingStreet
+   *
    * @return buildingStreet
-  **/
+   */
   @ApiModelProperty(example = "65 Basil Chambers", required = true, value = "")
   @NotNull
-
-@Size(max=100) 
+  @Size(max = 100)
   public String getBuildingStreet() {
     return buildingStreet;
   }
@@ -55,11 +49,11 @@ public class Address   {
 
   /**
    * Get line2
+   *
    * @return line2
-  **/
+   */
   @ApiModelProperty(example = "Northern Quarter", value = "")
-
-@Size(max=100) 
+  @Size(max = 100)
   public String getLine2() {
     return line2;
   }
@@ -75,12 +69,12 @@ public class Address   {
 
   /**
    * Get townCity
+   *
    * @return townCity
-  **/
+   */
   @ApiModelProperty(example = "Manchester", required = true, value = "")
   @NotNull
-
-@Size(max=100) 
+  @Size(max = 100)
   public String getTownCity() {
     return townCity;
   }
@@ -96,12 +90,15 @@ public class Address   {
 
   /**
    * Get postCode
+   *
    * @return postCode
-  **/
+   */
   @ApiModelProperty(example = "SK6 8GH", required = true, value = "")
   @NotNull
-
-@Pattern(regexp="^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$") 
+  @Pattern(
+    regexp =
+        "^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$"
+  )
   public String getPostCode() {
     return postCode;
   }
@@ -109,7 +106,6 @@ public class Address   {
   public void setPostCode(String postCode) {
     this.postCode = postCode;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -120,10 +116,10 @@ public class Address   {
       return false;
     }
     Address address = (Address) o;
-    return Objects.equals(this.buildingStreet, address.buildingStreet) &&
-        Objects.equals(this.line2, address.line2) &&
-        Objects.equals(this.townCity, address.townCity) &&
-        Objects.equals(this.postCode, address.postCode);
+    return Objects.equals(this.buildingStreet, address.buildingStreet)
+        && Objects.equals(this.line2, address.line2)
+        && Objects.equals(this.townCity, address.townCity)
+        && Objects.equals(this.postCode, address.postCode);
   }
 
   @Override
@@ -135,7 +131,7 @@ public class Address   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Address {\n");
-    
+
     sb.append("    buildingStreet: ").append(toIndentedString(buildingStreet)).append("\n");
     sb.append("    line2: ").append(toIndentedString(line2)).append("\n");
     sb.append("    townCity: ").append(toIndentedString(townCity)).append("\n");
@@ -145,8 +141,7 @@ public class Address   {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -155,4 +150,3 @@ public class Address   {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

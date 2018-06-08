@@ -1,25 +1,19 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
-import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.Error;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * Contains a list of Badge numbers.
- */
+/** Contains a list of Badge numbers. */
 @ApiModel(description = "Contains a list of Badge numbers.")
 @Validated
-
-public class BadgeNumbersResponse extends CommonResponse  {
+public class BadgeNumbersResponse extends CommonResponse {
   @JsonProperty("data")
   @Valid
   private List<String> data = null;
@@ -39,11 +33,10 @@ public class BadgeNumbersResponse extends CommonResponse  {
 
   /**
    * Get data
+   *
    * @return data
-  **/
+   */
   @ApiModelProperty(value = "")
-
-
   public List<String> getData() {
     return data;
   }
@@ -51,7 +44,6 @@ public class BadgeNumbersResponse extends CommonResponse  {
   public void setData(List<String> data) {
     this.data = data;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -62,8 +54,7 @@ public class BadgeNumbersResponse extends CommonResponse  {
       return false;
     }
     BadgeNumbersResponse badgeNumbersResponse = (BadgeNumbersResponse) o;
-    return Objects.equals(this.data, badgeNumbersResponse.data) &&
-        super.equals(o);
+    return Objects.equals(this.data, badgeNumbersResponse.data) && super.equals(o);
   }
 
   @Override
@@ -82,8 +73,7 @@ public class BadgeNumbersResponse extends CommonResponse  {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -92,4 +82,3 @@ public class BadgeNumbersResponse extends CommonResponse  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

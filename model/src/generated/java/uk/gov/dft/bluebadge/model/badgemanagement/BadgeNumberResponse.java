@@ -1,23 +1,16 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.Error;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+import java.util.Objects;
 import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
-/**
- * Returns a badge number.
- */
+/** Returns a badge number. */
 @ApiModel(description = "Returns a badge number.")
 @Validated
-
-public class BadgeNumberResponse extends CommonResponse  {
+public class BadgeNumberResponse extends CommonResponse {
   @JsonProperty("data")
   private String data = null;
 
@@ -28,11 +21,10 @@ public class BadgeNumberResponse extends CommonResponse  {
 
   /**
    * The unique badge number for this badge
+   *
    * @return data
-  **/
+   */
   @ApiModelProperty(example = "095715", value = "The unique badge number for this badge")
-
-
   public String getData() {
     return data;
   }
@@ -40,7 +32,6 @@ public class BadgeNumberResponse extends CommonResponse  {
   public void setData(String data) {
     this.data = data;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -51,8 +42,7 @@ public class BadgeNumberResponse extends CommonResponse  {
       return false;
     }
     BadgeNumberResponse badgeNumberResponse = (BadgeNumberResponse) o;
-    return Objects.equals(this.data, badgeNumberResponse.data) &&
-        super.equals(o);
+    return Objects.equals(this.data, badgeNumberResponse.data) && super.equals(o);
   }
 
   @Override
@@ -71,8 +61,7 @@ public class BadgeNumberResponse extends CommonResponse  {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -81,4 +70,3 @@ public class BadgeNumberResponse extends CommonResponse  {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

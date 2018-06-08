@@ -45,13 +45,7 @@ node {
           "recursive": "false"
         },
         {
-          "pattern": "server/build/libs/*.jar",
-          "target": "gradle-release-local/",
-          "regexp": "false",
-          "recursive": "false"
-        },
-        {
-          "pattern": "build/libs/*.jar",
+          "pattern": "service/build/libs/*.jar",
           "target": "gradle-release-local/",
           "regexp": "false",
           "recursive": "false"

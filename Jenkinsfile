@@ -59,7 +59,7 @@ node {
         ]
         }"""
 
-        def buildInfo1  = rtGradle.run buildFile: 'build.gradle', tasks: 'clear wrapper build'
+        def buildInfo1  = rtGradle.run buildFile: 'build.gradle', tasks: 'clean wrapper build'
         def buildInfo2 = server.upload(uploadSpec)
         buildInfo1.append buildInfo2
         server.publishBuildInfo buildInfo1

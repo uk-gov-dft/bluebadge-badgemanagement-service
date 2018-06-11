@@ -4,6 +4,17 @@ logging:
     root: INFO
     sample.mybatis.mapper: WARN
 
+management:
+  server:
+    port: 8281
+    address: localhost
+    servlet:
+      context-path: /manage
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 mybatis:
   type-aliases-package: uk.gov.dft.bluebadge.service.badgemanagement.repository.domain
 

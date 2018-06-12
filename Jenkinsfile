@@ -2,11 +2,6 @@ def version = "${env.BUILD_NUMBER}"
 def REPONAME = "${scm.getUserRemoteConfigs()[0].getUrl()}"
 
 node {
-
-    // Get Artifactory server instance, defined in the Artifactory Plugin administration page.
-    def server = Artifactory.server "dftbluebadge"
-    // Create an Artifactory Gradle instance.
-    def rtGradle = Artifactory.newGradleBuild()
     
     stage('Clone sources') {
       git(

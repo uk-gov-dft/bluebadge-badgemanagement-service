@@ -19,3 +19,11 @@ sourceSets {
 
 archivesBaseName = "badgemanagement-service-client"
 
+publishing {
+    publications {
+        project_client(MavenPublication) {
+            from components.java
+            artifactId "${archivesBaseName}"
+        }
+    }
+}

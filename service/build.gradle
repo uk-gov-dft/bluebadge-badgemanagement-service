@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
-//apply plugin: 'findbugs'
+apply plugin: 'maven'
 
 sourceCompatibility = 1.8
 
@@ -80,3 +80,12 @@ bootRun {
 }
 archivesBaseName = "badgemanagement-service"
 compileJava.dependsOn 'googleJavaFormat'
+
+publishing {
+    publications {
+        project_service(MavenPublication) {
+            from components.java
+            artifactId "${archivesBaseName}"
+        }
+    }
+}

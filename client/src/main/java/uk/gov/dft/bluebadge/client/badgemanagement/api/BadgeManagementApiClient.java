@@ -29,7 +29,7 @@ public class BadgeManagementApiClient {
     this.restTemplateFactory = restTemplateFactory;
   }
 
-  public List<BadgeSummary> searchBadges(String name, String niNumber, String badgeNumber) {
+  public List<BadgeSummary> findBadges(String name, String niNumber, String badgeNumber) {
 
     // TODO mock version.
     HttpHeaders headers = new HttpHeaders();

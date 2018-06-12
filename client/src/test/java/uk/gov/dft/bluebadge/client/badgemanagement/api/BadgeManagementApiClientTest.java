@@ -19,7 +19,7 @@ public class BadgeManagementApiClientTest {
 
   @Test
   public void searchBadges() {
-    List<BadgeSummary> response = badgeManagementApiClient.searchBadges("", "", "");
+    List<BadgeSummary> response = badgeManagementApiClient.findBadges("", "", "");
     Assert.notNull(response, "");
   }
 

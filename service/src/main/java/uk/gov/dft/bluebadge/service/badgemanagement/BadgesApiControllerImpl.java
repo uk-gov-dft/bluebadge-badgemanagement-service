@@ -5,12 +5,12 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import uk.gov.dft.bluebadge.service.badgemanagement.controller.BadgeApi;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 
 @Controller
-public class BadgesApiControllerImpl implements BadgeApi {
+public class BadgesApiControllerImpl implements BadgesApi {
 
   private BadgeManagementService service;
   private BadgeConverter badgeConverter = new BadgeConverter();

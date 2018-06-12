@@ -1,36 +1,48 @@
 package uk.gov.dft.bluebadge.model.badgemanagement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
-/** BadgeData */
+/** Contains a list of Badge numbers. */
+@ApiModel(description = "Contains a list of Badge numbers.")
 @Validated
-public class BadgeData extends Data {
-  @JsonProperty("badge")
-  private Badge badge = null;
+public class BadgeNumbersResponse extends CommonResponse {
+  @JsonProperty("data")
+  @Valid
+  private List<String> data = null;
 
-  public BadgeData badge(Badge badge) {
-    this.badge = badge;
+  public BadgeNumbersResponse data(List<String> data) {
+    this.data = data;
+    return this;
+  }
+
+  public BadgeNumbersResponse addDataItem(String dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
+    }
+    this.data.add(dataItem);
     return this;
   }
 
   /**
-   * Get badge
+   * Get data
    *
-   * @return badge
+   * @return data
    */
   @ApiModelProperty(value = "")
-  @Valid
-  public Badge getBadge() {
-    return badge;
+  public List<String> getData() {
+    return data;
   }
 
-  public void setBadge(Badge badge) {
-    this.badge = badge;
+  public void setData(List<String> data) {
+    this.data = data;
   }
 
   @Override
@@ -41,21 +53,21 @@ public class BadgeData extends Data {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BadgeData badgeData = (BadgeData) o;
-    return Objects.equals(this.badge, badgeData.badge) && super.equals(o);
+    BadgeNumbersResponse badgeNumbersResponse = (BadgeNumbersResponse) o;
+    return Objects.equals(this.data, badgeNumbersResponse.data) && super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(badge, super.hashCode());
+    return Objects.hash(data, super.hashCode());
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BadgeData {\n");
+    sb.append("class BadgeNumbersResponse {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    badge: ").append(toIndentedString(badge)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

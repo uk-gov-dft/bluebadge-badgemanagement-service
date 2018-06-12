@@ -18,7 +18,7 @@ public class BadgeManagementApiClientTest {
   @Autowired private BadgeManagementApiClient badgeManagementApiClient;
 
   @Test
-  public void searchBadges() {
+  public void findBadges() {
     List<BadgeSummary> response = badgeManagementApiClient.findBadges("", "", "");
     Assert.notNull(response, "");
   }

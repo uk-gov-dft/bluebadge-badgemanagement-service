@@ -7,10 +7,6 @@ buildscript {
         jcenter()
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-release'
-            credentials {
-                username = "rob"
-                 ***REMOVED***
-            }
         }
     }
 
@@ -36,10 +32,6 @@ allprojects {
         jcenter()
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-release-dev'
-            credentials {
-                username = "rob"
-                 ***REMOVED***
-            }
         }
     }
 }
@@ -50,8 +42,6 @@ artifactory {
     publish {
         repository {
             repoKey = 'gradle-dev-local'
-            username = "rob"
-             ***REMOVED***
             maven = true
         }
 
@@ -67,8 +57,6 @@ artifactory {
     resolve {
         repository {
             repoKey = 'gradle-release'
-            username = "rob"
-             ***REMOVED***
             maven = true
 
         }

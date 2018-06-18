@@ -12,6 +12,7 @@ node {
      }
 
     stage ('Gradle build') {
+        sh 'gradle wrapper'
         sh './gradlew clean build bootJar artifactoryPublish artifactoryDeploy'
     }
     

@@ -12,7 +12,7 @@ node {
      }
 
     stage ('Gradle build') {
-        sh 'gradle wrapper'
+        sh 'pwd && ls -la'
         sh './gradlew clean build bootJar artifactoryPublish artifactoryDeploy'
     }
     

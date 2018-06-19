@@ -15,7 +15,22 @@ buildscript {
     }
 }
 
-//apply plugin: 'com.jfrog.artifactory'
+def getCurrentGitBranch() {
+    def gitBranch = "Unknown branch"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim().replaceAll('/','_')
+            if (gitBranch == 'develop') {
+                gitBranch = 'SNAPSHOT'
+            }
+        }
+    } catch (e) {
+    }
+    return gitBranch
+}
 
 allprojects {
     apply plugin: 'java'
@@ -24,7 +39,7 @@ allprojects {
     apply plugin: 'com.jfrog.artifactory'
 
     group = 'uk.gov.dft.bluebadge'
-    version = rootProject.file('VERSION').text.trim()
+    version = rootProject.file('VERSION').text.trim() + '-' + getCurrentGitBranch()
     sourceCompatibility = 1.8
 
     repositories {

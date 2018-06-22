@@ -37,6 +37,8 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.artifactory'
+    apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
 
     group = 'uk.gov.dft.bluebadge'
     version = rootProject.file('VERSION').text.trim() + '-' + getCurrentGitBranch()
@@ -48,6 +50,11 @@ allprojects {
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-release-dev'
         }
+    }
+
+    checkstyle {
+        toolVersion "8.9"
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     }
 }
 
@@ -90,6 +97,12 @@ project(':service') {
         compile project(':model')
     }
 }
+
+jacoco {
+    toolVersion = "0.8.1"
+    // reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
 
 task generateSwagger() {
 

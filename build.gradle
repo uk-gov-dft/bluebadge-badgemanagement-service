@@ -70,7 +70,7 @@ artifactory {
         publishArtifacts = true
         publishPom = true
         defaults {
-            publications('project_model', 'project_client', 'project_service')
+            publications('project_model', 'project_service')
             publishArtifacts = true
             publishPom = true
         }
@@ -84,12 +84,6 @@ artifactory {
         }
     }
 
-}
-
-project(':client') {
-    dependencies {
-        compile project(':model')
-    }
 }
 
 project(':service') {
@@ -136,18 +130,18 @@ task unzipGenerated(type: Copy) {
 
 task generateModel(dependsOn: 'unzipGenerated', type: Sync){
     group = "GenerateAPI"
-    from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/model/badgemanagement"
+    from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
     include "**/*.java"
-    into "model/src/generated/java/uk/gov/dft/bluebadge/model/badgemanagement"
+    into "model/src/generated/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
 }
 
 task generateService(dependsOn: 'unzipGenerated', type: Sync){
     group = "GenerateAPI"
-    from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/service/badgemanagement"
+    from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/service/badgemanagement/generated"
     exclude '**/Swagger2SpringBoot.java'
     exclude '**/RFC3339DateFormat.java'
     exclude '**/*ApiController.java'
-    into "service/src/generated/java/uk/gov/dft/bluebadge/service/badgemanagement"
+    into "service/src/generated/java/uk/gov/dft/bluebadge/service/badgemanagement/generated"
 }
 
 

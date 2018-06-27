@@ -1,1 +1,1 @@
-include 'client', 'model', 'service'
+include 'model', 'service'

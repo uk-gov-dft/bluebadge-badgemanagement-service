@@ -9,9 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uk.gov.dft.bluebadge.model.badgemanagement.CommonResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.Error;
-import uk.gov.dft.bluebadge.model.badgemanagement.ErrorErrors;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.Error;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
 
 @ControllerAdvice
 public class CommonResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {

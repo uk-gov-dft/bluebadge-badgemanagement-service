@@ -49,7 +49,7 @@ public interface BadgesApi {
   @ApiOperation(
     value = "Request cancel badge",
     nickname = "cancelBlueBadge",
-    notes = "Request cancellation of a badge.",
+    notes = "Cancel a badge with immediate effect.",
     tags = {
       "badges",
     }
@@ -57,7 +57,9 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge replacement requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
-      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+      @Pattern(regexp = "^[0-9A-HK]{6}$")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -79,7 +81,9 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
   @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
   default ResponseEntity<Void> deleteBlueBadge(
-      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+      @Pattern(regexp = "^[0-9A-HK]{6}$")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
     } else {
@@ -90,7 +94,7 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-    value = "Find a blue badge given the specified query parameters",
+    value = "Find a Blue Badge given the specified query parameters",
     nickname = "findBlueBadge",
     notes =
         "By passing in appropriate options, you can search for available badges in the system.  Options are a partial match and all submitted options must be matched. At least 1 parameter must be provided. ",
@@ -103,10 +107,10 @@ public interface BadgesApi {
     value = {
       @ApiResponse(
         code = 200,
-        message = "Response when blue badges can (or can not) be found. ",
+        message = "Response when Blue Badges can (or can not) be found. ",
         response = BadgesResponse.class
       ),
-      @ApiResponse(code = 200, message = "Unexpected error", response = CommonResponse.class)
+      @ApiResponse(code = 200, message = "Unexpected error.", response = CommonResponse.class)
     }
   )
   @RequestMapping(
@@ -115,11 +119,13 @@ public interface BadgesApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgesResponse> findBlueBadge(
-      @ApiParam(value = "Search the badge holders name")
+      @Size(max = 100)
+          @ApiParam(value = "Search the badge holder's name.")
           @Valid
           @RequestParam(value = "name", required = false)
           Optional<String> name,
-      @ApiParam(value = "A valid postcode with or without spaces")
+      @Size(max = 20)
+          @ApiParam(value = "A valid postcode with or without spaces.")
           @Valid
           @RequestParam(value = "postCode", required = false)
           Optional<String> postCode) {
@@ -144,7 +150,8 @@ public interface BadgesApi {
   @ApiOperation(
     value = "Order badges",
     nickname = "orderBlueBadges",
-    notes = "Order One or more badges.",
+    notes =
+        "Place an order for a new badge, which will add a new record to the central record immediately and result in a fulfilment request being sent to the printer with no further intervention required.",
     response = BadgeNumbersResponse.class,
     tags = {
       "badges",
@@ -183,7 +190,8 @@ public interface BadgesApi {
   @ApiOperation(
     value = "Request replacement badge",
     nickname = "replaceBlueBadge",
-    notes = "Request a replacement badge.",
+    notes =
+        "Cancel an existing badge and order a new badge with the same details (including expiry date), with a start date of today.",
     response = BadgeNumberResponse.class,
     tags = {
       "badges",
@@ -200,7 +208,9 @@ public interface BadgesApi {
   )
   @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
   default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
-      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+      @Pattern(regexp = "^[0-9A-HK]{6}$")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeReplaceRequest badgeReplace) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -222,9 +232,9 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-    value = "Retrieve a blue badge given the blue badge number parameter.",
+    value = "Retrieve a Blue Badge given the Blue Badge number parameter.",
     nickname = "retrieveBlueBadge",
-    notes = "Retrieves a blue-badge given the blueBadgeNumber. ",
+    notes = "Retrieves a Blue Badge given the blueBadgeNumber. ",
     response = BadgeResponse.class,
     tags = {
       "badges",
@@ -234,12 +244,12 @@ public interface BadgesApi {
     value = {
       @ApiResponse(
         code = 200,
-        message = "Response when blue badge can be retrieved. ",
+        message = "Response when Blue Badge can be retrieved. ",
         response = BadgeResponse.class
       ),
       @ApiResponse(
         code = 404,
-        message = "A blue badge cannot be found given the parameters specified"
+        message = "A Blue Badge cannot be found given the parameters specified."
       )
     }
   )
@@ -249,7 +259,9 @@ public interface BadgesApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgeResponse> retrieveBlueBadge(
-      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
+      @Pattern(regexp = "^[0-9A-HK]{6}$")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {

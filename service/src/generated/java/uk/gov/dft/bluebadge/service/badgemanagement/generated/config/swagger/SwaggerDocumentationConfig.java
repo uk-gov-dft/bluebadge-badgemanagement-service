@@ -15,7 +15,7 @@ public class SwaggerDocumentationConfig {
   ApiInfo apiInfo() {
     return new ApiInfoBuilder()
         .title("Blue Badge Management Service")
-        .description("External API for local authorities to manage blue badges")
+        .description("External API for local authorities to manage Blue Badges.")
         .license("Apache 2.0")
         .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
         .termsOfServiceUrl("")

@@ -21,16 +21,17 @@ public class BadgeCancelRequest {
   }
 
   /**
-   * The unique badge number for this badge
+   * The unique badge number for this badge.
    *
    * @return badgeNumber
    */
   @ApiModelProperty(
-    example = "095715",
+    example = "72B9HA",
     required = true,
-    value = "The unique badge number for this badge"
+    value = "The unique badge number for this badge."
   )
   @NotNull
+  @Pattern(regexp = "^[0-9A-HK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -45,11 +46,15 @@ public class BadgeCancelRequest {
   }
 
   /**
-   * Code for Deceased, No longer needed or Revoked
+   * A short code from the CANCEL group of reference data.
    *
    * @return cancelReasonCode
    */
-  @ApiModelProperty(required = true, value = "Code for Deceased, No longer needed or Revoked ")
+  @ApiModelProperty(
+    example = "REVOKE",
+    required = true,
+    value = "A short code from the CANCEL group of reference data. "
+  )
   @NotNull
   @Size(max = 10)
   public String getCancelReasonCode() {

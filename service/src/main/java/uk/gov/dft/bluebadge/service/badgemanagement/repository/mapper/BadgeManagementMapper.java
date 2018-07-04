@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Mapper;
 @SuppressWarnings("unused")
 @Mapper
 public interface BadgeManagementMapper {
-
+  // Left empty intentionally
 }

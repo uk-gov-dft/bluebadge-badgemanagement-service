@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class BadgeManagementRepository {
 
   public BadgeManagementRepository() {
-
+    // Left empty just to keep the class as a placeholder
   }
 
 }

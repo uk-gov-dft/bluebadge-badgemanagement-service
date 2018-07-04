@@ -58,7 +58,6 @@ public class LoggingAspect {
     logger.debug(
         "***** Starting: {}.{} with *****",
         declaringTypeName,
-        signature.getName(),
-        paramDebugInfo);
+        signature.getName());
   }
 }

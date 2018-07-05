@@ -4,7 +4,7 @@ import java.util.List;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
 
 public class BlueBadgeBusinessException extends Exception {
-  private List<ErrorErrors> errorsList;
+  private transient List<ErrorErrors> errorsList;
 
   public BlueBadgeBusinessException(List<ErrorErrors> errorsList) {
     this.errorsList = errorsList;

@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
+
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 
@@ -13,7 +13,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 public class BadgesApiControllerImpl implements BadgesApi {
 
   private BadgeManagementService service;
-  private BadgeConverter badgeConverter = new BadgeConverter();
   private ObjectMapper objectMapper;
   private HttpServletRequest request;
 
@@ -26,12 +25,12 @@ public class BadgesApiControllerImpl implements BadgesApi {
     this.service = service;
   }
 
-  //@Override
+  @Override
   public Optional<ObjectMapper> getObjectMapper() {
     return Optional.ofNullable(objectMapper);
   }
 
-  //@Override
+  @Override
   public Optional<HttpServletRequest> getRequest() {
     return Optional.ofNullable(request);
   }

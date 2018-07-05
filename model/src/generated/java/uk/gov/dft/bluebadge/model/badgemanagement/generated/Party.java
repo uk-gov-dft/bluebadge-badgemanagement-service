@@ -57,7 +57,8 @@ public class Party {
    *
    * @return contact
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
   @Valid
   public Contact getContact() {
     return contact;

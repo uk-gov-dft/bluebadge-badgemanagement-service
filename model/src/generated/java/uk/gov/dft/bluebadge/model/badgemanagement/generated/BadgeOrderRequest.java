@@ -57,7 +57,8 @@ public class BadgeOrderRequest {
    *
    * @return party
    */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
   @Valid
   public Party getParty() {
     return party;
@@ -233,11 +234,13 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.
+   * Base64 encoded. Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.
    *
    * @return imageFile
    */
-  @ApiModelProperty(value = "Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.")
+  @ApiModelProperty(
+    value = "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
+  )
   public String getImageFile() {
     return imageFile;
   }

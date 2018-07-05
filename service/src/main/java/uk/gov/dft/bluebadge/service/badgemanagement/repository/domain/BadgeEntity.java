@@ -39,4 +39,8 @@ public class BadgeEntity implements Serializable {
   String secondaryPhoneNo;
   String contactEmailAddress;
   int numberOfBadges;
+
+  public boolean isPerson() {
+    return "PERSON".equals(partyCode);
+  }
 }

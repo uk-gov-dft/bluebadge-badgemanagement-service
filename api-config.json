@@ -510,7 +510,7 @@
           },
           "imageFile" : {
             "type" : "string",
-            "description" : "Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
+            "description" : "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
           },
           "deliverToCode" : {
             "type" : "string",
@@ -532,7 +532,7 @@
             "description" : "Must be 1 for a person, can be multiple for an organisation."
           }
         },
-        "required" : [ "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
+        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
       },
       "Party" : {
         "type" : "object",
@@ -553,7 +553,7 @@
             "$ref" : "#/definitions/Organisation"
           }
         },
-        "required" : [ "typeCode" ]
+        "required" : [ "typeCode", "contact" ]
       },
       "Person" : {
         "type" : "object",
@@ -628,7 +628,7 @@
           "postCode" : {
             "type" : "string",
             "example" : "SK6 8GH",
-            "pattern" : "^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$"
+            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
           },
           "primaryPhoneNumber" : {
             "type" : "string",

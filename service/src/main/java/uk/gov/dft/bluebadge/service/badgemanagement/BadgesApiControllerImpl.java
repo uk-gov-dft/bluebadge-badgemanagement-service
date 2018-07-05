@@ -1,10 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +22,10 @@ public class BadgesApiControllerImpl implements BadgesApi {
   private final BadgeManagementService service;
   private final BadgeOrderRequestConverter badgeOrderRequestConverter =
       new BadgeOrderRequestConverter();
-  private final ObjectMapper objectMapper;
-  private final HttpServletRequest request;
 
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiControllerImpl(
-      ObjectMapper objectMapper, HttpServletRequest request, BadgeManagementService service) {
-    this.objectMapper = objectMapper;
-    this.request = request;
+  public BadgesApiControllerImpl(BadgeManagementService service) {
     this.service = service;
   }
 
@@ -41,16 +33,6 @@ public class BadgesApiControllerImpl implements BadgesApi {
   @ExceptionHandler({ServiceException.class})
   public ResponseEntity<CommonResponse> handleServiceException(ServiceException e) {
     return e.getResponse();
-  }
-
-  @Override
-  public Optional<ObjectMapper> getObjectMapper() {
-    return Optional.ofNullable(objectMapper);
-  }
-
-  //@Override
-  public Optional<HttpServletRequest> getRequest() {
-    return Optional.ofNullable(request);
   }
 
   @Override

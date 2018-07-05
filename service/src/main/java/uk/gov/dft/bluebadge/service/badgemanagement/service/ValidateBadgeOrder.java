@@ -16,9 +16,8 @@ public class ValidateBadgeOrder {
 
   private ValidateBadgeOrder() {}
 
-  public static void validateCreateBadgeRequest(BadgeEntity entity) {
+  public static void validate(BadgeEntity entity) {
     List<ErrorErrors> errors = new ArrayList<>();
-    boolean isPerson = entity.getPartyCode().equals("PERSON");
 
     // Ref data validation
     validateRefData(PARTY, INVALID_PARTY_CODE, entity.getPartyCode(), errors);
@@ -32,11 +31,13 @@ public class ValidateBadgeOrder {
     validateStartExpiryDateRange(entity, errors);
 
     // Person specific validation
-    if (isPerson) {
+    if (entity.isPerson()) {
       validateDobInPast(entity, errors);
       validateRefData(ELIGIBILITY, INVALID_ELIGIBILITY_CODE, entity.getEligibilityCode(), errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }
+
+    // Report any failures
     if (!errors.isEmpty()) {
       throw new BadRequestException(errors);
     }

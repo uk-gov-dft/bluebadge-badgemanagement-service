@@ -25,18 +25,18 @@ public class BadgeManagementService {
     List<String> createdList = new ArrayList<>();
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
 
-    ValidateBadgeOrder.validateCreateBadgeRequest(entity);
+    ValidateBadgeOrder.validate(entity);
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
-      createdList.add(createNewBadgeNumber(entity));
+      entity.setBadgeNo(createNewBadgeNumber());
       repository.createBadge(entity);
+      createdList.add(entity.getBadgeNo());
     }
     return createdList;
   }
 
-  private String createNewBadgeNumber(BadgeEntity entity) {
+  private String createNewBadgeNumber() {
     String badgeNo = Base20.encode(repository.retrieveNextBadgeNumber());
     log.debug("Assigning badge number : {}", badgeNo);
-    entity.setBadgeNo(badgeNo);
 
     return badgeNo;
   }

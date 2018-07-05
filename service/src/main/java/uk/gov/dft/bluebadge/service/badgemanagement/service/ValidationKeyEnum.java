@@ -21,7 +21,14 @@ public enum ValidationKeyEnum {
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
       "expiryDate"),
-  INVALID_GENDER_CODE("Invalid.badge.genderCode", "Invalid gender code.", "person.genderCode");
+  INVALID_GENDER_CODE(
+      "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),
+  MISSING_PERSON_OBJECT(
+      "NotNull.badge.person", "Person details must be included if party is a person.", "party"),
+  MISSING_ORG_OBJECT(
+      "NotNull.badge.organisation",
+      "Organisation details must be included if party is an organisation.",
+      "organisation");
 
   private final String key;
   private final String defaultMessage;

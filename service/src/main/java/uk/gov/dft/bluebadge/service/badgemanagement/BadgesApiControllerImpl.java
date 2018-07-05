@@ -48,7 +48,7 @@ public class BadgesApiControllerImpl implements BadgesApi {
     return Optional.ofNullable(objectMapper);
   }
 
-  @Override
+  //@Override
   public Optional<HttpServletRequest> getRequest() {
     return Optional.ofNullable(request);
   }

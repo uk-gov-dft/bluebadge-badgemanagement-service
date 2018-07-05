@@ -510,7 +510,6 @@
           },
           "imageFile" : {
             "type" : "string",
-            "format" : "byte",
             "description" : "Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
           },
           "deliverToCode" : {

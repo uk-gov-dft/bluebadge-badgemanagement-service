@@ -1,10 +1,10 @@
-@badge-post
-Feature: Verify Create badge
+@badge-post-400
+Feature: Verify Create badge with 400
 
   Background:
     * url baseUrl
 
-  Scenario: Verify valid create
+  Scenario: Verify create 400
     * def payloadok =
     """
       {
@@ -15,7 +15,7 @@ Feature: Verify Create badge
             "buildingStreet": "65 Basil Chambers",
             "line2": "Northern Quarter",
             "townCity": "Manchester",
-            "postCode": "SK6 8GH",
+            "postCode": "S",
             "primaryPhoneNumber": "01616548765",
             "secondaryPhoneNumber": "01616548765",
             "emailAddress": "june@bigbrainknitting.com"
@@ -39,7 +39,7 @@ Feature: Verify Create badge
         "eligibilityCode": "CHILDBULK",
         "imageFile": "YWZpbGU=",
         "deliverToCode": "HOME",
-        "deliveryOptionCode": "STANDARD",
+        "deliveryOptionCode": "STAND",
         "numberOfBadges": 1
       }
     """
@@ -49,5 +49,5 @@ Feature: Verify Create badge
     Given path 'badges'
     And request jsonpayloadcreate
     When method POST
-    Then status 200
-    And match $.data[*] contains {id:"#notnull"}
+    Then status 400
+    And match $.error.errors contains {field:"party.contact.postCode", reason:"#notnull", message:"#notnull", location:"#null", locationType:"#null"}

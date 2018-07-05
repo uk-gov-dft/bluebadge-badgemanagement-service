@@ -18,7 +18,7 @@ public class NotFoundException extends ServiceException {
     UPDATE("update"),
     RETRIEVE("retrieve");
 
-    private String description;
+    private final String description;
 
     Operation(String description) {
       this.description = description;

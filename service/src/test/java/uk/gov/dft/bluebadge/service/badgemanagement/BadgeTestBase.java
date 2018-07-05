@@ -47,7 +47,7 @@ public class BadgeTestBase {
         .deliverToCode("HOME")
         .dob(LocalDate.now().minus(Period.ofYears(30)))
         .eligibilityCode("PIP")
-        .expiryDate(LocalDate.now().plus(Period.ofYears(3)).plus(Period.ofMonths(1)))
+        .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
         .genderCode("MALE")
         .holderName("Robert McRoberts")
         .localAuthorityId(2)

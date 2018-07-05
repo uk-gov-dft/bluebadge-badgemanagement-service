@@ -1,9 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.ELIGIBILITY;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.*;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.INVALID_ELIGIBILITY_CODE;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -37,8 +35,9 @@ public class ValidateBadgeOrder {
     if (isPerson) {
       validateDobInPast(entity, errors);
       validateRefData(ELIGIBILITY, INVALID_ELIGIBILITY_CODE, entity.getEligibilityCode(), errors);
+      validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }
-    if (errors.size() > 0) {
+    if (!errors.isEmpty()) {
       throw new BadRequestException(errors);
     }
   }
@@ -61,7 +60,8 @@ public class ValidateBadgeOrder {
 
   private static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
-    if (entity.getExpiryDate().minus(Period.ofYears(3)).isBefore(entity.getStartDate())) {
+    if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
+        .isBefore(entity.getStartDate())) {
       errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getErrorInstance());
     }
   }

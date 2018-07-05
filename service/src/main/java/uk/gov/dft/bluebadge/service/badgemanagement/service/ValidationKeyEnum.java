@@ -20,11 +20,12 @@ public enum ValidationKeyEnum {
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
-      "expiryDate");
+      "expiryDate"),
+  INVALID_GENDER_CODE("Invalid.badge.genderCode", "Invalid gender code.", "person.genderCode");
 
   private final String key;
   private final String defaultMessage;
-  private String field;
+  private final String field;
 
   ValidationKeyEnum(String key, String defaultMessage, String field) {
 

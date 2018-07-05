@@ -132,10 +132,7 @@ public class Contact {
    */
   @ApiModelProperty(example = "SK6 8GH", required = true, value = "")
   @NotNull
-  @Pattern(
-    regexp =
-        "^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$"
-  )
+  @Pattern(regexp = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$")
   public String getPostCode() {
     return postCode;
   }

@@ -36,7 +36,7 @@ public class BadgeOrderRequest {
   private String eligibilityCode = null;
 
   @JsonProperty("imageFile")
-  private byte[] imageFile = null;
+  private String imageFile = null;
 
   @JsonProperty("deliverToCode")
   private String deliverToCode = null;
@@ -227,7 +227,7 @@ public class BadgeOrderRequest {
     this.eligibilityCode = eligibilityCode;
   }
 
-  public BadgeOrderRequest imageFile(byte[] imageFile) {
+  public BadgeOrderRequest imageFile(String imageFile) {
     this.imageFile = imageFile;
     return this;
   }
@@ -238,12 +238,11 @@ public class BadgeOrderRequest {
    * @return imageFile
    */
   @ApiModelProperty(value = "Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.")
-  @Pattern(regexp = "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")
-  public byte[] getImageFile() {
+  public String getImageFile() {
     return imageFile;
   }
 
-  public void setImageFile(byte[] imageFile) {
+  public void setImageFile(String imageFile) {
     this.imageFile = imageFile;
   }
 

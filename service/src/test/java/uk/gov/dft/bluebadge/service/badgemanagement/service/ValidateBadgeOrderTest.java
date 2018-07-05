@@ -49,7 +49,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   public void validateCreateBadgeRequest_start_expiry_range() {
     try {
       BadgeEntity entity = getValidBadge();
-      entity.setExpiryDate(entity.getStartDate().plus(Period.ofYears(3).minus(Period.ofDays(1))));
+      entity.setExpiryDate((entity.getStartDate().plus(Period.ofYears(3)).plus(Period.ofDays(1))));
       ValidateBadgeOrder.validateCreateBadgeRequest(entity);
       Assert.fail("Badge valid range validation should throw an exception");
     } catch (BadRequestException e) {

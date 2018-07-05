@@ -22,7 +22,8 @@
         #{deliverOptionCode}, #{holderName}, #{nino},
         #{dob}, #{genderCode}, #{contactName},
         #{contactBuildingStreet}, #{contactLine2}, #{contactTownCity},
-        #{contactPostcode}, #{primaryPhoneNo}, #{secondaryPhoneNo2}
+        #{contactPostcode}, #{primaryPhoneNo}, #{secondaryPhoneNo},
+        #{contactEmailAddress}
         )
     </insert>
 

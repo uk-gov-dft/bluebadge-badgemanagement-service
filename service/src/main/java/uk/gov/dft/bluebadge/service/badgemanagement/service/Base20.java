@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 /**
- * Provides utlitties to convert between integer and Base20 strings. Note. Misses out the 'I' so the
+ * Provides utilities to convert between integer and Base20 strings. Note. Misses out the 'I' so the
  * range of characters is 0-9, A,B,C,D,E,F,G,H,J,K
  */
 public class Base20 {
@@ -19,7 +19,7 @@ public class Base20 {
   /**
    * Encode a 0 or positive integer value to a Base20 String.
    *
-   * @param number
+   * @param number integer to encode
    * @return a Base20 encoded String.
    * @throws IllegalArgumentException when the integer supplied is not valid.
    */
@@ -46,7 +46,7 @@ public class Base20 {
   /**
    * Decode a Base20 encoded String to its decimal counterpart.
    *
-   * @param base20String
+   * @param base20String Sting to decode.
    * @return an integer value.
    * @throws IllegalArgumentException thrown when the encoded String supplied is either null or zero
    *     length or contains an invalid character.

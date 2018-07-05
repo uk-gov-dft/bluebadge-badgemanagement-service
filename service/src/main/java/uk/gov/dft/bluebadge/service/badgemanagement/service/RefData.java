@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RefData {
 
-  private static Set<String> validGroupKeys = new HashSet<>();
+  private static final Set<String> validGroupKeys = new HashSet<>();
 
   @SuppressWarnings("unused")
   @PostConstruct

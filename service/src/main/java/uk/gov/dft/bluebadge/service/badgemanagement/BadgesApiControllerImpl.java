@@ -9,20 +9,24 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.ServiceException;
 
 @Controller
 public class BadgesApiControllerImpl implements BadgesApi {
 
-  private BadgeManagementService service;
-  private BadgeOrderRequestConverter badgeOrderRequestConverter = new BadgeOrderRequestConverter();
-  private ObjectMapper objectMapper;
-  private HttpServletRequest request;
+  private final BadgeManagementService service;
+  private final BadgeOrderRequestConverter badgeOrderRequestConverter =
+      new BadgeOrderRequestConverter();
+  private final ObjectMapper objectMapper;
+  private final HttpServletRequest request;
 
   @SuppressWarnings("unused")
   @Autowired
@@ -33,19 +37,25 @@ public class BadgesApiControllerImpl implements BadgesApi {
     this.service = service;
   }
 
-  // @Override
+  @SuppressWarnings("unused")
+  @ExceptionHandler({ServiceException.class})
+  public ResponseEntity<CommonResponse> handleServiceException(ServiceException e) {
+    return e.getResponse();
+  }
+
+  @Override
   public Optional<ObjectMapper> getObjectMapper() {
     return Optional.ofNullable(objectMapper);
   }
 
-  // @Override
+  @Override
   public Optional<HttpServletRequest> getRequest() {
     return Optional.ofNullable(request);
   }
 
   @Override
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
-      @ApiParam(value = "") @Valid @RequestBody BadgeOrderRequest badgeOrder) {
+      @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
     List<String> createdList =
         service.createBadge(badgeOrderRequestConverter.convertToEntity(badgeOrder));
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));

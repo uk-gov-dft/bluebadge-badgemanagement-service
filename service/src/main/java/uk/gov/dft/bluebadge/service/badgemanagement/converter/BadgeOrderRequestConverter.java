@@ -42,10 +42,11 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
         .contactBuildingStreet(contact.getBuildingStreet())
         .contactLine2(contact.getLine2())
         .contactTownCity(contact.getTownCity())
+        .contactEmailAddress(contact.getEmailAddress())
         .contactPostcode(
             null == contact.getPostCode()
                 ? null
-                : StringUtils.remove(contact.getPostCode().toUpperCase(), " "))
+                : StringUtils.removeAll(contact.getPostCode().toUpperCase(), " "))
         .primaryPhoneNo(contact.getPrimaryPhoneNumber())
         .secondaryPhoneNo(contact.getSecondaryPhoneNumber())
         .numberOfBadges(null == model.getNumberOfBadges() ? 1 : model.getNumberOfBadges())

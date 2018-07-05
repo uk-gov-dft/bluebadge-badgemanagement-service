@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+@SuppressWarnings("SpellCheckingInspection")
 public enum RefDataGroupEnum {
   ELIGIBILITY("ELIGIBILIT"),
   APP_SOURCE("APPSOURCE"),
@@ -13,7 +14,7 @@ public enum RefDataGroupEnum {
     return groupKey;
   }
 
-  private String groupKey;
+  private final String groupKey;
 
   RefDataGroupEnum(String groupKey) {
 

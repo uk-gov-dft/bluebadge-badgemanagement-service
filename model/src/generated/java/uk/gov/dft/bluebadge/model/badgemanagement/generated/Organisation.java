@@ -1,36 +1,35 @@
 package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
 
-/** Returns a badge number. */
-@ApiModel(description = "Returns a badge number.")
+/** Organisation */
 @Validated
-public class BadgeNumberResponse extends CommonResponse {
-  @JsonProperty("data")
-  private String data = null;
+public class Organisation {
+  @JsonProperty("badgeHolderName")
+  private String badgeHolderName = null;
 
-  public BadgeNumberResponse data(String data) {
-    this.data = data;
+  public Organisation badgeHolderName(String badgeHolderName) {
+    this.badgeHolderName = badgeHolderName;
     return this;
   }
 
   /**
-   * The unique badge number for this badge.
+   * Get badgeHolderName
    *
-   * @return data
+   * @return badgeHolderName
    */
-  @ApiModelProperty(example = "095715", value = "The unique badge number for this badge.")
-  public String getData() {
-    return data;
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+  public String getBadgeHolderName() {
+    return badgeHolderName;
   }
 
-  public void setData(String data) {
-    this.data = data;
+  public void setBadgeHolderName(String badgeHolderName) {
+    this.badgeHolderName = badgeHolderName;
   }
 
   @Override
@@ -41,21 +40,21 @@ public class BadgeNumberResponse extends CommonResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BadgeNumberResponse badgeNumberResponse = (BadgeNumberResponse) o;
-    return Objects.equals(this.data, badgeNumberResponse.data) && super.equals(o);
+    Organisation organisation = (Organisation) o;
+    return Objects.equals(this.badgeHolderName, organisation.badgeHolderName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(data, super.hashCode());
+    return Objects.hash(badgeHolderName);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BadgeNumberResponse {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    data: ").append(toIndentedString(data)).append("\n");
+    sb.append("class Organisation {\n");
+
+    sb.append("    badgeHolderName: ").append(toIndentedString(badgeHolderName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

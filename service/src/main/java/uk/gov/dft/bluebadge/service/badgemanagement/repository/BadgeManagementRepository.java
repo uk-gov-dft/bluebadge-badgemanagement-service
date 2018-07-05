@@ -1,16 +1,30 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
-@SuppressWarnings("WeakerAccess")
+/** Provides CRUD operations on BadgeEntity entity. */
 @Component
-public class BadgeManagementRepository {
+@Slf4j
+public class BadgeManagementRepository implements BadgeManagementMapper {
 
-  public BadgeManagementRepository() {
-    // Left empty just to keep the class as a placeholder
+  private final SqlSession sqlSession;
+
+  public BadgeManagementRepository(SqlSession sqlSession) {
+    this.sqlSession = sqlSession;
   }
 
+  @Override
+  public void createBadge(BadgeEntity entity) {
+    log.debug("Persisting new badge {}", entity.getBadgeNo());
+    sqlSession.insert("createBadge", entity);
+  }
+
+  @Override
+  public Integer retrieveNextBadgeNumber() {
+    return sqlSession.selectOne("retrieveNextBadgeNumber");
+  }
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper">
+
+    <insert id="createBadge" parameterType="BadgeEntity">
+        INSERT INTO badge
+        (badge_no, badge_status, party_code,
+        local_authority_id, local_authority_ref, app_datetime,
+        app_channel_code, start_date, expiry_date,
+        eligibility_code, image_link, deliver_to_code,
+        deliver_option_code, holder_name, nino,
+        dob, gender_code, contact_name,
+        contact_building_street, contact_line2, contact_town_city,
+        contact_postcode, primary_phone_no, secondary_phone_no,
+        contact_email_address)
+        VALUES
+        (#{badgeNo}, #{badgeStatus}, #{partyCode},
+        #{localAuthorityId}, #{localAuthorityRef}, #{appDateTime},
+        #{appChannelCode}, #{startDate}, #{expiryDate},
+        #{eligibilityCode}, #{imageLink}, #{deliverToCode},
+        #{deliverOptionCode}, #{holderName}, #{nino},
+        #{dob}, #{genderCode}, #{contactName},
+        #{contactBuildingStreet}, #{contactLine2}, #{contactTownCity},
+        #{contactPostcode}, #{primaryPhoneNo}, #{secondaryPhoneNo},
+        #{contactEmailAddress}
+        )
+    </insert>
+
+    <select id="retrieveNextBadgeNumber" resultType="Integer">
+        select nextval('badge_no')
+    </select>
+</mapper>

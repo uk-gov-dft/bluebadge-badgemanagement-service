@@ -4,7 +4,7 @@
 .project
 .idea
 .gradle
-migrations/drivers
+database-schema/migrations/drivers
 *.iml
 *.sublime*
 *.swp

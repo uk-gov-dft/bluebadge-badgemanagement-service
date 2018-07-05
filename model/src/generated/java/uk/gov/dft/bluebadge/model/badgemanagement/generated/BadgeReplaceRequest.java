@@ -27,16 +27,17 @@ public class BadgeReplaceRequest {
   }
 
   /**
-   * The unique badge number for this badge
+   * The unique badge number for this badge.
    *
    * @return badgeNumber
    */
   @ApiModelProperty(
-    example = "095215",
+    example = "72B9HA",
     required = true,
-    value = "The unique badge number for this badge"
+    value = "The unique badge number for this badge."
   )
   @NotNull
+  @Pattern(regexp = "^[0-9A-HK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -51,11 +52,15 @@ public class BadgeReplaceRequest {
   }
 
   /**
-   * Code for Lost, Stolen or Damaged
+   * A short code from the REPLACE group of reference data.
    *
    * @return replaceReasonCode
    */
-  @ApiModelProperty(required = true, value = "Code for Lost, Stolen or Damaged")
+  @ApiModelProperty(
+    example = "STOLEN",
+    required = true,
+    value = "A short code from the REPLACE group of reference data."
+  )
   @NotNull
   @Size(max = 10)
   public String getReplaceReasonCode() {
@@ -72,11 +77,15 @@ public class BadgeReplaceRequest {
   }
 
   /**
-   * Code for either Home address or LA address
+   * A short code from the DELIVER group of reference data.
    *
    * @return deliverToCode
    */
-  @ApiModelProperty(required = true, value = "Code for either Home address or LA address")
+  @ApiModelProperty(
+    example = "HOME",
+    required = true,
+    value = "A short code from the DELIVER group of reference data."
+  )
   @NotNull
   @Size(max = 10)
   public String getDeliverToCode() {
@@ -93,11 +102,15 @@ public class BadgeReplaceRequest {
   }
 
   /**
-   * Code for either Standard or Fast track
+   * A short code from the DELROPT group of reference data.
    *
    * @return deliveryOptionCode
    */
-  @ApiModelProperty(required = true, value = "Code for either Standard or Fast track")
+  @ApiModelProperty(
+    example = "STANDARD",
+    required = true,
+    value = "A short code from the DELROPT group of reference data."
+  )
   @NotNull
   @Size(max = 10)
   public String getDeliveryOptionCode() {

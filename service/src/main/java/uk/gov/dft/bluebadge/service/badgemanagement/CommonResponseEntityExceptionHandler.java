@@ -52,6 +52,8 @@ public class CommonResponseEntityExceptionHandler extends ResponseEntityExceptio
           new ErrorErrors().field(null).message(messageProperty).reason(error.getDefaultMessage()));
     }
 
+    commonResponse.setError(systemError);
+
     return handleExceptionInternal(ex, commonResponse, headers, status, request);
   }
 }

@@ -63,6 +63,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-aop')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compileOnly ('org.projectlombok:lombok:1.16.22')
     compile('org.postgresql:postgresql:42.2.2')
     compile('org.apache.commons:commons-lang3:3.7')
 

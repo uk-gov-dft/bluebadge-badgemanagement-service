@@ -3,7 +3,7 @@
     "swagger" : "2.0",
     "info" : {
       "title" : "Blue Badge Management Service",
-      "description" : "External API for local authorities to manage blue badges",
+      "description" : "External API for local authorities to manage Blue Badges.",
       "version" : "1.0.0",
       "contact" : {
         "email" : "rob.smallwood@does.not.exist"
@@ -15,7 +15,7 @@
     },
     "tags" : [ {
       "name" : "badges",
-      "description" : "Badge related operations"
+      "description" : "Badge related operations."
     } ],
     "paths" : {
       "/badges/{badgeNumber}" : {
@@ -24,19 +24,19 @@
         } ],
         "get" : {
           "tags" : [ "badges" ],
-          "summary" : "Retrieve a blue badge given the blue badge number parameter.",
+          "summary" : "Retrieve a Blue Badge given the Blue Badge number parameter.",
           "operationId" : "retrieveBlueBadge",
-          "description" : "Retrieves a blue-badge given the blueBadgeNumber.\n",
+          "description" : "Retrieves a Blue Badge given the blueBadgeNumber.\n",
           "produces" : [ "application/json" ],
           "responses" : {
             "200" : {
-              "description" : "Response when blue badge can be retrieved.\n",
+              "description" : "Response when Blue Badge can be retrieved.\n",
               "schema" : {
                 "$ref" : "#/definitions/BadgeResponse"
               }
             },
             "404" : {
-              "description" : "A blue badge cannot be found given the parameters specified"
+              "description" : "A Blue Badge cannot be found given the parameters specified."
             }
           }
         },
@@ -60,7 +60,7 @@
           "tags" : [ "badges" ],
           "summary" : "Request replacement badge",
           "operationId" : "replaceBlueBadge",
-          "description" : "Request a replacement badge.",
+          "description" : "Cancel an existing badge and order a new badge with the same details (including expiry date), with a start date of today.",
           "parameters" : [ {
             "name" : "badgeReplace",
             "in" : "body",
@@ -86,7 +86,7 @@
           "tags" : [ "badges" ],
           "summary" : "Request cancel badge",
           "operationId" : "cancelBlueBadge",
-          "description" : "Request cancellation of a badge.",
+          "description" : "Cancel a badge with immediate effect.",
           "parameters" : [ {
             "name" : "badgeCancel",
             "in" : "body",
@@ -104,7 +104,7 @@
       "/badges" : {
         "get" : {
           "tags" : [ "badges" ],
-          "summary" : "Find a blue badge given the specified query parameters",
+          "summary" : "Find a Blue Badge given the specified query parameters",
           "operationId" : "findBlueBadge",
           "description" : "By passing in appropriate options, you can search for\navailable badges in the system.  Options are a partial match\nand all submitted options must be matched. At least 1 parameter\nmust be provided.\n",
           "produces" : [ "application/json" ],
@@ -115,13 +115,13 @@
           } ],
           "responses" : {
             "200" : {
-              "description" : "Response when blue badges can (or can not) be found.\n",
+              "description" : "Response when Blue Badges can (or can not) be found.\n",
               "schema" : {
                 "$ref" : "#/definitions/BadgesResponse"
               }
             },
             "default" : {
-              "description" : "Unexpected error",
+              "description" : "Unexpected error.",
               "schema" : {
                 "$ref" : "#/definitions/CommonResponse"
               }
@@ -132,7 +132,7 @@
           "tags" : [ "badges" ],
           "summary" : "Order badges",
           "operationId" : "orderBlueBadges",
-          "description" : "Order One or more badges.",
+          "description" : "Place an order for a new badge, which will add a new record to the central record immediately and result in a fulfilment request being sent to the printer with no further intervention required.",
           "produces" : [ "application/json" ],
           "parameters" : [ {
             "name" : "badgeOrder",
@@ -182,6 +182,9 @@
           "message" : {
             "type" : "string"
           },
+          "reason" : {
+            "type" : "string"
+          },
           "errors" : {
             "type" : "array",
             "items" : {
@@ -218,7 +221,7 @@
             "data" : {
               "type" : "string",
               "example" : "095715",
-              "description" : "The unique badge number for this badge"
+              "description" : "The unique badge number for this badge."
             }
           }
         } ]
@@ -228,52 +231,48 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "example" : "095715",
-            "description" : "The unique badge number for this badge"
+            "example" : "72B9HA",
+            "pattern" : "^[0-9A-HK]{6}$",
+            "description" : "The unique badge number for this badge."
           },
           "cancelReasonCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for Deceased, No longer needed or Revoked\n"
+            "description" : "A short code from the CANCEL group of reference data.\n",
+            "example" : "REVOKE"
           }
         },
-        "required" : [ "badgeNumber", "cancelReasonCode" ],
-        "example" : {
-          "badgeNumber" : "72B9HA",
-          "cancelReasonCode" : "DECEASED"
-        }
+        "required" : [ "badgeNumber", "cancelReasonCode" ]
       },
       "BadgeReplaceRequest" : {
         "type" : "object",
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "example" : "095215",
-            "description" : "The unique badge number for this badge"
+            "pattern" : "^[0-9A-HK]{6}$",
+            "description" : "The unique badge number for this badge.",
+            "example" : "72B9HA"
           },
           "replaceReasonCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for Lost, Stolen or Damaged"
+            "description" : "A short code from the REPLACE group of reference data.",
+            "example" : "STOLEN"
           },
           "deliverToCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for either Home address or LA address"
+            "description" : "A short code from the DELIVER group of reference data.",
+            "example" : "HOME"
           },
           "deliveryOptionCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for either Standard or Fast track"
+            "description" : "A short code from the DELROPT group of reference data.",
+            "example" : "STANDARD"
           }
         },
-        "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ],
-        "example" : {
-          "badgeNumber" : "72B9HA",
-          "replaceReasonCode" : "STOLEN",
-          "deliverToCode" : "LA",
-          "deliveryOptionCode" : "STANDARD"
-        }
+        "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ]
       },
       "BadgeNumbersResponse" : {
         "description" : "Contains a list of Badge numbers.",
@@ -287,8 +286,9 @@
               "type" : "array",
               "items" : {
                 "type" : "string",
+                "pattern" : "^[0-9A-HK]{6}$",
                 "example" : "095215",
-                "description" : "The unique badge number for this badge"
+                "description" : "The unique badge number for this badge."
               }
             }
           }
@@ -328,54 +328,62 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "description" : "The unique badge number for this badge"
+            "pattern" : "^[0-9A-HK]{6}$",
+            "description" : "The unique badge number for this badge.",
+            "example" : "095215"
           },
           "partyTypeCode" : {
-            "type" : "string"
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "A short code from the PARTY group of reference data.",
+            "example" : "PERSON"
           },
           "partyTypeDescription" : {
-            "type" : "string"
+            "type" : "string",
+            "maxLength" : 100,
+            "example" : "Person"
           },
           "name" : {
             "type" : "string",
-            "description" : "The name of the badge holder Organisation or Person"
+            "maxLength" : 100,
+            "description" : "The name of the badge holder Organisation or Person",
+            "example" : "Ms Mary Inglethorpe"
           },
-          "nationalInsurance" : {
+          "nino" : {
             "type" : "string",
-            "description" : "The badgeholders national insurance number"
+            "pattern" : "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$",
+            "description" : "The badge holder's National Insurance number.",
+            "example" : "NY186548E"
           },
-          "localAuthorityId" : {
-            "type" : "integer"
+          "localAuthorityCode" : {
+            "type" : "integer",
+            "description" : "The code for the local authority.",
+            "example" : 211
           },
           "localAuthorityName" : {
             "type" : "string",
-            "description" : "Display name of the Local Authority"
+            "maxLength" : 100,
+            "description" : "Display name of the local authority.",
+            "example" : "Shropshire County Council"
           },
           "expiryDate" : {
             "type" : "string",
             "format" : "date",
-            "description" : "The date the blue bagde expires"
+            "description" : "The date the Blue Badge expires.",
+            "example" : "2019-06-10"
           },
           "statusCode" : {
             "type" : "string",
-            "description" : "The current status of the blue bage"
+            "maxLength" : 10,
+            "description" : "A short code from the STATUS group of reference data.",
+            "example" : "ISSUED"
           },
           "statusDescription" : {
             "type" : "string",
-            "description" : "Status full description"
+            "maxLength" : 100,
+            "description" : "Status full description.",
+            "example" : "Issued"
           }
-        },
-        "example" : {
-          "badgeNumber" : "091215",
-          "partyTypeCode" : "P",
-          "partyTypeDescription" : "Person",
-          "name" : "Henry McBoatface",
-          "nationalInsurance" : "JL089942B",
-          "localAuthorityId" : 2,
-          "localAuthorityName" : "Shropshire County Council",
-          "expiryDate" : "2019-12-31",
-          "statusCode" : "ACTIVE",
-          "statusDescription" : "Active"
         }
       },
       "Badge" : {
@@ -384,226 +392,262 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "091215",
-            "description" : "The unique badge number for this badge"
+            "pattern" : "^[0-9A-HK]{6}$",
+            "description" : "The unique badge number for this badge."
           },
-          "partyTypeCode" : {
-            "type" : "string",
-            "description" : "Code for Person or Organisation\n"
-          },
-          "nationalInsurance" : {
-            "type" : "string",
-            "description" : "The badgeholders national insurance number"
-          },
-          "name" : {
-            "type" : "string",
-            "description" : "The name of the badge holder Organisation or Person"
-          },
-          "homeAddress" : {
-            "$ref" : "#/definitions/Address"
-          },
-          "contactNumber" : {
-            "type" : "string"
-          },
-          "emailAddress" : {
-            "type" : "string"
-          },
-          "dob" : {
-            "type" : "string",
-            "format" : "date",
-            "description" : "The badgeholders date of birth"
+          "party" : {
+            "$ref" : "#/definitions/Party"
           },
           "localAuthorityId" : {
             "type" : "integer",
-            "description" : "Id of Local Authority"
+            "description" : "Id of local authority.",
+            "example" : 123
           },
           "localAuthorityRef" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "A reference to enable local authorities to link this badge to records in other systems",
+            "example" : "YOURREF"
           },
           "applicationDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "description" : "The date that the initial application was received by the issuing local authority.",
+            "example" : "2018-04-14"
           },
-          "applicationSourceCode" : {
+          "applicationChannelCode" : {
             "type" : "string",
-            "description" : "Code for Online, Paper, Phone or In person\n"
+            "description" : "A short code from the APPSOURCE group of reference data e.g. ONLINE, PAPER, PHONE or INPERSON.",
+            "example" : "INPERSON"
           },
           "orderDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "description" : "The date that the badge was ordered by the issuing local authority.",
+            "example" : "2018-07-07"
           },
           "startDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "description" : "The date that the badge comes into effect.",
+            "example" : "2018-07-07"
           },
           "expiryDate" : {
             "type" : "string",
             "format" : "date",
-            "description" : "The date the blue bagde expires"
+            "description" : "The date the badge expires.",
+            "example" : "2019-06-31"
           },
           "eligibilityCode" : {
             "type" : "string",
-            "description" : "Reason for badge"
+            "maxLength" : 10,
+            "description" : "A short code from the ELIGIBILIT group of reference data.",
+            "example" : "WALKD"
           },
           "imageLink" : {
             "type" : "string",
-            "description" : "Link to photo of badge holder if applicable"
+            "maxLength" : 255,
+            "description" : "A URL for the badge photo.",
+            "example" : "http://tiny.url?q=ab63fg"
+          },
+          "cancelReasonCode" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "A short code from the CANCEL group of reference data.\n",
+            "example" : "NOLONG"
           },
           "statusCode" : {
             "type" : "string",
-            "description" : "The current status of the blue bage"
+            "description" : "A short code from the STATUS group of reference data. The current status of the badge e.g. ACTIVE, EXPIRED, CANCELLED.",
+            "example" : "CANCELLED"
           }
-        },
-        "example" : {
-          "badgeNumber" : "095215",
-          "partyTypeCode" : "ORG",
-          "nationalInsurance" : "JL089942B",
-          "name" : "John Smith",
-          "contactNumber" : "01234 567890",
-          "emailAddress" : "nodoby@nowhere.com",
-          "dob" : "1970-05-29",
-          "localAuthorityId" : 2,
-          "localAuthorityRef" : "ABCD123",
-          "applicationDate" : "2017-11-30",
-          "applicationSourceCode" : "ONLINE",
-          "orderDate" : "2017-12-18",
-          "startDate" : "2018-01-01",
-          "expiryDate" : "2019-01-01",
-          "eligibilityCode" : "AFCS",
-          "imageLink" : "http://adomain.com:1234/myimages?id=hhjjsskkddjj66ssskk",
-          "statusCode" : "ACTIVE"
         }
       },
       "BadgeOrderRequest" : {
         "type" : "object",
         "properties" : {
-          "partyTypeCode" : {
-            "type" : "string",
-            "maxLength" : 10,
-            "description" : "Code for Person or Organisation\n"
-          },
-          "nationalInsurance" : {
-            "type" : "string",
-            "pattern" : "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$",
-            "description" : "The badgeholders national insurance number"
-          },
-          "name" : {
-            "type" : "string",
-            "maxLength" : 100,
-            "description" : "The name of the badge holder Organisation or Person"
-          },
-          "homeAddress" : {
-            "$ref" : "#/definitions/Address"
-          },
-          "contactNumber" : {
-            "type" : "string",
-            "pattern" : "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$"
-          },
-          "emailAddress" : {
-            "type" : "string",
-            "pattern" : "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
-          },
-          "dob" : {
-            "type" : "string",
-            "format" : "date",
-            "description" : "The badgeholders date of birth"
+          "party" : {
+            "$ref" : "#/definitions/Party"
           },
           "localAuthorityId" : {
             "type" : "integer",
-            "description" : "Id of Local Authority"
+            "example" : 187,
+            "description" : "Id of local authority."
           },
           "localAuthorityRef" : {
             "type" : "string",
-            "maxLength" : 100
+            "maxLength" : 100,
+            "example" : "YOURCODE"
           },
           "applicationDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "example" : "2018-04-23",
+            "description" : "The date that the initial application was received by the issuing local authority."
           },
-          "applicationSourceCode" : {
+          "applicationChannelCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for Online, Paper, Phone or In person\n"
+            "example" : "ONLINE",
+            "description" : "A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON."
           },
           "startDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date",
+            "example" : "2019-06-30",
+            "description" : "Cannot be in the past."
           },
           "expiryDate" : {
             "type" : "string",
             "format" : "date",
-            "description" : "The date the blue bagde expires"
+            "example" : "2019-07-01",
+            "description" : "The date the Blue Badge expires.  Must be within 3 years of start date.\n"
           },
           "eligibilityCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Reason for badge"
+            "example" : "CHILDBULK",
+            "description" : "A short code from the ELIGIBILITY group of reference data. Reason for badge."
           },
           "imageFile" : {
             "type" : "string",
-            "format" : "byte",
-            "description" : "Base64 encoded image"
+            "description" : "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
           },
           "deliverToCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for either Home address or LA address"
+            "example" : "HOME",
+            "description" : "A short code from the DELIVER group of reference data."
           },
           "deliveryOptionCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "Code for either Standard or Fast track"
+            "example" : "STANDARD",
+            "description" : "A short code from the DELOPT group of reference data. e.g. STANDARD or FAST"
           },
           "numberOfBadges" : {
             "type" : "integer",
-            "minimum" : 1
+            "minimum" : 1,
+            "maximum" : 999,
+            "example" : 1,
+            "description" : "Must be 1 for a person, can be multiple for an organisation."
           }
         },
-        "required" : [ "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationSourceCode", "deliverToCode", "deliveryOptionCode", "numberOfBadges" ],
-        "example" : {
-          "partyTypeCode" : "PERS",
-          "nationalInsurance" : "JL089942B",
-          "name" : "John Smith",
-          "contactNumber" : "01234 567890",
-          "emailAddress" : "nodoby@nowhere.com",
-          "dob" : "1970-05-29",
-          "localAuthorityId" : 2,
-          "localAuthorityRef" : "ABCD123",
-          "applicationDate" : "2017-11-30",
-          "applicationSourceCode" : "ONLINE",
-          "startDate" : "2018-01-01",
-          "expiryDate" : "2019-01-01",
-          "eligibilityCode" : "AFCS",
-          "imageFile" : "AbCdE=",
-          "deliverToCode" : "LA",
-          "deliveryOptionCode" : "STANDARD",
-          "numberOfBadges" : 1
-        }
+        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
       },
-      "Address" : {
+      "Party" : {
         "type" : "object",
         "properties" : {
-          "buildingStreet" : {
+          "typeCode" : {
+            "type" : "string",
+            "description" : "A short code from the PARTY group of reference data. e.g. PERSON or ORG.",
+            "maxLength" : 10,
+            "example" : "PERSON"
+          },
+          "contact" : {
+            "$ref" : "#/definitions/Contact"
+          },
+          "person" : {
+            "$ref" : "#/definitions/Person"
+          },
+          "organisation" : {
+            "$ref" : "#/definitions/Organisation"
+          }
+        },
+        "required" : [ "typeCode", "contact" ]
+      },
+      "Person" : {
+        "type" : "object",
+        "properties" : {
+          "badgeHolderName" : {
             "type" : "string",
             "maxLength" : 100,
+            "example" : "Dwight Appleman"
+          },
+          "nino" : {
+            "type" : "string",
+            "pattern" : "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$",
+            "example" : "NY188796B",
+            "description" : "The badge holder's National Insurance number."
+          },
+          "dob" : {
+            "type" : "string",
+            "format" : "date",
+            "example" : "1972-09-13",
+            "description" : "Date of birth YYYY-MM-DD"
+          },
+          "genderCode" : {
+            "type" : "string",
+            "example" : "MALE",
+            "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIED."
+          }
+        },
+        "required" : [ "name" ],
+        "example" : {
+          "badgeHolderName" : "Fred Bloggs",
+          "nino" : "NY188796B",
+          "dob" : "1972-09-12",
+          "genderCode" : "MALE"
+        }
+      },
+      "Organisation" : {
+        "type" : "object",
+        "properties" : {
+          "badgeHolderName" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "badgeHolderName" ],
+        "example" : {
+          "badgeHolderName" : "The Monroe Institute"
+        }
+      },
+      "Contact" : {
+        "type" : "object",
+        "properties" : {
+          "fullName" : {
+            "type" : "string",
+            "maxLength" : 100,
+            "description" : "The administrative contact for the badge(s).",
+            "example" : "June Whitfield"
+          },
+          "buildingStreet" : {
+            "type" : "string",
+            "maxLength" : 255,
             "example" : "65 Basil Chambers"
           },
           "line2" : {
             "type" : "string",
-            "maxLength" : 100,
+            "maxLength" : 255,
             "example" : "Northern Quarter"
           },
           "townCity" : {
             "type" : "string",
-            "maxLength" : 100,
+            "maxLength" : 255,
             "example" : "Manchester"
           },
           "postCode" : {
             "type" : "string",
             "example" : "SK6 8GH",
-            "pattern" : "^((GIR &0AA)|((([A-PR-UWYZ][A-HK-Y]?[0-9][0-9]?)|(([A-PR-UWYZ][0-9][A-HJKSTUW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRV-Y]))) &[0-9][ABD-HJLNP-UW-Z]{2}))$"
+            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
+          },
+          "primaryPhoneNumber" : {
+            "type" : "string",
+            "maxLength" : 50,
+            "example" : "01616548765"
+          },
+          "secondaryPhoneNumber" : {
+            "type" : "string",
+            "maxLength" : 50,
+            "example" : "01616548765"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "pattern" : ".+\\@.+",
+            "maxLength" : 255,
+            "example" : "june@bigbrainknitting.com"
           }
         },
-        "required" : [ "buildingStreet", "townCity", "postCode" ]
+        "required" : [ "buildingStreet", "townCity", "postCode", "fullName" ]
       }
     },
     "parameters" : {
@@ -611,12 +655,14 @@
         "in" : "query",
         "name" : "badgeNumber",
         "type" : "string",
+        "pattern" : "^[0-9A-HK]{6}$",
         "description" : "A valid badge number."
       },
       "BadgeNumberPathParam" : {
         "in" : "path",
         "name" : "badgeNumber",
         "type" : "string",
+        "pattern" : "^[0-9A-HK]{6}$",
         "description" : "A valid badge number.",
         "required" : true
       },
@@ -624,13 +670,15 @@
         "in" : "query",
         "name" : "name",
         "type" : "string",
-        "description" : "Search the badge holders name"
+        "maxLength" : 100,
+        "description" : "Search the badge holder's name."
       },
       "PostCodeParam" : {
         "in" : "query",
         "name" : "postCode",
         "type" : "string",
-        "description" : "A valid postcode with or without spaces"
+        "maxLength" : 20,
+        "description" : "A valid postcode with or without spaces."
       }
     },
     "host" : "virtserver.swaggerhub.com",

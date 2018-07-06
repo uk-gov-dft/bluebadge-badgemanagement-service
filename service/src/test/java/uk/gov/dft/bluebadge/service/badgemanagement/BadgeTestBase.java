@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
@@ -13,28 +15,48 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
 
 public class BadgeTestBase {
 
-  private boolean refDataAdded = false;
+  public class DefaultVals {
+    static final String STATUS_CODE = "NEW";
+    static final String ELIGIBILITY_CODE = "PIP";
+    static final String DELIVER_TO_CODE = "HOME";
+    static final String DELIVER_OPTION_CODE = "FAST";
+    static final String APP_CHANNEL_CODE = "ONLINE";
+    public static final String GENDER_CODE = "MALE";
+    public static final String GENDER_DESC = "Male";
+    static final String PARTY_PERSON_CODE = "PERSON";
+    public static final String PARTY_PERSON_DESC = "Person";
+    static final String PARTY_ORG_CODE = "ORG";
+  }
+
+  public BadgeTestBase() {
+    addRefData();
+  }
 
   private void addRefData() {
-    if (refDataAdded) return;
 
     RefData.getValidGroupKeys()
         .addAll(
             Arrays.asList(
-                "APPSOURCE_PAPER",
-                "DELOP_STAND",
-                "DELIVER_HOME",
-                "ELIGIBILIT_PIP",
-                "PARTY_PERSON",
-                "GENDER_MALE"));
+                APP_SOURCE.getGroupKey() + "_" + DefaultVals.APP_CHANNEL_CODE,
+                DELIVERY_OPTIONS.getGroupKey() + "_" + DefaultVals.DELIVER_OPTION_CODE,
+                DELIVER_TO.getGroupKey() + "_" + DefaultVals.DELIVER_TO_CODE,
+                ELIGIBILITY.getGroupKey() + "_" + DefaultVals.ELIGIBILITY_CODE,
+                PARTY.getGroupKey() + "_" + DefaultVals.PARTY_ORG_CODE,
+                PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
+                GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE));
 
-    refDataAdded = true;
+    RefData.getKeyDescriptionMap()
+        .put(GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC);
+    RefData.getKeyDescriptionMap()
+        .put(
+            PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
+            DefaultVals.PARTY_PERSON_DESC);
   }
 
-  protected BadgeEntity getValidBadge() {
-    addRefData();
+  protected BadgeEntity getValidPersonBadgeEntity() {
+
     return BadgeEntity.builder()
-        .appChannelCode("PAPER")
+        .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
         .appDateTime(LocalDate.now().minus(Period.ofDays(7)))
         .contactBuildingStreet("29 Listley Street")
         .contactLine2(null)
@@ -43,17 +65,17 @@ public class BadgeTestBase {
         .secondaryPhoneNo(null)
         .contactPostcode("WV16 4AW")
         .contactTownCity("Bridgnorth")
-        .deliverOptionCode("STAND")
-        .deliverToCode("HOME")
+        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE)
+        .deliverToCode(DefaultVals.DELIVER_TO_CODE)
         .dob(LocalDate.now().minus(Period.ofYears(30)))
-        .eligibilityCode("PIP")
+        .eligibilityCode(DefaultVals.ELIGIBILITY_CODE)
         .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
-        .genderCode("MALE")
+        .genderCode(DefaultVals.GENDER_CODE)
         .holderName("Robert McRoberts")
         .localAuthorityId(2)
         .localAuthorityRef(null)
         .nino("NS123456A")
-        .partyCode("PERSON")
+        .partyCode(DefaultVals.PARTY_PERSON_CODE)
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
         .badgeNo(null)
         .badgeStatus(null)
@@ -63,20 +85,19 @@ public class BadgeTestBase {
   }
 
   protected BadgeOrderRequest getValidBadgeOrderOrgRequest() {
-    addRefData();
     BadgeOrderRequest request = new BadgeOrderRequest();
     Party party = new Party();
     Contact contact = new Contact();
     Organisation org = new Organisation();
-    request.setApplicationChannelCode("PAPER");
+    request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
     request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
-    request.setDeliverToCode("HOME");
-    request.setEligibilityCode("PIP");
-    request.setDeliveryOptionCode("FAST");
+    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
+    request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
+    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
     request.setLocalAuthorityId(2);
     request.setParty(party);
     request.setNumberOfBadges(1);
-    party.setTypeCode("ORG");
+    party.setTypeCode(DefaultVals.PARTY_ORG_CODE);
     party.setOrganisation(org);
     org.setBadgeHolderName("An org");
     party.setContact(contact);
@@ -90,24 +111,23 @@ public class BadgeTestBase {
   }
 
   protected BadgeOrderRequest getValidBadgeOrderPersonRequest() {
-    addRefData();
     BadgeOrderRequest request = new BadgeOrderRequest();
     Party party = new Party();
     Contact contact = new Contact();
     Person person = new Person();
-    request.setApplicationChannelCode("PAPER");
+    request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
     request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
-    request.setDeliverToCode("HOME");
-    request.setEligibilityCode("PIP");
-    request.setDeliveryOptionCode("FAST");
+    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
+    request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
+    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
     request.setLocalAuthorityId(2);
     request.setParty(party);
     request.setNumberOfBadges(1);
-    party.setTypeCode("PERSON");
+    party.setTypeCode(DefaultVals.PARTY_PERSON_CODE);
     party.setPerson(person);
     person.setBadgeHolderName("Peter Parker");
     person.setDob(LocalDate.now().minus(Period.ofYears(30)));
-    person.setGenderCode("MALE");
+    person.setGenderCode(DefaultVals.GENDER_CODE);
     party.setContact(contact);
     contact.setBuildingStreet("12 The Rd");
     contact.setEmailAddress("a@b.com");
@@ -116,5 +136,36 @@ public class BadgeTestBase {
     contact.setPostCode("WV16 4AW");
     contact.setTownCity("Bridgnorth");
     return request;
+  }
+
+  protected BadgeEntity getValidOrgBadgeEntity() {
+    return BadgeEntity.builder()
+        .contactPostcode("WV164AW")
+        .contactTownCity("Bridgnorth")
+        .contactLine2(null)
+        .contactBuildingStreet("21 Listley St")
+        .contactName("Harry Kane")
+        .genderCode(null)
+        .dob(null)
+        .nino(null)
+        .holderName("Harry Kane")
+        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE)
+        .deliverToCode(DefaultVals.DELIVER_TO_CODE)
+        .imageLink(null)
+        .eligibilityCode(DefaultVals.ELIGIBILITY_CODE)
+        .expiryDate(LocalDate.now().plus(Period.ofMonths(35)))
+        .startDate(LocalDate.now().plus(Period.ofMonths(1)))
+        .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
+        .appDateTime(LocalDate.now().minus(Period.ofDays(1)))
+        .localAuthorityRef("LA_REF")
+        .localAuthorityId(2)
+        .partyCode(DefaultVals.PARTY_ORG_CODE)
+        .badgeNo("KKKKKK")
+        .badgeStatus(DefaultVals.STATUS_CODE)
+        .numberOfBadges(1)
+        .primaryPhoneNo("01234512312")
+        .secondaryPhoneNo(null)
+        .contactEmailAddress("a@b.c")
+        .build();
   }
 }

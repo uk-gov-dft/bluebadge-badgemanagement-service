@@ -90,12 +90,6 @@ artifactory {
 
 }
 
-project(':service') {
-    dependencies {
-        compile project(':model')
-    }
-}
-
 jacoco {
     toolVersion = "0.8.1"
     // reportsDir = file("$buildDir/customJacocoReportDir")
@@ -136,7 +130,7 @@ task generateModel(dependsOn: 'unzipGenerated', type: Sync){
     group = "GenerateAPI"
     from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
     include "**/*.java"
-    into "model/src/generated/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
+    into "service/src/generated/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
 }
 
 task generateService(dependsOn: 'unzipGenerated', type: Sync){

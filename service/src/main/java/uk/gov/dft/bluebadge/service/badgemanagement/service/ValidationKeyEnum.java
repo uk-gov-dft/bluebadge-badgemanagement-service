@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.Error;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
 
 public enum ValidationKeyEnum {
@@ -28,7 +29,13 @@ public enum ValidationKeyEnum {
   MISSING_ORG_OBJECT(
       "NotNull.badge.organisation",
       "Organisation details must be included if party is an organisation.",
-      "organisation");
+      "organisation"),
+  MISSING_FIND_PARAMS(
+      "NotNull.params.badge.find", "To search badges require either name or postcode.", "name"),
+  TOO_MANY_FIND_PARAMS(
+      "TooMany.params.badge.find",
+      "To search badges require either name or postcode, not both.",
+      "name");
 
   private final String key;
   private final String defaultMessage;
@@ -41,9 +48,16 @@ public enum ValidationKeyEnum {
     this.field = field;
   }
 
-  public ErrorErrors getErrorInstance() {
+  public ErrorErrors getFieldErrorInstance() {
     ErrorErrors error = new ErrorErrors();
     error.setField(field);
+    error.setMessage(key);
+    error.setReason(defaultMessage);
+    return error;
+  }
+
+  public Error getSystemErrorInstance() {
+    Error error = new Error();
     error.setMessage(key);
     error.setReason(defaultMessage);
     return error;

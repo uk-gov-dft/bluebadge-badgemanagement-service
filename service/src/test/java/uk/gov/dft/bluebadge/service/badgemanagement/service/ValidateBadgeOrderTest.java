@@ -13,7 +13,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_ok() {
     try {
-      ValidateBadgeOrder.validate(getValidBadge());
+      ValidateBadgeOrder.validate(getValidPersonBadgeEntity());
       // If we get here then was valid, else would have been exception thrown.
     } catch (BadRequestException e) {
       e.printStackTrace();
@@ -24,7 +24,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_dob_not_in_past() {
     try {
-      BadgeEntity entity = getValidBadge();
+      BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setDob(LocalDate.now().plus(Period.ofDays(1)));
       ValidateBadgeOrder.validate(entity);
       Assert.fail("DOB validation should throw an exception");
@@ -36,7 +36,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_start_date_in_future() {
     try {
-      BadgeEntity entity = getValidBadge();
+      BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setStartDate(LocalDate.now().minus(Period.ofDays(1)));
       ValidateBadgeOrder.validate(entity);
       Assert.fail("Start date validation should throw an exception");
@@ -48,7 +48,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_start_expiry_range() {
     try {
-      BadgeEntity entity = getValidBadge();
+      BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setExpiryDate((entity.getStartDate().plus(Period.ofYears(3)).plus(Period.ofDays(1))));
       ValidateBadgeOrder.validate(entity);
       Assert.fail("Badge valid range validation should throw an exception");
@@ -60,7 +60,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_invalid_ref_data() {
     try {
-      BadgeEntity entity = getValidBadge();
+      BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setPartyCode("Bob");
       ValidateBadgeOrder.validate(entity);
       Assert.fail("Ref data validation should throw an exception");
@@ -71,7 +71,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
 
   @Test
   public void null_stuff() {
-    BadgeEntity entity = getValidBadge();
+    BadgeEntity entity = getValidPersonBadgeEntity();
     // Try a null ref data look up
     entity.setEligibilityCode(null);
     ValidateBadgeOrder.validate(entity);

@@ -2,17 +2,23 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.ServiceException;
 
@@ -20,8 +26,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.ServiceExc
 public class BadgesApiControllerImpl implements BadgesApi {
 
   private final BadgeManagementService service;
-  private final BadgeOrderRequestConverter badgeOrderRequestConverter =
-      new BadgeOrderRequestConverter();
 
   @SuppressWarnings("unused")
   @Autowired
@@ -38,8 +42,28 @@ public class BadgesApiControllerImpl implements BadgesApi {
   @Override
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
+
     List<String> createdList =
-        service.createBadge(badgeOrderRequestConverter.convertToEntity(badgeOrder));
+        service.createBadge(new BadgeOrderRequestConverter().convertToEntity(badgeOrder));
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));
+  }
+
+  @Override
+  public ResponseEntity<BadgesResponse> findBlueBadge(
+      @Size(max = 100)
+          @ApiParam(value = "Search the badge holder's name.")
+          @Valid
+          @RequestParam(value = "name", required = false)
+          Optional<String> name,
+      @Size(max = 20)
+          @ApiParam(value = "A valid postcode with or without spaces.")
+          @Valid
+          @RequestParam(value = "postCode", required = false)
+          Optional<String> postCode) {
+
+    BadgeSummaryConverter converter = new BadgeSummaryConverter();
+    List<BadgeEntity> badgeEntities = service.findBadges(name.orElse(null), postCode.orElse(null));
+    return ResponseEntity.ok(
+        new BadgesResponse().data(converter.convertToModelList(badgeEntities)));
   }
 }

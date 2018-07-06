@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_ORG_OBJECT;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
-import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -27,6 +26,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
     BadgeEntity badgeEntity =
         BadgeEntity.builder()
             .partyCode(model.getParty().getTypeCode())
+            .badgeStatus("NEW")
             .localAuthorityId(model.getLocalAuthorityId())
             .localAuthorityRef(model.getLocalAuthorityRef())
             .appDateTime(model.getApplicationDate())
@@ -41,7 +41,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
             .contactLine2(contact.getLine2())
             .contactTownCity(contact.getTownCity())
             .contactEmailAddress(contact.getEmailAddress())
-            .contactPostcode(StringUtils.removeAll(contact.getPostCode().toUpperCase(), " "))
+            .contactPostcode(ConvertUtils.formatPostcodeForEntity(contact.getPostCode()))
             .primaryPhoneNo(contact.getPrimaryPhoneNumber())
             .secondaryPhoneNo(contact.getSecondaryPhoneNumber())
             .numberOfBadges(null == model.getNumberOfBadges() ? 1 : model.getNumberOfBadges())
@@ -51,7 +51,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
     if (isPerson(model.getParty())) {
       Person person = model.getParty().getPerson();
       if (null == person) {
-        throw new BadRequestException(MISSING_PERSON_OBJECT.getErrorInstance());
+        throw new BadRequestException(MISSING_PERSON_OBJECT.getFieldErrorInstance());
       }
       badgeEntity.setHolderName(person.getBadgeHolderName());
       badgeEntity.setNino(person.getNino());
@@ -60,7 +60,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
     } else {
       Organisation org = model.getParty().getOrganisation();
       if (null == org) {
-        throw new BadRequestException(MISSING_ORG_OBJECT.getErrorInstance());
+        throw new BadRequestException(MISSING_ORG_OBJECT.getFieldErrorInstance());
       }
       badgeEntity.setHolderName(org.getBadgeHolderName());
     }

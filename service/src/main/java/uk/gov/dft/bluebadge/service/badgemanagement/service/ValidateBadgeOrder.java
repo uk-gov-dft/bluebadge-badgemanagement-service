@@ -47,7 +47,7 @@ public class ValidateBadgeOrder {
     if (null == entity.getDob()) return;
 
     if (LocalDate.now().isBefore(entity.getDob())) {
-      errors.add(ValidationKeyEnum.APP_DATE_IN_PAST.getErrorInstance());
+      errors.add(ValidationKeyEnum.APP_DATE_IN_PAST.getFieldErrorInstance());
     }
   }
 
@@ -55,7 +55,7 @@ public class ValidateBadgeOrder {
     // No null check required. Start date mandatory.
     Assert.notNull(entity.getStartDate(), "Start date should not be null.");
     if (LocalDate.now().isAfter(entity.getStartDate())) {
-      errors.add(ValidationKeyEnum.START_DATE_IN_PAST.getErrorInstance());
+      errors.add(ValidationKeyEnum.START_DATE_IN_PAST.getFieldErrorInstance());
     }
   }
 
@@ -63,7 +63,7 @@ public class ValidateBadgeOrder {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
     if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
         .isBefore(entity.getStartDate())) {
-      errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getErrorInstance());
+      errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getFieldErrorInstance());
     }
   }
 
@@ -75,7 +75,7 @@ public class ValidateBadgeOrder {
     if (null == value) return;
 
     if (!RefData.groupContainsKey(group, value)) {
-      errors.add(validationKeyEnum.getErrorInstance());
+      errors.add(validationKeyEnum.getFieldErrorInstance());
     }
   }
 }

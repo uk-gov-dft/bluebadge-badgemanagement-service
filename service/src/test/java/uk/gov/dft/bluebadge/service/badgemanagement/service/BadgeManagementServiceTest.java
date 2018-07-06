@@ -1,8 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import org.junit.Assert;
@@ -13,6 +12,8 @@ import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
 
@@ -28,7 +29,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Test
   public void createBadge() {
-    BadgeEntity entity = getValidBadge();
+    BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setNumberOfBadges(3);
     when(repository.retrieveNextBadgeNumber()).thenReturn(1234);
     List<String> result = service.createBadge(entity);
@@ -38,5 +39,37 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     verify(repository, times(3)).createBadge(entity);
     verify(repository, times(3)).retrieveNextBadgeNumber();
     Assert.assertEquals("31E", result.get(1));
+  }
+
+  @Test
+  public void findBadges_ok() {
+    // Given search params valid when searching
+    String name = "abc";
+    FindBadgeParams params = FindBadgeParams.builder().name(name).build();
+    // When searching
+    service.findBadges(name, null);
+    // Then search is done
+    verify(repository, times(1)).findBadges(params);
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void findBadges_no_params() {
+    // Given search params valid when searching
+    String name = "  ";
+    // When searching
+    service.findBadges(name, null);
+    // Then search is done
+    verify(repository, never()).findBadges(any());
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void findBadges_too_many_params() {
+    // Given search params valid when searching
+    String name = "abc";
+    String postcode = "def";
+    // When searching
+    service.findBadges(name, postcode);
+    // Then search is done
+    verify(repository, never()).findBadges(any());
   }
 }

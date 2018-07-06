@@ -1,15 +1,19 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Component
 public class RefData {
 
   private static final Set<String> validGroupKeys = new HashSet<>();
+  private static final Map<String, String> keyDescriptionMap = new HashMap<>();
 
   @SuppressWarnings("unused")
   @PostConstruct
@@ -54,11 +58,26 @@ public class RefData {
             "STATUS_RETCAN",
             "STATUS_RETURNED",
             "STATUS_SUBMITTED"));
+
+    // Enough values for dev of findBadges.
+    keyDescriptionMap.put("PARTY_PERSON", "Person");
+    keyDescriptionMap.put("PARTY_ORG", "Organisation");
+    keyDescriptionMap.put("STATUS_NEW", "New");
   }
 
   public static boolean groupContainsKey(RefDataGroupEnum group, String code) {
     String key = group.getGroupKey() + "_" + code;
     return validGroupKeys.contains(key);
+  }
+
+  public static String getDescription(RefDataGroupEnum group, String code) {
+    Assert.notNull(group, "Must provide group code to retrieve ref data.");
+
+    return null == code ? null : keyDescriptionMap.get(group.getGroupKey() + "_" + code);
+  }
+
+  public static Map<String, String> getKeyDescriptionMap() {
+    return keyDescriptionMap;
   }
 
   public static Set<String> getValidGroupKeys() {

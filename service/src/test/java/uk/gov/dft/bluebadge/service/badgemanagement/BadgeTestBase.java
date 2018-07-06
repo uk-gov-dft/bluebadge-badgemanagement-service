@@ -2,6 +2,9 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Arrays;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -9,10 +12,6 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Arrays;
 
 public class BadgeTestBase {
 

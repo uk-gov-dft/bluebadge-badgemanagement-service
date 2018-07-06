@@ -42,7 +42,7 @@ public class BadgesApiControllerImpl implements BadgesApi {
   @Override
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
-    ;
+
     List<String> createdList =
         service.createBadge(new BadgeOrderRequestConverter().convertToEntity(badgeOrder));
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));

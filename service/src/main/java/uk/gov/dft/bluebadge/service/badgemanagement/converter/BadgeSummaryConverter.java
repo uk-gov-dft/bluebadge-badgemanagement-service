@@ -4,11 +4,10 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
 public class BadgeSummaryConverter implements BiConverter<BadgeEntity, BadgeSummary> {
   @Override
-  public BadgeEntity convertToEntity(BadgeSummary model) throws BadRequestException {
+  public BadgeEntity convertToEntity(BadgeSummary model) {
     return null;
   }
 

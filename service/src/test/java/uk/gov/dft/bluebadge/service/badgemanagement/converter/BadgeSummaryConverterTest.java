@@ -16,7 +16,7 @@ public class BadgeSummaryConverterTest extends BadgeTestBase {
 
     // Check a few values.
     Assert.assertEquals(entity.getBadgeNo(), model.getBadgeNumber());
-    Assert.assertEquals(entity.getBadgeStatus(), model.getStatusCode());
+    Assert.assertEquals(entity.getBadgeStatus().name(), model.getStatusCode());
     Assert.assertEquals(DefaultVals.PARTY_PERSON_DESC, model.getPartyTypeDescription());
   }
 
@@ -28,6 +28,6 @@ public class BadgeSummaryConverterTest extends BadgeTestBase {
 
     // Check a few values.
     Assert.assertEquals(entity.getBadgeNo(), model.getBadgeNumber());
-    Assert.assertEquals(entity.getBadgeStatus(), model.getStatusCode());
+    Assert.assertEquals(entity.getBadgeStatus().name(), model.getStatusCode());
   }
 }

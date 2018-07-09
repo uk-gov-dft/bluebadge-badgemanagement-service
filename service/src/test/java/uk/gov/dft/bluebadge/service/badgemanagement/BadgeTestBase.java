@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -11,12 +11,11 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 public class BadgeTestBase {
 
   public class DefaultVals {
-    static final String STATUS_CODE = "NEW";
     static final String ELIGIBILITY_CODE = "PIP";
     static final String DELIVER_TO_CODE = "HOME";
     static final String DELIVER_OPTION_CODE = "FAST";
@@ -34,7 +33,7 @@ public class BadgeTestBase {
 
   private void addRefData() {
 
-    RefData.getValidGroupKeys()
+    ReferenceDataService.getValidGroupKeys()
         .addAll(
             Arrays.asList(
                 APP_SOURCE.getGroupKey() + "_" + DefaultVals.APP_CHANNEL_CODE,
@@ -45,9 +44,9 @@ public class BadgeTestBase {
                 PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
                 GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE));
 
-    RefData.getKeyDescriptionMap()
+    ReferenceDataService.getKeyDescriptionMap()
         .put(GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC);
-    RefData.getKeyDescriptionMap()
+    ReferenceDataService.getKeyDescriptionMap()
         .put(
             PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
             DefaultVals.PARTY_PERSON_DESC);
@@ -77,10 +76,11 @@ public class BadgeTestBase {
         .nino("NS123456A")
         .partyCode(DefaultVals.PARTY_PERSON_CODE)
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
-        .badgeNo(null)
-        .badgeStatus(null)
+        .badgeNo("KKKKKK")
+        .badgeStatus(BadgeEntity.Status.NEW)
         .imageLink(null)
         .numberOfBadges(1)
+        .orderDate(LocalDate.now())
         .build();
   }
 
@@ -161,7 +161,7 @@ public class BadgeTestBase {
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")
-        .badgeStatus(DefaultVals.STATUS_CODE)
+        .badgeStatus(BadgeEntity.Status.NEW)
         .numberOfBadges(1)
         .primaryPhoneNo("01234512312")
         .secondaryPhoneNo(null)

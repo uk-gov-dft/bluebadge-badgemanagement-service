@@ -14,6 +14,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRe
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.NotFoundException;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
 
@@ -71,5 +72,19 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.findBadges(name, postcode);
     // Then search is done
     verify(repository, never()).findBadges(any());
+  }
+
+  @Test
+  public void retrieveBadge_ok(){
+    when(repository.retrieveBadge(any())).thenReturn(getValidPersonBadgeEntity());
+
+    BadgeEntity result = service.retrieveBadge("ABC");
+    Assert.assertEquals(getValidPersonBadgeEntity(), result);
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void retrieveBadge_notFound(){
+    when(repository.retrieveBadge(any())).thenReturn(null);
+    service.retrieveBadge("ABC");
   }
 }

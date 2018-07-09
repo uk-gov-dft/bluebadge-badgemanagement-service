@@ -6,6 +6,11 @@ public class ConvertUtils {
 
   private ConvertUtils() {}
 
+  public static String formatBadgeNoForQuery(String badgeNumber){
+    if(null == badgeNumber) return null;
+
+    return StringUtils.stripToNull(badgeNumber.toUpperCase());
+  }
   public static String formatPostcodeForEntity(String postcode) {
     if (null == postcode) return null;
 

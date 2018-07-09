@@ -11,7 +11,9 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
-public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, BadgeOrderRequest> {
+import java.time.LocalDate;
+
+public class BadgeOrderRequestConverter implements ToEntityConverter<BadgeEntity, BadgeOrderRequest> {
 
   private static boolean isPerson(Party party) {
     return "PERSON".equals(party.getTypeCode());
@@ -26,7 +28,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
     BadgeEntity badgeEntity =
         BadgeEntity.builder()
             .partyCode(model.getParty().getTypeCode())
-            .badgeStatus("NEW")
+            .badgeStatus(BadgeEntity.Status.NEW)
             .localAuthorityId(model.getLocalAuthorityId())
             .localAuthorityRef(model.getLocalAuthorityRef())
             .appDateTime(model.getApplicationDate())
@@ -45,6 +47,7 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
             .primaryPhoneNo(contact.getPrimaryPhoneNumber())
             .secondaryPhoneNo(contact.getSecondaryPhoneNumber())
             .numberOfBadges(null == model.getNumberOfBadges() ? 1 : model.getNumberOfBadges())
+            .orderDate(LocalDate.now())
             .build();
 
     // Populate person/organisation specific data
@@ -66,10 +69,5 @@ public class BadgeOrderRequestConverter implements BiConverter<BadgeEntity, Badg
     }
 
     return badgeEntity;
-  }
-
-  @Override
-  public BadgeOrderRequest convertToModel(BadgeEntity entity) {
-    return null;
   }
 }

@@ -4,17 +4,21 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
@@ -65,5 +69,17 @@ public class BadgesApiControllerImpl implements BadgesApi {
     List<BadgeEntity> badgeEntities = service.findBadges(name.orElse(null), postCode.orElse(null));
     return ResponseEntity.ok(
         new BadgesResponse().data(converter.convertToModelList(badgeEntities)));
+  }
+
+  @Override
+  public ResponseEntity<BadgeResponse> retrieveBlueBadge(
+      @Pattern(regexp = "^[0-9A-HK]{6}$")
+      @ApiParam(value = "A valid badge number.", required = true)
+      @PathVariable("badgeNumber")
+          String badgeNumber) {
+    BadgeConverter converter = new BadgeConverter();
+    BadgeEntity entity = service.retrieveBadge(badgeNumber);
+    return ResponseEntity.ok(
+        new BadgeResponse().data(converter.convertToModel(entity)));
   }
 }

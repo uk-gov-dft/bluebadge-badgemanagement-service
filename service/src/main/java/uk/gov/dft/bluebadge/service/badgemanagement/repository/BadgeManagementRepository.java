@@ -4,9 +4,11 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ConvertUtils;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
 /** Provides CRUD operations on BadgeEntity entity. */
@@ -40,5 +42,12 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
       params.setPostcode(ConvertUtils.formatPostcodeForEntity(params.getPostcode()));
     }
     return sqlSession.selectList("findBadges", params);
+  }
+
+  @Override
+  public BadgeEntity retrieveBadge(RetrieveBadgeParams params) {
+    params.setBadgeNo(ConvertUtils.formatBadgeNoForQuery(params.getBadgeNo()));
+    Assert.notNull(params.getBadgeNo(), "Cannot retrieve with null badge number");
+    return sqlSession.selectOne("retrieveBadge", params);
   }
 }

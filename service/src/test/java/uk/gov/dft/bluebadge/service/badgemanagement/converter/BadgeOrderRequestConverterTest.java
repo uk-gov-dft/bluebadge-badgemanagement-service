@@ -21,6 +21,7 @@ public class BadgeOrderRequestConverterTest extends BadgeTestBase {
     Assert.assertEquals("WV164AW", entity.getContactPostcode());
     Assert.assertEquals(
         request.getParty().getPerson().getBadgeHolderName(), entity.getHolderName());
+    Assert.assertNotNull(entity.getOrderDate());
   }
 
   @Test

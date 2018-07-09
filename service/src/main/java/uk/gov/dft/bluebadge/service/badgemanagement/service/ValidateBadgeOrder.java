@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.*;
 
 import java.time.LocalDate;
@@ -11,6 +11,8 @@ import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 
 public class ValidateBadgeOrder {
 
@@ -74,7 +76,7 @@ public class ValidateBadgeOrder {
       List<ErrorErrors> errors) {
     if (null == value) return;
 
-    if (!RefData.groupContainsKey(group, value)) {
+    if (!ReferenceDataService.groupContainsKey(group, value)) {
       errors.add(validationKeyEnum.getFieldErrorInstance());
     }
   }

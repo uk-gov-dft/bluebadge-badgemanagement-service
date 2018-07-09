@@ -13,8 +13,12 @@ import org.apache.ibatis.type.Alias;
 public class BadgeEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  public enum Status{
+    NEW
+  }
+
   String badgeNo;
-  String badgeStatus;
+  Status badgeStatus;
   String partyCode;
   Integer localAuthorityId;
   String localAuthorityRef;
@@ -38,6 +42,8 @@ public class BadgeEntity implements Serializable {
   String primaryPhoneNo;
   String secondaryPhoneNo;
   String contactEmailAddress;
+  String cancelReasonCode;
+  LocalDate orderDate;
   int numberOfBadges;
 
   public boolean isPerson() {

@@ -2,14 +2,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 
-public class BadgeSummaryConverter implements BiConverter<BadgeEntity, BadgeSummary> {
-  @Override
-  public BadgeEntity convertToEntity(BadgeSummary model) {
-    return null;
-  }
+public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, BadgeSummary> {
 
   @Override
   public BadgeSummary convertToModel(BadgeEntity entity) {
@@ -22,10 +18,10 @@ public class BadgeSummaryConverter implements BiConverter<BadgeEntity, BadgeSumm
     model.setNino(entity.getNino());
     model.setPartyTypeCode(entity.getPartyCode());
     model.setPartyTypeDescription(
-        RefData.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
-    model.setStatusCode(entity.getBadgeStatus());
+        ReferenceDataService.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
+    model.setStatusCode(entity.getBadgeStatus().name());
     model.setStatusDescription(
-        RefData.getDescription(RefDataGroupEnum.STATUS, entity.getBadgeStatus()));
+        ReferenceDataService.getDescription(RefDataGroupEnum.STATUS, entity.getBadgeStatus().name()));
     return model;
   }
 }

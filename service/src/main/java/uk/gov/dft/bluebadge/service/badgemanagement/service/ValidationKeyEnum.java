@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Error;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
+import uk.gov.dft.bluebadge.common.api.model.Error;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 
 public enum ValidationKeyEnum {
   APP_DATE_IN_PAST(

@@ -1,17 +1,16 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
-
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 
 @Component
 public class ReferenceDataService {
@@ -30,7 +29,7 @@ public class ReferenceDataService {
   public void init() {
 
     List<ReferenceData> referenceDataList = referenceDataApiClient.retrieveReferenceData();
-    for(ReferenceData item : referenceDataList){
+    for (ReferenceData item : referenceDataList) {
       String key = item.getGroupShortCode() + "_" + item.getShortCode();
       validGroupKeys.add(key);
       keyDescriptionMap.put(key, item.getDescription());

@@ -33,6 +33,7 @@ public interface BadgeManagementMapper {
 
   /**
    * Retrieve a single badge
+   *
    * @param params Holds badge number to retrieve
    * @return The badge
    */

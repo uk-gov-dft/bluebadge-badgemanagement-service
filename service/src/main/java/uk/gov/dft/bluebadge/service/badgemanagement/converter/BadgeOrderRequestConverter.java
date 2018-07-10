@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_ORG_OBJECT;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
+import java.time.LocalDate;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -11,9 +12,8 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
-import java.time.LocalDate;
-
-public class BadgeOrderRequestConverter implements ToEntityConverter<BadgeEntity, BadgeOrderRequest> {
+public class BadgeOrderRequestConverter
+    implements ToEntityConverter<BadgeEntity, BadgeOrderRequest> {
 
   private static boolean isPerson(Party party) {
     return "PERSON".equals(party.getTypeCode());

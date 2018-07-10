@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
+import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
 public class NotFoundException extends ServiceException {
 

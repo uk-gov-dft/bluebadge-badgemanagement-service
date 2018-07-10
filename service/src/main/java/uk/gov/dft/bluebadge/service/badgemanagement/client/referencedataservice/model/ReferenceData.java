@@ -2,9 +2,8 @@ package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-
 import java.util.Objects;
+import org.springframework.validation.annotation.Validated;
 
 /** ReferenceData */
 @Validated

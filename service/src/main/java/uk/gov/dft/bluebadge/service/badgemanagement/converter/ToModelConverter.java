@@ -14,5 +14,4 @@ public interface ToModelConverter<E, M> {
     }
     return modelList;
   }
-
 }

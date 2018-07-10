@@ -13,7 +13,7 @@ import org.apache.ibatis.type.Alias;
 public class BadgeEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  public enum Status{
+  public enum Status {
     NEW
   }
 

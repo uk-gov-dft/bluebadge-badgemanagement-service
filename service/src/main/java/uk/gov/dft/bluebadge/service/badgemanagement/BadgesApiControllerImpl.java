@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
@@ -74,12 +74,11 @@ public class BadgesApiControllerImpl implements BadgesApi {
   @Override
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
       @Pattern(regexp = "^[0-9A-HK]{6}$")
-      @ApiParam(value = "A valid badge number.", required = true)
-      @PathVariable("badgeNumber")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
           String badgeNumber) {
     BadgeConverter converter = new BadgeConverter();
     BadgeEntity entity = service.retrieveBadge(badgeNumber);
-    return ResponseEntity.ok(
-        new BadgeResponse().data(converter.convertToModel(entity)));
+    return ResponseEntity.ok(new BadgeResponse().data(converter.convertToModel(entity)));
   }
 }

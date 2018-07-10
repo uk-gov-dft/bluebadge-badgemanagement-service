@@ -2,13 +2,12 @@ package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.CommonResponse;
-
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
 /** ReferenceDataResponse */
 @Validated

@@ -1,18 +1,18 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.util.Assert;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.ErrorErrors;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 public class ValidateBadgeOrder {
 

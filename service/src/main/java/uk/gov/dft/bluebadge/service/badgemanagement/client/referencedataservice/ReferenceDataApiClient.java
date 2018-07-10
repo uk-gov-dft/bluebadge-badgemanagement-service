@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice;
 
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.RestTemplateFactory;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceDataResponse;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -37,7 +36,9 @@ public class ReferenceDataApiClient {
         restTemplateFactory
             .getInstance()
             .getForEntity(
-                messageServiceConfiguration.getUriComponentsBuilder("reference-data", "BADGE").toUriString(),
+                messageServiceConfiguration
+                    .getUriComponentsBuilder("reference-data", "BADGE")
+                    .toUriString(),
                 ReferenceDataResponse.class)
             .getBody();
 

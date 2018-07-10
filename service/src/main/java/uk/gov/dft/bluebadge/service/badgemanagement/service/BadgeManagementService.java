@@ -3,6 +3,8 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_FIND_PARAMS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeP
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.NotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -69,7 +68,7 @@ public class BadgeManagementService {
   public BadgeEntity retrieveBadge(String badgeNumber) {
     RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
     BadgeEntity entity = repository.retrieveBadge(params);
-    if(null == entity){
+    if (null == entity) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }
     return entity;

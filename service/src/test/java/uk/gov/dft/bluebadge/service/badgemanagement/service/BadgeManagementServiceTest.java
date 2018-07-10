@@ -75,7 +75,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void retrieveBadge_ok(){
+  public void retrieveBadge_ok() {
     when(repository.retrieveBadge(any())).thenReturn(getValidPersonBadgeEntity());
 
     BadgeEntity result = service.retrieveBadge("ABC");
@@ -83,7 +83,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test(expected = NotFoundException.class)
-  public void retrieveBadge_notFound(){
+  public void retrieveBadge_notFound() {
     when(repository.retrieveBadge(any())).thenReturn(null);
     service.retrieveBadge("ABC");
   }

@@ -55,7 +55,7 @@ public class ConvertUtilsTest {
   }
 
   @Test
-  public void formatBadgeNoForQuery(){
+  public void formatBadgeNoForQuery() {
     String result = ConvertUtils.formatBadgeNoForQuery("a123cc");
     Assert.assertEquals("A123CC", result);
 

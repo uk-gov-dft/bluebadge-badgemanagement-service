@@ -32,7 +32,7 @@ spring:
     username: developer
     url: jdbc:postgresql://127.0.0.1:5432/bb_dev?currentSchema=badgemanagement
   jackson:
-    date-format: uk.gov.dft.bluebadge.service.badgemanagement.RFC3339DateFormat
+    date-format: uk.gov.dft.bluebadge.common.api.RFC3339DateFormat
     serialization:
       write-dates-as-timestamps: false
 

@@ -1,11 +1,22 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import uk.gov.dft.bluebadge.common.converter.ToModelConverter;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
+@Component
 public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, BadgeSummary> {
+
+  private final ReferenceDataService referenceDataService;
+
+  @Autowired
+  public BadgeSummaryConverter(ReferenceDataService referenceDataService) {
+    this.referenceDataService = referenceDataService;
+  }
 
   @Override
   public BadgeSummary convertToModel(BadgeEntity entity) {
@@ -18,10 +29,10 @@ public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, Badg
     model.setNino(entity.getNino());
     model.setPartyTypeCode(entity.getPartyCode());
     model.setPartyTypeDescription(
-        ReferenceDataService.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
+        referenceDataService.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
     model.setStatusCode(entity.getBadgeStatus().name());
     model.setStatusDescription(
-        ReferenceDataService.getDescription(
+        referenceDataService.getDescription(
             RefDataGroupEnum.STATUS, entity.getBadgeStatus().name()));
     return model;
   }

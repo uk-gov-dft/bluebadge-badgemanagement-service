@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.NotFoundException;
 
 @Slf4j
 @Service
@@ -23,17 +23,19 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.NotFoundEx
 public class BadgeManagementService {
 
   private final BadgeManagementRepository repository;
+  private final ValidateBadgeOrder validateBadgeOrder;
 
   @Autowired
-  BadgeManagementService(BadgeManagementRepository repository) {
+  BadgeManagementService(BadgeManagementRepository repository, ValidateBadgeOrder validateBadgeOrder) {
     this.repository = repository;
+    this.validateBadgeOrder = validateBadgeOrder;
   }
 
   public List<String> createBadge(BadgeEntity entity) {
     List<String> createdList = new ArrayList<>();
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
 
-    ValidateBadgeOrder.validate(entity);
+    validateBadgeOrder.validate(entity);
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
       entity.setBadgeNo(createNewBadgeNumber());
       repository.createBadge(entity);

@@ -32,7 +32,7 @@ Feature: Verify Create badge with 400
         },
         localAuthorityId: 187,
         localAuthorityRef: 'YOURCODE',
-        applicationDate: '2018-04-23',
+        applicationDate: '2018-04-23T15:00:21Z',
         applicationChannelCode: 'ONLINE',
         startDate: '2016-06-30',
         expiryDate: '2017-07-01',

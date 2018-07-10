@@ -2,6 +2,9 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+
 public class ConvertUtils {
 
   private ConvertUtils() {}
@@ -29,5 +32,9 @@ public class ConvertUtils {
       param = param + "%";
     }
     return param.toUpperCase();
+  }
+
+  public static OffsetDateTime getAsUTC(OffsetDateTime time){
+    return OffsetDateTime.ofInstant(time.toInstant(), ZoneId.of("UTC"));
   }
 }

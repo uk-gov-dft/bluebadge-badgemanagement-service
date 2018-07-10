@@ -21,12 +21,12 @@ Feature: Verify badge details
     emailAddress: 'june@bigbrainknitting.com'
     },
     organisation: {
-    badgeHolderName: 'ORGTEST1234'
+    badgeHolderName: 'ORGTEST12345'
     }
     },
     localAuthorityId: 187,
     localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23',
+    applicationDate: '2018-04-23T14:00:00Z',
     applicationChannelCode: 'ONLINE',
     startDate: '2019-06-30',
     expiryDate: '2019-07-01',
@@ -49,6 +49,9 @@ Feature: Verify badge details
     When method GET
     Then status 200
     And match $.data.party.contact.fullName contains 'June Whitfield'
+    And def apptime = $.data
+
+    * print '=============================' + apptime
 
     Given  path 'badges/ZZZZZZ'
     When method GET

@@ -32,7 +32,7 @@ Feature: Verify Create badge
     },
     localAuthorityId: 187,
     localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23',
+    applicationDate: '2018-04-23T14:00:00Z',
     applicationChannelCode: 'ONLINE',
     startDate: '#(futureDate)',
     expiryDate: '#(futureDatePlusYear)',

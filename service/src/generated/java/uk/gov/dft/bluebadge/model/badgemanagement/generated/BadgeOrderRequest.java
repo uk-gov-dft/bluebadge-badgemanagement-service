@@ -2,15 +2,24 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDate;
-import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 
-/** BadgeOrderRequest */
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Objects;
+
+/**
+ * BadgeOrderRequest
+ */
 @Validated
-public class BadgeOrderRequest {
+
+public class BadgeOrderRequest   {
   @JsonProperty("party")
   private Party party = null;
 
@@ -21,7 +30,7 @@ public class BadgeOrderRequest {
   private String localAuthorityRef = null;
 
   @JsonProperty("applicationDate")
-  private LocalDate applicationDate = null;
+  private OffsetDateTime applicationDate = null;
 
   @JsonProperty("applicationChannelCode")
   private String applicationChannelCode = null;
@@ -54,12 +63,13 @@ public class BadgeOrderRequest {
 
   /**
    * Get party
-   *
    * @return party
-   */
+   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
+
   @Valid
+
   public Party getParty() {
     return party;
   }
@@ -75,11 +85,12 @@ public class BadgeOrderRequest {
 
   /**
    * Id of local authority.
-   *
    * @return localAuthorityId
-   */
+   **/
   @ApiModelProperty(example = "187", required = true, value = "Id of local authority.")
   @NotNull
+
+
   public Integer getLocalAuthorityId() {
     return localAuthorityId;
   }
@@ -95,11 +106,11 @@ public class BadgeOrderRequest {
 
   /**
    * Get localAuthorityRef
-   *
    * @return localAuthorityRef
-   */
+   **/
   @ApiModelProperty(example = "YOURCODE", value = "")
-  @Size(max = 100)
+
+  @Size(max=100)
   public String getLocalAuthorityRef() {
     return localAuthorityRef;
   }
@@ -108,28 +119,25 @@ public class BadgeOrderRequest {
     this.localAuthorityRef = localAuthorityRef;
   }
 
-  public BadgeOrderRequest applicationDate(LocalDate applicationDate) {
+  public BadgeOrderRequest applicationDate(OffsetDateTime applicationDate) {
     this.applicationDate = applicationDate;
     return this;
   }
 
   /**
    * The date that the initial application was received by the issuing local authority.
-   *
    * @return applicationDate
-   */
-  @ApiModelProperty(
-    example = "2018-04-23",
-    required = true,
-    value = "The date that the initial application was received by the issuing local authority."
-  )
+   **/
+  @ApiModelProperty(example = "2017-07-21T17:32:28Z", required = true, value = "The date that the initial application was received by the issuing local authority.")
   @NotNull
+
   @Valid
-  public LocalDate getApplicationDate() {
+
+  public OffsetDateTime getApplicationDate() {
     return applicationDate;
   }
 
-  public void setApplicationDate(LocalDate applicationDate) {
+  public void setApplicationDate(OffsetDateTime applicationDate) {
     this.applicationDate = applicationDate;
   }
 
@@ -139,18 +147,13 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * A short code from the APPSOURCE group of reference data. e.g. ONLINE, PAPER, PHONE or INPERSON.
-   *
+   * A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON.
    * @return applicationChannelCode
-   */
-  @ApiModelProperty(
-    example = "ONLINE",
-    required = true,
-    value =
-        "A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON."
-  )
+   **/
+  @ApiModelProperty(example = "ONLINE", required = true, value = "A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON.")
   @NotNull
-  @Size(max = 10)
+
+  @Size(max=10)
   public String getApplicationChannelCode() {
     return applicationChannelCode;
   }
@@ -166,12 +169,13 @@ public class BadgeOrderRequest {
 
   /**
    * Cannot be in the past.
-   *
    * @return startDate
-   */
+   **/
   @ApiModelProperty(example = "2019-06-30", required = true, value = "Cannot be in the past.")
   @NotNull
+
   @Valid
+
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -186,17 +190,14 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * The date the Blue Badge expires. Must be within 3 years of start date.
-   *
+   * The date the Blue Badge expires.  Must be within 3 years of start date.
    * @return expiryDate
-   */
-  @ApiModelProperty(
-    example = "2019-07-01",
-    required = true,
-    value = "The date the Blue Badge expires.  Must be within 3 years of start date. "
-  )
+   **/
+  @ApiModelProperty(example = "2019-07-01", required = true, value = "The date the Blue Badge expires.  Must be within 3 years of start date. ")
   @NotNull
+
   @Valid
+
   public LocalDate getExpiryDate() {
     return expiryDate;
   }
@@ -212,14 +213,11 @@ public class BadgeOrderRequest {
 
   /**
    * A short code from the ELIGIBILITY group of reference data. Reason for badge.
-   *
    * @return eligibilityCode
-   */
-  @ApiModelProperty(
-    example = "CHILDBULK",
-    value = "A short code from the ELIGIBILITY group of reference data. Reason for badge."
-  )
-  @Size(max = 10)
+   **/
+  @ApiModelProperty(example = "CHILDBULK", value = "A short code from the ELIGIBILITY group of reference data. Reason for badge.")
+
+  @Size(max=10)
   public String getEligibilityCode() {
     return eligibilityCode;
   }
@@ -234,13 +232,12 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * Base64 encoded. Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.
-   *
+   * Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.
    * @return imageFile
-   */
-  @ApiModelProperty(
-    value = "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
-  )
+   **/
+  @ApiModelProperty(value = "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF.")
+
+
   public String getImageFile() {
     return imageFile;
   }
@@ -256,16 +253,12 @@ public class BadgeOrderRequest {
 
   /**
    * A short code from the DELIVER group of reference data.
-   *
    * @return deliverToCode
-   */
-  @ApiModelProperty(
-    example = "HOME",
-    required = true,
-    value = "A short code from the DELIVER group of reference data."
-  )
+   **/
+  @ApiModelProperty(example = "HOME", required = true, value = "A short code from the DELIVER group of reference data.")
   @NotNull
-  @Size(max = 10)
+
+  @Size(max=10)
   public String getDeliverToCode() {
     return deliverToCode;
   }
@@ -281,16 +274,12 @@ public class BadgeOrderRequest {
 
   /**
    * A short code from the DELOPT group of reference data. e.g. STANDARD or FAST
-   *
    * @return deliveryOptionCode
-   */
-  @ApiModelProperty(
-    example = "STANDARD",
-    required = true,
-    value = "A short code from the DELOPT group of reference data. e.g. STANDARD or FAST"
-  )
+   **/
+  @ApiModelProperty(example = "STANDARD", required = true, value = "A short code from the DELOPT group of reference data. e.g. STANDARD or FAST")
   @NotNull
-  @Size(max = 10)
+
+  @Size(max=10)
   public String getDeliveryOptionCode() {
     return deliveryOptionCode;
   }
@@ -305,16 +294,14 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * Must be 1 for a person, can be multiple for an organisation. minimum: 1 maximum: 999
-   *
+   * Must be 1 for a person, can be multiple for an organisation.
+   * minimum: 1
+   * maximum: 999
    * @return numberOfBadges
-   */
-  @ApiModelProperty(
-    example = "1",
-    value = "Must be 1 for a person, can be multiple for an organisation."
-  )
-  @Min(1)
-  @Max(999)
+   **/
+  @ApiModelProperty(example = "1", value = "Must be 1 for a person, can be multiple for an organisation.")
+
+  @Min(1) @Max(999)
   public Integer getNumberOfBadges() {
     return numberOfBadges;
   }
@@ -322,6 +309,7 @@ public class BadgeOrderRequest {
   public void setNumberOfBadges(Integer numberOfBadges) {
     this.numberOfBadges = numberOfBadges;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -332,35 +320,23 @@ public class BadgeOrderRequest {
       return false;
     }
     BadgeOrderRequest badgeOrderRequest = (BadgeOrderRequest) o;
-    return Objects.equals(this.party, badgeOrderRequest.party)
-        && Objects.equals(this.localAuthorityId, badgeOrderRequest.localAuthorityId)
-        && Objects.equals(this.localAuthorityRef, badgeOrderRequest.localAuthorityRef)
-        && Objects.equals(this.applicationDate, badgeOrderRequest.applicationDate)
-        && Objects.equals(this.applicationChannelCode, badgeOrderRequest.applicationChannelCode)
-        && Objects.equals(this.startDate, badgeOrderRequest.startDate)
-        && Objects.equals(this.expiryDate, badgeOrderRequest.expiryDate)
-        && Objects.equals(this.eligibilityCode, badgeOrderRequest.eligibilityCode)
-        && Objects.equals(this.imageFile, badgeOrderRequest.imageFile)
-        && Objects.equals(this.deliverToCode, badgeOrderRequest.deliverToCode)
-        && Objects.equals(this.deliveryOptionCode, badgeOrderRequest.deliveryOptionCode)
-        && Objects.equals(this.numberOfBadges, badgeOrderRequest.numberOfBadges);
+    return Objects.equals(this.party, badgeOrderRequest.party) &&
+        Objects.equals(this.localAuthorityId, badgeOrderRequest.localAuthorityId) &&
+        Objects.equals(this.localAuthorityRef, badgeOrderRequest.localAuthorityRef) &&
+        Objects.equals(this.applicationDate, badgeOrderRequest.applicationDate) &&
+        Objects.equals(this.applicationChannelCode, badgeOrderRequest.applicationChannelCode) &&
+        Objects.equals(this.startDate, badgeOrderRequest.startDate) &&
+        Objects.equals(this.expiryDate, badgeOrderRequest.expiryDate) &&
+        Objects.equals(this.eligibilityCode, badgeOrderRequest.eligibilityCode) &&
+        Objects.equals(this.imageFile, badgeOrderRequest.imageFile) &&
+        Objects.equals(this.deliverToCode, badgeOrderRequest.deliverToCode) &&
+        Objects.equals(this.deliveryOptionCode, badgeOrderRequest.deliveryOptionCode) &&
+        Objects.equals(this.numberOfBadges, badgeOrderRequest.numberOfBadges);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        party,
-        localAuthorityId,
-        localAuthorityRef,
-        applicationDate,
-        applicationChannelCode,
-        startDate,
-        expiryDate,
-        eligibilityCode,
-        imageFile,
-        deliverToCode,
-        deliveryOptionCode,
-        numberOfBadges);
+    return Objects.hash(party, localAuthorityId, localAuthorityRef, applicationDate, applicationChannelCode, startDate, expiryDate, eligibilityCode, imageFile, deliverToCode, deliveryOptionCode, numberOfBadges);
   }
 
   @Override
@@ -372,9 +348,7 @@ public class BadgeOrderRequest {
     sb.append("    localAuthorityId: ").append(toIndentedString(localAuthorityId)).append("\n");
     sb.append("    localAuthorityRef: ").append(toIndentedString(localAuthorityRef)).append("\n");
     sb.append("    applicationDate: ").append(toIndentedString(applicationDate)).append("\n");
-    sb.append("    applicationChannelCode: ")
-        .append(toIndentedString(applicationChannelCode))
-        .append("\n");
+    sb.append("    applicationChannelCode: ").append(toIndentedString(applicationChannelCode)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
     sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");
@@ -387,7 +361,8 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(java.lang.Object o) {
     if (o == null) {
@@ -396,3 +371,4 @@ public class BadgeOrderRequest {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

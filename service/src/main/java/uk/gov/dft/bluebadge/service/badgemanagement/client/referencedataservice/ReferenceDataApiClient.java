@@ -12,9 +12,8 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 @Service
 public class ReferenceDataApiClient {
 
-  private ReferenceDataServiceConfiguration messageServiceConfiguration;
-
-  private RestTemplateFactory restTemplateFactory;
+  private final ReferenceDataServiceConfiguration messageServiceConfiguration;
+  private final RestTemplateFactory restTemplateFactory;
 
   @Autowired
   public ReferenceDataApiClient(

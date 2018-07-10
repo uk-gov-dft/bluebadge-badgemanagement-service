@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import uk.gov.dft.bluebadge.common.converter.ToModelConverter;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -14,8 +15,7 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     Badge badge = new Badge();
     // Populate common parts of model first.
     badge.setApplicationChannelCode(entity.getAppChannelCode());
-    // TODO time on application date- swagger model?
-    badge.setApplicationDate(entity.getAppDateTime());
+    badge.setApplicationDate(ConvertUtils.getAsUTC(entity.getAppDateTime()));
     badge.setBadgeNumber(entity.getBadgeNo());
     badge.setCancelReasonCode(entity.getCancelReasonCode());
     badge.setEligibilityCode(entity.getEligibilityCode());

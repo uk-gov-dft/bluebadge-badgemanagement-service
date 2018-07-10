@@ -7,18 +7,27 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
+@Component
 public class ValidateBadgeOrder {
 
-  private ValidateBadgeOrder() {}
+  private final ReferenceDataService referenceDataService;
 
-  public static void validate(BadgeEntity entity) {
+  @Autowired
+  ValidateBadgeOrder(ReferenceDataService referenceDataService) {
+    this.referenceDataService = referenceDataService;
+  }
+
+  public void validate(BadgeEntity entity) {
     List<ErrorErrors> errors = new ArrayList<>();
 
     // Ref data validation
@@ -69,14 +78,14 @@ public class ValidateBadgeOrder {
     }
   }
 
-  private static void validateRefData(
+  private void validateRefData(
       RefDataGroupEnum group,
       ValidationKeyEnum validationKeyEnum,
       String value,
       List<ErrorErrors> errors) {
     if (null == value) return;
 
-    if (!ReferenceDataService.groupContainsKey(group, value)) {
+    if (!referenceDataService.groupContainsKey(group, value)) {
       errors.add(validationKeyEnum.getFieldErrorInstance());
     }
   }

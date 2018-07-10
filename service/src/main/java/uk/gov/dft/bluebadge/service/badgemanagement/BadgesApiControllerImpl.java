@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
+import uk.gov.dft.bluebadge.common.service.exception.ServiceException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
@@ -24,17 +25,18 @@ import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConver
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.ServiceException;
 
 @Controller
 public class BadgesApiControllerImpl implements BadgesApi {
 
   private final BadgeManagementService service;
+  private final BadgeSummaryConverter badgeSummaryConverter;
 
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiControllerImpl(BadgeManagementService service) {
+  public BadgesApiControllerImpl(BadgeManagementService service, BadgeSummaryConverter badgeSummaryConverter) {
     this.service = service;
+    this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
   @SuppressWarnings("unused")
@@ -65,10 +67,9 @@ public class BadgesApiControllerImpl implements BadgesApi {
           @RequestParam(value = "postCode", required = false)
           Optional<String> postCode) {
 
-    BadgeSummaryConverter converter = new BadgeSummaryConverter();
     List<BadgeEntity> badgeEntities = service.findBadges(name.orElse(null), postCode.orElse(null));
     return ResponseEntity.ok(
-        new BadgesResponse().data(converter.convertToModelList(badgeEntities)));
+        new BadgesResponse().data(badgeSummaryConverter.convertToModelList(badgeEntities)));
   }
 
   @Override

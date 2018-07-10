@@ -16,11 +16,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManag
 @Slf4j
 public class BadgeManagementRepository implements BadgeManagementMapper {
 
-  class Statements{
+  class Statements {
     static final String CREATE = "createBadge";
     static final String FIND = "findBadges";
     static final String RETRIEVE = "retrieveBadge";
   }
+
   private final SqlSession sqlSession;
 
   public BadgeManagementRepository(SqlSession sqlSession) {

@@ -7,11 +7,8 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
@@ -47,21 +44,25 @@ public class BadgeTestBase {
     addRefData();
   }
 
-  private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description){
+  private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
     return new ReferenceData()
         .groupShortCode(group.getGroupKey())
         .shortCode(key)
         .description(description);
   }
+
   private void addRefData() {
     List<ReferenceData> referenceDataList = new ArrayList<>();
-    referenceDataList.add(getNewRefDataItem(APP_SOURCE, DefaultVals.APP_CHANNEL_CODE,null));
-    referenceDataList.add(getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE, null));
+    referenceDataList.add(getNewRefDataItem(APP_SOURCE, DefaultVals.APP_CHANNEL_CODE, null));
+    referenceDataList.add(
+        getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE, null));
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE, null));
     referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
     referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_ORG_CODE, null));
-    referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
-    referenceDataList.add(getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
+    referenceDataList.add(
+        getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
+    referenceDataList.add(
+        getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);

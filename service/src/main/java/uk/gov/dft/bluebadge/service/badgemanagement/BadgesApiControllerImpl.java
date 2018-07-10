@@ -34,7 +34,8 @@ public class BadgesApiControllerImpl implements BadgesApi {
 
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiControllerImpl(BadgeManagementService service, BadgeSummaryConverter badgeSummaryConverter) {
+  public BadgesApiControllerImpl(
+      BadgeManagementService service, BadgeSummaryConverter badgeSummaryConverter) {
     this.service = service;
     this.badgeSummaryConverter = badgeSummaryConverter;
   }

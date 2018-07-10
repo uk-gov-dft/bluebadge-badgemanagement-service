@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
@@ -25,7 +24,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Before
   public void setUp() {
-   // MockitoAnnotations.initMocks(this);
+    // MockitoAnnotations.initMocks(this);
     service = new BadgeManagementService(repository, validateBadgeOrder);
   }
 

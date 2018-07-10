@@ -16,8 +16,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeP
 
 public class BadgeManagementRepositoryTest {
 
-  @Mock
-  SqlSession sqlSession;
+  @Mock SqlSession sqlSession;
 
   BadgeManagementRepository repository;
 
@@ -33,7 +32,7 @@ public class BadgeManagementRepositoryTest {
   }
 
   @Test
-  public void findBadges(){
+  public void findBadges() {
     FindBadgeParams params = FindBadgeParams.builder().name("%Bob%").build();
     repository.findBadges(params);
     verify(sqlSession).selectList(eq(FIND), eq(params));

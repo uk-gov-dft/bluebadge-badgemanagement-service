@@ -1,16 +1,15 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 
 @Component
 public class ReferenceDataService {

@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-
 import lombok.Builder;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;

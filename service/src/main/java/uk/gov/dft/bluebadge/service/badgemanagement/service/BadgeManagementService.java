@@ -26,7 +26,8 @@ public class BadgeManagementService {
   private final ValidateBadgeOrder validateBadgeOrder;
 
   @Autowired
-  BadgeManagementService(BadgeManagementRepository repository, ValidateBadgeOrder validateBadgeOrder) {
+  BadgeManagementService(
+      BadgeManagementRepository repository, ValidateBadgeOrder validateBadgeOrder) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
   }

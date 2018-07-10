@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service;
 import java.time.LocalDate;
 import java.time.Period;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
@@ -12,7 +11,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 public class ValidateBadgeOrderTest extends BadgeTestBase {
 
   private ValidateBadgeOrder validateBadgeOrder;
-
 
   public ValidateBadgeOrderTest() {
     super();

@@ -4,7 +4,6 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKey
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
 import java.time.LocalDate;
-
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;

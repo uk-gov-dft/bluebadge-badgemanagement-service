@@ -17,6 +17,10 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManag
 public class BadgeManagementRepository implements BadgeManagementMapper {
 
   class Statements {
+
+    private Statements() {
+    }
+
     static final String CREATE = "createBadge";
     static final String FIND = "findBadges";
     static final String RETRIEVE = "retrieveBadge";

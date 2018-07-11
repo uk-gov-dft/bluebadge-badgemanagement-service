@@ -1,10 +1,10 @@
-@badge-find-org
-Feature: Verify retrieve newly created org badge
+@badge-get
+Feature: Verify badge details
 
   Background:
     * url baseUrl
 
-  Scenario: Verify findBadges
+  Scenario: Verify retrieve a badge
     * def badge =
     """
     {
@@ -21,15 +21,15 @@ Feature: Verify retrieve newly created org badge
     emailAddress: 'june@bigbrainknitting.com'
     },
     organisation: {
-    badgeHolderName: 'ORGTEST1234'
+    badgeHolderName: 'ORGTEST12345'
     }
     },
     localAuthorityId: 187,
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',
-    startDate: '#(futureDate)',
-    expiryDate: '#(futureDatePlusYear)',
+    startDate: '2019-06-30',
+    expiryDate: '2019-07-01',
     eligibilityCode: 'CHILDBULK',
     imageFile: 'YWZpbGU=',
     deliverToCode: 'HOME',
@@ -45,14 +45,15 @@ Feature: Verify retrieve newly created org badge
     And match $.data[*] contains "#notnull"
     And def createdbadgeno = $.data[0]
 
-    Given path 'badges'
-    And param name = 'orgtest'
+    Given path 'badges/' + createdbadgeno
     When method GET
     Then status 200
-    And match $.data[*].badgeNumber contains createdbadgeno
+    And match $.data.party.contact.fullName contains 'June Whitfield'
+    And def apptime = $.data
 
-    Given path 'badges'
-    And param postCode = 'OR68GG'
+    * print '=============================' + apptime
+
+    Given  path 'badges/ZZZZZZ'
     When method GET
-    Then status 200
-    And match $.data[*].badgeNumber contains createdbadgeno
+    Then status 404
+    And match $.error.message contains 'NotFound.badge'

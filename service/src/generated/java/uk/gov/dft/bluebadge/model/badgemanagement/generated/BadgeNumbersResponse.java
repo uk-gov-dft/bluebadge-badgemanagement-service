@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
 /** Contains a list of Badge numbers. */
 @ApiModel(description = "Contains a list of Badge numbers.")

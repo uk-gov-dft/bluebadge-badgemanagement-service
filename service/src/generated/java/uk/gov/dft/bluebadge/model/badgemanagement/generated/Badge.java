@@ -2,11 +2,13 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import org.springframework.validation.annotation.Validated;
 
 /** Badge */
 @Validated
@@ -142,7 +144,7 @@ public class Badge {
    * @return applicationDate
    */
   @ApiModelProperty(
-    example = "2018-04-14",
+    example = "2017-07-21",
     value = "The date that the initial application was received by the issuing local authority."
   )
   @Valid

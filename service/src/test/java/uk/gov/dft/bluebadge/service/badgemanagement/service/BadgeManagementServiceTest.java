@@ -8,23 +8,24 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Mock private BadgeManagementRepository repository;
+  @Mock private ValidateBadgeOrder validateBadgeOrder;
 
   private BadgeManagementService service;
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
-    service = new BadgeManagementService(repository);
+    // MockitoAnnotations.initMocks(this);
+    service = new BadgeManagementService(repository, validateBadgeOrder);
   }
 
   @Test
@@ -71,5 +72,20 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.findBadges(name, postcode);
     // Then search is done
     verify(repository, never()).findBadges(any());
+  }
+
+  @Test
+  public void retrieveBadge_ok() {
+    BadgeEntity badgeEntity = getValidPersonBadgeEntity();
+    when(repository.retrieveBadge(any())).thenReturn(badgeEntity);
+
+    BadgeEntity result = service.retrieveBadge("ABC");
+    Assert.assertEquals(badgeEntity, result);
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void retrieveBadge_notFound() {
+    when(repository.retrieveBadge(any())).thenReturn(null);
+    service.retrieveBadge("ABC");
   }
 }

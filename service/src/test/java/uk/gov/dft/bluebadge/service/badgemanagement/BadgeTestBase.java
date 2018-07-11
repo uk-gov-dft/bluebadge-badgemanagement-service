@@ -1,22 +1,29 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum.*;
+import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Arrays;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BadgeTestBase {
 
   public class DefaultVals {
-    static final String STATUS_CODE = "NEW";
     static final String ELIGIBILITY_CODE = "PIP";
     static final String DELIVER_TO_CODE = "HOME";
     static final String DELIVER_OPTION_CODE = "FAST";
@@ -28,36 +35,45 @@ public class BadgeTestBase {
     static final String PARTY_ORG_CODE = "ORG";
   }
 
+  protected ReferenceDataService referenceDataService;
+
+  @Mock private ReferenceDataApiClient referenceDataApiClient;
+
   public BadgeTestBase() {
+    MockitoAnnotations.initMocks(this);
     addRefData();
   }
 
+  private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
+    return new ReferenceData()
+        .groupShortCode(group.getGroupKey())
+        .shortCode(key)
+        .description(description);
+  }
+
   private void addRefData() {
+    List<ReferenceData> referenceDataList = new ArrayList<>();
+    referenceDataList.add(getNewRefDataItem(APP_SOURCE, DefaultVals.APP_CHANNEL_CODE, null));
+    referenceDataList.add(
+        getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE, null));
+    referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE, null));
+    referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
+    referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_ORG_CODE, null));
+    referenceDataList.add(
+        getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
+    referenceDataList.add(
+        getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
 
-    RefData.getValidGroupKeys()
-        .addAll(
-            Arrays.asList(
-                APP_SOURCE.getGroupKey() + "_" + DefaultVals.APP_CHANNEL_CODE,
-                DELIVERY_OPTIONS.getGroupKey() + "_" + DefaultVals.DELIVER_OPTION_CODE,
-                DELIVER_TO.getGroupKey() + "_" + DefaultVals.DELIVER_TO_CODE,
-                ELIGIBILITY.getGroupKey() + "_" + DefaultVals.ELIGIBILITY_CODE,
-                PARTY.getGroupKey() + "_" + DefaultVals.PARTY_ORG_CODE,
-                PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
-                GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE));
-
-    RefData.getKeyDescriptionMap()
-        .put(GENDER.getGroupKey() + "_" + DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC);
-    RefData.getKeyDescriptionMap()
-        .put(
-            PARTY.getGroupKey() + "_" + DefaultVals.PARTY_PERSON_CODE,
-            DefaultVals.PARTY_PERSON_DESC);
+    when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
+    referenceDataService = new ReferenceDataService(referenceDataApiClient);
+    referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, "MALE");
   }
 
   protected BadgeEntity getValidPersonBadgeEntity() {
 
     return BadgeEntity.builder()
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(LocalDate.now().minus(Period.ofDays(7)))
+        .appDate(LocalDate.now().minus(Period.ofDays(7)))
         .contactBuildingStreet("29 Listley Street")
         .contactLine2(null)
         .contactName("Robert McRoberts")
@@ -77,10 +93,11 @@ public class BadgeTestBase {
         .nino("NS123456A")
         .partyCode(DefaultVals.PARTY_PERSON_CODE)
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
-        .badgeNo(null)
-        .badgeStatus(null)
+        .badgeNo("KKKKKK")
+        .badgeStatus(BadgeEntity.Status.NEW)
         .imageLink(null)
         .numberOfBadges(1)
+        .orderDate(LocalDate.now())
         .build();
   }
 
@@ -156,12 +173,12 @@ public class BadgeTestBase {
         .expiryDate(LocalDate.now().plus(Period.ofMonths(35)))
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(LocalDate.now().minus(Period.ofDays(1)))
+        .appDate(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")
-        .badgeStatus(DefaultVals.STATUS_CODE)
+        .badgeStatus(BadgeEntity.Status.NEW)
         .numberOfBadges(1)
         .primaryPhoneNo("01234512312")
         .secondaryPhoneNo(null)

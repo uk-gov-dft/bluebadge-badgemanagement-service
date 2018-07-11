@@ -1,14 +1,21 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import uk.gov.dft.bluebadge.common.converter.ToModelConverter;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefData;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class BadgeSummaryConverter implements BiConverter<BadgeEntity, BadgeSummary> {
-  @Override
-  public BadgeEntity convertToEntity(BadgeSummary model) {
-    return null;
+@Component
+public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, BadgeSummary> {
+
+  private final ReferenceDataService referenceDataService;
+
+  @Autowired
+  public BadgeSummaryConverter(ReferenceDataService referenceDataService) {
+    this.referenceDataService = referenceDataService;
   }
 
   @Override
@@ -22,10 +29,11 @@ public class BadgeSummaryConverter implements BiConverter<BadgeEntity, BadgeSumm
     model.setNino(entity.getNino());
     model.setPartyTypeCode(entity.getPartyCode());
     model.setPartyTypeDescription(
-        RefData.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
-    model.setStatusCode(entity.getBadgeStatus());
+        referenceDataService.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));
+    model.setStatusCode(entity.getBadgeStatus().name());
     model.setStatusDescription(
-        RefData.getDescription(RefDataGroupEnum.STATUS, entity.getBadgeStatus()));
+        referenceDataService.getDescription(
+            RefDataGroupEnum.STATUS, entity.getBadgeStatus().name()));
     return model;
   }
 }

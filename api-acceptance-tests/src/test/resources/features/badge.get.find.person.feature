@@ -1,4 +1,4 @@
-@badge-get
+@badge-find-person
 Feature: Verify retrieve newly created badge
 
   Background:
@@ -31,8 +31,8 @@ Feature: Verify retrieve newly created badge
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',
-    startDate: '2019-06-30',
-    expiryDate: '2019-07-01',
+    startDate: '#(futureDate)',
+    expiryDate: '#(futureDatePlusYear)',
     eligibilityCode: 'CHILDBULK',
     imageFile: 'YWZpbGU=',
     deliverToCode: 'HOME',
@@ -49,10 +49,11 @@ Feature: Verify retrieve newly created badge
     And def createdbadgeno = $.data[0]
 
     Given path 'badges'
-    And param name = 'Fred'
+    And param name = 'red'
     When method GET
     Then status 200
     And match $.data[*].badgeNumber contains createdbadgeno
+    And match $.data[*].partyTypeDescription contains 'Person'
 
     Given path 'badges'
     And param name = 'IDONOTEXISTIWOULDHOPE'

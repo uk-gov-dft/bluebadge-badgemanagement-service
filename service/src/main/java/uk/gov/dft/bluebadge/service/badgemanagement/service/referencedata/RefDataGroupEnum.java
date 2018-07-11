@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement.service;
+package uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata;
 
 @SuppressWarnings("SpellCheckingInspection")
 public enum RefDataGroupEnum {

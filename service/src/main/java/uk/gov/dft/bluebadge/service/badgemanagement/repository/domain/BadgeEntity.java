@@ -23,7 +23,7 @@ public class BadgeEntity implements Serializable {
   String partyCode;
   Integer localAuthorityId;
   String localAuthorityRef;
-  LocalDate appDateTime;
+  LocalDate appDate;
   String appChannelCode;
   LocalDate startDate;
   LocalDate expiryDate;

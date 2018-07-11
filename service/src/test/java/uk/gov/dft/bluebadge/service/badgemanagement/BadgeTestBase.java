@@ -73,7 +73,7 @@ public class BadgeTestBase {
 
     return BadgeEntity.builder()
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(LocalDate.now().minus(Period.ofDays(7)))
+        .appDate(LocalDate.now().minus(Period.ofDays(7)))
         .contactBuildingStreet("29 Listley Street")
         .contactLine2(null)
         .contactName("Robert McRoberts")
@@ -173,7 +173,7 @@ public class BadgeTestBase {
         .expiryDate(LocalDate.now().plus(Period.ofMonths(35)))
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(LocalDate.now().minus(Period.ofDays(1)))
+        .appDate(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)

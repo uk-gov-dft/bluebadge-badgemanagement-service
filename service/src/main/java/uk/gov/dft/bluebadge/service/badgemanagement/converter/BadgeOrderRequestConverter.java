@@ -32,7 +32,7 @@ public class BadgeOrderRequestConverter
             .badgeStatus(BadgeEntity.Status.NEW)
             .localAuthorityId(model.getLocalAuthorityId())
             .localAuthorityRef(model.getLocalAuthorityRef())
-            .appDateTime(model.getApplicationDate())
+            .appDate(model.getApplicationDate())
             .appChannelCode(model.getApplicationChannelCode())
             .startDate(model.getStartDate())
             .expiryDate(model.getExpiryDate())

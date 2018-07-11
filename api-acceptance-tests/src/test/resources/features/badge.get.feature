@@ -26,7 +26,7 @@ Feature: Verify badge details
     },
     localAuthorityId: 187,
     localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23T14:00:00Z',
+    applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',
     startDate: '2019-06-30',
     expiryDate: '2019-07-01',

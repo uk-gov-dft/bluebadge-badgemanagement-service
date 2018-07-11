@@ -2,12 +2,13 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.Objects;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.Objects;
 
 /** Badge */
 @Validated
@@ -25,7 +26,7 @@ public class Badge {
   private String localAuthorityRef = null;
 
   @JsonProperty("applicationDate")
-  private OffsetDateTime applicationDate = null;
+  private LocalDate applicationDate = null;
 
   @JsonProperty("applicationChannelCode")
   private String applicationChannelCode = null;
@@ -132,7 +133,7 @@ public class Badge {
     this.localAuthorityRef = localAuthorityRef;
   }
 
-  public Badge applicationDate(OffsetDateTime applicationDate) {
+  public Badge applicationDate(LocalDate applicationDate) {
     this.applicationDate = applicationDate;
     return this;
   }
@@ -143,15 +144,15 @@ public class Badge {
    * @return applicationDate
    */
   @ApiModelProperty(
-    example = "2017-07-21T17:32:28Z",
+    example = "2017-07-21",
     value = "The date that the initial application was received by the issuing local authority."
   )
   @Valid
-  public OffsetDateTime getApplicationDate() {
+  public LocalDate getApplicationDate() {
     return applicationDate;
   }
 
-  public void setApplicationDate(OffsetDateTime applicationDate) {
+  public void setApplicationDate(LocalDate applicationDate) {
     this.applicationDate = applicationDate;
   }
 

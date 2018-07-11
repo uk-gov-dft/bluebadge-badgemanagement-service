@@ -15,7 +15,7 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     Badge badge = new Badge();
     // Populate common parts of model first.
     badge.setApplicationChannelCode(entity.getAppChannelCode());
-    badge.setApplicationDate(ConvertUtils.getAsUTC(entity.getAppDateTime()));
+    badge.setApplicationDate(entity.getAppDateTime());
     badge.setBadgeNumber(entity.getBadgeNo());
     badge.setCancelReasonCode(entity.getCancelReasonCode());
     badge.setEligibilityCode(entity.getEligibilityCode());

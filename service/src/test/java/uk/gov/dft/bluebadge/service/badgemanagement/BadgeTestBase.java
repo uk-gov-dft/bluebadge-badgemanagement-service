@@ -3,11 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 import static org.mockito.Mockito.when;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
@@ -20,6 +15,11 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BadgeTestBase {
 
@@ -73,7 +73,7 @@ public class BadgeTestBase {
 
     return BadgeEntity.builder()
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(OffsetDateTime.now().minus(Period.ofDays(7)))
+        .appDateTime(LocalDate.now().minus(Period.ofDays(7)))
         .contactBuildingStreet("29 Listley Street")
         .contactLine2(null)
         .contactName("Robert McRoberts")
@@ -107,7 +107,7 @@ public class BadgeTestBase {
     Contact contact = new Contact();
     Organisation org = new Organisation();
     request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
-    request.setApplicationDate(OffsetDateTime.now().minus(Period.ofDays(2)));
+    request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
@@ -133,7 +133,7 @@ public class BadgeTestBase {
     Contact contact = new Contact();
     Person person = new Person();
     request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
-    request.setApplicationDate(OffsetDateTime.now().minus(Period.ofDays(2)));
+    request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
@@ -173,7 +173,7 @@ public class BadgeTestBase {
         .expiryDate(LocalDate.now().plus(Period.ofMonths(35)))
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
-        .appDateTime(OffsetDateTime.now().minus(Period.ofDays(1)))
+        .appDateTime(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)

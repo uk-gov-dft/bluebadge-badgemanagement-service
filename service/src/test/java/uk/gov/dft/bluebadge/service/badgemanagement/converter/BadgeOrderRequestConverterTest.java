@@ -2,10 +2,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.exception.BadRequestException;
 
 public class BadgeOrderRequestConverterTest extends BadgeTestBase {
 
@@ -21,6 +21,7 @@ public class BadgeOrderRequestConverterTest extends BadgeTestBase {
     Assert.assertEquals("WV164AW", entity.getContactPostcode());
     Assert.assertEquals(
         request.getParty().getPerson().getBadgeHolderName(), entity.getHolderName());
+    Assert.assertNotNull(entity.getOrderDate());
   }
 
   @Test

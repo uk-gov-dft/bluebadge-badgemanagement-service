@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
         jcenter()
         maven {
-            url 'https://artifactory.does.not.exist/artifactory/gradle-release'
+            url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
     }
 
@@ -52,7 +52,7 @@ allprojects {
         mavenCentral()
         jcenter()
         maven {
-            url 'https://artifactory.does.not.exist/artifactory/gradle-release-dev'
+            url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
     }
 
@@ -74,7 +74,7 @@ artifactory {
         publishArtifacts = true
         publishPom = true
         defaults {
-            publications('project_model', 'project_service')
+            publications('project_service')
             publishArtifacts = true
             publishPom = true
         }
@@ -130,6 +130,9 @@ task generateModel(dependsOn: 'unzipGenerated', type: Sync){
     group = "GenerateAPI"
     from "${buildDir}/unpacked/spring-server/generated/src/main/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
     include "**/*.java"
+    exclude '**/CommonResponse.java'
+    exclude '**/ErrorErrors.java'
+    exclude '**/Error.java'
     into "service/src/generated/java/uk/gov/dft/bluebadge/model/badgemanagement/generated"
 }
 

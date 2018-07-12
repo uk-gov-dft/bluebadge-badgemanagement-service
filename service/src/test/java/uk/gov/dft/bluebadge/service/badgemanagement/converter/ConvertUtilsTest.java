@@ -53,4 +53,16 @@ public class ConvertUtilsTest {
   public void convertToUpperFullTextSearchParam_null_safe() {
     ConvertUtils.convertToUpperFullTextSearchParam(null);
   }
+
+  @Test
+  public void formatBadgeNoForQuery() {
+    String result = ConvertUtils.formatBadgeNoForQuery("a123cc");
+    Assert.assertEquals("A123CC", result);
+
+    result = ConvertUtils.formatBadgeNoForQuery(" a ");
+    Assert.assertEquals("A", result);
+
+    result = ConvertUtils.formatBadgeNoForQuery("  ");
+    Assert.assertNull(result);
+  }
 }

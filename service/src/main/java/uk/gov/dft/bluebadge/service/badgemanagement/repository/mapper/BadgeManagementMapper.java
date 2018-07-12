@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @SuppressWarnings("unused")
 @Mapper
@@ -29,4 +30,12 @@ public interface BadgeManagementMapper {
    * @return List of BadgeEntity
    */
   List<BadgeEntity> findBadges(FindBadgeParams params);
+
+  /**
+   * Retrieve a single badge
+   *
+   * @param params Holds badge number to retrieve
+   * @return The badge
+   */
+  BadgeEntity retrieveBadge(RetrieveBadgeParams params);
 }

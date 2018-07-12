@@ -1,48 +1,59 @@
-package uk.gov.dft.bluebadge.model.badgemanagement.generated;
+package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 
-/** Returns a badge number. */
-@ApiModel(description = "Returns a badge number.")
+/** ReferenceDataResponse */
 @Validated
-public class BadgeNumberResponse extends CommonResponse {
+public class ReferenceDataResponse extends CommonResponse {
   @JsonProperty("data")
-  private String data = null;
+  @Valid
+  private List<ReferenceData> data = null;
 
-  public BadgeNumberResponse data(String data) {
+  public ReferenceDataResponse data(List<ReferenceData> data) {
     this.data = data;
     return this;
   }
 
+  public ReferenceDataResponse addDataItem(ReferenceData dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
+    }
+    this.data.add(dataItem);
+    return this;
+  }
+
   /**
-   * The unique badge number for this badge.
+   * Get data
    *
    * @return data
    */
-  @ApiModelProperty(example = "095715", value = "The unique badge number for this badge.")
-  public String getData() {
+  @ApiModelProperty(value = "")
+  @Valid
+  public List<ReferenceData> getData() {
     return data;
   }
 
-  public void setData(String data) {
+  public void setData(List<ReferenceData> data) {
     this.data = data;
   }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BadgeNumberResponse badgeNumberResponse = (BadgeNumberResponse) o;
-    return Objects.equals(this.data, badgeNumberResponse.data) && super.equals(o);
+    ReferenceDataResponse referenceDataResponse = (ReferenceDataResponse) o;
+    return Objects.equals(this.data, referenceDataResponse.data) && super.equals(o);
   }
 
   @Override
@@ -53,7 +64,7 @@ public class BadgeNumberResponse extends CommonResponse {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BadgeNumberResponse {\n");
+    sb.append("class ReferenceDataResponse {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
@@ -63,7 +74,7 @@ public class BadgeNumberResponse extends CommonResponse {
   /**
    * Convert the given object to string with each line indented by 4 spaces (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

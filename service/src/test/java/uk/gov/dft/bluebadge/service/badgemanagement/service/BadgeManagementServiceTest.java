@@ -13,19 +13,22 @@ import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Mock private BadgeManagementRepository repository;
   @Mock private ValidateBadgeOrder validateBadgeOrder;
+  @Mock private ValidateCancelBadge validateCancelBadge;
 
   private BadgeManagementService service;
 
   @Before
   public void setUp() {
-    // MockitoAnnotations.initMocks(this);
-    service = new BadgeManagementService(repository, validateBadgeOrder);
+    service = new BadgeManagementService(repository, validateBadgeOrder, validateCancelBadge);
   }
 
   @Test
@@ -87,5 +90,27 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void retrieveBadge_notFound() {
     when(repository.retrieveBadge(any())).thenReturn(null);
     service.retrieveBadge("ABC");
+  }
+
+  @Test
+  public void cancelBadge_ok(){
+    CancelBadgeParams params = CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+    when(repository.cancelBadge(params)).thenReturn(1);
+    service.cancelBadge(params);
+
+    verify(validateCancelBadge, times(1)).validateRequest(params);
+    verify(validateCancelBadge, never()).validateAfterFailedCancel(any());
+    verify(repository, times(1)).cancelBadge(params);
+  }
+
+  @Test
+  public void cancelBadge_failed(){
+    CancelBadgeParams params = CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+    when(repository.cancelBadge(params)).thenReturn(0);
+    service.cancelBadge(params);
+
+    verify(validateCancelBadge, times(1)).validateRequest(params);
+    verify(validateCancelBadge, times(1)).validateAfterFailedCancel(any());
+    verify(repository, times(1)).cancelBadge(params);
   }
 }

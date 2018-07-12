@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement.service;
+package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
@@ -24,6 +24,8 @@ public enum ValidationKeyEnum {
       "expiryDate"),
   INVALID_GENDER_CODE(
       "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),
+  INVALID_CANCEL_CODE(
+      "Invalid.badgeCancelRequest.cancelReasonCode", "Invalid cancel code.", "cancelReasonCode"),
   MISSING_PERSON_OBJECT(
       "NotNull.badge.person", "Person details must be included if party is a person.", "party"),
   MISSING_ORG_OBJECT(
@@ -35,7 +37,10 @@ public enum ValidationKeyEnum {
   TOO_MANY_FIND_PARAMS(
       "TooMany.params.badge.find",
       "To search badges require either name or postcode, not both.",
-      "name");
+      "name"),
+  CANCEL_EXPIRY_DATE_IN_PAST("Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
+  CANCEL_STATUS_INVALID("Invalid.badge.cancel.status", "Cannot cancel a badge unless status is ISSUED.", "badgeStatus"),
+  CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown");
 
   private final String key;
   private final String defaultMessage;

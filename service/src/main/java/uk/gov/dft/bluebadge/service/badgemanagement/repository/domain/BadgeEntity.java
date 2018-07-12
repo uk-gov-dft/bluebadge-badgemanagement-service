@@ -1,11 +1,11 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository.domain;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 /** Bean to hold a BadgeEntity record. */
 @Alias("BadgeEntity")
@@ -14,8 +14,9 @@ import org.apache.ibatis.type.Alias;
 public class BadgeEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @SuppressWarnings("unused")
   public enum Status {
-    NEW
+    ISSUED, CANCELLED, REPLACED
   }
 
   String badgeNo;

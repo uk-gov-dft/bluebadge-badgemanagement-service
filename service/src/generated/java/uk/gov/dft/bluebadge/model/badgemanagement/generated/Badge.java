@@ -63,7 +63,7 @@ public class Badge {
    * @return badgeNumber
    */
   @ApiModelProperty(example = "091215", value = "The unique badge number for this badge.")
-  @Pattern(regexp = "^[0-9A-HK]{6}$")
+  @Pattern(regexp = "^[0-9A-HJK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }

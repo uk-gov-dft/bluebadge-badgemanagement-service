@@ -232,7 +232,7 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "72B9HA",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "cancelReasonCode" : {
@@ -249,7 +249,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "72B9HA"
           },
@@ -286,7 +286,7 @@
               "type" : "array",
               "items" : {
                 "type" : "string",
-                "pattern" : "^[0-9A-HK]{6}$",
+                "pattern" : "^[0-9A-HJK]{6}$",
                 "example" : "095215",
                 "description" : "The unique badge number for this badge."
               }
@@ -328,7 +328,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "095215"
           },
@@ -392,7 +392,7 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "091215",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "party" : {
@@ -655,14 +655,14 @@
         "in" : "query",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HK]{6}$",
+        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number."
       },
       "BadgeNumberPathParam" : {
         "in" : "path",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HK]{6}$",
+        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number.",
         "required" : true
       },

@@ -142,4 +142,11 @@ task generateService(dependsOn: 'unzipGenerated', type: Sync){
     into "service/src/generated/java/uk/gov/dft/bluebadge/service/badgemanagement/generated"
 }
 
-
+task createDatabaseSchemaZip(type: Zip) {
+    def targetFilename = getTheVersion() + "_schema.zip"
+    from 'database-schema/'
+    include '*'
+    include '*/*'
+    archiveName targetFilename
+    destinationDir(file("service/build/database-schema"))
+}

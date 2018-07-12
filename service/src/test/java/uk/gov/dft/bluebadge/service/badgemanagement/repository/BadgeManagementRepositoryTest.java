@@ -40,14 +40,15 @@ public class BadgeManagementRepositoryTest {
   }
 
   @Test
-  public void cancelBadge(){
-    CancelBadgeParams params = CancelBadgeParams.builder().badgeNo("KKKKKK").cancelReasonCode("ABC").build();
+  public void cancelBadge() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder().badgeNo("KKKKKK").cancelReasonCode("ABC").build();
     repository.cancelBadge(params);
     verify(sqlSession).update(eq(CANCEL), eq(params));
   }
 
   @Test
-  public void retrieveBadge(){
+  public void retrieveBadge() {
     RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo("ABCDEF").build();
     repository.retrieveBadge(params);
     verify(sqlSession).selectOne(eq(RETRIEVE), eq(params));

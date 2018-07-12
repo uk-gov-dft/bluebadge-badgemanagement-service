@@ -93,8 +93,9 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void cancelBadge_ok(){
-    CancelBadgeParams params = CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+  public void cancelBadge_ok() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
     when(repository.cancelBadge(params)).thenReturn(1);
     service.cancelBadge(params);
 
@@ -104,8 +105,9 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void cancelBadge_failed(){
-    CancelBadgeParams params = CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+  public void cancelBadge_failed() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
     when(repository.cancelBadge(params)).thenReturn(0);
     service.cancelBadge(params);
 

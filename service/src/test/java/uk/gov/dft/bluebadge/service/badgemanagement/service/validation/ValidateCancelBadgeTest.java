@@ -2,15 +2,14 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import java.time.LocalDate;
+import java.time.Period;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-
-import java.time.LocalDate;
-import java.time.Period;
 
 public class ValidateCancelBadgeTest extends BadgeTestBase {
 

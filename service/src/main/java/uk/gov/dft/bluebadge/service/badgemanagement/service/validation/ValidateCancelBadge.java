@@ -5,6 +5,9 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_FAILED_UNEXPECTED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_STATUS_INVALID;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,15 +20,11 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
 @Component
 public class ValidateCancelBadge extends ValidateBase {
 
-  private ReferenceDataService referenceDataService;
+  private final ReferenceDataService referenceDataService;
 
   @Autowired
   public ValidateCancelBadge(ReferenceDataService referenceDataService) {
@@ -48,9 +47,10 @@ public class ValidateCancelBadge extends ValidateBase {
     validateRefData(
         RefDataGroupEnum.CANCEL,
         ValidationKeyEnum.INVALID_CANCEL_CODE,
-        request.getCancelReasonCode(), errors);
+        request.getCancelReasonCode(),
+        errors);
 
-    if(errors.size() > 0){
+    if (errors.size() > 0) {
       throw new BadRequestException(errors);
     }
   }

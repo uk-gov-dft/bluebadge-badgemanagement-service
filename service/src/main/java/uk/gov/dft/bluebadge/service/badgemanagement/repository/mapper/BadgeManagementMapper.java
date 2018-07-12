@@ -42,6 +42,7 @@ public interface BadgeManagementMapper {
 
   /**
    * Cancel a badge.
+   *
    * @param params Contains badge no and cancel reason.
    * @return Number of updates (0 or 1)
    */

@@ -19,8 +19,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
 
   class Statements {
 
-    private Statements() {
-    }
+    private Statements() {}
 
     static final String CREATE = "createBadge";
     static final String FIND = "findBadges";

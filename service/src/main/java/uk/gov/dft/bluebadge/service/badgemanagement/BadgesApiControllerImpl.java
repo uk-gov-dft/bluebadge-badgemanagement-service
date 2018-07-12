@@ -1,9 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
 import io.swagger.annotations.ApiParam;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +27,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequest
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class BadgesApiControllerImpl implements BadgesApi {

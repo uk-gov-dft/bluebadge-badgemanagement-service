@@ -3,6 +3,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 import static org.mockito.Mockito.when;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
@@ -15,11 +19,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BadgeTestBase {
 
@@ -69,7 +68,9 @@ public class BadgeTestBase {
         getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
     referenceDataList.add(
         getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
-    referenceDataList.add(getNewRefDataItem(RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
+    referenceDataList.add(
+        getNewRefDataItem(
+            RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);

@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.*;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.*;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.Refere
 
 @Component
 @Slf4j
-public class ValidateBadgeOrder extends ValidateBase{
+public class ValidateBadgeOrder extends ValidateBase {
 
   private final ReferenceDataService referenceDataService;
 

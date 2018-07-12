@@ -7,7 +7,6 @@ import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 
 public class ValidateBadgeOrderTest extends BadgeTestBase {
 

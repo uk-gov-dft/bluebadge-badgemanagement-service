@@ -38,8 +38,12 @@ public enum ValidationKeyEnum {
       "TooMany.params.badge.find",
       "To search badges require either name or postcode, not both.",
       "name"),
-  CANCEL_EXPIRY_DATE_IN_PAST("Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
-  CANCEL_STATUS_INVALID("Invalid.badge.cancel.status", "Cannot cancel a badge unless status is ISSUED.", "badgeStatus"),
+  CANCEL_EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
+  CANCEL_STATUS_INVALID(
+      "Invalid.badge.cancel.status",
+      "Cannot cancel a badge unless status is ISSUED.",
+      "badgeStatus"),
   CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown");
 
   private final String key;

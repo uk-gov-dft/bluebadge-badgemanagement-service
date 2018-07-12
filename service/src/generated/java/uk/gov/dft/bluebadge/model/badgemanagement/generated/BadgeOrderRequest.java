@@ -2,15 +2,14 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-
+import java.time.LocalDate;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.util.Objects;
+import org.springframework.validation.annotation.Validated;
 
 /** BadgeOrderRequest */
 @Validated

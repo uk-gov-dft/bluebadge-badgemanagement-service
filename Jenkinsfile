@@ -14,7 +14,7 @@ node {
     stage ('Gradle build') {
         sh 'pwd && ls -la'
         try {
-            sh './gradlew clean build bootJar artifactoryPublish artifactoryDeploy --refresh-dependencies'
+            sh './gradlew clean build bootJar createDatabaseSchemaZip artifactoryPublish artifactoryDeploy --refresh-dependencies'
         }
         finally {
             junit '**/TEST*.xml'

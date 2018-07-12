@@ -50,7 +50,7 @@ public class ValidateCancelBadge extends ValidateBase {
         request.getCancelReasonCode(),
         errors);
 
-    if (errors.size() > 0) {
+    if (!errors.isEmpty()) {
       throw new BadRequestException(errors);
     }
   }

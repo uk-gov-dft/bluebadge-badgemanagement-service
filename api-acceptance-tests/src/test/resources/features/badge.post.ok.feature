@@ -11,7 +11,7 @@ Feature: Verify Create badge
     party: {
     typeCode: 'PERSON',
     contact: {
-    fullName: 'June Whitfield',
+    fullName: '',
     buildingStreet: '65 Basil Chambers',
     line2: 'Northern Quarter',
     townCity: 'Manchester',

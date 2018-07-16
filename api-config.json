@@ -232,7 +232,7 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "72B9HA",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "cancelReasonCode" : {
@@ -249,7 +249,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "72B9HA"
           },
@@ -286,7 +286,7 @@
               "type" : "array",
               "items" : {
                 "type" : "string",
-                "pattern" : "^[0-9A-HK]{6}$",
+                "pattern" : "^[0-9A-HJK]{6}$",
                 "example" : "095215",
                 "description" : "The unique badge number for this badge."
               }
@@ -328,7 +328,7 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "095215"
           },
@@ -392,7 +392,7 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "091215",
-            "pattern" : "^[0-9A-HK]{6}$",
+            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "party" : {
@@ -412,7 +412,7 @@
             "type" : "string",
             "format" : "date",
             "description" : "The date that the initial application was received by the issuing local authority.",
-            "example" : "2018-04-14"
+            "example" : "2017-07-21"
           },
           "applicationChannelCode" : {
             "type" : "string",
@@ -481,7 +481,7 @@
           "applicationDate" : {
             "type" : "string",
             "format" : "date",
-            "example" : "2018-04-23",
+            "example" : "2017-07-21",
             "description" : "The date that the initial application was received by the issuing local authority."
           },
           "applicationChannelCode" : {
@@ -581,7 +581,7 @@
             "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIED."
           }
         },
-        "required" : [ "name" ],
+        "required" : [ "badgeHolderName" ],
         "example" : {
           "badgeHolderName" : "Fred Bloggs",
           "nino" : "NY188796B",
@@ -647,7 +647,7 @@
             "example" : "june@bigbrainknitting.com"
           }
         },
-        "required" : [ "buildingStreet", "townCity", "postCode", "fullName" ]
+        "required" : [ "buildingStreet", "townCity", "postCode" ]
       }
     },
     "parameters" : {
@@ -655,14 +655,14 @@
         "in" : "query",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HK]{6}$",
+        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number."
       },
       "BadgeNumberPathParam" : {
         "in" : "path",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HK]{6}$",
+        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number.",
         "required" : true
       },

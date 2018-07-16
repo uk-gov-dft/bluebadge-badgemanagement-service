@@ -2,13 +2,11 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import org.springframework.validation.annotation.Validated;
 
 /** Badge */
 @Validated
@@ -63,7 +61,7 @@ public class Badge {
    * @return badgeNumber
    */
   @ApiModelProperty(example = "091215", value = "The unique badge number for this badge.")
-  @Pattern(regexp = "^[0-9A-HK]{6}$")
+  @Pattern(regexp = "^[0-9A-HJK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }

@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
@@ -38,4 +39,12 @@ public interface BadgeManagementMapper {
    * @return The badge
    */
   BadgeEntity retrieveBadge(RetrieveBadgeParams params);
+
+  /**
+   * Cancel a badge.
+   *
+   * @param params Contains badge no and cancel reason.
+   * @return Number of updates (0 or 1)
+   */
+  int cancelBadge(CancelBadgeParams params);
 }

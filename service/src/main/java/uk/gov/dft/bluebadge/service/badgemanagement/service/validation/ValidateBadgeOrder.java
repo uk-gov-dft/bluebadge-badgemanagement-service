@@ -1,23 +1,24 @@
-package uk.gov.dft.bluebadge.service.badgemanagement.service;
+package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.*;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.*;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 @Component
-public class ValidateBadgeOrder {
+@Slf4j
+public class ValidateBadgeOrder extends ValidateBase {
 
   private final ReferenceDataService referenceDataService;
 
@@ -27,6 +28,7 @@ public class ValidateBadgeOrder {
   }
 
   public void validate(BadgeEntity entity) {
+    log.debug("Validating badge order.");
     List<ErrorErrors> errors = new ArrayList<>();
 
     // Ref data validation
@@ -49,8 +51,10 @@ public class ValidateBadgeOrder {
 
     // Report any failures
     if (!errors.isEmpty()) {
+      log.debug("Badge order failed validation.");
       throw new BadRequestException(errors);
     }
+    log.debug("Badge order passed validation.");
   }
 
   private static void validateDobInPast(BadgeEntity entity, List<ErrorErrors> errors) {
@@ -77,15 +81,8 @@ public class ValidateBadgeOrder {
     }
   }
 
-  private void validateRefData(
-      RefDataGroupEnum group,
-      ValidationKeyEnum validationKeyEnum,
-      String value,
-      List<ErrorErrors> errors) {
-    if (null == value) return;
-
-    if (!referenceDataService.groupContainsKey(group, value)) {
-      errors.add(validationKeyEnum.getFieldErrorInstance());
-    }
+  @Override
+  protected ReferenceDataService getReferenceDataService() {
+    return referenceDataService;
   }
 }

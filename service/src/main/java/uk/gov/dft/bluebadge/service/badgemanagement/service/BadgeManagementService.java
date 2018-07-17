@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_FIND_PARAMS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,11 @@ import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
 @Slf4j
 @Service
@@ -24,12 +27,16 @@ public class BadgeManagementService {
 
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
+  private final ValidateCancelBadge validateCancelBadge;
 
   @Autowired
   BadgeManagementService(
-      BadgeManagementRepository repository, ValidateBadgeOrder validateBadgeOrder) {
+      BadgeManagementRepository repository,
+      ValidateBadgeOrder validateBadgeOrder,
+      ValidateCancelBadge validateCancelBadge) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
+    this.validateCancelBadge = validateCancelBadge;
   }
 
   public List<String> createBadge(BadgeEntity entity) {
@@ -75,5 +82,21 @@ public class BadgeManagementService {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }
     return entity;
+  }
+
+  public void cancelBadge(CancelBadgeParams request) {
+    // Validate the request
+    validateCancelBadge.validateRequest(request);
+    // Optimistically try cancel before validating to save reading badge data.
+    int updates = repository.cancelBadge(request);
+
+    if (updates == 0) {
+      // Cancel did not happen.
+      // Find out why cancel was invalid
+      BadgeEntity badgeEntity =
+          repository.retrieveBadge(
+              RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
+      validateCancelBadge.validateAfterFailedCancel(badgeEntity);
+    }
   }
 }

@@ -8,13 +8,14 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.common.service.exception.ServiceException;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
@@ -22,11 +23,12 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 
-@Controller
+@RestController
 public class BadgesApiControllerImpl implements BadgesApi {
 
   private final BadgeManagementService service;
@@ -75,12 +77,24 @@ public class BadgesApiControllerImpl implements BadgesApi {
 
   @Override
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
-      @Pattern(regexp = "^[0-9A-HK]{6}$")
+      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber) {
     BadgeConverter converter = new BadgeConverter();
     BadgeEntity entity = service.retrieveBadge(badgeNumber);
     return ResponseEntity.ok(new BadgeResponse().data(converter.convertToModel(entity)));
+  }
+
+  @Override
+  public ResponseEntity<Void> cancelBlueBadge(
+      @Pattern(regexp = "^[0-9A-HJK]{6}$")
+          @ApiParam(value = "A valid badge number.", required = true)
+          @PathVariable("badgeNumber")
+          String badgeNumber,
+      @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
+    CancelBadgeRequestConverter converter = new CancelBadgeRequestConverter();
+    service.cancelBadge(converter.convertToEntity(badgeCancel));
+    return ResponseEntity.ok().build();
   }
 }

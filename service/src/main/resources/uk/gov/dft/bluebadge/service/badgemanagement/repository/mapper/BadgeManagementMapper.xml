@@ -68,4 +68,12 @@
               contact_postcode = #{postcode}
           </if>
     </select>
+
+    <update id="cancelBadge" parameterType="CancelBadgeParams">
+        UPDATE badge
+          SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
+        WHERE badge_no = #{badgeNo}
+        AND expiry_date &gt;= current_date
+        AND badge_status = 'ISSUED'
+    </update>
 </mapper>

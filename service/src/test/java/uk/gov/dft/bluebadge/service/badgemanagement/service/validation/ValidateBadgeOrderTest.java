@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement.service;
+package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import java.time.LocalDate;
 import java.time.Period;

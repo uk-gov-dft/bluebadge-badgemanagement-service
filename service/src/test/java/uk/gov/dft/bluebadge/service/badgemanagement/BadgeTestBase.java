@@ -32,6 +32,7 @@ public class BadgeTestBase {
     static final String PARTY_PERSON_CODE = "PERSON";
     public static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
+    public static final String CANCEL_CODE_VALID = "NOLONG";
   }
 
   protected ReferenceDataService referenceDataService;
@@ -44,10 +45,15 @@ public class BadgeTestBase {
   }
 
   private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
-    return new ReferenceData()
+    return ReferenceData.builder()
         .groupShortCode(group.getGroupKey())
         .shortCode(key)
-        .description(description);
+        .description(description)
+        .displayOrder(1)
+        .groupDescription(null)
+        .subgroupDescription(null)
+        .subgroupShortCode(null)
+        .build();
   }
 
   private void addRefData() {
@@ -62,6 +68,9 @@ public class BadgeTestBase {
         getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
     referenceDataList.add(
         getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
+    referenceDataList.add(
+        getNewRefDataItem(
+            RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);
@@ -93,7 +102,7 @@ public class BadgeTestBase {
         .partyCode(DefaultVals.PARTY_PERSON_CODE)
         .startDate(LocalDate.now().plus(Period.ofMonths(1)))
         .badgeNo("KKKKKK")
-        .badgeStatus(BadgeEntity.Status.NEW)
+        .badgeStatus(BadgeEntity.Status.ISSUED)
         .imageLink(null)
         .numberOfBadges(1)
         .orderDate(LocalDate.now())
@@ -177,7 +186,7 @@ public class BadgeTestBase {
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")
-        .badgeStatus(BadgeEntity.Status.NEW)
+        .badgeStatus(BadgeEntity.Status.ISSUED)
         .numberOfBadges(1)
         .primaryPhoneNo("01234512312")
         .secondaryPhoneNo(null)

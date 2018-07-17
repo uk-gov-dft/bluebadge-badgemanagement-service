@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_ORG_OBJECT;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.ValidationKeyEnum.MISSING_PERSON_OBJECT;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_ORG_OBJECT;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
 import java.time.LocalDate;
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
@@ -29,7 +29,7 @@ public class BadgeOrderRequestConverter
     BadgeEntity badgeEntity =
         BadgeEntity.builder()
             .partyCode(model.getParty().getTypeCode())
-            .badgeStatus(BadgeEntity.Status.NEW)
+            .badgeStatus(BadgeEntity.Status.ISSUED)
             .localAuthorityId(model.getLocalAuthorityId())
             .localAuthorityRef(model.getLocalAuthorityRef())
             .appDate(model.getApplicationDate())

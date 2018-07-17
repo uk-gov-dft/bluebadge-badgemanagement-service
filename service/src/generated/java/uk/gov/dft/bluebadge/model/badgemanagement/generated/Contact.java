@@ -45,10 +45,8 @@ public class Contact {
    */
   @ApiModelProperty(
     example = "June Whitfield",
-    required = true,
     value = "The administrative contact for the badge(s)."
   )
-  @NotNull
   @Size(max = 100)
   public String getFullName() {
     return fullName;

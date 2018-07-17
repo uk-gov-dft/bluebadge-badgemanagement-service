@@ -412,7 +412,7 @@
             "type" : "string",
             "format" : "date",
             "description" : "The date that the initial application was received by the issuing local authority.",
-            "example" : "2018-04-14"
+            "example" : "2017-07-21"
           },
           "applicationChannelCode" : {
             "type" : "string",
@@ -481,7 +481,7 @@
           "applicationDate" : {
             "type" : "string",
             "format" : "date",
-            "example" : "2018-04-23",
+            "example" : "2017-07-21",
             "description" : "The date that the initial application was received by the issuing local authority."
           },
           "applicationChannelCode" : {
@@ -581,7 +581,7 @@
             "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIED."
           }
         },
-        "required" : [ "name" ],
+        "required" : [ "badgeHolderName" ],
         "example" : {
           "badgeHolderName" : "Fred Bloggs",
           "nino" : "NY188796B",
@@ -647,7 +647,7 @@
             "example" : "june@bigbrainknitting.com"
           }
         },
-        "required" : [ "buildingStreet", "townCity", "postCode", "fullName" ]
+        "required" : [ "buildingStreet", "townCity", "postCode" ]
       }
     },
     "parameters" : {

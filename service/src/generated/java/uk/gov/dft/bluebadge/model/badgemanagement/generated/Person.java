@@ -33,7 +33,8 @@ public class Person {
    *
    * @return badgeHolderName
    */
-  @ApiModelProperty(example = "Dwight Appleman", value = "")
+  @ApiModelProperty(example = "Dwight Appleman", required = true, value = "")
+  @NotNull
   @Size(max = 100)
   public String getBadgeHolderName() {
     return badgeHolderName;

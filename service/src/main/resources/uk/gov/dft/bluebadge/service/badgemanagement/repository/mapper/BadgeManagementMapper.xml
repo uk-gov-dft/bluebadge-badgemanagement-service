@@ -67,6 +67,8 @@
           <if test="postcode != null">
               contact_postcode = #{postcode}
           </if>
+        ORDER BY badge.start_date DESC
+        LIMIT 50
     </select>
 
     <update id="cancelBadge" parameterType="CancelBadgeParams">

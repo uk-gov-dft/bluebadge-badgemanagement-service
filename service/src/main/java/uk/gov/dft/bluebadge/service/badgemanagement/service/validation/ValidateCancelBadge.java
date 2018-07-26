@@ -60,13 +60,18 @@ public class ValidateCancelBadge extends ValidateBase {
    *
    * @param badgeEntity Entity that could not be cancelled.
    */
-  public void validateAfterFailedCancel(BadgeEntity badgeEntity) {
+  public void validateAfterFailedCancel(BadgeEntity badgeEntity, Integer localAuthority) {
     // Retrieve badge (if possible) and return error from above.
     // 1. Badge does not exist
     if (null == badgeEntity) {
       throw new NotFoundException("badge", UPDATE);
     }
     log.debug("Validating why cancel failed for {}", badgeEntity.getBadgeNo());
+
+    // 2. Badge local authority != given local authority (current users's local authority)
+    if (!localAuthority.equals(badgeEntity.getLocalAuthorityId())) {
+      throw new NotFoundException("badge", UPDATE);
+    }
 
     // 2. Badge already expired.
     validateExpiryDateInFuture(badgeEntity);

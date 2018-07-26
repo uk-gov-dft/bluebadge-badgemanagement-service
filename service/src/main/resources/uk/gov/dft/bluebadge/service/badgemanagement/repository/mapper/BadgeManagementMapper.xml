@@ -77,5 +77,8 @@
         WHERE badge_no = #{badgeNo}
         AND expiry_date &gt;= current_date
         AND badge_status = 'ISSUED'
+        <if test="localAuthorityId != null">
+            AND local_authority_id = #{localAuthorityId}
+        </if>
     </update>
 </mapper>

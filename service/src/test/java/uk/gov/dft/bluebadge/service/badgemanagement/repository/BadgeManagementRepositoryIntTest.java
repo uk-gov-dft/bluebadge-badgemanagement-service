@@ -10,17 +10,57 @@ import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 
 @RunWith(SpringRunner.class)
+@SqlGroup({@Sql(scripts = "classpath:/test-data.sql")})
 @Transactional
 public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
   @Autowired BadgeManagementRepository badgeManagementRepository;
+
+  @Test
+  public void cancelBadge_ok() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder()
+            .badgeNo("KKKKKK")
+            .cancelReasonCode("reason")
+            .localAuthorityId(2)
+            .build();
+    int recordsAffected = badgeManagementRepository.cancelBadge(params);
+    assertThat(recordsAffected).isEqualTo(1);
+  }
+
+  @Test
+  public void cancelBadge_badgeNotExist() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder()
+            .badgeNo("NOTEXI")
+            .cancelReasonCode("reason")
+            .localAuthorityId(2)
+            .build();
+    int recordsAffected = badgeManagementRepository.cancelBadge(params);
+    assertThat(recordsAffected).isEqualTo(0);
+  }
+
+  @Test
+  public void cancelBadge_existsInDifferentLocalAuthority() {
+    CancelBadgeParams params =
+        CancelBadgeParams.builder()
+            .badgeNo("KKKKKK")
+            .cancelReasonCode("reason")
+            .localAuthorityId(3)
+            .build();
+    int recordsAffected = badgeManagementRepository.cancelBadge(params);
+    assertThat(recordsAffected).isEqualTo(0);
+  }
 
   @Test
   public void findBadges_ShouldReturn50FirstResultsOrderedByStartDateDescendingOrder() {

@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.dft.bluebadge.common.security.SecurityUtils;
+import uk.gov.dft.bluebadge.common.security.model.LocalAuthority;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
@@ -28,20 +30,27 @@ public class BadgeManagementService {
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
+  private final SecurityUtils securityUtils;
 
   @Autowired
   BadgeManagementService(
       BadgeManagementRepository repository,
       ValidateBadgeOrder validateBadgeOrder,
-      ValidateCancelBadge validateCancelBadge) {
+      ValidateCancelBadge validateCancelBadge,
+      SecurityUtils securityUtils) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
+    this.securityUtils = securityUtils;
   }
 
   public List<String> createBadge(BadgeEntity entity) {
     List<String> createdList = new ArrayList<>();
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
+
+    LocalAuthority localAuthority = securityUtils.getCurrentLocalAuthority();
+    entity.setLocalAuthorityId(localAuthority.getId());
+    entity.setLocalAuthorityRef(localAuthority.getShortCode());
 
     validateBadgeOrder.validate(entity);
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
@@ -88,6 +97,8 @@ public class BadgeManagementService {
     // Validate the request
     validateCancelBadge.validateRequest(request);
     // Optimistically try cancel before validating to save reading badge data.
+    Integer localAuthorityId = securityUtils.getCurrentLocalAuthority().getId();
+    request.setLocalAuthorityId(localAuthorityId);
     int updates = repository.cancelBadge(request);
 
     if (updates == 0) {
@@ -96,7 +107,7 @@ public class BadgeManagementService {
       BadgeEntity badgeEntity =
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
-      validateCancelBadge.validateAfterFailedCancel(badgeEntity);
+      validateCancelBadge.validateAfterFailedCancel(badgeEntity, localAuthorityId);
     }
   }
 }

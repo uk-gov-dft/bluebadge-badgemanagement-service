@@ -1,10 +1,10 @@
 @badge-find-person
-Feature: Verify retrieve newly created badge
+Feature: Verify find badge for newly created badge
 
   Background:
     * url baseUrl
-
-  Scenario: Verify findBadges
+    * def result = callonce read('./oauth2.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
     * def badge =
     """
     {
@@ -41,6 +41,7 @@ Feature: Verify retrieve newly created badge
     }
     """
 
+  Scenario: Verify findBadges
     Given path 'badges'
     And request badge
     When method POST
@@ -48,13 +49,16 @@ Feature: Verify retrieve newly created badge
     And match $.data[*] contains "#notnull"
     And def createdbadgeno = $.data[0]
 
+  Scenario: Verify findBadges finds the created badge
     Given path 'badges'
     And param name = 'red'
     When method GET
     Then status 200
+    And match $.data[*] contains "#notnull"
     And match $.data[*].badgeNumber contains createdbadgeno
     And match $.data[*].partyTypeDescription contains 'Person'
 
+  Scenario: Verify findBadges finds nothing for unknown name
     Given path 'badges'
     And param name = 'IDONOTEXISTIWOULDHOPE'
     When method GET
@@ -62,6 +66,7 @@ Feature: Verify retrieve newly created badge
     And def stuff = $.data
     And assert stuff.length == 0
 
+  Scenario: Verify findBadges bad request when missing name and postcode
     Given path 'badges'
     And param name = ''
     And param postCode = ''
@@ -69,6 +74,7 @@ Feature: Verify retrieve newly created badge
     Then status 400
     And match $.error.message == 'NotNull.params.badge.find'
 
+  Scenario: Verify findBadges bad request when name and postcode both provided
     Given path 'badges'
     And param name = 'CANTHAVENAMEANDPOSTCODE'
     And param postCode = 'WV164AW'

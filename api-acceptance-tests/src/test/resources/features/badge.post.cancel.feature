@@ -3,6 +3,8 @@ Feature: Verify cancel a badge
 
   Background:
     * url baseUrl
+    * def result = callonce read('./oauth2.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify cancel a badge
     * def badge =

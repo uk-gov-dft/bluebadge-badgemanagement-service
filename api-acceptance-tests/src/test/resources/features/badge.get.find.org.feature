@@ -3,6 +3,8 @@ Feature: Verify retrieve newly created org badge
 
   Background:
     * url baseUrl
+    * def result = callonce read('./oauth2.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify findBadges
     * def badge =

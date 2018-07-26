@@ -26,7 +26,6 @@ apply plugin: 'pmd'
 apply plugin: 'maven'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     jcenter()
 }
@@ -59,7 +58,7 @@ tasks.withType(Pmd) {
 }
 
 dependencies {
-    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: '0.1.0-sje-feature_BBB-585-secure-with-access-tokens'
+    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: '0.1.0-feature_BBB-585-secure-with-access-tokens'
 
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.5'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'

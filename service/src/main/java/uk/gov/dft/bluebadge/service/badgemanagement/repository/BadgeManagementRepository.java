@@ -10,11 +10,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
 /** Provides CRUD operations on BadgeEntity entity. */
 @Component
 @Slf4j
-public class BadgeManagementRepository {
+public class BadgeManagementRepository implements BadgeManagementMapper {
 
   class Statements {
 

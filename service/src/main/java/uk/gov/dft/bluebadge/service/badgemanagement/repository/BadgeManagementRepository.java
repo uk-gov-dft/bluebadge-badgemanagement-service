@@ -33,18 +33,18 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     this.sqlSession = sqlSession;
   }
 
-  //  @Override
+  @Override
   public void createBadge(BadgeEntity entity) {
     log.debug("Persisting new badge {}", entity.getBadgeNo());
     sqlSession.insert(Statements.CREATE, entity);
   }
 
-  //  @Override
+  @Override
   public Integer retrieveNextBadgeNumber() {
     return sqlSession.selectOne("retrieveNextBadgeNumber");
   }
 
-  //  @Override
+  @Override
   public List<BadgeEntity> findBadges(FindBadgeParams params) {
     Assert.notNull(params, "params cannot be null.");
     if (null != params.getName()) {
@@ -56,14 +56,14 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     return sqlSession.selectList(Statements.FIND, params);
   }
 
-  //  @Override
+  @Override
   public BadgeEntity retrieveBadge(RetrieveBadgeParams params) {
     params.setBadgeNo(ConvertUtils.formatBadgeNoForQuery(params.getBadgeNo()));
     Assert.notNull(params.getBadgeNo(), "Cannot retrieve with null badge number");
     return sqlSession.selectOne(Statements.RETRIEVE, params);
   }
 
-  //  @Override
+  @Override
   public int cancelBadge(CancelBadgeParams params) {
     return sqlSession.update(Statements.CANCEL, params);
   }

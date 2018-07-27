@@ -14,7 +14,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBa
 /** Provides CRUD operations on BadgeEntity entity. */
 @Component
 @Slf4j
-public class BadgeManagementRepository { //implements BadgeManagementMapper {
+public class BadgeManagementRepository {
 
   class Statements {
 

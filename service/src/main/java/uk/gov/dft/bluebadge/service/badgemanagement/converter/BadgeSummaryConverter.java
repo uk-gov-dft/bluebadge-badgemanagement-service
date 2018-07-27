@@ -27,6 +27,7 @@ public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, Badg
     model.setLocalAuthorityName("NOT IMPLEMENTED");
     model.setName(entity.getHolderName());
     model.setNino(entity.getNino());
+    model.setPostCode(entity.getContactPostcode());
     model.setPartyTypeCode(entity.getPartyCode());
     model.setPartyTypeDescription(
         referenceDataService.getDescription(RefDataGroupEnum.PARTY, entity.getPartyCode()));

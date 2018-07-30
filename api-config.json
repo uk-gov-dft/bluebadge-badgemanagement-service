@@ -360,6 +360,11 @@
             "description" : "The code for the local authority.",
             "example" : 211
           },
+          "postCode" : {
+            "type" : "string",
+            "example" : "SK6 8GH",
+            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
+          },
           "localAuthorityName" : {
             "type" : "string",
             "maxLength" : 100,

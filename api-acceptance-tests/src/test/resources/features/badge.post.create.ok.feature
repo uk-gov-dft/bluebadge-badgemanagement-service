@@ -54,6 +54,7 @@ Feature: Verify Create badge
     * def badgeNo = $.data[0]
 
     Given path 'badges/' + badgeNo
+    * header Authorization = 'Bearer ' + result.accessToken
     When method GET
     Then status 200
     And def result = $.data

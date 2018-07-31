@@ -1,5 +1,5 @@
 @badge-find-org
-Feature: Verify retrieve newly created org badge
+Feature: Verify find newly created org badge
 
   Background:
     * url baseUrl

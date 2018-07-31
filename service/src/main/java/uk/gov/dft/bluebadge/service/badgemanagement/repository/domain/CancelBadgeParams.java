@@ -8,4 +8,5 @@ import lombok.Data;
 public class CancelBadgeParams {
   String badgeNo;
   String cancelReasonCode;
+  Integer localAuthorityId;
 }

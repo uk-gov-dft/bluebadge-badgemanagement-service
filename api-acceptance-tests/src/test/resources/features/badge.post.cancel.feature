@@ -30,7 +30,7 @@ Feature: Verify cancel a badge
           badgeHolderName: 'The Monroe Institute'
         }
       },
-      localAuthorityId: 187,
+      localAuthorityId: 2,
       localAuthorityRef: 'YOURCODE',
       applicationDate: '2018-04-23',
       applicationChannelCode: 'ONLINE',
@@ -65,3 +65,9 @@ Feature: Verify cancel a badge
     And request {badgeNumber: "#(badgeNumber)", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 200
+
+  Scenario: Verify cancel a badge in a different local authority
+    Given path 'badges/KKKKKE/cancellations'
+    And request {badgeNumber: "KKKKKE", cancelReasonCode: "NOLONG"}
+    When method POST
+    Then status 404

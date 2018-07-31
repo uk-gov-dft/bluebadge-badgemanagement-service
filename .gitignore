@@ -16,3 +16,6 @@ build
 out
 /env.mk
 VERSION-computed
+# application.properties used to override the default properties of application.yml in our local env to help us in development.
+# We do not want to accidentally commit and push it.
+service/src/main/resources/application.properties

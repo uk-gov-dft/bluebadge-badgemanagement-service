@@ -49,3 +49,11 @@ Feature: Verify Create badge
     When method POST
     Then status 200
     And match $.data[*] contains "#notnull"
+    And def createdbadgeno = $.data[0]
+
+    Given path 'badges/' + createdbadgeno
+    When method GET
+    Then status 200
+    And def result = $.data
+    And match result.badgeNumber == createdbadgeno
+    And match result.localAuthorityId == 2

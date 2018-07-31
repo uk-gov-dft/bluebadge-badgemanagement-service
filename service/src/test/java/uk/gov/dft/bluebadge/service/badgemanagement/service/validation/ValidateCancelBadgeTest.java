@@ -48,7 +48,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
   public void validateWhyCancelFailed_badge_not_exists() {
     // Given badge to cancel did not exist
     // When validated
-    validator.validateAfterFailedCancel(null);
+    validator.validateAfterFailedCancel(null, 2);
     // Then 404 thrown
   }
 
@@ -61,7 +61,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge);
+      validator.validateAfterFailedCancel(badge, 2);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.status");
@@ -78,7 +78,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge);
+      validator.validateAfterFailedCancel(badge, 2);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.expiryDate");
@@ -95,7 +95,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge);
+      validator.validateAfterFailedCancel(badge, 2);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Unexpected.cancel.fail");

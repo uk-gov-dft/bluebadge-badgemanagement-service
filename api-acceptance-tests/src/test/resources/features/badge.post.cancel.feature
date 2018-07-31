@@ -26,3 +26,9 @@ Feature: Verify cancel a badge
     And request {badgeNumber: "#(createdBadgeNo)", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 200
+
+  Scenario: Verify cancel a badge in a different local authority
+    Given path 'badges/KKKKKE/cancellations'
+    And request {badgeNumber: "KKKKKE", cancelReasonCode: "NOLONG"}
+    When method POST
+    Then status 404

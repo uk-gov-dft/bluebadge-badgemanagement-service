@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;

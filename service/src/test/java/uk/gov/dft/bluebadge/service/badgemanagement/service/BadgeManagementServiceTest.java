@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.springframework.beans.BeanUtils;
+import uk.gov.dft.bluebadge.common.security.SecurityUtils;
+import uk.gov.dft.bluebadge.common.security.model.LocalAuthority;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
@@ -19,30 +22,60 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateB
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
+  private static final Integer LOCAL_AUTHORITY_ID = 3;
+  private static final String LOCAL_AUTHORITY_SHORT_CODE = "BIRM";
+  private static final LocalAuthority LOCAL_AUTHORITY =
+      LocalAuthority.builder().id(LOCAL_AUTHORITY_ID).shortCode(LOCAL_AUTHORITY_SHORT_CODE).build();
 
-  @Mock private BadgeManagementRepository repository;
-  @Mock private ValidateBadgeOrder validateBadgeOrder;
-  @Mock private ValidateCancelBadge validateCancelBadge;
+  @Mock private BadgeManagementRepository repositoryMock;
+  @Mock private ValidateBadgeOrder validateBadgeOrderMock;
+  @Mock private ValidateCancelBadge validateCancelBadgeMock;
+  @Mock private SecurityUtils securityUtilsMock;
 
   private BadgeManagementService service;
 
   @Before
   public void setUp() {
-    service = new BadgeManagementService(repository, validateBadgeOrder, validateCancelBadge);
+    when(securityUtilsMock.getCurrentLocalAuthority()).thenReturn(LOCAL_AUTHORITY);
+    service =
+        new BadgeManagementService(
+            repositoryMock, validateBadgeOrderMock, validateCancelBadgeMock, securityUtilsMock);
   }
 
   @Test
   public void createBadge() {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setNumberOfBadges(3);
-    when(repository.retrieveNextBadgeNumber()).thenReturn(1234);
+    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
     List<String> result = service.createBadge(entity);
 
-    // Then get 3 badges create.
+    // Then get 3 badges create with current user's local authority
     Assert.assertEquals(3, result.size());
-    verify(repository, times(3)).createBadge(entity);
-    verify(repository, times(3)).retrieveNextBadgeNumber();
+    verify(repositoryMock, times(3)).createBadge(entity);
+    verify(repositoryMock, times(3)).retrieveNextBadgeNumber();
     Assert.assertEquals("31E", result.get(1));
+  }
+
+  @Test
+  public void createBadge_setLocalAuthorityToCurrentUsers() {
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setLocalAuthorityId(3);
+    entity.setLocalAuthorityRef("BIRM");
+    entity.setNumberOfBadges(1);
+
+    BadgeEntity expectedEntity = BadgeEntity.builder().build();
+    BeanUtils.copyProperties(entity, expectedEntity);
+    expectedEntity.setLocalAuthorityId(LOCAL_AUTHORITY_ID);
+    expectedEntity.setBadgeNo("31E");
+
+    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
+    List<String> results = service.createBadge(entity);
+
+    // Then get 3 badges create with current user's local authority
+    Assert.assertEquals(1, results.size());
+    verify(repositoryMock, times(1)).createBadge(expectedEntity);
+    verify(repositoryMock, times(1)).retrieveNextBadgeNumber();
+    Assert.assertEquals("31E", results.get(0));
   }
 
   @Test
@@ -53,7 +86,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     // When searching
     service.findBadges(name, null);
     // Then search is done
-    verify(repository, times(1)).findBadges(params);
+    verify(repositoryMock, times(1)).findBadges(params);
   }
 
   @Test(expected = BadRequestException.class)
@@ -63,7 +96,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     // When searching
     service.findBadges(name, null);
     // Then search is done
-    verify(repository, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any());
   }
 
   @Test(expected = BadRequestException.class)
@@ -74,13 +107,13 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     // When searching
     service.findBadges(name, postcode);
     // Then search is done
-    verify(repository, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any());
   }
 
   @Test
   public void retrieveBadge_ok() {
     BadgeEntity badgeEntity = getValidPersonBadgeEntity();
-    when(repository.retrieveBadge(any())).thenReturn(badgeEntity);
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badgeEntity);
 
     BadgeEntity result = service.retrieveBadge("ABC");
     Assert.assertEquals(badgeEntity, result);
@@ -88,7 +121,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Test(expected = NotFoundException.class)
   public void retrieveBadge_notFound() {
-    when(repository.retrieveBadge(any())).thenReturn(null);
+    when(repositoryMock.retrieveBadge(any())).thenReturn(null);
     service.retrieveBadge("ABC");
   }
 
@@ -96,23 +129,23 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void cancelBadge_ok() {
     CancelBadgeParams params =
         CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
-    when(repository.cancelBadge(params)).thenReturn(1);
+    when(repositoryMock.cancelBadge(params)).thenReturn(1);
     service.cancelBadge(params);
 
-    verify(validateCancelBadge, times(1)).validateRequest(params);
-    verify(validateCancelBadge, never()).validateAfterFailedCancel(any());
-    verify(repository, times(1)).cancelBadge(params);
+    verify(validateCancelBadgeMock, times(1)).validateRequest(params);
+    verify(validateCancelBadgeMock, never()).validateAfterFailedCancel(any(), any());
+    verify(repositoryMock, times(1)).cancelBadge(params);
   }
 
   @Test
   public void cancelBadge_failed() {
     CancelBadgeParams params =
         CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
-    when(repository.cancelBadge(params)).thenReturn(0);
+    when(repositoryMock.cancelBadge(params)).thenReturn(0);
     service.cancelBadge(params);
 
-    verify(validateCancelBadge, times(1)).validateRequest(params);
-    verify(validateCancelBadge, times(1)).validateAfterFailedCancel(any());
-    verify(repository, times(1)).cancelBadge(params);
+    verify(validateCancelBadgeMock, times(1)).validateRequest(params);
+    verify(validateCancelBadgeMock, times(1)).validateAfterFailedCancel(any(), any());
+    verify(repositoryMock, times(1)).cancelBadge(params);
   }
 }

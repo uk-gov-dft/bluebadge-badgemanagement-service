@@ -1,35 +1,29 @@
-@badge-post
-Feature: Verify Create badge
+@create-org-badge
+Feature: Verify Create badge of type org
 
   Background:
     * url baseUrl
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
-  Scenario: Verify valid create mixed case postcode
+  Scenario: Verify valid create
     * def badge =
     """
     {
     party: {
-    typeCode: 'PERSON',
+    typeCode: 'ORG',
     contact: {
-    fullName: '',
+    fullName: 'June Whitfield',
     buildingStreet: '65 Basil Chambers',
     line2: 'Northern Quarter',
     townCity: 'Manchester',
-    postCode: 'wK6 8GH',
+    postCode: 'OR6 8GG',
     primaryPhoneNumber: '01616548765',
     secondaryPhoneNumber: '01616548765',
     emailAddress: 'june@bigbrainknitting.com'
     },
-    person: {
-    badgeHolderName: 'Fred Bloggs',
-    nino: 'NY188796B',
-    dob: '1972-09-12',
-    genderCode: 'MALE'
-    },
     organisation: {
-    badgeHolderName: 'The Monroe Institute'
+    badgeHolderName: 'ORGTEST1234'
     }
     },
     localAuthorityId: 187,
@@ -52,11 +46,3 @@ Feature: Verify Create badge
     Then status 200
     And match $.data[*] contains "#notnull"
     * def badgeNo = $.data[0]
-
-    Given path 'badges/' + badgeNo
-    * header Authorization = 'Bearer ' + result.accessToken
-    When method GET
-    Then status 200
-    And def result = $.data
-    And match result.badgeNumber == badgeNo
-    And match result.localAuthorityId == 2

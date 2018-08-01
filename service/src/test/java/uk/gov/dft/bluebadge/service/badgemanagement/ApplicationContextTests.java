@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -8,4 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
   properties = {"management.server.port=19991"}
 )
 @ActiveProfiles({"test", "dev"})
-public abstract class ApplicationContextTests {}
+public class ApplicationContextTests {
+  @Test
+  public void loadContext() {}
+}

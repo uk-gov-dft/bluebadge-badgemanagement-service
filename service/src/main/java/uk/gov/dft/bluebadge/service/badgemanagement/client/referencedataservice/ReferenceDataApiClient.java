@@ -3,8 +3,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.RestTemplateFactory;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceDataResponse;
 
@@ -12,15 +14,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 @Service
 public class ReferenceDataApiClient {
 
-  private final ReferenceDataServiceConfiguration messageServiceConfiguration;
-  private final RestTemplateFactory restTemplateFactory;
+  private final RestTemplate restTemplate;
 
   @Autowired
   public ReferenceDataApiClient(
-      ReferenceDataServiceConfiguration serviceConfiguration,
-      RestTemplateFactory restTemplateFactory) {
-    this.messageServiceConfiguration = serviceConfiguration;
-    this.restTemplateFactory = restTemplateFactory;
+      @Qualifier("referenceDataServiceRestTemplate") RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
   }
 
   /**
@@ -32,11 +31,11 @@ public class ReferenceDataApiClient {
     log.debug("Loading reference data.");
 
     ReferenceDataResponse response =
-        restTemplateFactory
-            .getInstance()
+        restTemplate
             .getForEntity(
-                messageServiceConfiguration
-                    .getUriComponentsBuilder("reference-data", "BADGE")
+                UriComponentsBuilder.newInstance()
+                    .path("/")
+                    .pathSegment("reference-data", "BADGE")
                     .toUriString(),
                 ReferenceDataResponse.class)
             .getBody();

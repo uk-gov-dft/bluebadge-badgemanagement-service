@@ -3,6 +3,8 @@ Feature: Verify Create badge with 400
 
   Background:
     * url baseUrl
+    * def result = callonce read('./oauth2.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify create 400 with business validation start in past
     * def badge =

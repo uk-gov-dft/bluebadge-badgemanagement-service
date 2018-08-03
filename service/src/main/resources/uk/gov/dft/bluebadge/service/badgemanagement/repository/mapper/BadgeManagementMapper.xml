@@ -42,7 +42,7 @@
         contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode,
-        order_date AS orderDate
+        order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode
         FROM badge
         WHERE
           badge_no = #{badgeNo}
@@ -58,7 +58,7 @@
           dob AS dob, gender_code AS genderCode, contact_name AS contactName,
           contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
           contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode
+          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
         FROM badge
         WHERE
           <if test="name != null">

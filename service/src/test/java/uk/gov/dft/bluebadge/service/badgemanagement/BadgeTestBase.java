@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
@@ -97,6 +93,7 @@ public class BadgeTestBase {
         .genderCode(DefaultVals.GENDER_CODE)
         .holderName("Robert McRoberts")
         .localAuthorityId(2)
+        .localAuthorityShortCode("ABERD")
         .localAuthorityRef(null)
         .nino("NS123456A")
         .partyCode(DefaultVals.PARTY_PERSON_CODE)
@@ -183,6 +180,7 @@ public class BadgeTestBase {
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
         .appDate(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
+        .localAuthorityShortCode("ABERD")
         .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")

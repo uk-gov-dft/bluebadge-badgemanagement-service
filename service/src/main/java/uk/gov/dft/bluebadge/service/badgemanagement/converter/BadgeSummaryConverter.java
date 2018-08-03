@@ -24,6 +24,7 @@ public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, Badg
     model.setBadgeNumber(entity.getBadgeNo());
     model.setExpiryDate(entity.getExpiryDate());
     model.setLocalAuthorityCode(entity.getLocalAuthorityId());
+    model.setLocalAuthorityShortCode(entity.getLocalAuthorityShortCode());
     model.setLocalAuthorityName("NOT IMPLEMENTED");
     model.setName(entity.getHolderName());
     model.setNino(entity.getNino());

@@ -50,7 +50,7 @@ public class BadgeManagementService {
 
     LocalAuthority localAuthority = securityUtils.getCurrentLocalAuthority();
     entity.setLocalAuthorityId(localAuthority.getId());
-    entity.setLocalAuthorityRef(localAuthority.getShortCode());
+    entity.setLocalAuthorityShortCode(localAuthority.getShortCode());
 
     validateBadgeOrder.validate(entity);
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {

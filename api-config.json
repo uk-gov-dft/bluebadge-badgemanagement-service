@@ -488,6 +488,11 @@
             "example" : 187,
             "description" : "Id of local authority."
           },
+          "localAuthorityShortCode" : {
+            "type" : "string",
+            "example" : "ABERD",
+            "description" : "Id of local authority."
+          },
           "localAuthorityRef" : {
             "type" : "string",
             "maxLength" : 100,

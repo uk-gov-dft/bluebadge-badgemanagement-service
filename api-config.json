@@ -360,16 +360,21 @@
             "description" : "The code for the local authority.",
             "example" : 211
           },
-          "postCode" : {
+          "localAuthorityShortCode" : {
             "type" : "string",
-            "example" : "SK6 8GH",
-            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
+            "description" : "Short code of local authority",
+            "example" : "BLACK"
           },
           "localAuthorityName" : {
             "type" : "string",
             "maxLength" : 100,
             "description" : "Display name of the local authority.",
             "example" : "Shropshire County Council"
+          },
+          "postCode" : {
+            "type" : "string",
+            "example" : "SK6 8GH",
+            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
           },
           "expiryDate" : {
             "type" : "string",
@@ -407,6 +412,11 @@
             "type" : "integer",
             "description" : "Id of local authority.",
             "example" : 123
+          },
+          "localAuthorityShortCode" : {
+            "type" : "string",
+            "description" : "Short code of local authority",
+            "example" : "BLACK"
           },
           "localAuthorityRef" : {
             "type" : "string",

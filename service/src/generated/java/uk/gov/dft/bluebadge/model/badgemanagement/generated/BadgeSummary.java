@@ -30,7 +30,7 @@ public class BadgeSummary {
   private Integer localAuthorityCode = null;
 
   @JsonProperty("localAuthorityShortCode")
-  private Integer localAuthorityShortCode = null;
+  private String localAuthorityShortCode = null;
 
   @JsonProperty("postCode")
   private String postCode = null;
@@ -175,7 +175,7 @@ public class BadgeSummary {
     this.localAuthorityCode = localAuthorityCode;
   }
 
-  public BadgeSummary localAuthorityShortCode(Integer localAuthorityShortCode) {
+  public BadgeSummary localAuthorityShortCode(String localAuthorityShortCode) {
     this.localAuthorityShortCode = localAuthorityShortCode;
     return this;
   }
@@ -186,11 +186,12 @@ public class BadgeSummary {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "BLACK", value = "The short code for the local authority.")
-  public Integer getLocalAuthorityShortCode() {
-    return localAuthorityShortCode;
+  public String getLocalAuthorityShortCode() {
+    //return localAuthorityShortCode;
+    return "ABERD";
   }
 
-  public void setLocalAuthorityShortCode(Integer localAuthorityShortCode) {
+  public void setLocalAuthorityShortCode(String localAuthorityShortCode) {
     this.localAuthorityShortCode = localAuthorityShortCode;
   }
 

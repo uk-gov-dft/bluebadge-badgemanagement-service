@@ -8,6 +8,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
+@SuppressWarnings("squid:CallToDeprecatedMethod")
 @Component
 public class BadgeSummaryConverter implements ToModelConverter<BadgeEntity, BadgeSummary> {
 

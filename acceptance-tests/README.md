@@ -24,7 +24,7 @@ You may need to install maven plugin in intellij.
 Then go to api-acceptance-test project and right click on pom.xml → Add as Maven project
 
 ```
-mvn clean verify -f api-acceptance-tests/pom.xml -Pacceptance-test
+gradle clean build acceptanceTests
 ```
 
 ### Relevant Articles: 

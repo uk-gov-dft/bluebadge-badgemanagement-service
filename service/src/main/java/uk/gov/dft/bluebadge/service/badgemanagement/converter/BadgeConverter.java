@@ -8,7 +8,6 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
-@SuppressWarnings("squid:CallToDeprecatedMethod")
 public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
 
   @Override

@@ -60,7 +60,7 @@ public class ValidateCancelBadge extends ValidateBase {
    *
    * @param badgeEntity Entity that could not be cancelled.
    */
-  public void validateAfterFailedCancel(BadgeEntity badgeEntity, Integer localAuthority) {
+  public void validateAfterFailedCancel(BadgeEntity badgeEntity, String localAuthorityShortCode) {
     // Retrieve badge (if possible) and return error from above.
     // 1. Badge does not exist
     if (null == badgeEntity) {
@@ -69,7 +69,7 @@ public class ValidateCancelBadge extends ValidateBase {
     log.debug("Validating why cancel failed for {}", badgeEntity.getBadgeNo());
 
     // 2. Badge local authority != given local authority (current users's local authority)
-    if (!localAuthority.equals(badgeEntity.getLocalAuthorityId())) {
+    if (!localAuthorityShortCode.equals(badgeEntity.getLocalAuthorityShortCode())) {
       throw new NotFoundException("badge", UPDATE);
     }
 

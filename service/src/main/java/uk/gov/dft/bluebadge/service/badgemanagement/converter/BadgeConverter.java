@@ -22,7 +22,6 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     badge.setEligibilityCode(entity.getEligibilityCode());
     badge.setExpiryDate(entity.getExpiryDate());
     badge.setImageLink(entity.getImageLink());
-    badge.setLocalAuthorityId(entity.getLocalAuthorityId());
     badge.setLocalAuthorityShortCode(entity.getLocalAuthorityShortCode());
     badge.setLocalAuthorityRef(entity.getLocalAuthorityRef());
     badge.setOrderDate(entity.getOrderDate());

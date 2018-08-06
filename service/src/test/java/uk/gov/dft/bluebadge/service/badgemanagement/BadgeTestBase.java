@@ -94,7 +94,6 @@ public class BadgeTestBase {
         .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
         .genderCode(DefaultVals.GENDER_CODE)
         .holderName("Robert McRoberts")
-        .localAuthorityId(2)
         .localAuthorityShortCode("ABERD")
         .localAuthorityRef(null)
         .nino("NS123456A")
@@ -118,7 +117,6 @@ public class BadgeTestBase {
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
-    request.setLocalAuthorityId(2);
     request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
@@ -145,7 +143,6 @@ public class BadgeTestBase {
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
-    request.setLocalAuthorityId(2);
     request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
@@ -185,7 +182,6 @@ public class BadgeTestBase {
         .appDate(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
         .localAuthorityShortCode("ABERD")
-        .localAuthorityId(2)
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")
         .badgeStatus(BadgeEntity.Status.ISSUED)

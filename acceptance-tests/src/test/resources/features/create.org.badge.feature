@@ -26,7 +26,7 @@ Feature: Verify Create badge of type org
     badgeHolderName: 'ORGTEST1234'
     }
     },
-    localAuthorityId: 187,
+    localAuthorityShortCode: 'GLAM',
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',

@@ -27,10 +27,6 @@ public class BadgeSummary {
   @JsonProperty("nino")
   private String nino = null;
 
-  @Deprecated
-  @JsonProperty("localAuthorityCode")
-  private Integer localAuthorityCode = null;
-
   @JsonProperty("localAuthorityShortCode")
   private String localAuthorityShortCode = null;
 
@@ -158,28 +154,6 @@ public class BadgeSummary {
     this.nino = nino;
   }
 
-  @Deprecated
-  public BadgeSummary localAuthorityCode(Integer localAuthorityCode) {
-    this.localAuthorityCode = localAuthorityCode;
-    return this;
-  }
-
-  /**
-   * The code for the local authority.
-   *
-   * @return localAuthorityCode
-   */
-  @Deprecated
-  @ApiModelProperty(example = "211", value = "The code for the local authority.")
-  public Integer getLocalAuthorityCode() {
-    return localAuthorityCode;
-  }
-
-  @Deprecated
-  public void setLocalAuthorityCode(Integer localAuthorityCode) {
-    this.localAuthorityCode = localAuthorityCode;
-  }
-
   public BadgeSummary localAuthorityShortCode(String localAuthorityShortCode) {
     this.localAuthorityShortCode = localAuthorityShortCode;
     return this;
@@ -191,6 +165,7 @@ public class BadgeSummary {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "BLACK", value = "The short code for the local authority.")
+  @Pattern(regexp = "^[A-Z]+$")
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
   }
@@ -319,7 +294,6 @@ public class BadgeSummary {
         && Objects.equals(this.partyTypeDescription, badgeSummary.partyTypeDescription)
         && Objects.equals(this.name, badgeSummary.name)
         && Objects.equals(this.nino, badgeSummary.nino)
-        && Objects.equals(this.localAuthorityCode, badgeSummary.localAuthorityCode)
         && Objects.equals(this.localAuthorityShortCode, badgeSummary.localAuthorityShortCode)
         && Objects.equals(this.postCode, badgeSummary.postCode)
         && Objects.equals(this.localAuthorityName, badgeSummary.localAuthorityName)
@@ -336,7 +310,6 @@ public class BadgeSummary {
         partyTypeDescription,
         name,
         nino,
-        localAuthorityCode,
         localAuthorityShortCode,
         postCode,
         localAuthorityName,
@@ -357,7 +330,6 @@ public class BadgeSummary {
         .append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    nino: ").append(toIndentedString(nino)).append("\n");
-    sb.append("    localAuthorityCode: ").append(toIndentedString(localAuthorityCode)).append("\n");
     sb.append("    localAuthorityShortCode: ")
         .append(toIndentedString(localAuthorityShortCode))
         .append("\n");

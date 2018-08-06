@@ -355,14 +355,10 @@
             "description" : "The badge holder's National Insurance number.",
             "example" : "NY186548E"
           },
-          "localAuthorityCode" : {
-            "type" : "integer",
-            "description" : "The code for the local authority.",
-            "example" : 211
-          },
           "localAuthorityShortCode" : {
             "type" : "string",
             "description" : "Short code of local authority",
+            "pattern" : "^[A-Z]+$",
             "example" : "BLACK"
           },
           "localAuthorityName" : {
@@ -408,14 +404,10 @@
           "party" : {
             "$ref" : "#/definitions/Party"
           },
-          "localAuthorityId" : {
-            "type" : "integer",
-            "description" : "Id of local authority.",
-            "example" : 123
-          },
           "localAuthorityShortCode" : {
             "type" : "string",
             "description" : "Short code of local authority",
+            "pattern" : "^[A-Z]+$",
             "example" : "BLACK"
           },
           "localAuthorityRef" : {
@@ -483,15 +475,11 @@
           "party" : {
             "$ref" : "#/definitions/Party"
           },
-          "localAuthorityId" : {
-            "type" : "integer",
-            "example" : 187,
-            "description" : "Id of local authority."
-          },
           "localAuthorityShortCode" : {
             "type" : "string",
             "example" : "ABERD",
-            "description" : "Id of local authority."
+            "pattern" : "^[A-Z]+$",
+            "description" : "Short code of local authority."
           },
           "localAuthorityRef" : {
             "type" : "string",
@@ -552,7 +540,7 @@
             "description" : "Must be 1 for a person, can be multiple for an organisation."
           }
         },
-        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
+        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityShortCode", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
       },
       "Party" : {
         "type" : "object",

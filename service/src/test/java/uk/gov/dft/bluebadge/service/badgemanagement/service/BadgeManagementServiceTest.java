@@ -24,9 +24,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateC
 public class BadgeManagementServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
   private static final LocalAuthority LOCAL_AUTHORITY =
-      LocalAuthority.builder()
-          .shortCode(LOCAL_AUTHORITY_SHORT_CODE)
-          .build();
+      LocalAuthority.builder().shortCode(LOCAL_AUTHORITY_SHORT_CODE).build();
 
   @Mock private BadgeManagementRepository repositoryMock;
   @Mock private ValidateBadgeOrder validateBadgeOrderMock;

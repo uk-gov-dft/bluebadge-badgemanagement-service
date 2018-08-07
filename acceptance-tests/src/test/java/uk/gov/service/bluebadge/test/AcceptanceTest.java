@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
+@SuppressWarnings("squid:S2187")
 @RunWith(Karate.class)
 @CucumberOptions(features = "classpath:features")
 public class AcceptanceTest {

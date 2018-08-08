@@ -32,7 +32,7 @@ Feature: Verify Create badge
     badgeHolderName: 'The Monroe Institute'
     }
     },
-    localAuthorityId: 187,
+    localAuthorityShortCode: 'GLAM',
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',
@@ -59,4 +59,4 @@ Feature: Verify Create badge
     Then status 200
     And def result = $.data
     And match result.badgeNumber == badgeNo
-    And match result.localAuthorityId == 2
+    And match result.localAuthorityShortCode == 'ABERD'

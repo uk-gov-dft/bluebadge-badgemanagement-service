@@ -37,6 +37,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     validateRefData(
         DELIVERY_OPTIONS, INVALID_DELIVER_OPTION_CODE, entity.getDeliverOptionCode(), errors);
     validateRefData(APP_SOURCE, INVALID_CHANNEL_CODE, entity.getAppChannelCode(), errors);
+    validateRefData(LA, INVALID_LA_CODE, entity.getLocalAuthorityShortCode(), errors);
 
     // Business rules
     validateStartDateInFuture(entity, errors);

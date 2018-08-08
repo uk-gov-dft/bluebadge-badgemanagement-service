@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
@@ -33,6 +29,7 @@ public class BadgeTestBase {
     public static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
+    public static final String LOCAL_AUTHORITY_CODE = "ABERD";
   }
 
   protected ReferenceDataService referenceDataService;
@@ -63,6 +60,7 @@ public class BadgeTestBase {
         getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE, null));
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE, null));
     referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
+    referenceDataList.add(getNewRefDataItem(LA, DefaultVals.LOCAL_AUTHORITY_CODE, null));
     referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_ORG_CODE, null));
     referenceDataList.add(
         getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
@@ -96,7 +94,7 @@ public class BadgeTestBase {
         .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
         .genderCode(DefaultVals.GENDER_CODE)
         .holderName("Robert McRoberts")
-        .localAuthorityId(2)
+        .localAuthorityShortCode("ABERD")
         .localAuthorityRef(null)
         .nino("NS123456A")
         .partyCode(DefaultVals.PARTY_PERSON_CODE)
@@ -119,7 +117,7 @@ public class BadgeTestBase {
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
-    request.setLocalAuthorityId(2);
+    request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
     party.setTypeCode(DefaultVals.PARTY_ORG_CODE);
@@ -145,7 +143,7 @@ public class BadgeTestBase {
     request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
     request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
-    request.setLocalAuthorityId(2);
+    request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
     party.setTypeCode(DefaultVals.PARTY_PERSON_CODE);
@@ -183,7 +181,7 @@ public class BadgeTestBase {
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
         .appDate(LocalDate.now().minus(Period.ofDays(1)))
         .localAuthorityRef("LA_REF")
-        .localAuthorityId(2)
+        .localAuthorityShortCode("ABERD")
         .partyCode(DefaultVals.PARTY_ORG_CODE)
         .badgeNo("KKKKKK")
         .badgeStatus(BadgeEntity.Status.ISSUED)

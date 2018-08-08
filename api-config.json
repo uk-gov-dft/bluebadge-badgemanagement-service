@@ -355,21 +355,22 @@
             "description" : "The badge holder's National Insurance number.",
             "example" : "NY186548E"
           },
-          "localAuthorityCode" : {
-            "type" : "integer",
-            "description" : "The code for the local authority.",
-            "example" : 211
-          },
-          "postCode" : {
+          "localAuthorityShortCode" : {
             "type" : "string",
-            "example" : "SK6 8GH",
-            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
+            "description" : "Short code of local authority",
+            "pattern" : "^[A-Z]+$",
+            "example" : "BLACK"
           },
           "localAuthorityName" : {
             "type" : "string",
             "maxLength" : 100,
             "description" : "Display name of the local authority.",
             "example" : "Shropshire County Council"
+          },
+          "postCode" : {
+            "type" : "string",
+            "example" : "SK6 8GH",
+            "pattern" : "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$"
           },
           "expiryDate" : {
             "type" : "string",
@@ -403,10 +404,11 @@
           "party" : {
             "$ref" : "#/definitions/Party"
           },
-          "localAuthorityId" : {
-            "type" : "integer",
-            "description" : "Id of local authority.",
-            "example" : 123
+          "localAuthorityShortCode" : {
+            "type" : "string",
+            "description" : "Short code of local authority",
+            "pattern" : "^[A-Z]+$",
+            "example" : "BLACK"
           },
           "localAuthorityRef" : {
             "type" : "string",
@@ -473,10 +475,11 @@
           "party" : {
             "$ref" : "#/definitions/Party"
           },
-          "localAuthorityId" : {
-            "type" : "integer",
-            "example" : 187,
-            "description" : "Id of local authority."
+          "localAuthorityShortCode" : {
+            "type" : "string",
+            "example" : "ABERD",
+            "pattern" : "^[A-Z]+$",
+            "description" : "Short code of local authority."
           },
           "localAuthorityRef" : {
             "type" : "string",
@@ -537,7 +540,7 @@
             "description" : "Must be 1 for a person, can be multiple for an organisation."
           }
         },
-        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityId", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
+        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityShortCode", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
       },
       "Party" : {
         "type" : "object",

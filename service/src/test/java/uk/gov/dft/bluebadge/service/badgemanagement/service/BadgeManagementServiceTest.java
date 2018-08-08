@@ -22,10 +22,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateB
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
-  private static final Integer LOCAL_AUTHORITY_ID = 3;
-  private static final String LOCAL_AUTHORITY_SHORT_CODE = "BIRM";
+  private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
   private static final LocalAuthority LOCAL_AUTHORITY =
-      LocalAuthority.builder().id(LOCAL_AUTHORITY_ID).shortCode(LOCAL_AUTHORITY_SHORT_CODE).build();
+      LocalAuthority.builder().shortCode(LOCAL_AUTHORITY_SHORT_CODE).build();
 
   @Mock private BadgeManagementRepository repositoryMock;
   @Mock private ValidateBadgeOrder validateBadgeOrderMock;
@@ -59,13 +58,12 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Test
   public void createBadge_setLocalAuthorityToCurrentUsers() {
     BadgeEntity entity = getValidPersonBadgeEntity();
-    entity.setLocalAuthorityId(3);
-    entity.setLocalAuthorityRef("BIRM");
+    entity.setLocalAuthorityShortCode("BIRM");
     entity.setNumberOfBadges(1);
 
     BadgeEntity expectedEntity = BadgeEntity.builder().build();
     BeanUtils.copyProperties(entity, expectedEntity);
-    expectedEntity.setLocalAuthorityId(LOCAL_AUTHORITY_ID);
+    expectedEntity.setLocalAuthorityShortCode(LOCAL_AUTHORITY_SHORT_CODE);
     expectedEntity.setBadgeNo("31E");
 
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);

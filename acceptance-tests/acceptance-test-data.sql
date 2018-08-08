@@ -19,7 +19,7 @@ VALUES(-5, 'delete test', 'deleteme@dft.gov.uk', 2, 2);
 
 insert into badge
 (badge_no, badge_status, party_code,
-        local_authority_id, local_authority_ref,
+        local_authority_short_code, local_authority_ref,
         app_channel_code, start_date, expiry_date,
         eligibility_code, image_link, deliver_to_code,
         deliver_option_code, holder_name, nino,
@@ -28,5 +28,5 @@ insert into badge
         contact_postcode, primary_phone_no, secondary_phone_no,
         contact_email_address, holder_name_upper, order_date, app_date)
 values
-('KKKKKE', 'ISSUED', 'PERSON', 3, 'to cancel', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', 'HOME', 'STAND', 'Reginald Pai', '', '1953-09-12', 'MALE',
+('KKKKKE', 'ISSUED', 'PERSON', 'ANGL', 'to cancel', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', 'HOME', 'STAND', 'Reginald Pai', '', '1953-09-12', 'MALE',
 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01');

@@ -49,8 +49,7 @@ public class BadgeManagementService {
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
 
     LocalAuthority localAuthority = securityUtils.getCurrentLocalAuthority();
-    entity.setLocalAuthorityId(localAuthority.getId());
-    entity.setLocalAuthorityRef(localAuthority.getShortCode());
+    entity.setLocalAuthorityShortCode(localAuthority.getShortCode());
 
     validateBadgeOrder.validate(entity);
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
@@ -97,8 +96,7 @@ public class BadgeManagementService {
     // Validate the request
     validateCancelBadge.validateRequest(request);
     // Optimistically try cancel before validating to save reading badge data.
-    Integer localAuthorityId = securityUtils.getCurrentLocalAuthority().getId();
-    request.setLocalAuthorityId(localAuthorityId);
+    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthority().getShortCode();
     int updates = repository.cancelBadge(request);
 
     if (updates == 0) {
@@ -107,7 +105,7 @@ public class BadgeManagementService {
       BadgeEntity badgeEntity =
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
-      validateCancelBadge.validateAfterFailedCancel(badgeEntity, localAuthorityId);
+      validateCancelBadge.validateAfterFailedCancel(badgeEntity, localAuthorityShortCode);
     }
   }
 }

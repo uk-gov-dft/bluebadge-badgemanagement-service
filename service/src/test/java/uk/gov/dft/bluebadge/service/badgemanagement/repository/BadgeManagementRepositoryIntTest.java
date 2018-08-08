@@ -32,7 +32,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
             .cancelReasonCode("reason")
-            .localAuthorityId(2)
+            .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
     assertThat(recordsAffected).isEqualTo(1);
@@ -44,7 +44,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
         CancelBadgeParams.builder()
             .badgeNo("NOTEXI")
             .cancelReasonCode("reason")
-            .localAuthorityId(2)
+            .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
     assertThat(recordsAffected).isEqualTo(0);
@@ -56,7 +56,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
             .cancelReasonCode("reason")
-            .localAuthorityId(3)
+            .localAuthorityShortCode("ANGL")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
     assertThat(recordsAffected).isEqualTo(0);
@@ -76,7 +76,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
               .badgeNo(String.valueOf(id))
               .contactName("Jane" + id)
               .partyCode("PAR")
-              .localAuthorityId(45)
+              .localAuthorityShortCode("WINMD")
               .appDate(LocalDate.now())
               .appChannelCode("APC")
               .startDate(INITIAL_START_DATE.plusDays(id))

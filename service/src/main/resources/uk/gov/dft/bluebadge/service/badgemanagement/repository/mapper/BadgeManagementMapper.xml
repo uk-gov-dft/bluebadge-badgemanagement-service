@@ -6,7 +6,7 @@
     <insert id="createBadge" parameterType="BadgeEntity">
         INSERT INTO badge
         (badge_no, badge_status, party_code,
-        local_authority_id, local_authority_ref, app_date,
+        local_authority_short_code, local_authority_ref, app_date,
         app_channel_code, start_date, expiry_date,
         eligibility_code, image_link, deliver_to_code,
         deliver_option_code, holder_name, nino,
@@ -16,7 +16,7 @@
         contact_email_address, holder_name_upper, order_date)
         VALUES
         (#{badgeNo}, #{badgeStatus}, #{partyCode},
-        #{localAuthorityId}, #{localAuthorityRef}, #{appDate},
+        #{localAuthorityShortCode}, #{localAuthorityRef}, #{appDate},
         #{appChannelCode}, #{startDate}, #{expiryDate},
         #{eligibilityCode}, #{imageLink}, #{deliverToCode},
         #{deliverOptionCode}, #{holderName}, #{nino},
@@ -34,7 +34,7 @@
     <select id="retrieveBadge" resultType="BadgeEntity" parameterType="RetrieveBadgeParams">
         SELECT
         badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-        local_authority_id AS localAuthorityId, local_authority_ref As localAuthorityRef, app_date AS appDate,
+        local_authority_ref As localAuthorityRef, app_date AS appDate,
         app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
         eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
         deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
@@ -42,7 +42,7 @@
         contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode,
-        order_date AS orderDate
+        order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode
         FROM badge
         WHERE
           badge_no = #{badgeNo}
@@ -51,14 +51,14 @@
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
           badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-          local_authority_id AS localAuthorityId, local_authority_ref As localAuthorityRef, app_date AS appDate,
+          local_authority_ref As localAuthorityRef, app_date AS appDate,
           app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
           eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
           deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
           dob AS dob, gender_code AS genderCode, contact_name AS contactName,
           contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
           contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode
+          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
         FROM badge
         WHERE
           <if test="name != null">
@@ -77,8 +77,8 @@
         WHERE badge_no = #{badgeNo}
         AND expiry_date &gt;= current_date
         AND badge_status = 'ISSUED'
-        <if test="localAuthorityId != null">
-            AND local_authority_id = #{localAuthorityId}
+        <if test="localAuthorityShortCode != null">
+            AND local_authority_short_code = #{localAuthorityShortCode}
         </if>
     </update>
 </mapper>

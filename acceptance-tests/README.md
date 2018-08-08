@@ -6,25 +6,23 @@ First you need to start the badgemanagement service by executing following comma
 
 ```
 cd badgemanagement-service
-git pull
-git checkout whateverbranch
-cd model
-gradle install
-cd ../client
-gradle install
-cd ..
-gradle build
-gradle bootRun
+./gradlew bootRun
 ```
 
 #### How to run api acceptance tests
+
+You need the following service to run api acceptance tests:
+-authorisation service
+-reference data service
 
 You may need to install maven plugin in intellij.
 
 Then go to api-acceptance-test project and right click on pom.xml → Add as Maven project
 
+
+To run
 ```
-gradle clean build acceptanceTests
+./gradlew clean build acceptanceTests
 ```
 
 ### Relevant Articles: 

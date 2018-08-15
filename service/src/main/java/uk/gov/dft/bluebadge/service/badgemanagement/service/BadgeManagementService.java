@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
-import uk.gov.dft.bluebadge.common.security.model.LocalAuthority;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
+import uk.gov.dft.bluebadge.common.util.Base20;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
@@ -31,29 +33,40 @@ public class BadgeManagementService {
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
   private final SecurityUtils securityUtils;
+  private PhotoService photoService;
 
   @Autowired
   BadgeManagementService(
       BadgeManagementRepository repository,
       ValidateBadgeOrder validateBadgeOrder,
       ValidateCancelBadge validateCancelBadge,
-      SecurityUtils securityUtils) {
+      SecurityUtils securityUtils,
+      PhotoService photoService) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
     this.securityUtils = securityUtils;
+    this.photoService = photoService;
   }
 
-  public List<String> createBadge(BadgeEntity entity) {
+  public List<String> createBadge(BadgeOrderRequest model) {
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
+
     List<String> createdList = new ArrayList<>();
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
 
-    LocalAuthority localAuthority = securityUtils.getCurrentLocalAuthority();
-    entity.setLocalAuthorityShortCode(localAuthority.getShortCode());
+    entity.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
 
     validateBadgeOrder.validate(entity);
+
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
-      entity.setBadgeNo(createNewBadgeNumber());
+      String newBadgeNo = createNewBadgeNumber();
+      entity.setBadgeNo(newBadgeNo);
+      if (entity.isPerson() && !StringUtils.isEmpty(model.getImageFile())) {
+        S3KeyNames names = photoService.photoUpload(model.getImageFile(), newBadgeNo);
+        entity.setImageLink(names.getThumbnameUrl());
+        entity.setImageLinkOriginal(names.getOriginalUrl());
+      }
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
     }
@@ -96,7 +109,7 @@ public class BadgeManagementService {
     // Validate the request
     validateCancelBadge.validateRequest(request);
     // Optimistically try cancel before validating to save reading badge data.
-    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthority().getShortCode();
+    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthorityShortCode();
     int updates = repository.cancelBadge(request);
 
     if (updates == 0) {

@@ -1,27 +1,29 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.config;
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+@Getter
 public class S3Config {
-  @Value("${amazonProperties.endpointUrl}")
-  private String endpointUrl;
-  @Value("${amazonProperties.bucketName}")
-  private String bucketName;
-  @Value("${amazonProperties.accessKey}")
-  private String accessKey;
-  @Value("${amazonProperties.secretKey}")
-  private String secretKey;
+  @Value("${amazon.profile:default}")
+  private String profile;
+
+  @Value("${amazon.s3bucket}")
+  private String s3bucket;
+
+  @Value("${amazon.thumbnail-height-px:300}")
+  private Integer thumbnailHeight;
 
   @Bean
-  public AmazonS3Client amazonS3Client(){
+  public AmazonS3 amazonS3() {
     return AmazonS3ClientBuilder.standard()
-        .withRegion(clientRegion)
-        .withCredentials(new ProfileCredentialsProvider())
+        .withCredentials(new ProfileCredentialsProvider(profile))
         .build();
   }
-
 }

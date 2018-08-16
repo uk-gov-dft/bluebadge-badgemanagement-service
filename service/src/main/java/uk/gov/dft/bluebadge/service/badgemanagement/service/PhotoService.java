@@ -50,8 +50,8 @@ public class PhotoService {
     path = StringUtils.replace(FILE_PATH_TEMPLATE_THUMBNAIL, "{uuid}", uuid);
     names.setThumbnailKeyName(StringUtils.replace(path, "{badgeNumber}", badgeNumber));
 
-    names.setOriginalUrl("/" + s3Config.getS3bucket() + "/" + names.getOriginalKeyName());
-    names.setThumbnameUrl("/" + s3Config.getS3bucket() + "/" + names.getThumbnailKeyName());
+    names.setOriginalUrl("/" + s3Config.getBadgeS3bucket() + "/" + names.getOriginalKeyName());
+    names.setThumbnameUrl("/" + s3Config.getBadgeS3bucket() + "/" + names.getThumbnailKeyName());
 
     return names;
   }
@@ -109,7 +109,7 @@ public class PhotoService {
     ByteArrayInputStream streamToWriteToS3 =
         getInputStreamForSizedBufferedImage(originalImage, height);
     PutObjectRequest request =
-        new PutObjectRequest(s3Config.getS3bucket(), s3Key, streamToWriteToS3, metadata);
+        new PutObjectRequest(s3Config.getBadgeS3bucket(), s3Key, streamToWriteToS3, metadata);
     PutObjectResult result = amazonS3.putObject(request);
     log.debug("Original Image: wrote {} bytes to s3.", result.getMetadata().getContentLength());
   }

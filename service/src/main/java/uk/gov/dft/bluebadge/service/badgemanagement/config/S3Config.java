@@ -14,8 +14,8 @@ public class S3Config {
   @Value("${amazon.profile:default}")
   private String profile;
 
-  @Value("${amazon.s3bucket}")
-  private String s3bucket;
+  @Value("${amazon.badge-s3bucket}")
+  private String badgeS3bucket;
 
   @Value("${amazon.thumbnail-height-px:300}")
   private Integer thumbnailHeight;

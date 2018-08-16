@@ -3,13 +3,15 @@ package uk.gov.dft.bluebadge.service.badgemanagement.config;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Data
+@Getter
+@Setter
 public class S3Config {
   @Value("${amazon.profile:default}")
   private String profile;

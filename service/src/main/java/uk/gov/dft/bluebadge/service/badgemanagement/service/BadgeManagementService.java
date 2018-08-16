@@ -33,7 +33,7 @@ public class BadgeManagementService {
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
   private final SecurityUtils securityUtils;
-  private PhotoService photoService;
+  private final PhotoService photoService;
 
   @Autowired
   BadgeManagementService(

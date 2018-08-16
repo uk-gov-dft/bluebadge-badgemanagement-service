@@ -26,13 +26,12 @@ apply plugin: 'pmd'
 apply plugin: 'maven'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     jcenter()
 }
 
 sourceSets {
-    main{
+    main {
         java {
             srcDir 'src/main/java'
             srcDir 'src/generated/java'
@@ -59,7 +58,7 @@ tasks.withType(Pmd) {
 }
 
 dependencies {
-    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: '0.4.1-feature_BBB-488-s3-upload-photo-SNAPSHOT'
+    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: '0.4.1-SNAPSHOT'
 
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.5'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'
@@ -72,7 +71,7 @@ dependencies {
     compile('org.apache.commons:commons-lang3:3.7')
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
-    compileOnly ('org.projectlombok:lombok:1.16.22')
+    compileOnly('org.projectlombok:lombok:1.16.22')
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
 
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.385'
@@ -94,7 +93,7 @@ compileJava.dependsOn 'googleJavaFormat'
 publishing {
     publications {
         project_service(MavenPublication) {
-            artifact ("${buildDir}/database-schema/" + getTheVersion() + "_schema.zip") {
+            artifact("${buildDir}/database-schema/" + getTheVersion() + "_schema.zip") {
                 classifier "schema"
             }
             from components.java

@@ -8,73 +8,74 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Base64;
 import java.util.UUID;
-import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.Error;
+import uk.gov.dft.bluebadge.common.service.ImageProcessingService;
 import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.service.badgemanagement.config.S3Config;
 
 @Slf4j
 @Service
-public class PhotoService {
+class PhotoService {
 
   private static final String FILE_PATH_TEMPLATE_ORIGINAL =
-      "{badgeNumber}/artefacts/{uuid}-original.jpg";
+      "{parentId}/artefacts/{uuid}-original.jpg";
   private static final String FILE_PATH_TEMPLATE_THUMBNAIL =
-      "{badgeNumber}/artefacts/{uuid}-thumbnail.jpg";
+      "{parentId}/artefacts/{uuid}-thumbnail.jpg";
+  private static final String IMAGE_JPEG = "image/jpeg";
   private final AmazonS3 amazonS3;
-  private S3Config s3Config;
+  private final S3Config s3Config;
+  private final ImageProcessingService imageProcessingService;
 
   @Autowired
-  public PhotoService(AmazonS3 amazonS3, S3Config s3Config) {
+  PhotoService(
+      AmazonS3 amazonS3, S3Config s3Config, ImageProcessingService imageProcessingService) {
     this.amazonS3 = amazonS3;
     this.s3Config = s3Config;
+    this.imageProcessingService = imageProcessingService;
   }
 
-  S3KeyNames getS3KeyNames(String badgeNumber) {
-    Assert.notNull(badgeNumber, "badge number required to generate s3 key");
+  /**
+   * Retrieves the S3 key for a given badge number. Also returns the url to store in database.
+   *
+   * @param parentId Identifier of parent object e.g. badge number.
+   * @return Keys and urls.
+   */
+  S3KeyNames generateS3KeyNames(String parentId, String bucket) {
+    Assert.notNull(parentId, "badge number required to generate s3 key");
     S3KeyNames names = new S3KeyNames();
     String uuid = UUID.randomUUID().toString();
     String path = StringUtils.replace(FILE_PATH_TEMPLATE_ORIGINAL, "{uuid}", uuid);
-    names.setOriginalKeyName(StringUtils.replace(path, "{badgeNumber}", badgeNumber));
+    names.setOriginalKeyName(StringUtils.replace(path, "{parentId}", parentId));
 
     path = StringUtils.replace(FILE_PATH_TEMPLATE_THUMBNAIL, "{uuid}", uuid);
-    names.setThumbnailKeyName(StringUtils.replace(path, "{badgeNumber}", badgeNumber));
+    names.setThumbnailKeyName(StringUtils.replace(path, "{parentId}", parentId));
 
-    names.setOriginalUrl("/" + s3Config.getBadgeS3bucket() + "/" + names.getOriginalKeyName());
-    names.setThumbnameUrl("/" + s3Config.getBadgeS3bucket() + "/" + names.getThumbnailKeyName());
+    names.setOriginalUrl("/" + bucket + "/" + names.getOriginalKeyName());
+    names.setThumbnameUrl("/" + bucket + "/" + names.getThumbnailKeyName());
 
     return names;
   }
 
-  S3KeyNames photoUpload(String imageAsBase64, String badgeNumber) {
+  /**
+   * Store photo and thumbnail in S3.
+   *
+   * @param imageAsBase64 Source as encoded string.
+   * @param parentId Parent context object id, e.g. badge number.
+   * @return Urls to access stored images.
+   */
+  S3KeyNames photoUpload(String imageAsBase64, String parentId) {
     Assert.notNull(imageAsBase64, "Require image.");
-    Assert.notNull(badgeNumber, "Need badge number for storage path");
+    Assert.notNull(parentId, "Need badge number for storage path");
 
-    S3KeyNames names = getS3KeyNames(badgeNumber);
-
-    byte[] rawData = Base64.getDecoder().decode(imageAsBase64);
-    InputStream originalAsByteInputStream = new ByteArrayInputStream(rawData);
-    ImageIO.setUseCache(false);
-
-    BufferedImage originalImage;
-    try {
-      originalImage = ImageIO.read(originalAsByteInputStream);
-    } catch (IOException e) {
-      log.error("Could not process file.", e);
-      Error error = new Error();
-      error.setMessage("File storage failed, Could not parse file.");
-      throw new InternalServerException(error);
-    }
+    S3KeyNames names = generateS3KeyNames(parentId, s3Config.getS3Bucket());
+    BufferedImage originalImage =
+        imageProcessingService.getBufferedImageFromBase64(imageAsBase64, parentId);
 
     try {
       // Save original image
@@ -83,7 +84,7 @@ public class PhotoService {
       // Save thumbnail
       uploadImage(originalImage, names.getThumbnailKeyName(), s3Config.getThumbnailHeight());
 
-      log.info("Photo upload successful, badge {}.", badgeNumber);
+      log.info("Photo upload successful, badge {}.", parentId);
     } catch (AmazonServiceException e) {
       // The call was transmitted successfully, but Amazon S3 couldn't process
       // it, so it returned an error response.
@@ -103,46 +104,21 @@ public class PhotoService {
     return names;
   }
 
-  void uploadImage(BufferedImage originalImage, String s3Key, int height) {
+  /**
+   * Upload a single image to S3 after resizing it.
+   *
+   * @param originalImage Image.
+   * @param s3Key S3 key to store at.
+   * @param height Height to size to.
+   */
+  private void uploadImage(BufferedImage originalImage, String s3Key, int height) {
     ObjectMetadata metadata = new ObjectMetadata();
-    metadata.setContentType("image/jpeg");
+    metadata.setContentType(IMAGE_JPEG);
     ByteArrayInputStream streamToWriteToS3 =
-        getInputStreamForSizedBufferedImage(originalImage, height);
+        imageProcessingService.getInputStreamForSizedBufferedImage(originalImage, height);
     PutObjectRequest request =
-        new PutObjectRequest(s3Config.getBadgeS3bucket(), s3Key, streamToWriteToS3, metadata);
+        new PutObjectRequest(s3Config.getS3Bucket(), s3Key, streamToWriteToS3, metadata);
     PutObjectResult result = amazonS3.putObject(request);
-    log.debug("Original Image: wrote {} bytes to s3.", result.getMetadata().getContentLength());
-  }
-
-  ByteArrayInputStream getInputStreamForSizedBufferedImage(BufferedImage sourceImage, int height) {
-    BufferedImage outputImage =
-        new BufferedImage(
-            sourceImage.getWidth(), sourceImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-    outputImage
-        .createGraphics()
-        .drawImage(sourceImage, 0, 0, getProportionalWidth(sourceImage, height), height, null);
-
-    ByteArrayOutputStream imageOutputStream = new ByteArrayOutputStream();
-
-    try {
-      ImageIO.write(outputImage, "jpg", imageOutputStream);
-    } catch (IOException e) {
-      log.error("Could not process file - resizing.", e);
-      Error error = new Error();
-      error.setMessage("File storage failed, Could not resize file.");
-      throw new InternalServerException(error);
-    }
-    return new ByteArrayInputStream(imageOutputStream.toByteArray());
-  }
-
-  int getProportionalWidth(BufferedImage sourceImage, int height) {
-    // No change if 100% (Avoid any rounding)
-    if (sourceImage.getHeight() == height) {
-      return sourceImage.getWidth();
-    }
-
-    float ratio = (float) height / (float) sourceImage.getHeight();
-
-    return Math.round(ratio * sourceImage.getWidth());
+    log.debug("image written to s3 key: {}. Aws result: {}", s3Key, result.getETag());
   }
 }

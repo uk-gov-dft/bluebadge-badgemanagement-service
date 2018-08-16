@@ -8,7 +8,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP SCHEMA IF EXISTS badgemanagement_unittest;
+DROP SCHEMA IF EXISTS badgemanagement_unittest CASCADE;
 CREATE SCHEMA badgemanagement_unittest;
 
 SET search_path = badgemanagement_unittest;

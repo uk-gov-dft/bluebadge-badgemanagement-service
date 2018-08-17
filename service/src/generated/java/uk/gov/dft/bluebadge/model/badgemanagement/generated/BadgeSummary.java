@@ -30,11 +30,11 @@ public class BadgeSummary {
   @JsonProperty("localAuthorityShortCode")
   private String localAuthorityShortCode = null;
 
-  @JsonProperty("postCode")
-  private String postCode = null;
-
   @JsonProperty("localAuthorityName")
   private String localAuthorityName = null;
+
+  @JsonProperty("postCode")
+  private String postCode = null;
 
   @JsonProperty("expiryDate")
   private LocalDate expiryDate = null;
@@ -160,11 +160,11 @@ public class BadgeSummary {
   }
 
   /**
-   * The short code for the local authority.
+   * Short code of local authority
    *
    * @return localAuthorityShortCode
    */
-  @ApiModelProperty(example = "BLACK", value = "The short code for the local authority.")
+  @ApiModelProperty(example = "BLACK", value = "Short code of local authority")
   @Pattern(regexp = "^[A-Z]+$")
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
@@ -172,26 +172,6 @@ public class BadgeSummary {
 
   public void setLocalAuthorityShortCode(String localAuthorityShortCode) {
     this.localAuthorityShortCode = localAuthorityShortCode;
-  }
-
-  public BadgeSummary postCode(String postCode) {
-    this.postCode = postCode;
-    return this;
-  }
-
-  /**
-   * Get postCode
-   *
-   * @return postCode
-   */
-  @ApiModelProperty(example = "SK6 8GH", value = "")
-  @Pattern(regexp = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$")
-  public String getPostCode() {
-    return postCode;
-  }
-
-  public void setPostCode(String postCode) {
-    this.postCode = postCode;
   }
 
   public BadgeSummary localAuthorityName(String localAuthorityName) {
@@ -215,6 +195,26 @@ public class BadgeSummary {
 
   public void setLocalAuthorityName(String localAuthorityName) {
     this.localAuthorityName = localAuthorityName;
+  }
+
+  public BadgeSummary postCode(String postCode) {
+    this.postCode = postCode;
+    return this;
+  }
+
+  /**
+   * Get postCode
+   *
+   * @return postCode
+   */
+  @ApiModelProperty(example = "SK6 8GH", value = "")
+  @Pattern(regexp = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$")
+  public String getPostCode() {
+    return postCode;
+  }
+
+  public void setPostCode(String postCode) {
+    this.postCode = postCode;
   }
 
   public BadgeSummary expiryDate(LocalDate expiryDate) {
@@ -295,8 +295,8 @@ public class BadgeSummary {
         && Objects.equals(this.name, badgeSummary.name)
         && Objects.equals(this.nino, badgeSummary.nino)
         && Objects.equals(this.localAuthorityShortCode, badgeSummary.localAuthorityShortCode)
-        && Objects.equals(this.postCode, badgeSummary.postCode)
         && Objects.equals(this.localAuthorityName, badgeSummary.localAuthorityName)
+        && Objects.equals(this.postCode, badgeSummary.postCode)
         && Objects.equals(this.expiryDate, badgeSummary.expiryDate)
         && Objects.equals(this.statusCode, badgeSummary.statusCode)
         && Objects.equals(this.statusDescription, badgeSummary.statusDescription);
@@ -311,8 +311,8 @@ public class BadgeSummary {
         name,
         nino,
         localAuthorityShortCode,
-        postCode,
         localAuthorityName,
+        postCode,
         expiryDate,
         statusCode,
         statusDescription);
@@ -333,8 +333,8 @@ public class BadgeSummary {
     sb.append("    localAuthorityShortCode: ")
         .append(toIndentedString(localAuthorityShortCode))
         .append("\n");
-    sb.append("    postCode: ").append(toIndentedString(postCode)).append("\n");
     sb.append("    localAuthorityName: ").append(toIndentedString(localAuthorityName)).append("\n");
+    sb.append("    postCode: ").append(toIndentedString(postCode)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
     sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("    statusDescription: ").append(toIndentedString(statusDescription)).append("\n");

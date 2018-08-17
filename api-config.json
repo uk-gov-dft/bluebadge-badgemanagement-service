@@ -650,7 +650,7 @@
           },
           "emailAddress" : {
             "type" : "string",
-            "pattern" : ".+\\@.+",
+            "pattern" : "^\\S+\\@\\S+",
             "maxLength" : 255,
             "example" : "june@bigbrainknitting.com"
           }

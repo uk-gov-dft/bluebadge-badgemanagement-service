@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.common.service.ImageProcessingService;
 import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.service.badgemanagement.config.S3Config;
 
@@ -44,7 +43,7 @@ public class PhotoServiceTest {
     config.setS3Bucket(BUCKET);
     config.setProfile("profile");
     config.setThumbnailHeight(300);
-    photoService = new PhotoService(amazonS3Client, config, new ImageProcessingService());
+    photoService = new PhotoService(amazonS3Client, config);
   }
 
   @Test

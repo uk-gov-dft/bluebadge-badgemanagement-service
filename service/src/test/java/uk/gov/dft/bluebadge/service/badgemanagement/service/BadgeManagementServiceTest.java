@@ -31,7 +31,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private ValidateBadgeOrder validateBadgeOrderMock;
   @Mock private ValidateCancelBadge validateCancelBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
-  @Mock private PhotoService photoService;
+  @Mock private PhotoService photoServiceMock;
 
   private BadgeManagementService service;
 
@@ -45,7 +45,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
             validateBadgeOrderMock,
             validateCancelBadgeMock,
             securityUtilsMock,
-            photoService);
+            photoServiceMock);
   }
 
   @Test
@@ -79,7 +79,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     entity.setImageLink("thumb");
 
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
-    when(photoService.photoUpload(any(), any())).thenReturn(names);
+    when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
     List<String> results = service.createBadge(model);
 
     Assert.assertEquals(1, results.size());

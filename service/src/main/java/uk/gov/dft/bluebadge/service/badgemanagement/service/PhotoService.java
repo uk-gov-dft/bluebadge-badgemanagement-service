@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.Error;
-import uk.gov.dft.bluebadge.common.service.ImageProcessingService;
+import uk.gov.dft.bluebadge.common.service.ImageProcessingUtils;
 import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.service.badgemanagement.config.S3Config;
 
@@ -30,14 +30,12 @@ class PhotoService {
   private static final String IMAGE_JPEG = "image/jpeg";
   private final AmazonS3 amazonS3;
   private final S3Config s3Config;
-  private final ImageProcessingService imageProcessingService;
 
   @Autowired
   PhotoService(
-      AmazonS3 amazonS3, S3Config s3Config, ImageProcessingService imageProcessingService) {
+      AmazonS3 amazonS3, S3Config s3Config) {
     this.amazonS3 = amazonS3;
     this.s3Config = s3Config;
-    this.imageProcessingService = imageProcessingService;
   }
 
   /**
@@ -47,7 +45,7 @@ class PhotoService {
    * @return Keys and urls.
    */
   S3KeyNames generateS3KeyNames(String parentId, String bucket) {
-    Assert.notNull(parentId, "badge number required to generate s3 key");
+    Assert.notNull(parentId, "parentId (badge number) required to generate s3 key");
     S3KeyNames names = new S3KeyNames();
     String uuid = UUID.randomUUID().toString();
     String path = StringUtils.replace(FILE_PATH_TEMPLATE_ORIGINAL, "{uuid}", uuid);
@@ -71,11 +69,11 @@ class PhotoService {
    */
   S3KeyNames photoUpload(String imageAsBase64, String parentId) {
     Assert.notNull(imageAsBase64, "Require image.");
-    Assert.notNull(parentId, "Need badge number for storage path");
+    Assert.notNull(parentId, "Need parentId (badge number) for storage path");
 
     S3KeyNames names = generateS3KeyNames(parentId, s3Config.getS3Bucket());
     BufferedImage originalImage =
-        imageProcessingService.getBufferedImageFromBase64(imageAsBase64, parentId);
+        ImageProcessingUtils.getBufferedImageFromBase64(imageAsBase64, parentId);
 
     try {
       // Save original image
@@ -115,7 +113,7 @@ class PhotoService {
     ObjectMetadata metadata = new ObjectMetadata();
     metadata.setContentType(IMAGE_JPEG);
     ByteArrayInputStream streamToWriteToS3 =
-        imageProcessingService.getInputStreamForSizedBufferedImage(originalImage, height);
+        ImageProcessingUtils.getInputStreamForSizedBufferedImage(originalImage, height);
     PutObjectRequest request =
         new PutObjectRequest(s3Config.getS3Bucket(), s3Key, streamToWriteToS3, metadata);
     PutObjectResult result = amazonS3.putObject(request);

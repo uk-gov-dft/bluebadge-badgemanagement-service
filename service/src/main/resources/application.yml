@@ -54,3 +54,4 @@ amazon:
   profile: default
   s3bucket: dev-dft-badges
   thumbnail-height-px: 300
+  signed-url-duration-ms: 60000

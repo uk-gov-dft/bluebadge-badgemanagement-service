@@ -64,8 +64,8 @@ public class BadgeManagementService {
       entity.setBadgeNo(newBadgeNo);
       if (entity.isPerson() && !StringUtils.isEmpty(model.getImageFile())) {
         S3KeyNames names = photoService.photoUpload(model.getImageFile(), newBadgeNo);
-        entity.setImageLink(names.getThumbnameUrl());
-        entity.setImageLinkOriginal(names.getOriginalUrl());
+        entity.setImageLink(names.getThumbnailKeyName());
+        entity.setImageLinkOriginal(names.getOriginalKeyName());
       }
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
@@ -99,9 +99,12 @@ public class BadgeManagementService {
   public BadgeEntity retrieveBadge(String badgeNumber) {
     RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
     BadgeEntity entity = repository.retrieveBadge(params);
+
     if (null == entity) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }
+    entity.setImageLink(photoService.generateSignedS3Url(entity.getImageLink()));
+    entity.setImageLinkOriginal(photoService.generateSignedS3Url(entity.getImageLinkOriginal()));
     return entity;
   }
 

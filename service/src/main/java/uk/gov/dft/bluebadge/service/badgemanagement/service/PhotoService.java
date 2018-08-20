@@ -1,13 +1,16 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.net.URL;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,8 +35,7 @@ class PhotoService {
   private final S3Config s3Config;
 
   @Autowired
-  PhotoService(
-      AmazonS3 amazonS3, S3Config s3Config) {
+  PhotoService(AmazonS3 amazonS3, S3Config s3Config) {
     this.amazonS3 = amazonS3;
     this.s3Config = s3Config;
   }
@@ -44,7 +46,7 @@ class PhotoService {
    * @param parentId Identifier of parent object e.g. badge number.
    * @return Keys and urls.
    */
-  S3KeyNames generateS3KeyNames(String parentId, String bucket) {
+  S3KeyNames generateS3KeyNames(String parentId) {
     Assert.notNull(parentId, "parentId (badge number) required to generate s3 key");
     S3KeyNames names = new S3KeyNames();
     String uuid = UUID.randomUUID().toString();
@@ -53,9 +55,6 @@ class PhotoService {
 
     path = StringUtils.replace(FILE_PATH_TEMPLATE_THUMBNAIL, "{uuid}", uuid);
     names.setThumbnailKeyName(StringUtils.replace(path, "{parentId}", parentId));
-
-    names.setOriginalUrl("/" + bucket + "/" + names.getOriginalKeyName());
-    names.setThumbnameUrl("/" + bucket + "/" + names.getThumbnailKeyName());
 
     return names;
   }
@@ -71,7 +70,7 @@ class PhotoService {
     Assert.notNull(imageAsBase64, "Require image.");
     Assert.notNull(parentId, "Need parentId (badge number) for storage path");
 
-    S3KeyNames names = generateS3KeyNames(parentId, s3Config.getS3Bucket());
+    S3KeyNames names = generateS3KeyNames(parentId);
     BufferedImage originalImage =
         ImageProcessingUtils.getBufferedImageFromBase64(imageAsBase64, parentId);
 
@@ -93,7 +92,7 @@ class PhotoService {
     } catch (SdkClientException e) {
       // Amazon S3 couldn't be contacted for a response, or the client
       // couldn't parse the response from Amazon S3.
-      log.error("Could not connect to s3", e);
+      log.error("Could not connect to s3 to store image", e);
       Error error = new Error();
       error.setMessage("File storage failed, s3 storage could not be contacted.");
       throw new InternalServerException(error);
@@ -118,5 +117,41 @@ class PhotoService {
         new PutObjectRequest(s3Config.getS3Bucket(), s3Key, streamToWriteToS3, metadata);
     PutObjectResult result = amazonS3.putObject(request);
     log.debug("image written to s3 key: {}. Aws result: {}", s3Key, result.getETag());
+  }
+
+  String generateSignedS3Url(String link) {
+    if (null == link) {
+      return null;
+    }
+
+    java.util.Date expiration = new java.util.Date();
+    long expTimeMillis = expiration.getTime();
+    expTimeMillis += s3Config.getSignedUrlDurationMs();
+    expiration.setTime(expTimeMillis);
+
+    // Generate the pre-signed URL with expiry.
+    try {
+      GeneratePresignedUrlRequest generatePresignedUrlRequest =
+          new GeneratePresignedUrlRequest(s3Config.getS3Bucket(), link)
+              .withMethod(HttpMethod.GET)
+              .withExpiration(expiration);
+      URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+      return url.toString();
+    } catch (AmazonServiceException e) {
+      // The call was transmitted successfully, but Amazon S3 couldn't process
+      // it, so it returned an error response.
+      log.error("S3 could not complete generate signed url.", e);
+      Error error = new Error();
+      error.setMessage(
+          "Generate signed url for image failed, s3 storage could not process request.");
+      throw new InternalServerException(error);
+    } catch (SdkClientException e) {
+      // Amazon S3 couldn't be contacted for a response, or the client
+      // couldn't parse the response from Amazon S3.
+      log.error("Could not connect to s3 to generate signed url", e);
+      Error error = new Error();
+      error.setMessage("Generate signed url for image failed, s3 storage could not be contacted.");
+      throw new InternalServerException(error);
+    }
   }
 }

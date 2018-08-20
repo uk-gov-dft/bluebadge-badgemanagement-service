@@ -72,8 +72,8 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     entity.setBadgeNo("31E");
 
     S3KeyNames names = new S3KeyNames();
-    names.setThumbnameUrl("thumb");
-    names.setOriginalUrl("orig");
+    names.setThumbnailKeyName("thumb");
+    names.setOriginalKeyName("orig");
 
     entity.setImageLinkOriginal("orig");
     entity.setImageLink("thumb");

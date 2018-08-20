@@ -7,6 +7,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +19,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.config.S3Config;
 
 public class PhotoServiceTest {
 
-  private final String BUCKET = "bucket";
   private final String BADGE_NUMBER = "KKKKKK";
   private final String IMAGE_JPG_BASE64_GOOD =
       "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRo"
@@ -40,9 +41,11 @@ public class PhotoServiceTest {
     when(amazonS3Client.putObject(any())).thenReturn(new PutObjectResult());
     S3Config config = new S3Config();
 
+    String BUCKET = "bucket";
     config.setS3Bucket(BUCKET);
     config.setProfile("profile");
     config.setThumbnailHeight(300);
+    config.setSignedUrlDurationMs(1000);
     photoService = new PhotoService(amazonS3Client, config);
   }
 
@@ -82,26 +85,40 @@ public class PhotoServiceTest {
 
   @Test
   public void getS3KeyNames() {
-    S3KeyNames names = photoService.generateS3KeyNames(BADGE_NUMBER, BUCKET);
+    S3KeyNames names = photoService.generateS3KeyNames(BADGE_NUMBER);
     Assert.assertTrue(names.getOriginalKeyName().startsWith("KKKKKK/artefacts/"));
     Assert.assertTrue(names.getOriginalKeyName().endsWith("-original.jpg"));
     Assert.assertTrue(names.getThumbnailKeyName().startsWith("KKKKKK/artefacts/"));
     Assert.assertTrue(names.getThumbnailKeyName().endsWith("-thumbnail.jpg"));
-    Assert.assertTrue(names.getOriginalUrl().startsWith("/" + BUCKET + "/KKKKKK/artefacts/"));
-    Assert.assertTrue(names.getOriginalUrl().endsWith("-original.jpg"));
-    Assert.assertTrue(names.getThumbnameUrl().startsWith("/" + BUCKET + "/KKKKKK/artefacts/"));
-    Assert.assertTrue(names.getThumbnameUrl().endsWith("-thumbnail.jpg"));
   }
 
   @Test(expected = InternalServerException.class)
-  public void awsDown() {
+  public void awsDown_putImage() {
     when(amazonS3Client.putObject(any())).thenThrow(AmazonServiceException.class);
     photoService.photoUpload(IMAGE_JPG_BASE64_GOOD, BADGE_NUMBER);
   }
 
   @Test(expected = InternalServerException.class)
-  public void awsClientError() {
+  public void awsClientError_putImage() {
     when(amazonS3Client.putObject(any())).thenThrow(SdkClientException.class);
     photoService.photoUpload(IMAGE_JPG_BASE64_GOOD, BADGE_NUMBER);
+  }
+
+  @Test
+  public void getUrl() throws MalformedURLException {
+    when(amazonS3Client.generatePresignedUrl(any())).thenReturn(new URL("http://www.google.com/"));
+    Assert.assertEquals("http://www.google.com/", photoService.generateSignedS3Url("abc"));
+  }
+
+  @Test(expected = InternalServerException.class)
+  public void awsDown_getUrl() {
+    when(amazonS3Client.generatePresignedUrl(any())).thenThrow(AmazonServiceException.class);
+    photoService.generateSignedS3Url("abc");
+  }
+
+  @Test(expected = InternalServerException.class)
+  public void awsClientError_getUrl() {
+    when(amazonS3Client.generatePresignedUrl(any())).thenThrow(SdkClientException.class);
+    photoService.generateSignedS3Url("abc");
   }
 }

@@ -6,6 +6,4 @@ import lombok.Data;
 class S3KeyNames {
   private String originalKeyName;
   private String thumbnailKeyName;
-  private String originalUrl;
-  private String thumbnameUrl;
 }

@@ -91,12 +91,17 @@ public class Badge {
     this.party = party;
   }
 
+  public Badge localAuthorityShortCode(String localAuthorityShortCode) {
+    this.localAuthorityShortCode = localAuthorityShortCode;
+    return this;
+  }
+
   /**
-   * The short code for the local authority.
+   * Short code of local authority
    *
    * @return localAuthorityShortCode
    */
-  @ApiModelProperty(example = "BLACK", value = "The short code for the local authority.")
+  @ApiModelProperty(example = "BLACK", value = "Short code of local authority")
   @Pattern(regexp = "^[A-Z]+$")
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;

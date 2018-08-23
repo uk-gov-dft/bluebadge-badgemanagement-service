@@ -2,17 +2,21 @@ package uk.gov.service.bluebadge.test.utils;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
+
 public class DbUtils {
   private final JdbcTemplate jdbc;
+  private static final Logger log = LoggerFactory.getLogger(DbUtils.class);
 
   public DbUtils(Map<String, Object> config) {
     String url = (String) config.get("url");
@@ -28,8 +32,7 @@ public class DbUtils {
     log.info("init jdbc template: {}", url);
   }
 
-  @SneakyThrows
-  public boolean runScript(String script) {
+  public boolean runScript(String script) throws SQLException {
     log.info("Karate DB. Running script: {}", script);
     ScriptUtils.executeSqlScript(
         jdbc.getDataSource().getConnection(), new ClassPathResource(script));

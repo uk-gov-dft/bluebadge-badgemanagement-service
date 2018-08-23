@@ -24,3 +24,4 @@ service/src/main/resources/application.properties
 client/generated.zip
 generated.zip
 model/generated.zip
+**/dev-env*

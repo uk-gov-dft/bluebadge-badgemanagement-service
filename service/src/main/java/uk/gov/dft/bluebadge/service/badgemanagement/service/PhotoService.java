@@ -83,7 +83,8 @@ class PhotoService {
 
       log.info("Photo upload successful, badge {}.", parentId);
     } catch (AmazonServiceException e) {
-      handleSdkClientException(e, "File storage failed, s3 storage could not process request to putObject.");
+      handleSdkClientException(
+          e, "File storage failed, s3 storage could not process request to putObject.");
     } catch (SdkClientException e) {
       handleSdkClientException(e, "File storage failed, s3 storage could not be contacted.");
     }
@@ -128,14 +129,16 @@ class PhotoService {
       URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
       return url.toString();
     } catch (AmazonServiceException e) {
-      handleSdkClientException(e, "Generate signed url for image failed, s3 storage could not process request.");
+      handleSdkClientException(
+          e, "Generate signed url for image failed, s3 storage could not process request.");
     } catch (SdkClientException e) {
-      handleSdkClientException(e, "Generate signed url for image failed, s3 storage could not be contacted.");
+      handleSdkClientException(
+          e, "Generate signed url for image failed, s3 storage could not be contacted.");
     }
     return null;
   }
 
-  private void handleSdkClientException(SdkClientException e, String message){
+  private void handleSdkClientException(SdkClientException e, String message) {
     // Amazon S3 couldn't be contacted for a response, or the client
     // couldn't parse the response from Amazon S3.
     log.error(message, e);

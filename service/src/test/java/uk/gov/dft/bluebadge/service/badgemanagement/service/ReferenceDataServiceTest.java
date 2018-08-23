@@ -1,6 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Assert;
 import org.junit.Test;

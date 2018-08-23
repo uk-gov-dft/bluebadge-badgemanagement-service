@@ -5,7 +5,7 @@ Feature: Verify find newly created org badge
     * url baseUrl
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./create.org.badge.feature')
+    * def createResult = callonce read('./badge-create-org.feature')
     * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify findBadges by name

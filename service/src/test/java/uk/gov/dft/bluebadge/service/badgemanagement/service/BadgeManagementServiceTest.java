@@ -1,19 +1,22 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.springframework.beans.BeanUtils;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
-import uk.gov.dft.bluebadge.common.security.model.LocalAuthority;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
@@ -23,55 +26,64 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateC
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
-  private static final LocalAuthority LOCAL_AUTHORITY =
-      LocalAuthority.builder().shortCode(LOCAL_AUTHORITY_SHORT_CODE).build();
 
   @Mock private BadgeManagementRepository repositoryMock;
   @Mock private ValidateBadgeOrder validateBadgeOrderMock;
   @Mock private ValidateCancelBadge validateCancelBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
+  @Mock private PhotoService photoServiceMock;
 
   private BadgeManagementService service;
 
   @Before
   public void setUp() {
-    when(securityUtilsMock.getCurrentLocalAuthority()).thenReturn(LOCAL_AUTHORITY);
+    when(securityUtilsMock.getCurrentLocalAuthorityShortCode())
+        .thenReturn(LOCAL_AUTHORITY_SHORT_CODE);
     service =
         new BadgeManagementService(
-            repositoryMock, validateBadgeOrderMock, validateCancelBadgeMock, securityUtilsMock);
+            repositoryMock,
+            validateBadgeOrderMock,
+            validateCancelBadgeMock,
+            securityUtilsMock,
+            photoServiceMock);
   }
 
   @Test
   public void createBadge() {
-    BadgeEntity entity = getValidPersonBadgeEntity();
-    entity.setNumberOfBadges(3);
+    BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
+    model.setNumberOfBadges(3);
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
-    List<String> result = service.createBadge(entity);
+    List<String> result = service.createBadge(model);
 
     // Then get 3 badges create with current user's local authority
     Assert.assertEquals(3, result.size());
-    verify(repositoryMock, times(3)).createBadge(entity);
+    verify(repositoryMock, times(3)).createBadge(any(BadgeEntity.class));
     verify(repositoryMock, times(3)).retrieveNextBadgeNumber();
     Assert.assertEquals("31E", result.get(1));
   }
 
   @Test
   public void createBadge_setLocalAuthorityToCurrentUsers() {
-    BadgeEntity entity = getValidPersonBadgeEntity();
-    entity.setLocalAuthorityShortCode("BIRM");
-    entity.setNumberOfBadges(1);
+    BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
+    model.setNumberOfBadges(1);
+    model.setImageFile("B64IMAGE");
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
+    entity.setLocalAuthorityShortCode(LOCAL_AUTHORITY_SHORT_CODE);
+    entity.setBadgeNo("31E");
 
-    BadgeEntity expectedEntity = BadgeEntity.builder().build();
-    BeanUtils.copyProperties(entity, expectedEntity);
-    expectedEntity.setLocalAuthorityShortCode(LOCAL_AUTHORITY_SHORT_CODE);
-    expectedEntity.setBadgeNo("31E");
+    S3KeyNames names = new S3KeyNames();
+    names.setThumbnailKeyName("thumb");
+    names.setOriginalKeyName("orig");
+
+    entity.setImageLinkOriginal("orig");
+    entity.setImageLink("thumb");
 
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
-    List<String> results = service.createBadge(entity);
+    when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
+    List<String> results = service.createBadge(model);
 
-    // Then get 3 badges create with current user's local authority
     Assert.assertEquals(1, results.size());
-    verify(repositoryMock, times(1)).createBadge(expectedEntity);
+    verify(repositoryMock, times(1)).createBadge(entity);
     verify(repositoryMock, times(1)).retrieveNextBadgeNumber();
     Assert.assertEquals("31E", results.get(0));
   }

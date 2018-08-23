@@ -15,7 +15,6 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'idea'
 
 dependencies {
     testCompile group: 'org.springframework', name:'spring-jdbc', version: '5.0.6.RELEASE'
@@ -27,27 +26,13 @@ dependencies {
     testCompileOnly ('org.projectlombok:lombok:1.16.22')
 }
 
-sourceSets{
-    acceptanceTests {
-        java.srcDir 'src/test/java'
-        resources.srcDir 'src/test/resources'
-    }
-}
-
 // Do not run acceptance tests as part of main project build.
 test {
     exclude '**/*AcceptanceTest*'
 }
 
-configurations {
-    acceptanceTestsCompile.extendsFrom testCompile
-    acceptanceTestsRuntime.extendsFrom testRuntime
-}
-
 task acceptanceTests(type:Test) {
     group = "acceptancetests"
     outputs.upToDateWhen { false }
-
     description = "Run acceptance tests (located in acceptance-tests/...)."
-    testClassesDirs = sourceSets.acceptanceTests.output
 }

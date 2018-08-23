@@ -82,7 +82,7 @@ testExitCode=$?
 # Save the logs if something went wrong
 if [[ "$testExitCode" -ne 0 ]]; then
    cd dev-env-develop
-   docker-compose logs --no-color > ../docker.log
+   docker-compose logs -t --no-color > ../docker.log
    cd ..
 fi
 

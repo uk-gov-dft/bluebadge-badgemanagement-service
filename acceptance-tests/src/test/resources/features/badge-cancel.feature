@@ -1,11 +1,15 @@
-@badge-cancel-200
+@badge-cancel
 Feature: Verify cancel a badge
 
   Background:
     * url baseUrl
+    * def dbConfig = { username: 'developer',  ***REMOVED*** }
+    * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
+    * def db = new DbUtils(dbConfig)
+    * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge.post.create.ok.feature')
+    * def createResult = callonce read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify 404 response for cancel of unknown badge
@@ -29,6 +33,6 @@ Feature: Verify cancel a badge
 
   Scenario: Verify cancel a badge in a different local authority
     Given path 'badges/KKKKKE/cancellations'
-    And request {badgeNumber: "KKKKKE", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "BBBBBB", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 404

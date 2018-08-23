@@ -5,7 +5,7 @@ Feature: Verify find badge for newly created badge
     * url baseUrl
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge.post.create.ok.feature')
+    * def createResult = callonce read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify findBadges finds the created badge

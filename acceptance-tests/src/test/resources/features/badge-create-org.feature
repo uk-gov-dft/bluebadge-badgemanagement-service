@@ -1,8 +1,12 @@
-@create-org-badge
+@badge-create-org
 Feature: Verify Create badge of type org
 
   Background:
     * url baseUrl
+    * def dbConfig = { username: 'developer',  ***REMOVED*** }
+    * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
+    * def db = new DbUtils(dbConfig)
+    * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
@@ -23,7 +27,7 @@ Feature: Verify Create badge of type org
     emailAddress: 'june@bigbrainknitting.com'
     },
     organisation: {
-    badgeHolderName: 'ORGTEST1234'
+    badgeHolderName: 'TestData ORGTEST1234'
     }
     },
     localAuthorityShortCode: 'GLAM',

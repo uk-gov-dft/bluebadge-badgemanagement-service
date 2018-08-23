@@ -1,11 +1,11 @@
-@badge-get
+@badge-retrieve
 Feature: Verify badge details
 
   Background:
     * url baseUrl
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge.post.create.ok.feature')
+    * def createResult = callonce read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify retrieve a badge

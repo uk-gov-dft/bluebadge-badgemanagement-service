@@ -1,8 +1,12 @@
-@badge-post
+@badge-create-person
 Feature: Verify Create badge
 
   Background:
     * url baseUrl
+    * def dbConfig = { username: 'developer',  ***REMOVED*** }
+    * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
+    * def db = new DbUtils(dbConfig)
+    * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
@@ -13,7 +17,7 @@ Feature: Verify Create badge
     party: {
     typeCode: 'PERSON',
     contact: {
-    fullName: '',
+    fullName: 'June Whitfield',
     buildingStreet: '65 Basil Chambers',
     line2: 'Northern Quarter',
     townCity: 'Manchester',
@@ -23,13 +27,13 @@ Feature: Verify Create badge
     emailAddress: 'june@bigbrainknitting.com'
     },
     person: {
-    badgeHolderName: 'Fred Bloggs',
+    badgeHolderName: 'TestData Fred Bloggs',
     nino: 'NY188796B',
     dob: '1972-09-12',
     genderCode: 'MALE'
     },
     organisation: {
-    badgeHolderName: 'The Monroe Institute'
+    badgeHolderName: 'TestData Monroe Institute'
     }
     },
     localAuthorityShortCode: 'GLAM',

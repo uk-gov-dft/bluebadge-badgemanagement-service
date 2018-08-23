@@ -79,7 +79,6 @@ public class BadgeOrderRequest {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "ABERD", required = true, value = "Short code of local authority.")
-  @NotNull
   @Pattern(regexp = "^[A-Z]+$")
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;

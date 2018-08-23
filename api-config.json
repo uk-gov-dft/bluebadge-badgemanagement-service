@@ -540,7 +540,7 @@
             "description" : "Must be 1 for a person, can be multiple for an organisation."
           }
         },
-        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "localAuthorityShortCode", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
+        "required" : [ "party", "partyTypeCode", "name", "contactNumber", "startDate", "expiryDate", "applicationDate", "applicationChannelCode", "deliverToCode", "deliveryOptionCode" ]
       },
       "Party" : {
         "type" : "object",

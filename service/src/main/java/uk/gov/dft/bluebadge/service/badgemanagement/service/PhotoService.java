@@ -83,19 +83,9 @@ class PhotoService {
 
       log.info("Photo upload successful, badge {}.", parentId);
     } catch (AmazonServiceException e) {
-      // The call was transmitted successfully, but Amazon S3 couldn't process
-      // it, so it returned an error response.
-      log.error("S3 could not complete putobject.", e);
-      Error error = new Error();
-      error.setMessage("File storage failed, s3 storage could not process request.");
-      throw new InternalServerException(error);
+      handleSdkClientException(e, "File storage failed, s3 storage could not process request to putObject.");
     } catch (SdkClientException e) {
-      // Amazon S3 couldn't be contacted for a response, or the client
-      // couldn't parse the response from Amazon S3.
-      log.error("Could not connect to s3 to store image", e);
-      Error error = new Error();
-      error.setMessage("File storage failed, s3 storage could not be contacted.");
-      throw new InternalServerException(error);
+      handleSdkClientException(e, "File storage failed, s3 storage could not be contacted.");
     }
 
     return names;
@@ -138,20 +128,19 @@ class PhotoService {
       URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
       return url.toString();
     } catch (AmazonServiceException e) {
-      // The call was transmitted successfully, but Amazon S3 couldn't process
-      // it, so it returned an error response.
-      log.error("S3 could not complete generate signed url.", e);
-      Error error = new Error();
-      error.setMessage(
-          "Generate signed url for image failed, s3 storage could not process request.");
-      throw new InternalServerException(error);
+      handleSdkClientException(e, "Generate signed url for image failed, s3 storage could not process request.");
     } catch (SdkClientException e) {
-      // Amazon S3 couldn't be contacted for a response, or the client
-      // couldn't parse the response from Amazon S3.
-      log.error("Could not connect to s3 to generate signed url", e);
-      Error error = new Error();
-      error.setMessage("Generate signed url for image failed, s3 storage could not be contacted.");
-      throw new InternalServerException(error);
+      handleSdkClientException(e, "Generate signed url for image failed, s3 storage could not be contacted.");
     }
+    return null;
+  }
+
+  private void handleSdkClientException(SdkClientException e, String message){
+    // Amazon S3 couldn't be contacted for a response, or the client
+    // couldn't parse the response from Amazon S3.
+    log.error(message, e);
+    Error error = new Error();
+    error.setMessage(message);
+    throw new InternalServerException(error);
   }
 }

@@ -21,7 +21,7 @@ node {
         }
         finally {
             junit '**/TEST*.xml'
-            archiveArtifacts '**/docker.log'
+
         }
     }
 
@@ -57,6 +57,7 @@ node {
                 }
                 finally {
                     junit '**/TEST*.xml'
+                    archiveArtifacts allowEmptyArchive: true, '**/docker.log'
                 }
             }
         }

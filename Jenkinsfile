@@ -21,6 +21,7 @@ node {
         }
         finally {
             junit '**/TEST*.xml'
+            archiveArtifacts '**/docker.log'
         }
     }
 

@@ -31,6 +31,11 @@ outputVersions() {
   echo "RD_VERSION=$RD_VERSION"
 }
 
+saveLogs() {
+   docker-compose logs > ../logs.txt
+}
+
+
 set -a
 
 if [[ ! -e ~/.ssh/github_token ]]; then
@@ -73,6 +78,11 @@ psql -h localhost -U developer -d bb_dev -f ./scripts/db/setup-user.sql
 cd ..
 gradle acceptanceTests
 testExitCode=$?
+
+# Save the logs if something went wrong
+if [[ "$testExitCode" -ne 0 ]]; then
+   docker-compose logs > ../docker.log
+fi
 
 # Tear down
 tearDown

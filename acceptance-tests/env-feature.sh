@@ -5,8 +5,7 @@ export LA_VERSION=0.6.0-SNAPSHOT
 # usermanagement service
 export UM_VERSION=0.6.0-SNAPSHOT
 # badge management service
-export BB_VERSION=0.5.0-SNAPSHOT
-#$(cat VERSION-computed)
+export BB_VERSION=$(cat VERSION-computed)
 # application service
 export AP_VERSION=0.3.0-SNAPSHOT
 # authorisation service

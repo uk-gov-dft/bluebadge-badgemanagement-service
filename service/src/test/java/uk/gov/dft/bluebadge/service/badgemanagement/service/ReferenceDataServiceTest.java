@@ -15,11 +15,4 @@ public class ReferenceDataServiceTest extends BadgeTestBase {
         referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, DefaultVals.GENDER_CODE));
     Assert.assertFalse(referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, "VOLVO"));
   }
-
-  @Test
-  public void getDescription() {
-    assertEquals(
-        DefaultVals.GENDER_DESC,
-        referenceDataService.getDescription(RefDataGroupEnum.GENDER, DefaultVals.GENDER_CODE));
-  }
 }

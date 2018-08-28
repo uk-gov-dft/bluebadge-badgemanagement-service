@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 
@@ -54,19 +53,5 @@ public class ReferenceDataService {
 
     String key = group.getGroupKey() + "_" + code;
     return validGroupKeys.contains(key);
-  }
-
-  /**
-   * Return display text for a reference data value.
-   *
-   * @param group Group containing key.
-   * @param code Key of item.
-   * @return The description.
-   */
-  public String getDescription(RefDataGroupEnum group, String code) {
-    Assert.notNull(group, "Must provide group code to retrieve ref data.");
-    if (!isLoaded) init();
-
-    return null == code ? null : keyDescriptionMap.get(group.getGroupKey() + "_" + code);
   }
 }

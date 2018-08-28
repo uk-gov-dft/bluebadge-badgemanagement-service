@@ -15,7 +15,6 @@ Feature: Verify find badge for newly created badge
     Then status 200
     And match $.data[*] contains "#notnull"
     And match $.data[*].badgeNumber contains createdBadgeNo
-    And match $.data[*].partyTypeDescription contains 'Person'
 
   Scenario: Verify findBadges finds nothing for unknown name
     Given path 'badges'

@@ -338,11 +338,6 @@
             "description" : "A short code from the PARTY group of reference data.",
             "example" : "PERSON"
           },
-          "partyTypeDescription" : {
-            "type" : "string",
-            "maxLength" : 100,
-            "example" : "Person"
-          },
           "name" : {
             "type" : "string",
             "maxLength" : 100,
@@ -361,12 +356,6 @@
             "pattern" : "^[A-Z]+$",
             "example" : "BLACK"
           },
-          "localAuthorityName" : {
-            "type" : "string",
-            "maxLength" : 100,
-            "description" : "Display name of the local authority.",
-            "example" : "Shropshire County Council"
-          },
           "postCode" : {
             "type" : "string",
             "example" : "SK6 8GH",
@@ -383,12 +372,6 @@
             "maxLength" : 10,
             "description" : "A short code from the STATUS group of reference data.",
             "example" : "ISSUED"
-          },
-          "statusDescription" : {
-            "type" : "string",
-            "maxLength" : 100,
-            "description" : "Status full description.",
-            "example" : "Issued"
           }
         }
       },
@@ -529,8 +512,8 @@
           "deliveryOptionCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "example" : "STANDARD",
-            "description" : "A short code from the DELOPT group of reference data. e.g. STANDARD or FAST"
+            "example" : "STAND",
+            "description" : "A short code from the DELOP group of reference data. e.g. STAND or FAST"
           },
           "numberOfBadges" : {
             "type" : "integer",

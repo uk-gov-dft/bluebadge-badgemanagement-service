@@ -35,7 +35,9 @@ public class ReferenceDataService {
         validGroupKeys.add(key);
         keyDescriptionMap.put(key, item.getDescription());
       }
-      isLoaded = true;
+      if (!referenceDataList.isEmpty()) {
+        isLoaded = true;
+      }
     }
   }
 

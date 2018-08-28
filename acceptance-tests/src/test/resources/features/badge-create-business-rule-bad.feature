@@ -1,4 +1,4 @@
-@badge-post-400-business
+@badge-create-business-rule-bad
 Feature: Verify Create badge with 400
 
   Background:
@@ -23,7 +23,7 @@ Feature: Verify Create badge with 400
             emailAddress: 'june@bigbrainknitting.com'
           },
           person: {
-            badgeHolderName: 'Fred Bloggs',
+            badgeHolderName: 'TestData Bloggs',
             nino: 'NY188796B',
             dob: '1972-09-12',
             genderCode: 'MALE'

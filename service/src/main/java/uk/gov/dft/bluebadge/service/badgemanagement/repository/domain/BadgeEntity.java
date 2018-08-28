@@ -31,6 +31,7 @@ public class BadgeEntity implements Serializable {
   LocalDate expiryDate;
   String eligibilityCode;
   String imageLink;
+  String imageLinkOriginal;
   String deliverToCode;
   String deliverOptionCode;
   String holderName;

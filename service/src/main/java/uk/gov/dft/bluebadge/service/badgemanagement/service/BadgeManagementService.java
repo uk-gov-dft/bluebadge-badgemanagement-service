@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
-import uk.gov.dft.bluebadge.common.security.model.LocalAuthority;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
+import uk.gov.dft.bluebadge.common.util.Base20;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
@@ -31,29 +33,40 @@ public class BadgeManagementService {
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
   private final SecurityUtils securityUtils;
+  private final PhotoService photoService;
 
   @Autowired
   BadgeManagementService(
       BadgeManagementRepository repository,
       ValidateBadgeOrder validateBadgeOrder,
       ValidateCancelBadge validateCancelBadge,
-      SecurityUtils securityUtils) {
+      SecurityUtils securityUtils,
+      PhotoService photoService) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
     this.securityUtils = securityUtils;
+    this.photoService = photoService;
   }
 
-  public List<String> createBadge(BadgeEntity entity) {
+  public List<String> createBadge(BadgeOrderRequest model) {
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
+
     List<String> createdList = new ArrayList<>();
     log.debug("Creating {} badge orders.", entity.getNumberOfBadges());
 
-    LocalAuthority localAuthority = securityUtils.getCurrentLocalAuthority();
-    entity.setLocalAuthorityShortCode(localAuthority.getShortCode());
+    entity.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
 
     validateBadgeOrder.validate(entity);
+
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
-      entity.setBadgeNo(createNewBadgeNumber());
+      String newBadgeNo = createNewBadgeNumber();
+      entity.setBadgeNo(newBadgeNo);
+      if (entity.isPerson() && !StringUtils.isEmpty(model.getImageFile())) {
+        S3KeyNames names = photoService.photoUpload(model.getImageFile(), newBadgeNo);
+        entity.setImageLink(names.getThumbnailKeyName());
+        entity.setImageLinkOriginal(names.getOriginalKeyName());
+      }
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
     }
@@ -86,17 +99,24 @@ public class BadgeManagementService {
   public BadgeEntity retrieveBadge(String badgeNumber) {
     RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
     BadgeEntity entity = repository.retrieveBadge(params);
+
     if (null == entity) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }
+    entity.setImageLink(photoService.generateSignedS3Url(entity.getImageLink()));
+    entity.setImageLinkOriginal(photoService.generateSignedS3Url(entity.getImageLinkOriginal()));
     return entity;
   }
 
   public void cancelBadge(CancelBadgeParams request) {
     // Validate the request
     validateCancelBadge.validateRequest(request);
+
+    // Use authority code of the user.
+    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthorityShortCode();
+    request.setLocalAuthorityShortCode(localAuthorityShortCode);
+
     // Optimistically try cancel before validating to save reading badge data.
-    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthority().getShortCode();
     int updates = repository.cancelBadge(request);
 
     if (updates == 0) {

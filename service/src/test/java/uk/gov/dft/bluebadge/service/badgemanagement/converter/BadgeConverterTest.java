@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;

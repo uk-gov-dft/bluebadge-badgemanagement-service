@@ -8,20 +8,17 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
-import uk.gov.dft.bluebadge.common.service.exception.ServiceException;
+import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
-import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
@@ -29,7 +26,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 
 @RestController
-public class BadgesApiControllerImpl implements BadgesApi {
+public class BadgesApiControllerImpl extends AbstractController implements BadgesApi {
 
   private final BadgeManagementService service;
   private final BadgeSummaryConverter badgeSummaryConverter;
@@ -42,18 +39,11 @@ public class BadgesApiControllerImpl implements BadgesApi {
     this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
-  @SuppressWarnings("unused")
-  @ExceptionHandler({ServiceException.class})
-  public ResponseEntity<CommonResponse> handleServiceException(ServiceException e) {
-    return e.getResponse();
-  }
-
   @Override
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
-    List<String> createdList =
-        service.createBadge(new BadgeOrderRequestConverter().convertToEntity(badgeOrder));
+    List<String> createdList = service.createBadge(badgeOrder);
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));
   }
 

@@ -9,3 +9,5 @@ spring:
   datasource:
     url: jdbc:postgresql://postgresql:5432/bb_dev?currentSchema=badgemanagement
 
+amazon:
+  s3bucket: qa-dft-badges

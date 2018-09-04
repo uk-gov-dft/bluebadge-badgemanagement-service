@@ -1,11 +1,11 @@
 blue-badge:
   auth-server:
-    url: https://authorisation-service.${bb_env}.does.not.exist/bb_auth
+    url: https://authorisation-service.${bb_env}.${url}/bb_auth
     client-id: bb_user_management_id
      ***REMOVED***
   referencedataservice:
     servicehost:
-      host: reference-service.${bb_env}.does.not.exist
+      host: reference-service.${bb_env}.${url}
       port: 443
       scheme: https
       connectiontimeout: 6000
@@ -35,7 +35,7 @@ spring:
   datasource:
      ***REMOVED***
     username: ${bb_db_username:-developer}
-    url: jdbc:postgresql://postgres-service.${bb_env}.does.not.exist:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement
+    url: jdbc:postgresql://postgres-service.${bb_env}.${url}:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement
   jackson:
     date-format: uk.gov.dft.bluebadge.common.api.RFC3339DateFormat
     serialization:
@@ -47,3 +47,9 @@ server:
     context-path: /uk-gov-dft/badge-management-service/1.0.0
 
 springfox.documentation.swagger.v2.path: /api-docs
+
+amazon:
+  profile: ${profile}
+  s3bucket: ${bucket}
+  thumbnail-height-px: 300
+  signed-url-duration-ms: 60000

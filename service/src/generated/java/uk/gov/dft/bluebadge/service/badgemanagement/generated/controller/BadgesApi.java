@@ -5,12 +5,17 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.generated.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -54,7 +59,7 @@ public interface BadgesApi {
       "badges",
     }
   )
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge replacement requested.")})
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
       @Pattern(regexp = "^[0-9A-HJK]{6}$")

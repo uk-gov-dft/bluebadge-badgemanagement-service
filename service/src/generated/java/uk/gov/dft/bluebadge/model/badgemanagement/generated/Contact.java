@@ -68,7 +68,7 @@ public class Contact {
    */
   @ApiModelProperty(example = "65 Basil Chambers", required = true, value = "")
   @NotNull
-  @Size(max = 255)
+  @Size(max = 100)
   public String getBuildingStreet() {
     return buildingStreet;
   }
@@ -88,7 +88,7 @@ public class Contact {
    * @return line2
    */
   @ApiModelProperty(example = "Northern Quarter", value = "")
-  @Size(max = 255)
+  @Size(max = 100)
   public String getLine2() {
     return line2;
   }
@@ -109,7 +109,7 @@ public class Contact {
    */
   @ApiModelProperty(example = "Manchester", required = true, value = "")
   @NotNull
-  @Size(max = 255)
+  @Size(max = 100)
   public String getTownCity() {
     return townCity;
   }
@@ -149,8 +149,9 @@ public class Contact {
    *
    * @return primaryPhoneNumber
    */
-  @ApiModelProperty(example = "01616548765", value = "")
-  @Size(max = 50)
+  @ApiModelProperty(example = "01616548765", required = true, value = "")
+  @NotNull
+  @Size(max = 20)
   public String getPrimaryPhoneNumber() {
     return primaryPhoneNumber;
   }
@@ -170,7 +171,7 @@ public class Contact {
    * @return secondaryPhoneNumber
    */
   @ApiModelProperty(example = "01616548765", value = "")
-  @Size(max = 50)
+  @Size(max = 20)
   public String getSecondaryPhoneNumber() {
     return secondaryPhoneNumber;
   }
@@ -191,7 +192,7 @@ public class Contact {
    */
   @ApiModelProperty(example = "june@bigbrainknitting.com", value = "")
   @Pattern(regexp = "^\\S+\\@\\S+")
-  @Size(max = 255)
+  @Size(max = 100)
   public String getEmailAddress() {
     return emailAddress;
   }

@@ -27,7 +27,10 @@ apply plugin: 'maven'
 
 repositories {
     mavenCentral()
-    jcenter()
+    maven {
+        url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+    }
+//    jcenter()
 }
 
 sourceSets {

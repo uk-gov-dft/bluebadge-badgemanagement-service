@@ -96,7 +96,7 @@
           } ],
           "responses" : {
             "200" : {
-              "description" : "Badge replacement requested."
+              "description" : "Badge cancellation requested."
             }
           }
         }
@@ -603,17 +603,17 @@
           },
           "buildingStreet" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 100,
             "example" : "65 Basil Chambers"
           },
           "line2" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 100,
             "example" : "Northern Quarter"
           },
           "townCity" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 100,
             "example" : "Manchester"
           },
           "postCode" : {
@@ -623,22 +623,22 @@
           },
           "primaryPhoneNumber" : {
             "type" : "string",
-            "maxLength" : 50,
+            "maxLength" : 20,
             "example" : "01616548765"
           },
           "secondaryPhoneNumber" : {
             "type" : "string",
-            "maxLength" : 50,
+            "maxLength" : 20,
             "example" : "01616548765"
           },
           "emailAddress" : {
             "type" : "string",
             "pattern" : "^\\S+\\@\\S+",
-            "maxLength" : 255,
+            "maxLength" : 100,
             "example" : "june@bigbrainknitting.com"
           }
         },
-        "required" : [ "buildingStreet", "townCity", "postCode" ]
+        "required" : [ "buildingStreet", "townCity", "postCode", "primaryPhoneNumber" ]
       }
     },
     "parameters" : {

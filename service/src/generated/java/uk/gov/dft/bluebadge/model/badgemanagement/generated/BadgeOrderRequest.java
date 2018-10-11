@@ -78,7 +78,7 @@ public class BadgeOrderRequest {
    *
    * @return localAuthorityShortCode
    */
-  @ApiModelProperty(example = "ABERD", required = true, value = "Short code of local authority.")
+  @ApiModelProperty(example = "ABERD", value = "Short code of local authority.")
   @Pattern(regexp = "^[A-Z]+$")
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
@@ -280,14 +280,14 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * A short code from the DELOPT group of reference data. e.g. STANDARD or FAST
+   * A short code from the DELOP group of reference data. e.g. STAND or FAST
    *
    * @return deliveryOptionCode
    */
   @ApiModelProperty(
-    example = "STANDARD",
+    example = "STAND",
     required = true,
-    value = "A short code from the DELOPT group of reference data. e.g. STANDARD or FAST"
+    value = "A short code from the DELOP group of reference data. e.g. STAND or FAST"
   )
   @NotNull
   @Size(max = 10)

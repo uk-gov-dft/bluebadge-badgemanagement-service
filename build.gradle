@@ -4,14 +4,17 @@ buildscript {
 
     repositories {
         mavenCentral()
-        jcenter()
+//        jcenter()
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
+        }
+        maven {
+            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
         }
     }
 
     dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.3"
     }
 }
 
@@ -42,7 +45,6 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
 
     group = 'uk.gov.dft.bluebadge'
     version = getTheVersion()
@@ -50,15 +52,13 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
+//        jcenter()
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
-    }
-
-    checkstyle {
-        toolVersion "8.9"
-        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+        maven {
+            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+        }
     }
 }
 

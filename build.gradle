@@ -8,10 +8,13 @@ buildscript {
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
+        maven {
+            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+        }
     }
 
     dependencies {
-//        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.8.0"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.3"
     }
 }
 
@@ -40,7 +43,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-//    apply plugin: 'com.jfrog.artifactory'
+    apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'jacoco'
 
     group = 'uk.gov.dft.bluebadge'

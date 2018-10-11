@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.8.0"
     }
 }
 
@@ -42,7 +42,6 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
 
     group = 'uk.gov.dft.bluebadge'
     version = getTheVersion()
@@ -54,11 +53,6 @@ allprojects {
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
-    }
-
-    checkstyle {
-        toolVersion "8.9"
-        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     }
 }
 

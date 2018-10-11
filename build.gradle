@@ -52,9 +52,12 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
+//        jcenter()
         maven {
             url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
+        }
+        maven {
+            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
         }
     }
 }

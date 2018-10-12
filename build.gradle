@@ -4,12 +4,8 @@ buildscript {
 
     repositories {
         mavenCentral()
-//        jcenter()
         maven {
-            url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
-        }
-        maven {
-            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+            url 'https://artifactory.does.not.exist/artifactory/gradle-release'
         }
     }
 
@@ -52,12 +48,11 @@ allprojects {
 
     repositories {
         mavenCentral()
-//        jcenter()
         maven {
-            url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
+            url 'https://artifactory.does.not.exist/artifactory/gradle-release'
         }
         maven {
-            url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+            url 'https://artifactory.does.not.exist/artifactory/gradle-dev-local'
         }
     }
 }

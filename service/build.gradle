@@ -4,7 +4,6 @@ buildscript {
     }
     repositories {
         mavenCentral()
-//        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -12,25 +11,22 @@ buildscript {
 }
 
 plugins {
-//    id 'com.github.sherter.google-java-format' version '0.6'
+    id 'com.github.sherter.google-java-format' version '0.6'
     id "org.sonarqube" version "2.6.2"
-//    id "com.gorylenko.gradle-git-properties" version "1.5.1"
+    id "com.gorylenko.gradle-git-properties" version "1.5.1"
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'checkstyle'
-//apply plugin: 'pmd'
 apply plugin: 'maven'
 
 repositories {
     mavenCentral()
     maven {
-        url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+        url 'https://artifactory.does.not.exist/artifactory/gradle-release'
     }
-//    jcenter()
 }
 
 sourceSets {
@@ -78,7 +74,7 @@ bootRun {
     sourceResources sourceSets.main
 }
 archivesBaseName = "badgemanagement-service"
-//compileJava.dependsOn 'googleJavaFormat'
+compileJava.dependsOn 'googleJavaFormat'
 
 publishing {
     publications {

@@ -42,7 +42,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 
   @Override
   @PreAuthorize(
-      "hasAuthority('PERM_ORDER_BADGE')")
+      "hasAuthority('PERM_ORDER_BADGE' and @securityUtils.isAuthorisedLACode(#badgeOrder.localAuthorityShortCode))")
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
@@ -82,7 +82,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
-  @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE')")
+  @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE' and @badgeSecurity.isAuthorised(#badgeNumber))")
   public ResponseEntity<Void> cancelBlueBadge(
       @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
@@ -95,7 +95,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
-  @PreAuthorize("hasAuthority('PERM_DELETE_BADGE')")
+  @PreAuthorize("hasAuthority('PERM_DELETE_BADGE' and @badgeSecurity.isAuthorised(#badgeNumber))")
   public ResponseEntity<Void> deleteBlueBadge(
       @Pattern(regexp = "^[0-9A-HJK]{6}$") String badgeNumber) {
     service.deleteBadge(badgeNumber);

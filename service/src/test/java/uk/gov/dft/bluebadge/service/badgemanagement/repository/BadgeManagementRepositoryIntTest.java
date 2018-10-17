@@ -137,7 +137,18 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
-  public void deleteBadge_shouldLogicallDeleteBadge() {
+  public void findBadges_shouldSearchByStatusAndPostCode() {
+    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
+    FindBadgeParams params =
+        FindBadgeParams.builder().postcode("S637FU").statuses(statuses).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    assertThat(badges).isNotEmpty();
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
+    assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
+  }
+
+  @Test
+  public void deleteBadge_shouldLogicallyDeleteBadge() {
     DeleteBadgeParams deleteBadgeParams =
         DeleteBadgeParams.builder()
             .deleteStatus(BadgeEntity.Status.DELETED)

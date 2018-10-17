@@ -60,19 +60,20 @@
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
         FROM badge
-        WHERE
-        <if test="name != null">
-            holder_name_upper LIKE #{name}
-        </if>
-        <if test="postcode != null">
-            contact_postcode = #{postcode}
-        </if>
-        <if test="statuses != null">
-            badge_status in
-            <foreach item="status" collection="statuses" separator="," open="(" close=")">
-                #{status}
-            </foreach>
-        </if>
+        <where>
+            <if test="name != null">
+                holder_name_upper LIKE #{name}
+            </if>
+            <if test="postcode != null">
+                AND contact_postcode = #{postcode}
+            </if>
+            <if test="statuses != null">
+                AND badge_status in
+                <foreach item="status" collection="statuses" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </where>
         ORDER BY badge.start_date DESC
         LIMIT 50
     </select>

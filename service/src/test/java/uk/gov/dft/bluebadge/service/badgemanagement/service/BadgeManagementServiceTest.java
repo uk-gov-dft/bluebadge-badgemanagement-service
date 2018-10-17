@@ -95,11 +95,12 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void findBadges_ok() {
     // Given search params valid when searching
     String name = "abc";
-    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name(), BadgeEntity.Status.CANCELLED.name(), BadgeEntity.Status.REPLACED.name());
-    FindBadgeParams params = FindBadgeParams.builder()
-        .name(name)
-        .statuses(statuses)
-        .build();
+    Set<String> statuses =
+        ImmutableSet.of(
+            BadgeEntity.Status.ISSUED.name(),
+            BadgeEntity.Status.CANCELLED.name(),
+            BadgeEntity.Status.REPLACED.name());
+    FindBadgeParams params = FindBadgeParams.builder().name(name).statuses(statuses).build();
     // When searching
     service.findBadges(name, null);
     // Then search is done
@@ -168,10 +169,11 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
   @Test
   public void deleteBadge_ok() {
-    DeleteBadgeParams deleteBadgeParams = DeleteBadgeParams.builder()
-        .deleteStatus(BadgeEntity.Status.DELETED)
-        .badgeNo("BADGENO")
-        .build();
+    DeleteBadgeParams deleteBadgeParams =
+        DeleteBadgeParams.builder()
+            .deleteStatus(BadgeEntity.Status.DELETED)
+            .badgeNo("BADGENO")
+            .build();
 
     service.deleteBadge("BADGENO");
 

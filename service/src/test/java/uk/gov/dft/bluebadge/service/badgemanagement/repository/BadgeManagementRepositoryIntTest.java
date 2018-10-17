@@ -124,8 +124,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
     assertThat(badges).isNotEmpty();
-    assertThat(badges).extracting("badgeStatus")
-        .containsOnly(BadgeEntity.Status.ISSUED);
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
   }
 
   @Test
@@ -134,16 +133,16 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
     assertThat(badges).isNotEmpty();
-    assertThat(badges).extracting("badgeStatus")
-        .containsOnly(BadgeEntity.Status.DELETED);
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.DELETED);
   }
 
   @Test
-  public void deleteBadge_shouldLogicallDeleteBadge(){
-    DeleteBadgeParams deleteBadgeParams = DeleteBadgeParams.builder()
-        .deleteStatus(BadgeEntity.Status.DELETED)
-        .badgeNo("KKKKKK")
-        .build();
+  public void deleteBadge_shouldLogicallDeleteBadge() {
+    DeleteBadgeParams deleteBadgeParams =
+        DeleteBadgeParams.builder()
+            .deleteStatus(BadgeEntity.Status.DELETED)
+            .badgeNo("KKKKKK")
+            .build();
 
     badgeManagementRepository.deleteBadge(deleteBadgeParams);
 

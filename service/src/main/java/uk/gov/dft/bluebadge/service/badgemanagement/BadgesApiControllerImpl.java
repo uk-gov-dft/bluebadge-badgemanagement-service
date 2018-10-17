@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +41,8 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
+  @PreAuthorize(
+      "hasAuthority('PERM_ORDER_BADGE')")
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
@@ -48,6 +51,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
+  @PreAuthorize("hasAuthority('PERM_FIND_BADGES')")
   public ResponseEntity<BadgesResponse> findBlueBadge(
       @Size(max = 100)
           @ApiParam(value = "Search the badge holder's name.")
@@ -66,6 +70,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
+  @PreAuthorize("hasAuthority('PERM_VIEW_BADGE_DETAILS')")
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
       @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
@@ -77,6 +82,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
+  @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE')")
   public ResponseEntity<Void> cancelBlueBadge(
       @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
@@ -85,6 +91,14 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
       @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     CancelBadgeRequestConverter converter = new CancelBadgeRequestConverter();
     service.cancelBadge(converter.convertToEntity(badgeCancel));
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("hasAuthority('PERM_DELETE_BADGE')")
+  public ResponseEntity<Void> deleteBlueBadge(
+      @Pattern(regexp = "^[0-9A-HJK]{6}$") String badgeNumber) {
+    service.deleteBadge(badgeNumber);
     return ResponseEntity.ok().build();
   }
 }

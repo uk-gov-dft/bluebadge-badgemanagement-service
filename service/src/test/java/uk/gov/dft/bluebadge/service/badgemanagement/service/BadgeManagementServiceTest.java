@@ -6,7 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.ImmutableSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +22,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestC
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
@@ -92,7 +95,11 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void findBadges_ok() {
     // Given search params valid when searching
     String name = "abc";
-    FindBadgeParams params = FindBadgeParams.builder().name(name).build();
+    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name(), BadgeEntity.Status.CANCELLED.name(), BadgeEntity.Status.REPLACED.name());
+    FindBadgeParams params = FindBadgeParams.builder()
+        .name(name)
+        .statuses(statuses)
+        .build();
     // When searching
     service.findBadges(name, null);
     // Then search is done
@@ -157,5 +164,17 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     verify(validateCancelBadgeMock, times(1)).validateRequest(params);
     verify(validateCancelBadgeMock, times(1)).validateAfterFailedCancel(any(), any());
     verify(repositoryMock, times(1)).cancelBadge(params);
+  }
+
+  @Test
+  public void deleteBadge_ok() {
+    DeleteBadgeParams deleteBadgeParams = DeleteBadgeParams.builder()
+        .deleteStatus(BadgeEntity.Status.DELETED)
+        .badgeNo("BADGENO")
+        .build();
+
+    service.deleteBadge("BADGENO");
+
+    verify(repositoryMock, times(1)).deleteBadge(deleteBadgeParams);
   }
 }

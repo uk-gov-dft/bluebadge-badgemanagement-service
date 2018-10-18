@@ -126,10 +126,6 @@ public class BadgeManagementService {
     // Validate the request
     validateCancelBadge.validateRequest(request);
 
-    // Use authority code of the user.
-    String localAuthorityShortCode = securityUtils.getCurrentLocalAuthorityShortCode();
-    request.setLocalAuthorityShortCode(localAuthorityShortCode);
-
     // Optimistically try cancel before validating to save reading badge data.
     int updates = repository.cancelBadge(request);
 
@@ -139,7 +135,7 @@ public class BadgeManagementService {
       BadgeEntity badgeEntity =
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
-      validateCancelBadge.validateAfterFailedCancel(badgeEntity, localAuthorityShortCode);
+      validateCancelBadge.validateAfterFailedCancel(badgeEntity);
     }
   }
 

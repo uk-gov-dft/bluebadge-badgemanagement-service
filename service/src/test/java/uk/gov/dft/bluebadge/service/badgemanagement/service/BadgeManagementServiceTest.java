@@ -151,7 +151,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.cancelBadge(params);
 
     verify(validateCancelBadgeMock, times(1)).validateRequest(params);
-    verify(validateCancelBadgeMock, never()).validateAfterFailedCancel(any(), any());
+    verify(validateCancelBadgeMock, never()).validateAfterFailedCancel(any());
     verify(repositoryMock, times(1)).cancelBadge(params);
   }
 
@@ -163,7 +163,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.cancelBadge(params);
 
     verify(validateCancelBadgeMock, times(1)).validateRequest(params);
-    verify(validateCancelBadgeMock, times(1)).validateAfterFailedCancel(any(), any());
+    verify(validateCancelBadgeMock, times(1)).validateAfterFailedCancel(any());
     verify(repositoryMock, times(1)).cancelBadge(params);
   }
 

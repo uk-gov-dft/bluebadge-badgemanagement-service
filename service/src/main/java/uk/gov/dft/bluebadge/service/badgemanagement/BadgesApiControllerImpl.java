@@ -102,8 +102,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 
   @Override
   @PreAuthorize("hasAuthority('PERM_DELETE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
-  public ResponseEntity<Void> deleteBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$") String badgeNumber) {
+  public ResponseEntity<Void> deleteBlueBadge(@PathVariable String badgeNumber) {
     service.deleteBadge(badgeNumber);
     return ResponseEntity.ok().build();
   }

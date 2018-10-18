@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.net.URL;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -145,5 +146,11 @@ class PhotoService {
     Error error = new Error();
     error.setMessage(message);
     throw new InternalServerException(error);
+  }
+
+  public void deletePhoto(String badgeNumber, String imageKey) {
+    log.info("Deleting photo for badge {}, {}", badgeNumber, imageKey);
+    Objects.requireNonNull(imageKey, "Cannot delete image. Key is null");
+    amazonS3.deleteObject(s3Config.getS3Bucket(), imageKey);
   }
 }

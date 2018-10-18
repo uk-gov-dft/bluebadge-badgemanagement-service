@@ -168,7 +168,9 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void deleteBadge_ok() {
+  public void deleteBadge_ok_noImages() {
+    BadgeEntity badge = BadgeEntity.builder().badgeNo("BADGENO").build();
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
     DeleteBadgeParams deleteBadgeParams =
         DeleteBadgeParams.builder()
             .deleteStatus(BadgeEntity.Status.DELETED)
@@ -178,5 +180,43 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.deleteBadge("BADGENO");
 
     verify(repositoryMock, times(1)).deleteBadge(deleteBadgeParams);
+    verify(photoServiceMock, never()).deletePhoto(any(), any());
+  }
+
+  @Test
+  public void deleteBadge_ok_imagesAlsoDeleted() {
+    BadgeEntity badge =
+        BadgeEntity.builder()
+            .badgeNo("BADGENO")
+            .imageLink("image1")
+            .imageLinkOriginal("image2")
+            .build();
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    DeleteBadgeParams deleteBadgeParams =
+        DeleteBadgeParams.builder()
+            .deleteStatus(BadgeEntity.Status.DELETED)
+            .badgeNo("BADGENO")
+            .build();
+
+    service.deleteBadge("BADGENO");
+
+    verify(repositoryMock, times(1)).deleteBadge(deleteBadgeParams);
+    verify(photoServiceMock, times(1)).deletePhoto("BADGENO", "image1");
+    verify(photoServiceMock, times(1)).deletePhoto("BADGENO", "image2");
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void deleteBadge_whenRepositoryReturnedNull() {
+    service.deleteBadge("BADGENO");
+  }
+  @Test(expected = NotFoundException.class)
+  public void deleteBadge_alreadyDeleted() {
+    BadgeEntity badge =
+        BadgeEntity.builder()
+            .badgeNo("BADGENO")
+            .badgeStatus(BadgeEntity.Status.DELETED)
+            .build();
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    service.deleteBadge("BADGENO");
   }
 }

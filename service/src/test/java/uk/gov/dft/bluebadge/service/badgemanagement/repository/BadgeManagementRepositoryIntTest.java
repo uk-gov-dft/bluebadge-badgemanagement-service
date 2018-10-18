@@ -31,6 +31,19 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Autowired BadgeManagementRepository badgeManagementRepository;
 
   @Test
+  public void retrieveBadge_ok() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("KKKKKK");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+
+    assertThat(badgeEntity.getImageLink()).isEqualTo("badge/KKKKKK/thumbnail.jpg");
+    assertThat(badgeEntity.getImageLinkOriginal()).isEqualTo("badge/KKKKKK/original.jpg");
+  }
+
+  @Test
   public void cancelBadge_ok() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()

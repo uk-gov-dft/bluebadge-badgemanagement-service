@@ -141,7 +141,19 @@ public class BadgeManagementService {
 
   public void deleteBadge(String badgeNumber) {
     log.info("Deleting badge {}", badgeNumber);
+    RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
+    BadgeEntity badge = repository.retrieveBadge(params);
 
+    if (null == badge || DELETED == badge.getBadgeStatus()) {
+      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+    }
+
+    if (null != badge.getImageLink()) {
+      photoService.deletePhoto(badgeNumber, badge.getImageLink());
+    }
+    if (null != badge.getImageLinkOriginal()) {
+      photoService.deletePhoto(badgeNumber, badge.getImageLinkOriginal());
+    }
     DeleteBadgeParams deleteBadgeParams =
         DeleteBadgeParams.builder().badgeNo(badgeNumber).deleteStatus(DELETED).build();
 

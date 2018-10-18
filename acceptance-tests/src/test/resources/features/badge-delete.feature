@@ -9,8 +9,6 @@ Feature: Verify delete a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify 404 response for delete of unknown badge
     Given path 'badges/AAAAAA'
@@ -18,11 +16,15 @@ Feature: Verify delete a badge
     Then status 404
 
   Scenario: Verify delete a badge success
+    * def createResult = call read('./badge-create-person.feature')
+    * def createdBadgeNo = createResult.badgeNo
     Given path 'badges/'+ createdBadgeNo
     When method DELETE
     Then status 200
 
   Scenario: Verify delete a badge image success
+    * def createResult = call read('./badge-create-person.feature')
+    * def createdBadgeNo = createResult.badgeNo
     Given path 'badges/'+ createdBadgeNo
     When method GET
     Then status 200

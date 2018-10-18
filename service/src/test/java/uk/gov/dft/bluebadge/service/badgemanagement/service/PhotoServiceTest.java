@@ -127,12 +127,13 @@ public class PhotoServiceTest {
   }
 
   @Test
-  public void deletePhoto(){
+  public void deletePhoto() {
     photoService.deletePhoto("BadgeNo", "imageKey");
     verify(amazonS3Client, times(1)).deleteObject(any(), Mockito.eq("imageKey"));
   }
+
   @Test(expected = NullPointerException.class)
-  public void deletePhoto_whenNullImageKey_thenNullPointer(){
+  public void deletePhoto_whenNullImageKey_thenNullPointer() {
     photoService.deletePhoto("BadgeNo", null);
     verify(amazonS3Client, never()).deleteObject(any(), any());
   }

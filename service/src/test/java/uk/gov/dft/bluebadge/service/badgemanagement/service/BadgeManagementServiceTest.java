@@ -209,13 +209,11 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void deleteBadge_whenRepositoryReturnedNull() {
     service.deleteBadge("BADGENO");
   }
+
   @Test(expected = NotFoundException.class)
   public void deleteBadge_alreadyDeleted() {
     BadgeEntity badge =
-        BadgeEntity.builder()
-            .badgeNo("BADGENO")
-            .badgeStatus(BadgeEntity.Status.DELETED)
-            .build();
+        BadgeEntity.builder().badgeNo("BADGENO").badgeStatus(BadgeEntity.Status.DELETED).build();
     when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
     service.deleteBadge("BADGENO");
   }

@@ -22,6 +22,17 @@ Feature: Verify delete a badge
     When method DELETE
     Then status 200
 
+  Scenario: Verify retrieve is not found after delete
+    * def createResult = call read('./badge-create-person.feature')
+    * def createdBadgeNo = createResult.badgeNo
+    Given path 'badges/'+ createdBadgeNo
+    When method DELETE
+    Then status 200
+    * header Authorization = 'Bearer ' + result.accessToken
+    Given path 'badges/'+ createdBadgeNo
+    When method GET
+    Then status 404
+
   Scenario: Verify delete a badge image success
     * def createResult = call read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo

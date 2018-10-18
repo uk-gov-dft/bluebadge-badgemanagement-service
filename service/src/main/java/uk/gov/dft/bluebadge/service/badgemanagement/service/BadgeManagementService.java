@@ -33,7 +33,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateC
 @Service
 @Transactional
 public class BadgeManagementService {
-  public static final Set<String> DEFAULT_SEARCH_STATUSES =
+  private static final Set<String> DEFAULT_SEARCH_STATUSES =
       EnumSet.complementOf(EnumSet.of(DELETED))
           .stream()
           .map(BadgeEntity.Status::name)

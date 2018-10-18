@@ -92,7 +92,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
           @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
-    if (!badgeCancel.getBadgeNumber().equals(badgeNumber)) {
+    if (!badgeNumber.equals(badgeCancel.getBadgeNumber())) {
       throw new BadRequestException(INVALID_BADGE_NUMBER.getFieldErrorInstance());
     }
     CancelBadgeRequestConverter converter = new CancelBadgeRequestConverter();

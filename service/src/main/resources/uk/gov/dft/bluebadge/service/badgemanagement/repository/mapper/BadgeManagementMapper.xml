@@ -36,9 +36,9 @@
         badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
         local_authority_ref As localAuthorityRef, app_date AS appDate,
         app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
+        eligibility_code AS eligibilityCode, image_link AS imageLink, image_link_original AS imageLinkOriginal,
+        deliver_to_code AS deliverToCode, deliver_option_code AS deliverOptionCode, holder_name AS holderName,
+        nino AS nino, dob AS dob, gender_code AS genderCode, contact_name AS contactName,
         contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode,
@@ -50,35 +50,65 @@
 
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
-          badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-          local_authority_ref As localAuthorityRef, app_date AS appDate,
-          app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-          eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-          deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-          dob AS dob, gender_code AS genderCode, contact_name AS contactName,
-          contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
-          contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
+        badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
+        local_authority_ref As localAuthorityRef, app_date AS appDate,
+        app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
+        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
+        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
+        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
+        contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
+        contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
+        contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
         FROM badge
-        WHERE
-          <if test="name != null">
-              holder_name_upper LIKE #{name}
-          </if>
-          <if test="postcode != null">
-              contact_postcode = #{postcode}
-          </if>
+        <where>
+            <if test="name != null">
+                holder_name_upper LIKE #{name}
+            </if>
+            <if test="postcode != null">
+                AND contact_postcode = #{postcode}
+            </if>
+            <if test="statuses != null">
+                AND badge_status in
+                <foreach item="status" collection="statuses" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </where>
         ORDER BY badge.start_date DESC
         LIMIT 50
     </select>
 
     <update id="cancelBadge" parameterType="CancelBadgeParams">
         UPDATE badge
-          SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
+        SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
         WHERE badge_no = #{badgeNo}
         AND expiry_date &gt;= current_date
         AND badge_status = 'ISSUED'
         <if test="localAuthorityShortCode != null">
             AND local_authority_short_code = #{localAuthorityShortCode}
         </if>
+    </update>
+
+    <update id="deleteBadge" parameterType="DeleteBadgeParams">
+        UPDATE badge
+          SET badge_status = #{deleteStatus}
+              , image_link = null
+              , deliver_to_code = 'DELETED'
+              , deliver_option_code = 'DELETED'
+              , holder_name = 'DELETED'
+              , nino = null
+              , dob = null
+              , gender_code = null
+              , contact_name = null
+              , contact_building_street = 'DELETED'
+              , contact_line2 = null
+              , contact_town_city = 'DELETED'
+              , contact_postcode = 'DELETED'
+              , primary_phone_no = 'DELETED'
+              , secondary_phone_no = null
+              , contact_email_address = null
+              , holder_name_upper = null
+              , image_link_original = null
+        WHERE badge_no = #{badgeNo}
     </update>
 </mapper>

@@ -46,7 +46,11 @@ public enum ValidationKeyEnum {
       "Invalid.badge.cancel.status",
       "Cannot cancel a badge unless status is ISSUED.",
       "badgeStatus"),
-  CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown");
+  CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown"),
+  INVALID_BADGE_NUMBER(
+      "Invalid.badgeNumber",
+      "Invalid badge number or the body does not match the request.",
+      "badgeNumber");
 
   private final String key;
   private final String defaultMessage;

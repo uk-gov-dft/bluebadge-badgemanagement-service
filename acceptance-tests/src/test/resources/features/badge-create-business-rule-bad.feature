@@ -32,7 +32,7 @@ Feature: Verify Create badge with 400
             badgeHolderName: 'The Monroe Institute'
           }
         },
-        localAuthorityShortCode: 'GLAM',
+        localAuthorityShortCode: 'ABERD',
         localAuthorityRef: 'YOURCODE',
         applicationDate: '2018-04-23',
         applicationChannelCode: 'ONLINE',

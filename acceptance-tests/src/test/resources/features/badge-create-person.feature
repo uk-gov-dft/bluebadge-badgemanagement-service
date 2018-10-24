@@ -36,7 +36,7 @@ Feature: Verify Create badge
     badgeHolderName: 'TestData Monroe Institute'
     }
     },
-    localAuthorityShortCode: 'GLAM',
+    localAuthorityShortCode: 'ABERD',
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',

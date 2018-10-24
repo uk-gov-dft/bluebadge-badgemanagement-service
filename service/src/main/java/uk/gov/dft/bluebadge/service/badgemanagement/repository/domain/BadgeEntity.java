@@ -17,7 +17,8 @@ public class BadgeEntity implements Serializable {
   public enum Status {
     ISSUED,
     CANCELLED,
-    REPLACED
+    REPLACED,
+    DELETED
   }
 
   String badgeNo;

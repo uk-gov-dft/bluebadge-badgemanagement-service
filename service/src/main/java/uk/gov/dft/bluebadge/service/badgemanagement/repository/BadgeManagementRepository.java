@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ConvertUtils;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
@@ -25,6 +26,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String FIND = "findBadges";
     static final String RETRIEVE = "retrieveBadge";
     static final String CANCEL = "cancelBadge";
+    static final String DELETE = "deleteBadge";
   }
 
   private final SqlSession sqlSession;
@@ -66,5 +68,10 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   @Override
   public int cancelBadge(CancelBadgeParams params) {
     return sqlSession.update(Statements.CANCEL, params);
+  }
+
+  @Override
+  public int deleteBadge(DeleteBadgeParams deleteBadgeParams) {
+    return sqlSession.update(Statements.DELETE, deleteBadgeParams);
   }
 }

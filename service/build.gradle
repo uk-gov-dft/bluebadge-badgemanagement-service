@@ -1,10 +1,13 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.1.RELEASE'
+        springBootVersion = '2.0.6.RELEASE'
     }
     repositories {
         mavenCentral()
-//        jcenter()
+        jcenter()
+        maven {
+            url 'https://artifactory.does.not.exist/artifactory/gradle-release'
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -12,25 +15,22 @@ buildscript {
 }
 
 plugins {
-//    id 'com.github.sherter.google-java-format' version '0.6'
+    id 'com.github.sherter.google-java-format' version '0.6'
     id "org.sonarqube" version "2.6.2"
-//    id "com.gorylenko.gradle-git-properties" version "1.5.1"
+    id "com.gorylenko.gradle-git-properties" version "1.5.1"
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'checkstyle'
-//apply plugin: 'pmd'
 apply plugin: 'maven'
 
 repositories {
     mavenCentral()
     maven {
-        url 'https://artifactory.does.not.exist/artifactory/jcenter-cache'
+        url 'https://artifactory.does.not.exist/artifactory/gradle-release'
     }
-//    jcenter()
 }
 
 sourceSets {
@@ -48,7 +48,8 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: '0.4.1-SNAPSHOT'
+    ext.commonVersion = '0.6.2-SNAPSHOT'
+    compile group: 'uk.gov.dft.bluebadge', name: 'bluebadge-common', version: "${commonVersion}", changing: true
 
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.5'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.0.1.RELEASE'
@@ -57,6 +58,8 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.0.1.RELEASE'
+
     compile('org.postgresql:postgresql:42.2.2')
     compile('org.apache.commons:commons-lang3:3.7')
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
@@ -69,6 +72,7 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.1.RELEASE'
 
     runtime('org.springframework.boot:spring-boot-devtools')
+    runtime group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.2'
     runtime group: 'ch.qos.logback.contrib', name: 'logback-json-classic', version: '0.1.5'
     runtime group: 'ch.qos.logback.contrib', name: 'logback-jackson', version: '0.1.5'
     runtime group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
@@ -78,7 +82,7 @@ bootRun {
     sourceResources sourceSets.main
 }
 archivesBaseName = "badgemanagement-service"
-//compileJava.dependsOn 'googleJavaFormat'
+compileJava.dependsOn 'googleJavaFormat'
 
 publishing {
     publications {

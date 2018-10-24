@@ -13,8 +13,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadg
 
 public class ValidateCancelBadgeTest extends BadgeTestBase {
 
-  public static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
-
   ValidateCancelBadge validator;
 
   public ValidateCancelBadgeTest() {
@@ -50,7 +48,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
   public void validateWhyCancelFailed_badge_not_exists() {
     // Given badge to cancel did not exist
     // When validated
-    validator.validateAfterFailedCancel(null, LOCAL_AUTHORITY_SHORT_CODE);
+    validator.validateAfterFailedCancel(null);
     // Then 404 thrown
   }
 
@@ -63,7 +61,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge, LOCAL_AUTHORITY_SHORT_CODE);
+      validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.status");
@@ -80,7 +78,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge, LOCAL_AUTHORITY_SHORT_CODE);
+      validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.expiryDate");
@@ -97,7 +95,7 @@ public class ValidateCancelBadgeTest extends BadgeTestBase {
 
     // When validated
     try {
-      validator.validateAfterFailedCancel(badge, LOCAL_AUTHORITY_SHORT_CODE);
+      validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("Unexpected.cancel.fail");

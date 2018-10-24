@@ -59,7 +59,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
     model.setNumberOfBadges(3);
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(2345);
-    when(blacklistFilter.valid(any(String.class))).thenReturn(true);
+    when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> result = service.createBadge(model);
 
     // Then get 3 badges create with current user's local authority
@@ -87,7 +87,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
     when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(2345);
     when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
-    when(blacklistFilter.valid(any(String.class))).thenReturn(true);
+    when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> results = service.createBadge(model);
 
     Assert.assertEquals(1, results.size());

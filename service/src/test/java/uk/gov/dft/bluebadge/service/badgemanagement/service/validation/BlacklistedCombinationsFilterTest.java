@@ -19,26 +19,26 @@ public class BlacklistedCombinationsFilterTest {
   @Autowired private BlacklistedCombinationsFilter filter;
 
   @Test
-  public void test_loadCombinations() {
+  public void shouldLoadCombinations() {
     assertThat(filter.getCombinations().size(), is(18));
   }
 
   @Test
-  public void test_invalidBadge() {
+  public void shouldFailBadgeWithInvalidCombinations() {
     filter
         .getCombinations()
         .stream()
         .forEach(
             i -> {
               String badge = randomBadge() + i.toUpperCase();
-              assertFalse(filter.valid(badge));
+              assertFalse(filter.isValid(badge));
             });
   }
 
   @Test
-  public void test_validBadge() {
+  public void shouldPassValidBadge() {
     String badge = "23KH5";
-    assertTrue(filter.valid(badge));
+    assertTrue(filter.isValid(badge));
   }
 
   private String randomBadge() {

@@ -91,7 +91,7 @@ public class BadgeManagementService {
     String badgeNo = null;
     do {
       badgeNo = Base20.encode(repository.retrieveNextBadgeNumber());
-    } while (!blacklistFilter.valid(badgeNo));
+    } while (!blacklistFilter.isValid(badgeNo));
     log.debug("Assigning badge number : {}", badgeNo);
 
     return badgeNo;

@@ -31,7 +31,7 @@ public class BadgeCancelRequest {
     value = "The unique badge number for this badge."
   )
   @NotNull
-   public String getBadgeNumber() {
+  public String getBadgeNumber() {
     return badgeNumber;
   }
 

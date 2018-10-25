@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
@@ -32,7 +33,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateC
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 public class BadgeManagementService {
   private static final Set<String> DEFAULT_SEARCH_STATUSES =
       EnumSet.complementOf(EnumSet.of(DELETED))
@@ -46,6 +47,7 @@ public class BadgeManagementService {
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
+  private final BadgeNumberService badgeNumberService;
 
   @Autowired
   BadgeManagementService(
@@ -54,12 +56,14 @@ public class BadgeManagementService {
       ValidateCancelBadge validateCancelBadge,
       SecurityUtils securityUtils,
       PhotoService photoService,
+      BadgeNumberService badgeNumberService,
       BlacklistedCombinationsFilter blacklistFilter) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
     this.securityUtils = securityUtils;
     this.photoService = photoService;
+    this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
   }
 
@@ -90,7 +94,7 @@ public class BadgeManagementService {
   private String createNewBadgeNumber() {
     String badgeNo = null;
     do {
-      badgeNo = Base20.encode(repository.retrieveNextBadgeNumber());
+      badgeNo = Base20.encode(badgeNumberService.getBagdeNumber());
     } while (!blacklistFilter.isValid(badgeNo));
     log.debug("Assigning badge number : {}", badgeNo);
 

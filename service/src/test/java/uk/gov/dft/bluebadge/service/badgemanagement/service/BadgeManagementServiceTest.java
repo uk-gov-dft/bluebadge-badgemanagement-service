@@ -37,6 +37,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private SecurityUtils securityUtilsMock;
   @Mock private PhotoService photoServiceMock;
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
+  @Mock private BadgeNumberService numberService;
 
   private BadgeManagementService service;
 
@@ -51,6 +52,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
             validateCancelBadgeMock,
             securityUtilsMock,
             photoServiceMock,
+            numberService,
             blacklistFilter);
   }
 
@@ -58,14 +60,14 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   public void createBadge() {
     BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
     model.setNumberOfBadges(3);
-    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(2345);
+    when(numberService.getBagdeNumber()).thenReturn(2345);
     when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> result = service.createBadge(model);
 
     // Then get 3 badges create with current user's local authority
     Assert.assertEquals(3, result.size());
     verify(repositoryMock, times(3)).createBadge(any(BadgeEntity.class));
-    verify(repositoryMock, times(3)).retrieveNextBadgeNumber();
+    verify(numberService, times(3)).getBagdeNumber();
     Assert.assertEquals("7L7", result.get(1));
   }
 
@@ -85,14 +87,14 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     entity.setImageLinkOriginal("orig");
     entity.setImageLink("thumb");
 
-    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(2345);
+    when(numberService.getBagdeNumber()).thenReturn(2345);
     when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
     when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> results = service.createBadge(model);
 
     Assert.assertEquals(1, results.size());
     verify(repositoryMock, times(1)).createBadge(entity);
-    verify(repositoryMock, times(1)).retrieveNextBadgeNumber();
+    verify(numberService, times(1)).getBagdeNumber();
     Assert.assertEquals("7L7", results.get(0));
   }
 

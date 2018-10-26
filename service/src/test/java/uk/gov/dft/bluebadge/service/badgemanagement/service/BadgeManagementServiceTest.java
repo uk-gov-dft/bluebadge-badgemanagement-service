@@ -78,7 +78,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     model.setImageFile("B64IMAGE");
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
     entity.setLocalAuthorityShortCode(LOCAL_AUTHORITY_SHORT_CODE);
-    entity.setBadgeNo("7L7");
+    entity.setBadgeNo("2227L7");
 
     S3KeyNames names = new S3KeyNames();
     names.setThumbnailKeyName("thumb");

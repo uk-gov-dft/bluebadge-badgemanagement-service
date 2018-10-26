@@ -68,7 +68,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     Assert.assertEquals(3, result.size());
     verify(repositoryMock, times(3)).createBadge(any(BadgeEntity.class));
     verify(numberService, times(3)).getBagdeNumber();
-    Assert.assertEquals("7L7", result.get(1));
+    Assert.assertEquals("2227L7", result.get(1));
   }
 
   @Test
@@ -95,7 +95,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     Assert.assertEquals(1, results.size());
     verify(repositoryMock, times(1)).createBadge(entity);
     verify(numberService, times(1)).getBagdeNumber();
-    Assert.assertEquals("7L7", results.get(0));
+    Assert.assertEquals("2227L7", results.get(0));
   }
 
   @Test

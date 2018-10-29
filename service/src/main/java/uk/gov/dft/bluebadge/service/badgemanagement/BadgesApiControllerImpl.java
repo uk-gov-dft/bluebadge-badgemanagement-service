@@ -2,12 +2,13 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
-import io.swagger.annotations.ApiParam;
 import java.util.List;
 import java.util.Optional;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,11 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiParam;
 import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
@@ -106,4 +111,14 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
     service.deleteBadge(badgeNumber);
     return ResponseEntity.ok().build();
   }
+
+	@Override
+    @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
+	public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(@PathVariable String badgeNumber,
+	    @Valid BadgeReplaceRequest badgeReplace) {
+
+		return ResponseEntity.ok(new BadgeNumberResponse());
+	}
+  
+  
 }

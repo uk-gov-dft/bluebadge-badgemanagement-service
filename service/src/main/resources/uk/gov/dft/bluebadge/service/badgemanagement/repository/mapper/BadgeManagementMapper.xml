@@ -111,4 +111,15 @@
               , image_link_original = null
         WHERE badge_no = #{badgeNo}
     </update>
+
+    <update id="replaceBadge" parameterType="ReplaceBadgeParams">
+        UPDATE badge
+        SET badge_status = #{status}, 
+        	    replace_reason_code = #{reasonCode},
+            deliver_to_code = #{deliveryCode},
+            deliver_option_code = #{deliveryOptionCode},
+            start_date= #{startDate}        	    
+        WHERE badge_no = #{badgeNo}
+    </update>
+
 </mapper>

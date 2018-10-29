@@ -48,6 +48,7 @@ public class BadgeEntity implements Serializable {
   String secondaryPhoneNo;
   String contactEmailAddress;
   String cancelReasonCode;
+  String replaceReasonCode;
   LocalDate orderDate;
   int numberOfBadges;
 

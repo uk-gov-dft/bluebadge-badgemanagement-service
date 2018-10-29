@@ -1,30 +1,38 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.common.util.Base20;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
@@ -159,4 +167,41 @@ public class BadgeManagementService {
 
     repository.deleteBadge(deleteBadgeParams);
   }
+  
+  public void replaceBadge(String badgeNumber, BadgeReplaceRequest request) {
+    log.info("Replacing badge {}", badgeNumber);
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
+    BadgeEntity badge = repository.retrieveBadge(retrieveParams);
+  	
+    validationChecks(badge);
+    
+    ReplaceBadgeParams replaceParams = ReplaceBadgeParams.builder()
+    		.deliveryCode(request.getDeliverToCode())
+    		.deliveryOptionCode(request.getDeliveryOptionCode())
+    		.reasonCode(request.getReplaceReasonCode())
+    		.startDate(LocalDate.now())
+    		.status(Status.REPLACED)
+    		.build();
+    
+    repository.replaceBadge(replaceParams);
+    
+    String newBadgeNumber = createNewBadgeNumber();
+    badge.setBadgeNo(newBadgeNumber);
+    repository.createBadge(badge);
+  }
+
+  
+	private void validationChecks(BadgeEntity badge) {
+    if (null == badge || DELETED == badge.getBadgeStatus()) {
+      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+    }
+
+    if (badge.getExpiryDate().isBefore(LocalDate.now()) || ISSUED != badge.getBadgeStatus()) {
+    		ErrorErrors error = new ErrorErrors();
+    		error.setField("expiryDate");
+    		error.setMessage("Can't replace expired badges");
+    		throw new BadRequestException(error);
+    }
+	}
 }
+

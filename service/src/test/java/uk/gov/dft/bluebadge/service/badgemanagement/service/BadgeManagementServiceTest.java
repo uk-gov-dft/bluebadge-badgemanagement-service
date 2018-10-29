@@ -24,6 +24,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
@@ -35,6 +36,8 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private ValidateCancelBadge validateCancelBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
   @Mock private PhotoService photoServiceMock;
+  @Mock private BlacklistedCombinationsFilter blacklistFilter;
+  @Mock private BadgeNumberService numberService;
 
   private BadgeManagementService service;
 
@@ -48,21 +51,24 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
             validateBadgeOrderMock,
             validateCancelBadgeMock,
             securityUtilsMock,
-            photoServiceMock);
+            photoServiceMock,
+            numberService,
+            blacklistFilter);
   }
 
   @Test
   public void createBadge() {
     BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
     model.setNumberOfBadges(3);
-    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
+    when(numberService.getBagdeNumber()).thenReturn(2345);
+    when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> result = service.createBadge(model);
 
     // Then get 3 badges create with current user's local authority
     Assert.assertEquals(3, result.size());
     verify(repositoryMock, times(3)).createBadge(any(BadgeEntity.class));
-    verify(repositoryMock, times(3)).retrieveNextBadgeNumber();
-    Assert.assertEquals("31E", result.get(1));
+    verify(numberService, times(3)).getBagdeNumber();
+    Assert.assertEquals("2227L7", result.get(1));
   }
 
   @Test
@@ -72,7 +78,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     model.setImageFile("B64IMAGE");
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
     entity.setLocalAuthorityShortCode(LOCAL_AUTHORITY_SHORT_CODE);
-    entity.setBadgeNo("31E");
+    entity.setBadgeNo("2227L7");
 
     S3KeyNames names = new S3KeyNames();
     names.setThumbnailKeyName("thumb");
@@ -81,14 +87,15 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     entity.setImageLinkOriginal("orig");
     entity.setImageLink("thumb");
 
-    when(repositoryMock.retrieveNextBadgeNumber()).thenReturn(1234);
+    when(numberService.getBagdeNumber()).thenReturn(2345);
     when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
+    when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
     List<String> results = service.createBadge(model);
 
     Assert.assertEquals(1, results.size());
     verify(repositoryMock, times(1)).createBadge(entity);
-    verify(repositoryMock, times(1)).retrieveNextBadgeNumber();
-    Assert.assertEquals("31E", results.get(0));
+    verify(numberService, times(1)).getBagdeNumber();
+    Assert.assertEquals("2227L7", results.get(0));
   }
 
   @Test

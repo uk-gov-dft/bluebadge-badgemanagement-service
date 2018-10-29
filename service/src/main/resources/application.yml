@@ -55,3 +55,5 @@ amazon:
   s3bucket: dev-dft-badges
   thumbnail-height-px: 300
   signed-url-duration-ms: 60000
+  
+blacklisted.combinations: babe,c4c4,caca,d34d,dead,f3c35,f3ck,f4ck,fack,feck,‌h338,‌h35h3,‌h383,hebe,heeb,j4d3,jade,kkk  

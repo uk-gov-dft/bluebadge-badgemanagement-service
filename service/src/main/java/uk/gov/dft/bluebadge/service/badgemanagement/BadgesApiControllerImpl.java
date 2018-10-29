@@ -80,7 +80,6 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_VIEW_BADGE_DETAILS')")
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber) {
@@ -92,7 +91,6 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> cancelBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber,

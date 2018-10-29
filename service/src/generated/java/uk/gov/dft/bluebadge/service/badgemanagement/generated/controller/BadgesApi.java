@@ -62,7 +62,6 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber,
@@ -86,7 +85,6 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
   @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
   default ResponseEntity<Void> deleteBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber) {
@@ -213,7 +211,6 @@ public interface BadgesApi {
   )
   @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
   default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber,
@@ -264,7 +261,6 @@ public interface BadgesApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgeResponse> retrieveBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
           @ApiParam(value = "A valid badge number.", required = true)
           @PathVariable("badgeNumber")
           String badgeNumber) {

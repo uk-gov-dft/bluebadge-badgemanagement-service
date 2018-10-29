@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +35,13 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 public class BadgeManagementService {
   private static final Set<String> DEFAULT_SEARCH_STATUSES =
       EnumSet.complementOf(EnumSet.of(DELETED))
@@ -52,6 +54,8 @@ public class BadgeManagementService {
   private final ValidateCancelBadge validateCancelBadge;
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
+  private final BlacklistedCombinationsFilter blacklistFilter;
+  private final BadgeNumberService badgeNumberService;
 
   @Autowired
   BadgeManagementService(
@@ -59,12 +63,16 @@ public class BadgeManagementService {
       ValidateBadgeOrder validateBadgeOrder,
       ValidateCancelBadge validateCancelBadge,
       SecurityUtils securityUtils,
-      PhotoService photoService) {
+      PhotoService photoService,
+      BadgeNumberService badgeNumberService,
+      BlacklistedCombinationsFilter blacklistFilter) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
     this.securityUtils = securityUtils;
     this.photoService = photoService;
+    this.badgeNumberService = badgeNumberService;
+    this.blacklistFilter = blacklistFilter;
   }
 
   public List<String> createBadge(BadgeOrderRequest model) {
@@ -92,7 +100,10 @@ public class BadgeManagementService {
   }
 
   private String createNewBadgeNumber() {
-    String badgeNo = Base20.encode(repository.retrieveNextBadgeNumber());
+    String badgeNo = null;
+    do {
+      badgeNo = Base20.encode(badgeNumberService.getBagdeNumber());
+    } while (!blacklistFilter.isValid(badgeNo));
     log.debug("Assigning badge number : {}", badgeNo);
 
     return badgeNo;

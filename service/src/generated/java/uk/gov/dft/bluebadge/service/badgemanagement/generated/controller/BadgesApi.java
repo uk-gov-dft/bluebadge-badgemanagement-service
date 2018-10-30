@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,8 +61,7 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -85,8 +83,7 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
   @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
   default ResponseEntity<Void> deleteBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
     } else {
@@ -211,8 +208,7 @@ public interface BadgesApi {
   )
   @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
   default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeReplaceRequest badgeReplace) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -261,8 +257,7 @@ public interface BadgesApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgeResponse> retrieveBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {

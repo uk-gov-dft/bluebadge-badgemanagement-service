@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -75,8 +74,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_VIEW_BADGE_DETAILS')")
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     BadgeConverter converter = new BadgeConverter();
     BadgeEntity entity = service.retrieveBadge(badgeNumber);
@@ -86,8 +84,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> cancelBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     if (!badgeNumber.equals(badgeCancel.getBadgeNumber())) {

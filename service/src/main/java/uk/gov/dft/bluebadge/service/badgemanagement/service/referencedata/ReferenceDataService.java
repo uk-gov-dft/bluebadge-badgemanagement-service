@@ -5,18 +5,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 
-@Component
+@Service
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ReferenceDataService {
 
   private final Set<String> validGroupKeys = new HashSet<>();
   private final Map<String, String> keyDescriptionMap = new HashMap<>();
   private final ReferenceDataApiClient referenceDataApiClient;
-  private boolean isLoaded = false;
+  private AtomicBoolean isLoaded = new AtomicBoolean(false);
 
   @Autowired
   public ReferenceDataService(ReferenceDataApiClient referenceDataApiClient) {
@@ -28,15 +33,15 @@ public class ReferenceDataService {
    * if ref data service is still starting.
    */
   private void init() {
-    if (!isLoaded) {
+    if (!isLoaded.getAndSet(true)) {
       List<ReferenceData> referenceDataList = referenceDataApiClient.retrieveReferenceData();
       for (ReferenceData item : referenceDataList) {
         String key = item.getGroupShortCode() + "_" + item.getShortCode();
         validGroupKeys.add(key);
         keyDescriptionMap.put(key, item.getDescription());
       }
-      if (!referenceDataList.isEmpty()) {
-        isLoaded = true;
+      if (referenceDataList.isEmpty()) {
+        isLoaded.set(false);
       }
     }
   }
@@ -49,8 +54,7 @@ public class ReferenceDataService {
    * @return true if present.
    */
   public boolean groupContainsKey(RefDataGroupEnum group, String code) {
-    if (!isLoaded) init();
-
+    init();
     String key = group.getGroupKey() + "_" + code;
     return validGroupKeys.contains(key);
   }

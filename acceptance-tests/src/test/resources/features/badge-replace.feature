@@ -23,16 +23,16 @@ Feature: Verify cancel a badge
     And request {"badgeNumber": "CCCCCC","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
     Then status 400
-    And match $.error.errors[0].message == 'Invalid.badge.replace.badgeStatus'
+    And match $.error.message == 'Invalid.badge.replace.badgeStatus'
 
   Scenario: Verify replace expired badge
     Given path 'badges/DDDDDD/replacements'
     And request {"badgeNumber": "DDDDDD","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
     Then status 400
-    And match $.error.errors[0].message == 'Invalid.badge.replace.expiryDate'
+    And match $.error.message == 'Invalid.badge.replace.expiryDate'
 
-  Scenario: Verify cancel a badge success
+  Scenario: Verify replace a badge success
     Given path 'badges/'+ createdBadgeNo + '/replacements'
     And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "STOLEN","deliverToCode": "HOME","deliveryOptionCode": "STANDARD"}
     When method POST
@@ -43,7 +43,7 @@ Feature: Verify cancel a badge
     And request {"badgeNumber": "DDDDDD","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
     Then status 400
-    And match $.error.errors[0].message == 'Invalid.badgeNumber'
+    And match $.error.message == 'Invalid.badgeNumber'
 
   Scenario: Verify replace a badge in a different local authority
     Given path 'badges/BBBBBB/replacements'

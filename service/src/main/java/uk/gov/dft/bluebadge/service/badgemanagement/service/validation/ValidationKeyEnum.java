@@ -50,7 +50,13 @@ public enum ValidationKeyEnum {
   INVALID_BADGE_NUMBER(
       "Invalid.badgeNumber",
       "Invalid badge number or the body does not match the request.",
-      "badgeNumber");
+      "badgeNumber"),
+  REPLACE_INVALID_REASON(
+      "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
+  REPLACE_EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
+  REPLACE_INVALID_BADGE_STATUS(
+      "Invalid.badge.replace.badgeStatus", "Cannot replace an already cancelled, replaced or deleted badge.", "badgeStatus");
 
   private final String key;
   private final String defaultMessage;

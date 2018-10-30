@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class ReplaceBadgeParams {
 
+	private final String badgeNumber;
 	private final BadgeEntity.Status status;
 	private final String reasonCode;
 	private final String deliveryCode;

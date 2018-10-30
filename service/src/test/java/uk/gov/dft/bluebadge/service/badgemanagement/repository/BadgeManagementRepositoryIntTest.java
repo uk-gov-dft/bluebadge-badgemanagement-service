@@ -21,7 +21,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 
 @RunWith(SpringRunner.class)
 @SqlGroup({@Sql(scripts = "classpath:/test-data.sql")})
@@ -193,4 +195,29 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity.getContactEmailAddress()).isNull();
     assertThat(badgeEntity.getImageLinkOriginal()).isNull();
   }
+
+  @Test
+  public void replaceBadge_shouldUpdateRecord() {
+    ReplaceBadgeParams params = ReplaceBadgeParams.builder()
+				.badgeNumber("KKKKKK")
+	    		.deliveryCode("HOME")
+	    		.deliveryOptionCode("FAST")
+	    		.reasonCode("DAMAGED")
+	    		.startDate(LocalDate.now())
+	    		.status(Status.REPLACED)
+	    		.build();
+
+    badgeManagementRepository.replaceBadge(params);
+
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.REPLACED);
+    assertThat(badgeEntity.getDeliverToCode()).isEqualTo("HOME");
+    assertThat(badgeEntity.getDeliverOptionCode()).isEqualTo("FAST");
+    assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
+    assertThat(badgeEntity.getStartDate()).isEqualTo(LocalDate.now());
+
+   }
 }

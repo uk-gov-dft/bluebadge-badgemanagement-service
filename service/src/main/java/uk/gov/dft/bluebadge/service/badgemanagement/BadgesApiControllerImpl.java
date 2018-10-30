@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.ReplaceBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
@@ -113,9 +113,15 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 	@Override
     @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
 	public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(@PathVariable String badgeNumber,
-	    @Valid BadgeReplaceRequest badgeReplace) {
+	    @Valid BadgeReplaceRequest request) {
+	    if (!badgeNumber.equals(request.getBadgeNumber())) {
+	        throw new BadRequestException(INVALID_BADGE_NUMBER.getFieldErrorInstance());
+	      }
+	      
+	    ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
+	    String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
 
-		return ResponseEntity.ok(new BadgeNumberResponse());
+		return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
 	}
   
   

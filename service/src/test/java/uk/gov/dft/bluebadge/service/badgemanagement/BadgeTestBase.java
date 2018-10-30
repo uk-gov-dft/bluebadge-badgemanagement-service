@@ -8,6 +8,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -40,6 +41,7 @@ public class BadgeTestBase {
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
     public static final String LOCAL_AUTHORITY_CODE = "ABERD";
+    public static final String REPLACE_REASON = "DAMAGED";
   }
 
   protected ReferenceDataService referenceDataService;
@@ -79,6 +81,8 @@ public class BadgeTestBase {
     referenceDataList.add(
         getNewRefDataItem(
             RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
+    referenceDataList.add(
+        getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);

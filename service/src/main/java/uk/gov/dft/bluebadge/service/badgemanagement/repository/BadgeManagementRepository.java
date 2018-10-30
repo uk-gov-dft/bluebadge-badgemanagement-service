@@ -77,8 +77,8 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     return sqlSession.update(Statements.DELETE, deleteBadgeParams);
   }
 
-	@Override
-	public int replaceBadge(ReplaceBadgeParams params) {
-		return sqlSession.update(Statements.REPLACE, params);
-	}
+  @Override
+  public int replaceBadge(ReplaceBadgeParams params) {
+    return sqlSession.update(Statements.REPLACE, params);
+  }
 }

@@ -51,6 +51,6 @@ public interface BadgeManagementMapper {
   int cancelBadge(CancelBadgeParams params);
 
   int deleteBadge(DeleteBadgeParams badgeEntity);
-  
+
   int replaceBadge(ReplaceBadgeParams params);
 }

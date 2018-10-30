@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.Bad
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_EXPIRY_DATE_IN_PAST;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_INVALID_BADGE_STATUS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
 import java.time.LocalDate;
@@ -12,14 +13,12 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
@@ -176,38 +175,37 @@ public class BadgeManagementService {
 
     repository.deleteBadge(deleteBadgeParams);
   }
-  
+
   public String replaceBadge(ReplaceBadgeParams replaceParams) {
     log.info("Replacing badge {}", replaceParams.getBadgeNumber());
-    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
+    RetrieveBadgeParams retrieveParams =
+        RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
     BadgeEntity badge = repository.retrieveBadge(retrieveParams);
-  	
+
     validationChecks(badge);
-    
+
     repository.replaceBadge(replaceParams);
     log.info("Repalced badge number {}", replaceParams.getBadgeNumber());
-    
+
     String newBadgeNumber = createNewBadgeNumber();
     badge.setBadgeNo(newBadgeNumber);
     repository.createBadge(badge);
     log.info("Created replacement badge {}", newBadgeNumber);
-    
+
     return newBadgeNumber;
   }
 
-  
-	private void validationChecks(BadgeEntity badge) {
+  private void validationChecks(BadgeEntity badge) {
     if (null == badge || DELETED == badge.getBadgeStatus()) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }
 
     if (badge.getExpiryDate().isBefore(LocalDate.now())) {
-      throw new BadRequestException(REPLACE_EXPIRY_DATE_IN_PAST.getFieldErrorInstance());
+      throw new BadRequestException(REPLACE_EXPIRY_DATE_IN_PAST.getSystemErrorInstance());
     }
 
     if (ISSUED != badge.getBadgeStatus()) {
-      throw new BadRequestException(REPLACE_EXPIRY_DATE_IN_PAST.getFieldErrorInstance());
+      throw new BadRequestException(REPLACE_INVALID_BADGE_STATUS.getSystemErrorInstance());
     }
-	}
+  }
 }
-

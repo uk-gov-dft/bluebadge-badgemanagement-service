@@ -10,18 +10,16 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManag
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.RETRIEVE;
 
 import java.time.LocalDate;
-
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 
 public class BadgeManagementRepositoryTest {
 
@@ -64,15 +62,16 @@ public class BadgeManagementRepositoryTest {
 
   @Test
   public void replaceBadge() {
-    ReplaceBadgeParams params = ReplaceBadgeParams.builder()
-    																									.badgeNumber("BAD789")
-    																						    		.deliveryCode("HOME")
-    																						    		.deliveryOptionCode("FAST")
-    																						    		.reasonCode("DAMAGED")
-    																						    		.startDate(LocalDate.now())
-    																						    		.status(Status.REPLACED)
-    																						    		.build();
-    																									
+    ReplaceBadgeParams params =
+        ReplaceBadgeParams.builder()
+            .badgeNumber("BAD789")
+            .deliveryCode("HOME")
+            .deliveryOptionCode("FAST")
+            .reasonCode("DAMAGED")
+            .startDate(LocalDate.now())
+            .status(Status.REPLACED)
+            .build();
+
     repository.replaceBadge(params);
     verify(sqlSession).update(eq(REPLACE), eq(params));
   }

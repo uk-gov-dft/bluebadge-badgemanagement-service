@@ -18,12 +18,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 
 @RunWith(SpringRunner.class)
 @SqlGroup({@Sql(scripts = "classpath:/test-data.sql")})
@@ -198,14 +198,15 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
   @Test
   public void replaceBadge_shouldUpdateRecord() {
-    ReplaceBadgeParams params = ReplaceBadgeParams.builder()
-				.badgeNumber("KKKKKK")
-	    		.deliveryCode("HOME")
-	    		.deliveryOptionCode("FAST")
-	    		.reasonCode("DAMAGED")
-	    		.startDate(LocalDate.now())
-	    		.status(Status.REPLACED)
-	    		.build();
+    ReplaceBadgeParams params =
+        ReplaceBadgeParams.builder()
+            .badgeNumber("KKKKKK")
+            .deliveryCode("HOME")
+            .deliveryOptionCode("FAST")
+            .reasonCode("DAMAGED")
+            .startDate(LocalDate.now())
+            .status(Status.REPLACED)
+            .build();
 
     badgeManagementRepository.replaceBadge(params);
 
@@ -218,6 +219,5 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity.getDeliverOptionCode()).isEqualTo("FAST");
     assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
     assertThat(badgeEntity.getStartDate()).isEqualTo(LocalDate.now());
-
-   }
+  }
 }

@@ -2,12 +2,11 @@ package uk.gov.dft.bluebadge.service.badgemanagement;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.annotations.ApiParam;
 import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
@@ -80,8 +77,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_VIEW_BADGE_DETAILS')")
   public ResponseEntity<BadgeResponse> retrieveBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     BadgeConverter converter = new BadgeConverter();
     BadgeEntity entity = service.retrieveBadge(badgeNumber);
@@ -91,8 +87,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("hasAuthority('PERM_CANCEL_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> cancelBlueBadge(
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     if (!badgeNumber.equals(badgeCancel.getBadgeNumber())) {
@@ -110,19 +105,17 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
     return ResponseEntity.ok().build();
   }
 
-	@Override
-    @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
-	public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(@PathVariable String badgeNumber,
-	    @Valid BadgeReplaceRequest request) {
-	    if (!badgeNumber.equals(request.getBadgeNumber())) {
-	        throw new BadRequestException(INVALID_BADGE_NUMBER.getFieldErrorInstance());
-	      }
-	      
-	    ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
-	    String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
+  @Override
+  @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
+  public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
+      @PathVariable String badgeNumber, @Valid @RequestBody BadgeReplaceRequest request) {
+    if (!badgeNumber.equals(request.getBadgeNumber())) {
+      throw new BadRequestException(INVALID_BADGE_NUMBER.getSystemErrorInstance());
+    }
 
-		return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
-	}
-  
-  
+    ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
+    String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
+
+    return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
+  }
 }

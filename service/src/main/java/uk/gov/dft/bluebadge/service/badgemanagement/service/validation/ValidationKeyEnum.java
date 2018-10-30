@@ -56,7 +56,9 @@ public enum ValidationKeyEnum {
   REPLACE_EXPIRY_DATE_IN_PAST(
       "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
   REPLACE_INVALID_BADGE_STATUS(
-      "Invalid.badge.replace.badgeStatus", "Cannot replace an already cancelled, replaced or deleted badge.", "badgeStatus");
+      "Invalid.badge.replace.badgeStatus",
+      "Cannot replace an already cancelled, replaced or deleted badge.",
+      "badgeStatus");
 
   private final String key;
   private final String defaultMessage;

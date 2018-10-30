@@ -81,8 +81,7 @@ public class BadgeTestBase {
     referenceDataList.add(
         getNewRefDataItem(
             RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
-    referenceDataList.add(
-        getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
+    referenceDataList.add(getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);

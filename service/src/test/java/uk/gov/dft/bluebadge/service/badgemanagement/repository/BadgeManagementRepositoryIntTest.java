@@ -215,9 +215,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity).isNotNull();
 
     assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.REPLACED);
-    assertThat(badgeEntity.getDeliverToCode()).isEqualTo("HOME");
-    assertThat(badgeEntity.getDeliverOptionCode()).isEqualTo("FAST");
     assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
-    assertThat(badgeEntity.getStartDate()).isEqualTo(LocalDate.now());
+    assertThat(badgeEntity.getExpiryDate()).isEqualTo(LocalDate.now().minusDays(1));
   }
 }

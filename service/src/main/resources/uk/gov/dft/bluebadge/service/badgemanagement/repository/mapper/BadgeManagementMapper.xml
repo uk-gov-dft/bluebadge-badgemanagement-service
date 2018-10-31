@@ -118,9 +118,7 @@
         UPDATE badge
         SET badge_status = #{status}, 
         	    replace_reason_code = #{reasonCode},
-            deliver_to_code = #{deliveryCode},
-            deliver_option_code = #{deliveryOptionCode},
-            start_date= #{startDate}        	    
+            expiry_date= current_date - integer '1'        	    
         WHERE badge_no = #{badgeNumber}
     </update>
 

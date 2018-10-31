@@ -189,6 +189,9 @@ public class BadgeManagementService {
 
     String newBadgeNumber = createNewBadgeNumber();
     badge.setBadgeNo(newBadgeNumber);
+    badge.setStartDate(replaceParams.getStartDate());
+    badge.setDeliverToCode(replaceParams.getDeliveryCode());
+    badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode());
     repository.createBadge(badge);
     log.info("Created replacement badge {}", newBadgeNumber);
 

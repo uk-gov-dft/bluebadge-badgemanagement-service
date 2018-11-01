@@ -9,7 +9,7 @@ import uk.gov.dft.bluebadge.common.esapi.EsapiFilter;
 public class EsapiConfig {
 
   @Bean
-  @Order(500)
+  @Order(1000)
   public EsapiFilter getEsapiFilter() {
     return new EsapiFilter();
   }

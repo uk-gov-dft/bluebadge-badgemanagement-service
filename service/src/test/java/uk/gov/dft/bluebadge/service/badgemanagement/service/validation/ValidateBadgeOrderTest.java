@@ -86,4 +86,16 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
     entity.setDob(null);
     validateBadgeOrder.validate(entity);
   }
+
+  @Test
+  public void validateCreateBadgeRequest_person_incorrectNumberOfBadges() {
+    try {
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setNumberOfBadges(10);
+      validateBadgeOrder.validate(entity);
+      Assert.fail("Badge valid range validation should throw an exception");
+    } catch (BadRequestException e) {
+      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
+    }
+  }
 }

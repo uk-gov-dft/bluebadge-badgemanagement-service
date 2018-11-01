@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,6 +52,8 @@ public class ValidateBadgeOrder extends ValidateBase {
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }
 
+    validateNumberOfBadges(entity, errors);
+    
     // Report any failures
     if (!errors.isEmpty()) {
       log.debug("Badge order failed validation.");
@@ -81,6 +85,17 @@ public class ValidateBadgeOrder extends ValidateBase {
       errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getFieldErrorInstance());
     }
   }
+
+  private static void validateNumberOfBadges(BadgeEntity entity, List<ErrorErrors> errors) {
+  		if (entity.isPerson()) { 
+  		 if (entity.getNumberOfBadges() != 1) {
+        errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_PERSON.getFieldErrorInstance());  			
+  		 }
+  		} else if (entity.getNumberOfBadges() < 1 || entity.getNumberOfBadges() > 50) {
+        errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_ORGANISATION.getFieldErrorInstance());
+  		}
+  }
+  		
 
   @Override
   protected ReferenceDataService getReferenceDataService() {

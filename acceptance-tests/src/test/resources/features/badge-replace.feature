@@ -14,7 +14,7 @@ Feature: Verify cancel a badge
 
   Scenario: Verify 404 response for replace of unknown badge
     Given path 'badges/AAAAAA/replacements'
-    And request {"badgeNumber": "AAAAAA","replaceReasonCode": "STOLEN","deliverToCode": "HOME","deliveryOptionCode": "STANDARD"}
+    And request {"badgeNumber": "AAAAAA","replaceReasonCode": "STOLEN","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 404
 
@@ -35,7 +35,7 @@ Feature: Verify cancel a badge
 
   Scenario: Verify replace a badge success
     Given path 'badges/'+ createdBadgeNo + '/replacements'
-    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STANDARD"}
+    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data
@@ -51,7 +51,7 @@ Feature: Verify cancel a badge
 	* match replacedBadge.app_channel_code == newBadge.app_channel_code
 	* match replacedBadge.eligibility_code == newBadge.eligibility_code
 	* match replacedBadge.image_link == newBadge.image_link
-	* match newBadge.deliver_option_code == 'STANDARD'
+	* match newBadge.deliver_option_code == 'STAND'
 	* match newBadge.deliver_to_code == 'HOME'
 	* match replacedBadge.holder_name == newBadge.holder_name
 	* match replacedBadge.nino == newBadge.nino
@@ -79,6 +79,6 @@ Feature: Verify cancel a badge
 
   Scenario: Verify replace a badge in a different local authority
     Given path 'badges/BBBBBB/replacements'
-    And request {"badgeNumber": "BBBBBB","replaceReasonCode": "STOLEN","deliverToCode": "HOME","deliveryOptionCode": "STANDARD"}
+    And request {"badgeNumber": "BBBBBB","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 403

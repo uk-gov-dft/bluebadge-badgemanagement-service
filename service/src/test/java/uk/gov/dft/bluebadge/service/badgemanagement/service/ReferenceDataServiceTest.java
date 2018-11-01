@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
@@ -12,5 +14,14 @@ public class ReferenceDataServiceTest extends BadgeTestBase {
     Assert.assertTrue(
         referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, DefaultVals.GENDER_CODE));
     Assert.assertFalse(referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, "VOLVO"));
+  }
+
+  @Test
+  public void test() {
+    Set<String> items = new HashSet<>();
+
+    items.add("AAA");
+    items.add("BBB");
+    items.add("CCC");
   }
 }

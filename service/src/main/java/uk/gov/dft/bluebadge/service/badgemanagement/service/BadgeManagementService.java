@@ -35,6 +35,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBa
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
 @Slf4j
 @Service
@@ -49,6 +50,7 @@ public class BadgeManagementService {
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
+  private final ValidateReplaceBadge validateReplaceBadge;
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
@@ -59,6 +61,7 @@ public class BadgeManagementService {
       BadgeManagementRepository repository,
       ValidateBadgeOrder validateBadgeOrder,
       ValidateCancelBadge validateCancelBadge,
+      ValidateReplaceBadge validateReplaceBadge,
       SecurityUtils securityUtils,
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
@@ -70,6 +73,7 @@ public class BadgeManagementService {
     this.photoService = photoService;
     this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
+    this.validateReplaceBadge = validateReplaceBadge;
   }
 
   public List<String> createBadge(BadgeOrderRequest model) {
@@ -178,6 +182,8 @@ public class BadgeManagementService {
 
   public String replaceBadge(ReplaceBadgeParams replaceParams) {
     log.info("Replacing badge {}", replaceParams.getBadgeNumber());
+
+    validateReplaceBadge.validateRequest(replaceParams);
     RetrieveBadgeParams retrieveParams =
         RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
     BadgeEntity badge = repository.retrieveBadge(retrieveParams);

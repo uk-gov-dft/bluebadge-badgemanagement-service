@@ -92,6 +92,13 @@ jacoco {
     // reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
+configurations.all {
+    resolutionStrategy {
+        // don't cache changing modules at all
+        cacheChangingModulesFor 0, 'seconds'
+    }
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
 
 task generateSwagger() {
 

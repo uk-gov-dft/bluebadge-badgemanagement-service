@@ -1,26 +1,29 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalCouncilRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ReferenceDataService {
 
   private final Set<String> validGroupKeys = new HashSet<>();
-  private final Map<String, String> keyDescriptionMap = new HashMap<>();
   private final ReferenceDataApiClient referenceDataApiClient;
+  private Map<String, LocalAuthorityRefData> localAuthorityMap = new HashMap<>();
   private AtomicBoolean isLoaded = new AtomicBoolean(false);
 
   @Autowired
@@ -38,7 +41,10 @@ public class ReferenceDataService {
       for (ReferenceData item : referenceDataList) {
         String key = item.getGroupShortCode() + "_" + item.getShortCode();
         validGroupKeys.add(key);
-        keyDescriptionMap.put(key, item.getDescription());
+
+        if (item instanceof LocalAuthorityRefData) {
+          localAuthorityMap.put(item.getShortCode(), (LocalAuthorityRefData) item);
+        }
       }
       if (referenceDataList.isEmpty()) {
         isLoaded.set(false);
@@ -57,5 +63,10 @@ public class ReferenceDataService {
     init();
     String key = group.getGroupKey() + "_" + code;
     return validGroupKeys.contains(key);
+  }
+
+  public LocalAuthorityRefData retrieveLocalAuthority(String localAuthorityShortCode) {
+    init();
+    return localAuthorityMap.get(localAuthorityShortCode);
   }
 }

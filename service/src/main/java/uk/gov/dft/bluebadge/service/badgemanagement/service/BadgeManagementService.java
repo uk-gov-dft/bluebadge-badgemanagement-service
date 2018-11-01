@@ -1,14 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +18,21 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
 @Slf4j
 @Service
@@ -47,6 +50,7 @@ public class BadgeManagementService {
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
+  private final BadgeAuditLogger badgeAuditLogger;
   private final BadgeNumberService badgeNumberService;
 
   @Autowired
@@ -57,7 +61,8 @@ public class BadgeManagementService {
       SecurityUtils securityUtils,
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
-      BlacklistedCombinationsFilter blacklistFilter) {
+      BlacklistedCombinationsFilter blacklistFilter,
+      BadgeAuditLogger badgeAuditLogger) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
@@ -65,6 +70,7 @@ public class BadgeManagementService {
     this.photoService = photoService;
     this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
+    this.badgeAuditLogger = badgeAuditLogger;
   }
 
   public List<String> createBadge(BadgeOrderRequest model) {
@@ -88,11 +94,12 @@ public class BadgeManagementService {
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
     }
+    badgeAuditLogger.logCreateAuditMessage(model, createdList, log);
     return createdList;
   }
 
   private String createNewBadgeNumber() {
-    String badgeNo = null;
+    String badgeNo;
     do {
       badgeNo = Base20.encode(badgeNumberService.getBagdeNumber());
     } while (!blacklistFilter.isValid(badgeNo));
@@ -147,6 +154,8 @@ public class BadgeManagementService {
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
       validateCancelBadge.validateAfterFailedCancel(badgeEntity);
+    }else{
+      badgeAuditLogger.logCancelAuditMessage(request, log);
     }
   }
 

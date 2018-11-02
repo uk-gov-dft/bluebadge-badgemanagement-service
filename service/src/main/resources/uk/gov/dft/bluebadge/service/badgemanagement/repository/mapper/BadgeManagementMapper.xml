@@ -117,8 +117,7 @@
     <update id="replaceBadge" parameterType="ReplaceBadgeParams">
         UPDATE badge
         SET badge_status = #{status}, 
-        	    replace_reason_code = #{reasonCode},
-            expiry_date= current_date - integer '1'        	    
+        	    replace_reason_code = #{reasonCode}
         WHERE badge_no = #{badgeNumber}
     </update>
 

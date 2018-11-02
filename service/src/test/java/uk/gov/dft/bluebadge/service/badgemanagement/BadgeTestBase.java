@@ -1,5 +1,18 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
+import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
@@ -12,20 +25,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
 
 public class BadgeTestBase {
 

@@ -1,6 +1,14 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.ImmutableSet;
+import java.util.List;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +28,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogg
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
-
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";

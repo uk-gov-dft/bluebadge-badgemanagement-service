@@ -1,5 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.audit;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -7,6 +15,7 @@ import org.slf4j.Logger;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import uk.gov.dft.bluebadge.common.logging.LogEventBuilder;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
@@ -14,16 +23,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class BadgeAuditLoggerTest {
 
@@ -42,14 +41,14 @@ public class BadgeAuditLoggerTest {
     badgeAuditLogger.logCancelAuditMessage(
         CancelBadgeParams.builder().cancelReasonCode("DDD").localAuthorityShortCode("ABC").build(),
         log);
-    verify(log, times(1)).info(BadgeAuditLogger.AuditEventFields.CANCEL.getEvent().name());
+    verify(log, times(1)).info(LogEventBuilder.AuditEvent.BADGE_CANCELLED.name());
   }
 
   @Test
   public void logCreateAuditMessage() {
 
     badgeAuditLogger.logCreateAuditMessage(getPopulatedBadgeOrderRequest(), null, log);
-    verify(log, times(1)).info(BadgeAuditLogger.AuditEventFields.CREATE.getEvent().name());
+    verify(log, times(1)).info(LogEventBuilder.AuditEvent.BADGE_ORDERED.name());
   }
 
   @Test
@@ -68,7 +67,7 @@ public class BadgeAuditLoggerTest {
 
     StandardEvaluationContext context = new StandardEvaluationContext(badgeOrderedAuditData);
     // The log will be populated with every specified field
-    for (String field : BadgeAuditLogger.AuditEventFields.CREATE.getFields()) {
+    for (String field : BadgeAuditLogger.AuditEventFields.CREATE_FIELDS.getFields()) {
       if (null == parser.parseExpression(field).getValue(context)) {
         fail("Field not in object:" + field);
       }
@@ -91,32 +90,30 @@ public class BadgeAuditLoggerTest {
 
     StandardEvaluationContext context = new StandardEvaluationContext(badgeCancelledAuditData);
     // The log will be populated with every specified field
-    for (String field : BadgeAuditLogger.AuditEventFields.CANCEL.getFields()) {
+    for (String field : BadgeAuditLogger.AuditEventFields.CANCEL_FIELDS.getFields()) {
       if (null == parser.parseExpression(field).getValue(context)) {
         fail("Field not in object:" + field);
       }
     }
   }
 
-  BadgeOrderRequest getPopulatedBadgeOrderRequest() {
-    BadgeOrderRequest badgeOrderRequest =
-        new BadgeOrderRequest()
-            .applicationChannelCode("CHANNEL")
-            .applicationDate(LocalDate.now())
-            .eligibilityCode("WALK")
-            .startDate(LocalDate.now())
-            .expiryDate(LocalDate.now())
-            .localAuthorityShortCode("ABC")
-            .numberOfBadges(1)
-            .party(new Party().typeCode("ORG"));
-    return badgeOrderRequest;
+  private BadgeOrderRequest getPopulatedBadgeOrderRequest() {
+    return new BadgeOrderRequest()
+        .applicationChannelCode("CHANNEL")
+        .applicationDate(LocalDate.now())
+        .eligibilityCode("WALK")
+        .startDate(LocalDate.now())
+        .expiryDate(LocalDate.now())
+        .localAuthorityShortCode("ABC")
+        .numberOfBadges(1)
+        .party(new Party().typeCode("ORG"));
   }
 
-  LocalAuthorityRefData getLocalAuthorityRefData() {
+  private LocalAuthorityRefData getLocalAuthorityRefData() {
     LocalAuthorityMetaData meta = new LocalAuthorityMetaData();
     meta.setNation(Nation.SCO);
     LocalAuthorityRefData data = new LocalAuthorityRefData();
-    data.setLocalAuthorityMetaData(Optional.of(meta));
+    data.setLocalAuthorityMetaData(meta);
     return data;
   }
 }

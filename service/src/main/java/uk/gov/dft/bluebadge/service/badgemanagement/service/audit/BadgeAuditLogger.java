@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.audit;
 
+import java.util.List;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +10,13 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-import java.util.List;
-
 @Component
 public class BadgeAuditLogger {
   @Getter
   enum AuditEventFields {
-    CREATE(
-        LogEventBuilder.AuditEvent.BADGE_ORDERED,
+    CREATE_FIELDS(
         "badgeOrderRequest.localAuthorityShortCode",
-        "localAuthorityRefData.nation",
+        "localAuthorityRefData.localAuthorityMetaData.nation",
         "badgeOrderRequest.eligibilityCode",
         "badgeOrderRequest.party.typeCode",
         "badgeOrderRequest.startDate",
@@ -28,17 +26,14 @@ public class BadgeAuditLogger {
         "badgeOrderRequest.applicationChannelCode",
         "createdBadgeNumbers",
         "badgeOrderRequest.numberOfBadges"),
-    CANCEL(
-        LogEventBuilder.AuditEvent.BADGE_CANCELLED,
+    CANCEL_FIELDS(
         "cancelBadgeParams.localAuthorityShortCode",
         "cancelBadgeParams.cancelReasonCode",
         "cancellationDate");
 
-    private final LogEventBuilder.AuditEvent event;
     private final String[] fields;
 
-    AuditEventFields(LogEventBuilder.AuditEvent event, String... fields) {
-      this.event = event;
+    AuditEventFields(String... fields) {
       this.fields = fields;
     }
   }
@@ -46,7 +41,7 @@ public class BadgeAuditLogger {
   private ReferenceDataService referenceDataService;
 
   @Autowired
-  public BadgeAuditLogger(ReferenceDataService referenceDataService) {
+  BadgeAuditLogger(ReferenceDataService referenceDataService) {
     this.referenceDataService = referenceDataService;
   }
 
@@ -56,8 +51,8 @@ public class BadgeAuditLogger {
 
     LogEventBuilder.builder()
         .withLogger(log)
-        .withFields(AuditEventFields.CANCEL.getFields())
-        .forEvent(AuditEventFields.CANCEL.getEvent())
+        .withFields(AuditEventFields.CANCEL_FIELDS.getFields())
+        .forEvent(LogEventBuilder.AuditEvent.BADGE_CANCELLED)
         .forObject(badgeCancelledAuditData)
         .log();
   }
@@ -75,8 +70,8 @@ public class BadgeAuditLogger {
     LogEventBuilder.builder()
         .forObject(data)
         .withLogger(log)
-        .forEvent(AuditEventFields.CREATE.getEvent())
-        .withFields(AuditEventFields.CREATE.getFields())
+        .forEvent(LogEventBuilder.AuditEvent.BADGE_ORDERED)
+        .withFields(AuditEventFields.CREATE_FIELDS.getFields())
         .log();
   }
 }

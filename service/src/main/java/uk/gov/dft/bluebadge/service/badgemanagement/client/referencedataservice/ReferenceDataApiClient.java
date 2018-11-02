@@ -17,8 +17,7 @@ public class ReferenceDataApiClient {
   private final RestTemplate restTemplate;
 
   @Autowired
-  public ReferenceDataApiClient(
-      @Qualifier("referenceDataServiceRestTemplate") RestTemplate restTemplate) {
+  ReferenceDataApiClient(@Qualifier("referenceDataServiceRestTemplate") RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 

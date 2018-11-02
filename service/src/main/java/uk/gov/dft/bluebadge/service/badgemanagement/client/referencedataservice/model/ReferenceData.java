@@ -2,10 +2,8 @@ package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.Builder;
-import lombok.Data;
-
 import java.util.Map;
+import lombok.Data;
 
 @Data
 @JsonTypeInfo(
@@ -15,10 +13,7 @@ import java.util.Map;
   property = "groupShortCode",
   visible = true
 )
-@JsonSubTypes({
-  @JsonSubTypes.Type(value = LocalAuthorityRefData.class, name = "LA"),
-  @JsonSubTypes.Type(value = LocalCouncilRefData.class, name = "LC")
-})
+@JsonSubTypes({@JsonSubTypes.Type(value = LocalAuthorityRefData.class, name = "LA")})
 public class ReferenceData {
   private String shortCode;
   private String description;

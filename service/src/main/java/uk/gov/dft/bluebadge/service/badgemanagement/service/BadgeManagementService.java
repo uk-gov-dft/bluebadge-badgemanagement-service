@@ -1,5 +1,14 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +28,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
 @Slf4j
 @Service
@@ -154,7 +152,7 @@ public class BadgeManagementService {
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
       validateCancelBadge.validateAfterFailedCancel(badgeEntity);
-    }else{
+    } else {
       badgeAuditLogger.logCancelAuditMessage(request, log);
     }
   }

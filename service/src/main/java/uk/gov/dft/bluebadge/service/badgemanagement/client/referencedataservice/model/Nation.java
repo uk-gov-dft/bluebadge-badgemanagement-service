@@ -1,10 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Map;
 
 public enum Nation {
   ENG,
@@ -12,17 +9,12 @@ public enum Nation {
   SCO,
   NIR;
 
-  private static Map<String, Nation> nationMap =
-      ImmutableMap.of("ENG", ENG, "SCO", SCO, "WLS", WLS, "NIR", NIR);
-
+  @SuppressWarnings("unused")
   @JsonCreator
   public static Nation forValue(String value) {
     // Expect a valid nation if a value given
     if (StringUtils.isNotEmpty(value)) {
-      if (null == nationMap.get(value)) {
-        throw new IllegalArgumentException("No Nation mapping for value " + value);
-      }
-      return nationMap.get(value);
+      return Nation.valueOf(value);
     }
     return null;
   }

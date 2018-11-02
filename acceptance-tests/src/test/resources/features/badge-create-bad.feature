@@ -98,7 +98,7 @@ Feature: Verify Create badge with 400
     Then status 400
     And match $.error.errors contains {field:"numberOfBadges", reason:"#notnull", message:"#notnull", location:"#null", locationType:"#null"}
     
-   Scenario: Verify create more than 50 badge for organisation 400
+   Scenario: Verify create more than 999 badge for organisation 400
     * def badgeNotValidNumberOrg =
     """
       {
@@ -134,7 +134,7 @@ Feature: Verify Create badge with 400
       imageFile: 'YWZpbGU=',
       deliverToCode: 'HOME',
       deliveryOptionCode: 'STAND',
-      numberOfBadges: 105
+      numberOfBadges: 1500
     }
     """
 

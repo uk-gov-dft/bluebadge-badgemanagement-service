@@ -513,7 +513,7 @@
           "numberOfBadges" : {
             "type" : "integer",
             "minimum" : 1,
-            "maximum" : 50,
+            "maximum" : 999,
             "example" : 1,
             "description" : "Must be 1 for a person, can be multiple for an organisation."
           }

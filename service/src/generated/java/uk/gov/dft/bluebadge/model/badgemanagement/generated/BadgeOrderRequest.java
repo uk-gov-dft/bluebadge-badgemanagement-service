@@ -314,7 +314,7 @@ public class BadgeOrderRequest {
     value = "Must be 1 for a person, can be multiple for an organisation."
   )
   @Min(1)
-  @Max(50)
+  @Max(999)
   public Integer getNumberOfBadges() {
     return numberOfBadges;
   }

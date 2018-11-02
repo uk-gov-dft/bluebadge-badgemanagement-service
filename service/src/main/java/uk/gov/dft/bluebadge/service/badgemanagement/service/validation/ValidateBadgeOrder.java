@@ -89,7 +89,7 @@ public class ValidateBadgeOrder extends ValidateBase {
       if (entity.getNumberOfBadges() != 1) {
         errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_PERSON.getFieldErrorInstance());
       }
-    } else if (entity.getNumberOfBadges() < 1 || entity.getNumberOfBadges() > 50) {
+    } else if (entity.getNumberOfBadges() < 1 || entity.getNumberOfBadges() > 999) {
       errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_ORGANISATION.getFieldErrorInstance());
     }
   }

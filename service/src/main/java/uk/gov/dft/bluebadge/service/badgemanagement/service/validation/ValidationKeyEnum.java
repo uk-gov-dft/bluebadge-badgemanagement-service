@@ -28,7 +28,7 @@ public enum ValidationKeyEnum {
       "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
   INVALID_NUMBER_OF_BADGES_ORGANISATION(
       "Invalid.badge.numberOfBadges",
-      "Number of badges should be between 1 and 50",
+      "Number of badges should be between 1 and 999",
       "numberOfBadges"),
   INVALID_GENDER_CODE(
       "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),

@@ -10,6 +10,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
@@ -27,6 +28,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String RETRIEVE = "retrieveBadge";
     static final String CANCEL = "cancelBadge";
     static final String DELETE = "deleteBadge";
+    static final String REPLACE = "replaceBadge";
   }
 
   private final SqlSession sqlSession;
@@ -73,5 +75,10 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   @Override
   public int deleteBadge(DeleteBadgeParams deleteBadgeParams) {
     return sqlSession.update(Statements.DELETE, deleteBadgeParams);
+  }
+
+  @Override
+  public int replaceBadge(ReplaceBadgeParams params) {
+    return sqlSession.update(Statements.REPLACE, params);
   }
 }

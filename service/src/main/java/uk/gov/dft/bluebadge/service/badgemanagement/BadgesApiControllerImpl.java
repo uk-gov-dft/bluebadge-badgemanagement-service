@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.ReplaceBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
@@ -100,5 +103,19 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   public ResponseEntity<Void> deleteBlueBadge(@PathVariable String badgeNumber) {
     service.deleteBadge(badgeNumber);
     return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
+  public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
+      @PathVariable String badgeNumber, @Valid @RequestBody BadgeReplaceRequest request) {
+    if (!badgeNumber.equals(request.getBadgeNumber())) {
+      throw new BadRequestException(INVALID_BADGE_NUMBER.getSystemErrorInstance());
+    }
+
+    ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
+    String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
+
+    return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
   }
 }

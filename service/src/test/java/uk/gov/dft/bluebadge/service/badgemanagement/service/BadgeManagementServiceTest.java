@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -7,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableSet;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Set;
 import org.junit.Assert;
@@ -21,12 +24,15 @@ import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
 public class BadgeManagementServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
@@ -34,6 +40,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private BadgeManagementRepository repositoryMock;
   @Mock private ValidateBadgeOrder validateBadgeOrderMock;
   @Mock private ValidateCancelBadge validateCancelBadgeMock;
+  @Mock private ValidateReplaceBadge validateReplaceBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
   @Mock private PhotoService photoServiceMock;
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
@@ -50,6 +57,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
             repositoryMock,
             validateBadgeOrderMock,
             validateCancelBadgeMock,
+            validateReplaceBadgeMock,
             securityUtilsMock,
             photoServiceMock,
             numberService,
@@ -223,5 +231,95 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
         BadgeEntity.builder().badgeNo("BADGENO").badgeStatus(BadgeEntity.Status.DELETED).build();
     when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
     service.deleteBadge("BADGENO");
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void replaceBadge_notFound() {
+    String badgeNo = "BADGENO";
+    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+
+    when(repositoryMock.retrieveBadge(any())).thenReturn(null);
+    service.replaceBadge(params);
+  }
+
+  @Test(expected = NotFoundException.class)
+  public void replaceBadge_alreadyDeleted() {
+    String badgeNo = "BADGENO";
+    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+
+    BadgeEntity badge =
+        BadgeEntity.builder().badgeNo(badgeNo).badgeStatus(BadgeEntity.Status.DELETED).build();
+
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    service.replaceBadge(params);
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void replaceBadge_alreadyExpired() {
+    String badgeNo = "BADGENO";
+    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+
+    BadgeEntity badge =
+        BadgeEntity.builder()
+            .badgeNo(badgeNo)
+            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .expiryDate(LocalDate.now().minus(Period.ofDays(1)))
+            .build();
+
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    service.replaceBadge(params);
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void replaceBadge_alreadyCancelledOrReplaced() {
+    String badgeNo = "BADGENO";
+    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+
+    BadgeEntity badge =
+        BadgeEntity.builder()
+            .badgeNo(badgeNo)
+            .badgeStatus(BadgeEntity.Status.REPLACED)
+            .expiryDate(LocalDate.now().plus(Period.ofDays(1)))
+            .build();
+
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    service.replaceBadge(params);
+  }
+
+  @Test
+  public void replaceBadge_ok() {
+    String badgeNo = "BAD234";
+    String newBadgeNo = "BAD567";
+    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "DAMAGED");
+
+    BadgeEntity badge =
+        BadgeEntity.builder()
+            .badgeNo(badgeNo)
+            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .expiryDate(LocalDate.now().plus(Period.ofDays(1)))
+            .build();
+
+    when(repositoryMock.retrieveBadge(any())).thenReturn(badge);
+    when(numberService.getBagdeNumber()).thenReturn(30169285);
+    when(blacklistFilter.isValid(any())).thenReturn(true);
+    String result = service.replaceBadge(params);
+    assertEquals(newBadgeNo, result);
+    verify(repositoryMock, times(1)).retrieveBadge(any());
+    verify(repositoryMock, times(1)).replaceBadge(any());
+    verify(repositoryMock, times(1)).createBadge(any());
+    verify(numberService, times(1)).getBagdeNumber();
+    verify(blacklistFilter, times(1)).isValid(any());
+  }
+
+  private ReplaceBadgeParams replaceParams(
+      String badgeNo, String deliveryCode, String deliveryOption, String reason) {
+    return ReplaceBadgeParams.builder()
+        .badgeNumber(badgeNo)
+        .deliveryCode(deliveryCode)
+        .deliveryOptionCode(deliveryOption)
+        .reasonCode(reason)
+        .startDate(LocalDate.now())
+        .status(Status.REPLACED)
+        .build();
   }
 }

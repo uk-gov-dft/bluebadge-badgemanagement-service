@@ -6,6 +6,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @SuppressWarnings("unused")
@@ -50,4 +51,6 @@ public interface BadgeManagementMapper {
   int cancelBadge(CancelBadgeParams params);
 
   int deleteBadge(DeleteBadgeParams badgeEntity);
+
+  int replaceBadge(ReplaceBadgeParams params);
 }

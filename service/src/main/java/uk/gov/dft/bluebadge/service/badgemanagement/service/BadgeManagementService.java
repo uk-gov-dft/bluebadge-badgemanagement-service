@@ -141,7 +141,6 @@ public class BadgeManagementService {
   public void cancelBadge(CancelBadgeParams request) {
     // Validate the request
     validateCancelBadge.validateRequest(request);
-    request.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
 
     // Optimistically try cancel before validating to save reading badge data.
     int updates = repository.cancelBadge(request);
@@ -154,6 +153,8 @@ public class BadgeManagementService {
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
       validateCancelBadge.validateAfterFailedCancel(badgeEntity);
     } else {
+      // Local authority code required for logging.
+      request.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
       badgeAuditLogger.logCancelAuditMessage(request, log);
     }
   }

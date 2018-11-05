@@ -141,6 +141,7 @@ public class BadgeManagementService {
   public void cancelBadge(CancelBadgeParams request) {
     // Validate the request
     validateCancelBadge.validateRequest(request);
+    request.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
 
     // Optimistically try cancel before validating to save reading badge data.
     int updates = repository.cancelBadge(request);

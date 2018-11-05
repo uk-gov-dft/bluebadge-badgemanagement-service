@@ -50,10 +50,10 @@ public class BadgeAuditLogger {
         BadgeCancelledAuditData.builder().cancelBadgeParams(request).build();
 
     LogEventBuilder.builder()
+        .forObject(badgeCancelledAuditData)
         .withLogger(log)
         .withFields(AuditEventFields.CANCEL_FIELDS.getFields())
         .forEvent(LogEventBuilder.AuditEvent.BADGE_CANCELLED)
-        .forObject(badgeCancelledAuditData)
         .log();
   }
 

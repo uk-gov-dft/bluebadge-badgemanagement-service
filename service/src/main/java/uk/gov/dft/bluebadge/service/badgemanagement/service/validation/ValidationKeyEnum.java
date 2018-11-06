@@ -24,6 +24,12 @@ public enum ValidationKeyEnum {
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
       "expiryDate"),
+  INVALID_NUMBER_OF_BADGES_PERSON(
+      "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
+  INVALID_NUMBER_OF_BADGES_ORGANISATION(
+      "Invalid.badge.numberOfBadges",
+      "Number of badges should be between 1 and 999",
+      "numberOfBadges"),
   INVALID_GENDER_CODE(
       "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),
   INVALID_CANCEL_CODE(

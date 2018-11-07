@@ -39,7 +39,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository repositoryMock;
-  @Mock private ValidateBadgeOrder validaóteBadgeOrderMock;
+  @Mock private ValidateBadgeOrder validateBadgeOrderMock;
   @Mock private ValidateCancelBadge validateCancelBadgeMock;
   @Mock private ValidateReplaceBadge validateReplaceBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;

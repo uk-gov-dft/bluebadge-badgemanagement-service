@@ -12,12 +12,6 @@ blue-badge:
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
 
-logging:
-  level:
-    root: ${APP_LOGGING_LEVEL:-INFO}
-    sample.mybatis.mapper: WARN
-    uk.gov.dft.bluebadge.service: ${APP_LOGGING_LEVEL:-DEBUG}
-
 management:
   server:
     port: ${bb_health:-8081}
@@ -28,25 +22,16 @@ management:
       exposure:
         include: '*'
 
-mybatis:
-  type-aliases-package: uk.gov.dft.bluebadge.service.badgemanagement.repository.domain
-
 spring:
   datasource:
      ***REMOVED***
     username: ${bb_db_username:-developer}
     url: jdbc:postgresql://postgres-service.${bb_env}.${url}:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement
-  jackson:
-    date-format: uk.gov.dft.bluebadge.common.api.RFC3339DateFormat
-    serialization:
-      write-dates-as-timestamps: false
 
 server:
   port: ${bb_port:-8080}
   servlet:
     context-path: /uk-gov-dft/badge-management-service/1.0.0
-
-springfox.documentation.swagger.v2.path: /api-docs
 
 amazon:
   profile: ${profile}

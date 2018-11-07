@@ -29,6 +29,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
@@ -45,6 +46,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private PhotoService photoServiceMock;
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
   @Mock private BadgeNumberService numberService;
+  @Mock private BadgeAuditLogger badgeAuditLogger;
 
   private BadgeManagementService service;
 
@@ -61,7 +63,8 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
             securityUtilsMock,
             photoServiceMock,
             numberService,
-            blacklistFilter);
+            blacklistFilter,
+            badgeAuditLogger);
   }
 
   @Test

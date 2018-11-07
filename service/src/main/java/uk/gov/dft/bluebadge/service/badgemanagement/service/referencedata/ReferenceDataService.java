@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 
 @Service
@@ -19,8 +20,8 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 public class ReferenceDataService {
 
   private final Set<String> validGroupKeys = new HashSet<>();
-  private final Map<String, String> keyDescriptionMap = new HashMap<>();
   private final ReferenceDataApiClient referenceDataApiClient;
+  private Map<String, LocalAuthorityRefData> localAuthorityMap = new HashMap<>();
   private AtomicBoolean isLoaded = new AtomicBoolean(false);
 
   @Autowired
@@ -38,7 +39,10 @@ public class ReferenceDataService {
       for (ReferenceData item : referenceDataList) {
         String key = item.getGroupShortCode() + "_" + item.getShortCode();
         validGroupKeys.add(key);
-        keyDescriptionMap.put(key, item.getDescription());
+
+        if (item instanceof LocalAuthorityRefData) {
+          localAuthorityMap.put(item.getShortCode(), (LocalAuthorityRefData) item);
+        }
       }
       if (referenceDataList.isEmpty()) {
         isLoaded.set(false);
@@ -57,5 +61,10 @@ public class ReferenceDataService {
     init();
     String key = group.getGroupKey() + "_" + code;
     return validGroupKeys.contains(key);
+  }
+
+  public LocalAuthorityRefData retrieveLocalAuthority(String localAuthorityShortCode) {
+    init();
+    return localAuthorityMap.get(localAuthorityShortCode);
   }
 }

@@ -35,12 +35,12 @@ public class BadgeTestBase {
     static final String DELIVER_OPTION_CODE = "FAST";
     static final String APP_CHANNEL_CODE = "ONLINE";
     public static final String GENDER_CODE = "MALE";
-    public static final String GENDER_DESC = "Male";
+    static final String GENDER_DESC = "Male";
     static final String PARTY_PERSON_CODE = "PERSON";
-    public static final String PARTY_PERSON_DESC = "Person";
+    static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
-    public static final String LOCAL_AUTHORITY_CODE = "ABERD";
+    static final String LOCAL_AUTHORITY_CODE = "ABERD";
     public static final String REPLACE_REASON = "DAMAGED";
   }
 
@@ -54,15 +54,13 @@ public class BadgeTestBase {
   }
 
   private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
-    return ReferenceData.builder()
-        .groupShortCode(group.getGroupKey())
-        .shortCode(key)
-        .description(description)
-        .displayOrder(1)
-        .groupDescription(null)
-        .subgroupDescription(null)
-        .subgroupShortCode(null)
-        .build();
+    ReferenceData data = new ReferenceData();
+    data.setGroupShortCode(group.getGroupKey());
+    data.setShortCode(group.getGroupKey());
+    data.setShortCode(key);
+    data.setDescription(description);
+    data.setDisplayOrder(1);
+    return data;
   }
 
   private void addRefData() {

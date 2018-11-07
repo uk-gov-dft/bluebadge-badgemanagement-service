@@ -32,6 +32,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
@@ -55,6 +56,7 @@ public class BadgeManagementService {
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
+  private final BadgeAuditLogger badgeAuditLogger;
   private final BadgeNumberService badgeNumberService;
 
   @Autowired
@@ -66,7 +68,8 @@ public class BadgeManagementService {
       SecurityUtils securityUtils,
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
-      BlacklistedCombinationsFilter blacklistFilter) {
+      BlacklistedCombinationsFilter blacklistFilter,
+      BadgeAuditLogger badgeAuditLogger) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
@@ -74,6 +77,7 @@ public class BadgeManagementService {
     this.photoService = photoService;
     this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
+    this.badgeAuditLogger = badgeAuditLogger;
     this.validateReplaceBadge = validateReplaceBadge;
   }
 
@@ -98,11 +102,12 @@ public class BadgeManagementService {
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
     }
+    badgeAuditLogger.logCreateAuditMessage(model, createdList, log);
     return createdList;
   }
 
   private String createNewBadgeNumber() {
-    String badgeNo = null;
+    String badgeNo;
     do {
       badgeNo = Base20.encode(badgeNumberService.getBagdeNumber());
     } while (!blacklistFilter.isValid(badgeNo));
@@ -157,6 +162,10 @@ public class BadgeManagementService {
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
       validateCancelBadge.validateAfterFailedCancel(badgeEntity);
+    } else {
+      // Local authority code required for logging.
+      request.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
+      badgeAuditLogger.logCancelAuditMessage(request, log);
     }
   }
 

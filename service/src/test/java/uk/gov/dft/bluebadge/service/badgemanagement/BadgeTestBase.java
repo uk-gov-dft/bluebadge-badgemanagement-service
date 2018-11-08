@@ -31,8 +31,10 @@ public class BadgeTestBase {
 
   public class DefaultVals {
     static final String ELIGIBILITY_CODE = "PIP";
-    static final String DELIVER_TO_CODE = "HOME";
-    static final String DELIVER_OPTION_CODE = "FAST";
+    static final String DELIVER_TO_CODE_HOME = "HOME";
+    static final String DELIVER_TO_CODE_COUNCIL = "COUNCIL";
+    static final String DELIVER_OPTION_CODE_FAST = "FAST";
+    static final String DELIVER_OPTION_CODE_STAND = "STAND";
     static final String APP_CHANNEL_CODE = "ONLINE";
     public static final String GENDER_CODE = "MALE";
     static final String GENDER_DESC = "Male";
@@ -67,8 +69,11 @@ public class BadgeTestBase {
     List<ReferenceData> referenceDataList = new ArrayList<>();
     referenceDataList.add(getNewRefDataItem(APP_SOURCE, DefaultVals.APP_CHANNEL_CODE, null));
     referenceDataList.add(
-        getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE, null));
-    referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE, null));
+        getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE_FAST, null));
+    referenceDataList.add(
+        getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE_STAND, null));
+    referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_HOME, null));
+    referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_COUNCIL, null));
     referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
     referenceDataList.add(getNewRefDataItem(LA, DefaultVals.LOCAL_AUTHORITY_CODE, null));
     referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_ORG_CODE, null));
@@ -98,8 +103,8 @@ public class BadgeTestBase {
         .secondaryPhoneNo(null)
         .contactPostcode("WV16 4AW")
         .contactTownCity("Bridgnorth")
-        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE)
-        .deliverToCode(DefaultVals.DELIVER_TO_CODE)
+        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE_FAST)
+        .deliverToCode(DefaultVals.DELIVER_TO_CODE_HOME)
         .dob(LocalDate.now().minus(Period.ofYears(30)))
         .eligibilityCode(DefaultVals.ELIGIBILITY_CODE)
         .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
@@ -125,9 +130,9 @@ public class BadgeTestBase {
     Organisation org = new Organisation();
     request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
     request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
-    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
+    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE_HOME);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
-    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
+    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE_FAST);
     request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
@@ -151,9 +156,9 @@ public class BadgeTestBase {
     Person person = new Person();
     request.setApplicationChannelCode(DefaultVals.APP_CHANNEL_CODE);
     request.setApplicationDate(LocalDate.now().minus(Period.ofDays(2)));
-    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE);
+    request.setDeliverToCode(DefaultVals.DELIVER_TO_CODE_HOME);
     request.setEligibilityCode(DefaultVals.ELIGIBILITY_CODE);
-    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE);
+    request.setDeliveryOptionCode(DefaultVals.DELIVER_OPTION_CODE_FAST);
     request.setLocalAuthorityShortCode("ABERD");
     request.setParty(party);
     request.setNumberOfBadges(1);
@@ -183,8 +188,8 @@ public class BadgeTestBase {
         .dob(null)
         .nino(null)
         .holderName("Harry Kane")
-        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE)
-        .deliverToCode(DefaultVals.DELIVER_TO_CODE)
+        .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE_FAST)
+        .deliverToCode(DefaultVals.DELIVER_TO_CODE_HOME)
         .imageLink(null)
         .eligibilityCode(DefaultVals.ELIGIBILITY_CODE)
         .expiryDate(LocalDate.now().plus(Period.ofMonths(35)))

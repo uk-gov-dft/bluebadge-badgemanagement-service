@@ -15,6 +15,10 @@ public enum ValidationKeyEnum {
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(
       "Invalid.badge.deliverOptionCode", "Invalid delivery option code.", "deliverOptionCode"),
+  INVALID_DELIVER_FAST_TO_COUNCIL(
+      "Invalid.badge.deliverOptionCode",
+      "Only 'standard' delivery option is available when delivering to council.",
+      "deliverToCode"),
   INVALID_CHANNEL_CODE("Invalid.badge.channelCode", "Invalid channel code.", "appChannelCode"),
   INVALID_LA_CODE(
       "Invalid.badge.localAuthority", "Invalid local authority code.", "localAuthorityShortCode"),

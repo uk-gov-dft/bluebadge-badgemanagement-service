@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
+import static org.junit.Assert.assertEquals;
+
 import java.time.LocalDate;
 import java.time.Period;
 import org.junit.Assert;
@@ -93,9 +95,28 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
       BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setNumberOfBadges(10);
       validateBadgeOrder.validate(entity);
-      Assert.fail("Badge valid range validation should throw an exception");
+      Assert.fail("Badge valid number of budges validation should throw an exception");
     } catch (BadRequestException e) {
       Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
+    }
+  }
+
+  @Test
+  public void validateCreateBadgeRequest_fastDelivery_toCouncil() {
+    try {
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setDeliverToCode("COUNCIL");
+      entity.setDeliverOptionCode("FAST");
+      validateBadgeOrder.validate(entity);
+      Assert.fail("Badge deivery rules validation should throw an exception");
+    } catch (BadRequestException e) {
+      assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
+      String message = e.getResponse().getBody().getError().getErrors().get(0).getMessage();
+      String reason = e.getResponse().getBody().getError().getErrors().get(0).getReason();
+
+      assertEquals(
+          "Only 'standard' delivery option is available when delivering to council.", reason);
+      assertEquals("Invalid.badge.deliverOptionCode", message);
     }
   }
 }

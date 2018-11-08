@@ -31,6 +31,12 @@ Feature: Verify cancel a badge
     When method POST
     Then status 200
 
+  Scenario: Verify cancel fails for invalid status
+    Given path 'badges/BBBBBD/cancellations'
+    And request {badgeNumber: "BBBBBD", cancelReasonCode: "NOLONG"}
+    When method POST
+    Then status 400
+
   Scenario: Verify cancel a badge success when ISSUED
     Given path 'badges/BBBBBC/cancellations'
     And request {badgeNumber: "BBBBBC", cancelReasonCode: "NOLONG"}

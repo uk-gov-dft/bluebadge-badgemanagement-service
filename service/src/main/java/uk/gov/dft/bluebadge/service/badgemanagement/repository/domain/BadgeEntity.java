@@ -18,7 +18,10 @@ public class BadgeEntity implements Serializable {
     ISSUED,
     CANCELLED,
     REPLACED,
-    DELETED
+    DELETED,
+    ORDERED,
+    PROCESSED,
+    REJECT
   }
 
   String badgeNo;

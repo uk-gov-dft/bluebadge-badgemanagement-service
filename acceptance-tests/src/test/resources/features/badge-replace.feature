@@ -1,5 +1,5 @@
 @badge-replace
-Feature: Verify cancel a badge
+Feature: Verify replace a badge
 
   Background:
     * url baseUrl
@@ -34,13 +34,13 @@ Feature: Verify cancel a badge
 
 
   Scenario: Verify replace a badge success
-    Given path 'badges/'+ createdBadgeNo + '/replacements'
-    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    Given path 'badges/EEEEEE/replacements'
+    And request {badgeNumber: "EEEEEE","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data
 
-	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + createdBadgeNo + "'")
+	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = 'EEEEEE'")
 	* match replacedBadge.badge_status == 'REPLACED'
 	* match replacedBadge.replace_reason_code == 'DAMAGED'
 
@@ -64,7 +64,7 @@ Feature: Verify cancel a badge
 	* match replacedBadge.primary_phone_no == newBadge.primary_phone_no
 	* match replacedBadge.secondary_phone_no == newBadge.secondary_phone_no
 	* match replacedBadge.contact_email_address == newBadge.contact_email_address
-	* match replacedBadge.holder_name_upper == newBadge.holder_name_upper
+	* match replacedBadge.holder_name_upper == 'REGINALD'
 	* match replacedBadge.cancel_reason_code == newBadge.cancel_reason_code
 	* match replacedBadge.local_authority_short_code == newBadge.local_authority_short_code
 	* match replacedBadge.image_link_original == newBadge.image_link_original

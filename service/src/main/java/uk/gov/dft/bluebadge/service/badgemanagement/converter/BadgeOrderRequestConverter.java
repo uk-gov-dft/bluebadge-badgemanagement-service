@@ -29,7 +29,7 @@ public class BadgeOrderRequestConverter
     BadgeEntity badgeEntity =
         BadgeEntity.builder()
             .partyCode(model.getParty().getTypeCode())
-            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .badgeStatus(BadgeEntity.Status.ORDERED)
             .localAuthorityRef(model.getLocalAuthorityRef())
             .appDate(model.getApplicationDate())
             .appChannelCode(model.getApplicationChannelCode())

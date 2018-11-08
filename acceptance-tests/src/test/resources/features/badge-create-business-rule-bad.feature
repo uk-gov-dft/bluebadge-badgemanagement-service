@@ -51,7 +51,7 @@ Feature: Verify Create badge with 400
     Then status 400
     And match $.error.errors contains {field:"startDate", reason:"#notnull", message:"#notnull", location:"#null", locationType:"#null"}
 
-  Scenario: Verify create 400 with business validation start in past
+  Scenario: Verify create 400 when fast delivery option selected with council as delivery to
     * def badgeFastToCouncil =
     """
       {

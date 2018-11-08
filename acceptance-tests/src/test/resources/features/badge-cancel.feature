@@ -36,6 +36,7 @@ Feature: Verify cancel a badge
     And request {badgeNumber: "BBBBBD", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 400
+    And match $.error.message == 'Invalid.badge.cancel.status'
 
   Scenario: Verify cancel a badge success when ISSUED
     Given path 'badges/BBBBBC/cancellations'

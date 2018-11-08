@@ -25,9 +25,15 @@ Feature: Verify cancel a badge
     Then status 400
     And match $.error.errors[0].message == 'Invalid.badgeCancelRequest.cancelReasonCode'
 
-  Scenario: Verify cancel a badge success
+  Scenario: Verify cancel a badge success when newly created
     Given path 'badges/'+ createdBadgeNo + '/cancellations'
     And request {badgeNumber: "#(createdBadgeNo)", cancelReasonCode: "NOLONG"}
+    When method POST
+    Then status 200
+
+  Scenario: Verify cancel a badge success when ISSUED
+    Given path 'badges/BBBBBC/cancellations'
+    And request {badgeNumber: "BBBBBC", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 200
 

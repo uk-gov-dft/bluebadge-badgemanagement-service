@@ -22,3 +22,9 @@ Feature: Verify badge details
     When method GET
     Then status 404
     And match $.error.message contains 'NotFound.badge'
+
+  Scenario: Verify retrieve of a replaced badge
+    Given path 'badges/EEEEEE'
+    When method GET
+    Then status 200
+    And match $.data.replaceReasonCode contains 'STOLE'

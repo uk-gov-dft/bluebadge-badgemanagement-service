@@ -1,5 +1,5 @@
 @badge-replace
-Feature: Verify cancel a badge
+Feature: Verify replace a badge
 
   Background:
     * url baseUrl
@@ -18,7 +18,7 @@ Feature: Verify cancel a badge
     When method POST
     Then status 404
 
-  Scenario: Verify replace already cancelled badge
+  Scenario: Verify replace already replaced badge
     Given path 'badges/CCCCCC/replacements'
     And request {"badgeNumber": "CCCCCC","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
@@ -35,14 +35,14 @@ Feature: Verify cancel a badge
 
   Scenario: Verify replace a badge success
     Given path 'badges/'+ createdBadgeNo + '/replacements'
-    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data
 
 	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + createdBadgeNo + "'")
 	* match replacedBadge.badge_status == 'REPLACED'
-	* match replacedBadge.replace_reason_code == 'DAMAGED'
+	* match replacedBadge.replace_reason_code == 'STOLE'
 
 	* def newBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + newBadgeNo + "'")	    
 	* match newBadge.badge_status == 'ISSUED'

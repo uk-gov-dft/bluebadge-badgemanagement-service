@@ -18,7 +18,7 @@ public class ValidateReplaceBadgeTest extends BadgeTestBase {
             .badgeNumber("72B9HA")
             .deliveryCode("HOME")
             .deliveryOptionCode("FAST")
-            .reasonCode("DAMAGED")
+            .reasonCode("STOLE")
             .startDate(LocalDate.now())
             .status(Status.REPLACED)
             .build();

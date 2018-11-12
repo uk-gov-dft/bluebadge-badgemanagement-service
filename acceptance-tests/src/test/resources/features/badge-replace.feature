@@ -18,7 +18,7 @@ Feature: Verify replace a badge
     When method POST
     Then status 404
 
-  Scenario: Verify replace already cancelled badge
+  Scenario: Verify replace already replaced badge
     Given path 'badges/CCCCCC/replacements'
     And request {"badgeNumber": "CCCCCC","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
@@ -34,15 +34,15 @@ Feature: Verify replace a badge
 
 
   Scenario: Verify replace a badge success
-    Given path 'badges/EEEEEE/replacements'
-    And request {badgeNumber: "EEEEEE","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    Given path 'badges/EEEEEF/replacements'
+    And request {badgeNumber: "EEEEEF","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data
 
-	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = 'EEEEEE'")
+	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = 'EEEEEF'")
 	* match replacedBadge.badge_status == 'REPLACED'
-	* match replacedBadge.replace_reason_code == 'DAMAGED'
+	* match replacedBadge.replace_reason_code == 'STOLE'
 
 	* def newBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + newBadgeNo + "'")	    
 	* match newBadge.badge_status == 'ISSUED'

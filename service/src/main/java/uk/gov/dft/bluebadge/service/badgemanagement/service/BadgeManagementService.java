@@ -198,7 +198,7 @@ public class BadgeManagementService {
         RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
     BadgeEntity badge = repository.retrieveBadge(retrieveParams);
 
-    validationChecks(badge);
+    replaceValidationChecks(badge);
 
     repository.replaceBadge(replaceParams);
     log.info("Repalced badge number {}", replaceParams.getBadgeNumber());
@@ -214,7 +214,7 @@ public class BadgeManagementService {
     return newBadgeNumber;
   }
 
-  private void validationChecks(BadgeEntity badge) {
+  private void replaceValidationChecks(BadgeEntity badge) {
     if (null == badge || DELETED == badge.getBadgeStatus()) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }

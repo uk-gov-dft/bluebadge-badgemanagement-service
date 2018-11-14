@@ -1,12 +1,15 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import static uk.gov.dft.bluebadge.common.service.exception.NotFoundException.Operation.UPDATE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ORDERED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_EXPIRY_DATE_IN_PAST;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_FAILED_UNEXPECTED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_STATUS_INVALID;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +83,7 @@ public class ValidateCancelBadge extends ValidateBase {
   }
 
   private void validateStatusValidForCancel(BadgeEntity badgeEntity) {
-    if (!BadgeEntity.Status.ISSUED.equals(badgeEntity.getBadgeStatus())) {
+    if (!EnumSet.of(ISSUED, ORDERED).contains(badgeEntity.getBadgeStatus())) {
       throw new BadRequestException(CANCEL_STATUS_INVALID.getSystemErrorInstance());
     }
   }

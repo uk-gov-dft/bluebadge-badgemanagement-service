@@ -84,7 +84,7 @@
         SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
         WHERE badge_no = #{badgeNo}
         AND expiry_date &gt;= current_date
-        AND badge_status = 'ISSUED'
+        AND badge_status IN ('ISSUED', 'ORDERED')
         <if test="localAuthorityShortCode != null">
             AND local_authority_short_code = #{localAuthorityShortCode}
         </if>

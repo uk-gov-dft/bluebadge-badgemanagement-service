@@ -97,7 +97,7 @@ public class ValidateBadgeOrder extends ValidateBase {
 
   private static void validateDeliveryRules(BadgeEntity entity, List<ErrorErrors> errors) {
     if ("COUNCIL".equals(entity.getDeliverToCode())
-        && entity.getDeliverOptionCode().equals("FAST")) {
+        && "FAST".equals(entity.getDeliverOptionCode())) {
       errors.add(ValidationKeyEnum.INVALID_DELIVER_FAST_TO_COUNCIL.getFieldErrorInstance());
     }
   }

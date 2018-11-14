@@ -43,7 +43,7 @@ public class BadgeTestBase {
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
     static final String LOCAL_AUTHORITY_CODE = "ABERD";
-    public static final String REPLACE_REASON = "DAMAGED";
+    public static final String REPLACE_REASON = "STOLE";
   }
 
   protected ReferenceDataService referenceDataService;
@@ -120,6 +120,7 @@ public class BadgeTestBase {
         .imageLink(null)
         .numberOfBadges(1)
         .orderDate(LocalDate.now())
+        .replaceReasonCode(DefaultVals.REPLACE_REASON)
         .build();
   }
 

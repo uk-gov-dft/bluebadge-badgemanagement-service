@@ -56,7 +56,7 @@ public class BadgeReplaceRequest {
    * @return replaceReasonCode
    */
   @ApiModelProperty(
-    example = "STOLEN",
+    example = "STOLE",
     required = true,
     value = "A short code from the REPLACE group of reference data."
   )
@@ -101,14 +101,14 @@ public class BadgeReplaceRequest {
   }
 
   /**
-   * A short code from the DELROPT group of reference data.
+   * A short code from the DELOP group of reference data.
    *
    * @return deliveryOptionCode
    */
   @ApiModelProperty(
-    example = "STANDARD",
+    example = "STAND",
     required = true,
-    value = "A short code from the DELROPT group of reference data."
+    value = "A short code from the DELOP group of reference data."
   )
   @NotNull
   @Size(max = 10)

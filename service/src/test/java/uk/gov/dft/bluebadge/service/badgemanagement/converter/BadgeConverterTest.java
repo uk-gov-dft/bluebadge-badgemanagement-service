@@ -19,7 +19,7 @@ public class BadgeConverterTest extends BadgeTestBase {
     Assert.assertNull(model.getParty().getOrganisation());
     // And contact details present.
     Assert.assertEquals(
-        entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
+        model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
     Assert.assertEquals(DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
   }
 

@@ -51,6 +51,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
 
     validateNumberOfBadges(entity, errors);
+    validateDeliveryRules(entity, errors);
 
     // Report any failures
     if (!errors.isEmpty()) {
@@ -91,6 +92,13 @@ public class ValidateBadgeOrder extends ValidateBase {
       }
     } else if (entity.getNumberOfBadges() < 1 || entity.getNumberOfBadges() > 999) {
       errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_ORGANISATION.getFieldErrorInstance());
+    }
+  }
+
+  private static void validateDeliveryRules(BadgeEntity entity, List<ErrorErrors> errors) {
+    if ("COUNCIL".equals(entity.getDeliverToCode())
+        && entity.getDeliverOptionCode().equals("FAST")) {
+      errors.add(ValidationKeyEnum.INVALID_DELIVER_FAST_TO_COUNCIL.getFieldErrorInstance());
     }
   }
 

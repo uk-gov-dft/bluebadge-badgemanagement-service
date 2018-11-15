@@ -48,6 +48,9 @@ public class Badge {
   @JsonProperty("cancelReasonCode")
   private String cancelReasonCode = null;
 
+  @JsonProperty("replaceReasonCode")
+  private String replaceReasonCode = null;
+
   @JsonProperty("statusCode")
   private String statusCode = null;
 
@@ -62,7 +65,6 @@ public class Badge {
    * @return badgeNumber
    */
   @ApiModelProperty(example = "091215", value = "The unique badge number for this badge.")
-  @Pattern(regexp = "^[0-9A-HJK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -297,7 +299,7 @@ public class Badge {
    */
   @ApiModelProperty(
     example = "NOLONG",
-    value = "A short code from the CANCEL group of reference data. "
+    value = "A short code from the CANCEL group of reference data."
   )
   @Size(max = 10)
   public String getCancelReasonCode() {
@@ -306,6 +308,29 @@ public class Badge {
 
   public void setCancelReasonCode(String cancelReasonCode) {
     this.cancelReasonCode = cancelReasonCode;
+  }
+
+  public Badge replaceReasonCode(String replaceReasonCode) {
+    this.replaceReasonCode = replaceReasonCode;
+    return this;
+  }
+
+  /**
+   * A short code from the REPLACE group of reference data.
+   *
+   * @return replaceReasonCode
+   */
+  @ApiModelProperty(
+    example = "STOLE",
+    value = "A short code from the REPLACE group of reference data."
+  )
+  @Size(max = 10)
+  public String getReplaceReasonCode() {
+    return replaceReasonCode;
+  }
+
+  public void setReplaceReasonCode(String replaceReasonCode) {
+    this.replaceReasonCode = replaceReasonCode;
   }
 
   public Badge statusCode(String statusCode) {
@@ -353,6 +378,7 @@ public class Badge {
         && Objects.equals(this.eligibilityCode, badge.eligibilityCode)
         && Objects.equals(this.imageLink, badge.imageLink)
         && Objects.equals(this.cancelReasonCode, badge.cancelReasonCode)
+        && Objects.equals(this.replaceReasonCode, badge.replaceReasonCode)
         && Objects.equals(this.statusCode, badge.statusCode);
   }
 
@@ -371,6 +397,7 @@ public class Badge {
         eligibilityCode,
         imageLink,
         cancelReasonCode,
+        replaceReasonCode,
         statusCode);
   }
 
@@ -395,6 +422,7 @@ public class Badge {
     sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");
     sb.append("    imageLink: ").append(toIndentedString(imageLink)).append("\n");
     sb.append("    cancelReasonCode: ").append(toIndentedString(cancelReasonCode)).append("\n");
+    sb.append("    replaceReasonCode: ").append(toIndentedString(replaceReasonCode)).append("\n");
     sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("}");
     return sb.toString();

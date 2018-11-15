@@ -18,9 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @RunWith(SpringRunner.class)
@@ -192,5 +194,27 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity.getSecondaryPhoneNo()).isNull();
     assertThat(badgeEntity.getContactEmailAddress()).isNull();
     assertThat(badgeEntity.getImageLinkOriginal()).isNull();
+  }
+
+  @Test
+  public void replaceBadge_shouldUpdateRecord() {
+    ReplaceBadgeParams params =
+        ReplaceBadgeParams.builder()
+            .badgeNumber("KKKKKK")
+            .deliveryCode("HOME")
+            .deliveryOptionCode("FAST")
+            .reasonCode("DAMAGED")
+            .startDate(LocalDate.now())
+            .status(Status.REPLACED)
+            .build();
+
+    badgeManagementRepository.replaceBadge(params);
+
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.REPLACED);
+    assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
   }
 }

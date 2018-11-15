@@ -255,7 +255,7 @@
             "type" : "string",
             "maxLength" : 10,
             "description" : "A short code from the REPLACE group of reference data.",
-            "example" : "STOLEN"
+            "example" : "STOLE"
           },
           "deliverToCode" : {
             "type" : "string",
@@ -266,8 +266,8 @@
           "deliveryOptionCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "A short code from the DELROPT group of reference data.",
-            "example" : "STANDARD"
+            "description" : "A short code from the DELOP group of reference data.",
+            "example" : "STAND"
           }
         },
         "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ]
@@ -437,8 +437,14 @@
           "cancelReasonCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "A short code from the CANCEL group of reference data.\n",
+            "description" : "A short code from the CANCEL group of reference data.",
             "example" : "NOLONG"
+          },
+          "replaceReasonCode" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "A short code from the REPLACE group of reference data.",
+            "example" : "STOLE"
           },
           "statusCode" : {
             "type" : "string",

@@ -243,6 +243,7 @@ public class BadgeSummary {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BadgeSummary {\n");
+
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    partyTypeCode: ").append(toIndentedString(partyTypeCode)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");

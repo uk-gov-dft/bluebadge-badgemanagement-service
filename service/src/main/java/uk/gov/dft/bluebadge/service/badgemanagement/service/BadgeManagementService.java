@@ -1,9 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_EXPIRY_DATE_IN_PAST;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_INVALID_BADGE_STATUS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -26,11 +30,15 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
+@SuppressWarnings("squid:S00107")
 @Slf4j
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
@@ -44,9 +52,11 @@ public class BadgeManagementService {
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
   private final ValidateCancelBadge validateCancelBadge;
+  private final ValidateReplaceBadge validateReplaceBadge;
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
+  private final BadgeAuditLogger badgeAuditLogger;
   private final BadgeNumberService badgeNumberService;
 
   @Autowired
@@ -54,10 +64,12 @@ public class BadgeManagementService {
       BadgeManagementRepository repository,
       ValidateBadgeOrder validateBadgeOrder,
       ValidateCancelBadge validateCancelBadge,
+      ValidateReplaceBadge validateReplaceBadge,
       SecurityUtils securityUtils,
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
-      BlacklistedCombinationsFilter blacklistFilter) {
+      BlacklistedCombinationsFilter blacklistFilter,
+      BadgeAuditLogger badgeAuditLogger) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
@@ -65,6 +77,8 @@ public class BadgeManagementService {
     this.photoService = photoService;
     this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
+    this.badgeAuditLogger = badgeAuditLogger;
+    this.validateReplaceBadge = validateReplaceBadge;
   }
 
   public List<String> createBadge(BadgeOrderRequest model) {
@@ -88,11 +102,12 @@ public class BadgeManagementService {
       repository.createBadge(entity);
       createdList.add(entity.getBadgeNo());
     }
+    badgeAuditLogger.logCreateAuditMessage(model, createdList, log);
     return createdList;
   }
 
   private String createNewBadgeNumber() {
-    String badgeNo = null;
+    String badgeNo;
     do {
       badgeNo = Base20.encode(badgeNumberService.getBagdeNumber());
     } while (!blacklistFilter.isValid(badgeNo));
@@ -147,6 +162,10 @@ public class BadgeManagementService {
           repository.retrieveBadge(
               RetrieveBadgeParams.builder().badgeNo(request.getBadgeNo()).build());
       validateCancelBadge.validateAfterFailedCancel(badgeEntity);
+    } else {
+      // Local authority code required for logging.
+      request.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
+      badgeAuditLogger.logCancelAuditMessage(request, log);
     }
   }
 
@@ -169,5 +188,43 @@ public class BadgeManagementService {
         DeleteBadgeParams.builder().badgeNo(badgeNumber).deleteStatus(DELETED).build();
 
     repository.deleteBadge(deleteBadgeParams);
+  }
+
+  public String replaceBadge(ReplaceBadgeParams replaceParams) {
+    log.info("Replacing badge {}", replaceParams.getBadgeNumber());
+
+    validateReplaceBadge.validateRequest(replaceParams);
+    RetrieveBadgeParams retrieveParams =
+        RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
+    BadgeEntity badge = repository.retrieveBadge(retrieveParams);
+
+    validationChecks(badge);
+
+    repository.replaceBadge(replaceParams);
+    log.info("Repalced badge number {}", replaceParams.getBadgeNumber());
+
+    String newBadgeNumber = createNewBadgeNumber();
+    badge.setBadgeNo(newBadgeNumber);
+    badge.setOrderDate(replaceParams.getStartDate());
+    badge.setDeliverToCode(replaceParams.getDeliveryCode());
+    badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode());
+    repository.createBadge(badge);
+    log.info("Created replacement badge {}", newBadgeNumber);
+
+    return newBadgeNumber;
+  }
+
+  private void validationChecks(BadgeEntity badge) {
+    if (null == badge || DELETED == badge.getBadgeStatus()) {
+      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+    }
+
+    if (badge.getExpiryDate().isBefore(LocalDate.now())) {
+      throw new BadRequestException(REPLACE_EXPIRY_DATE_IN_PAST.getSystemErrorInstance());
+    }
+
+    if (ISSUED != badge.getBadgeStatus()) {
+      throw new BadRequestException(REPLACE_INVALID_BADGE_STATUS.getSystemErrorInstance());
+    }
   }
 }

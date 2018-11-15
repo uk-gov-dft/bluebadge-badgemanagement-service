@@ -24,6 +24,12 @@ public enum ValidationKeyEnum {
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
       "expiryDate"),
+  INVALID_NUMBER_OF_BADGES_PERSON(
+      "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
+  INVALID_NUMBER_OF_BADGES_ORGANISATION(
+      "Invalid.badge.numberOfBadges",
+      "Number of badges should be between 1 and 999",
+      "numberOfBadges"),
   INVALID_GENDER_CODE(
       "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),
   INVALID_CANCEL_CODE(
@@ -50,7 +56,15 @@ public enum ValidationKeyEnum {
   INVALID_BADGE_NUMBER(
       "Invalid.badgeNumber",
       "Invalid badge number or the body does not match the request.",
-      "badgeNumber");
+      "badgeNumber"),
+  REPLACE_INVALID_REASON(
+      "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
+  REPLACE_EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
+  REPLACE_INVALID_BADGE_STATUS(
+      "Invalid.badge.replace.badgeStatus",
+      "Cannot replace an already cancelled, replaced or deleted badge.",
+      "badgeStatus");
 
   private final String key;
   private final String defaultMessage;

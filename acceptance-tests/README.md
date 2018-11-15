@@ -22,7 +22,7 @@ Then go to api-acceptance-test project and right click on pom.xml → Add as Mav
 
 To run
 ```
-./gradlew clean build acceptanceTests
+./gradlew clean build acceptanceTests -DbaseUrl=http://localhost:8280
 ```
 
 ### Relevant Articles: 

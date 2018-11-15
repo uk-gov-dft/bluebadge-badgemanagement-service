@@ -24,7 +24,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReferenceDataApiClientTest extends ApplicationContextTests {
-  public static final String TEST_URI = "http://justtesting:7777/test/";
+  private static final String TEST_URI = "http://justtesting:7777/test/";
   private static final String BASE_ENDPOINT = TEST_URI + "reference-data";
 
   private ReferenceDataApiClient client;
@@ -32,7 +32,7 @@ public class ReferenceDataApiClientTest extends ApplicationContextTests {
   private ObjectMapper om = new ObjectMapper();
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     RestTemplate restTemplate = new RestTemplate();
     restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(TEST_URI));
     mockServer = MockRestServiceServer.bindTo(restTemplate).build();
@@ -61,14 +61,15 @@ public class ReferenceDataApiClientTest extends ApplicationContextTests {
   }
 
   private ReferenceData buildReferenceData(int i) {
-    return ReferenceData.builder()
-        .description("description" + 1)
-        .displayOrder(i)
-        .groupDescription("groupDescription" + i)
-        .groupShortCode("groupShortCode" + i)
-        .shortCode("shortCode" + i)
-        .subgroupDescription("subGroupDescription" + i)
-        .subgroupShortCode("subGroupShortCode" + i)
-        .build();
+    ReferenceData data = new ReferenceData();
+
+    data.setDescription("description" + 1);
+    data.setDisplayOrder(i);
+    data.setGroupDescription("groupDescription" + i);
+    data.setGroupShortCode("groupShortCode" + i);
+    data.setShortCode("shortCode" + i);
+    data.setSubgroupDescription("subGroupDescription" + i);
+    data.setSubgroupShortCode("subGroupShortCode" + i);
+    return data;
   }
 }

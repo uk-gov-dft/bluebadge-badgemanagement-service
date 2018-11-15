@@ -8,6 +8,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -34,12 +35,13 @@ public class BadgeTestBase {
     static final String DELIVER_OPTION_CODE = "FAST";
     static final String APP_CHANNEL_CODE = "ONLINE";
     public static final String GENDER_CODE = "MALE";
-    public static final String GENDER_DESC = "Male";
+    static final String GENDER_DESC = "Male";
     static final String PARTY_PERSON_CODE = "PERSON";
-    public static final String PARTY_PERSON_DESC = "Person";
+    static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
-    public static final String LOCAL_AUTHORITY_CODE = "ABERD";
+    static final String LOCAL_AUTHORITY_CODE = "ABERD";
+    public static final String REPLACE_REASON = "STOLE";
   }
 
   protected ReferenceDataService referenceDataService;
@@ -52,15 +54,13 @@ public class BadgeTestBase {
   }
 
   private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
-    return ReferenceData.builder()
-        .groupShortCode(group.getGroupKey())
-        .shortCode(key)
-        .description(description)
-        .displayOrder(1)
-        .groupDescription(null)
-        .subgroupDescription(null)
-        .subgroupShortCode(null)
-        .build();
+    ReferenceData data = new ReferenceData();
+    data.setGroupShortCode(group.getGroupKey());
+    data.setShortCode(group.getGroupKey());
+    data.setShortCode(key);
+    data.setDescription(description);
+    data.setDisplayOrder(1);
+    return data;
   }
 
   private void addRefData() {
@@ -79,6 +79,7 @@ public class BadgeTestBase {
     referenceDataList.add(
         getNewRefDataItem(
             RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
+    referenceDataList.add(getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
 
     when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
     referenceDataService = new ReferenceDataService(referenceDataApiClient);
@@ -114,6 +115,7 @@ public class BadgeTestBase {
         .imageLink(null)
         .numberOfBadges(1)
         .orderDate(LocalDate.now())
+        .replaceReasonCode(DefaultVals.REPLACE_REASON)
         .build();
   }
 

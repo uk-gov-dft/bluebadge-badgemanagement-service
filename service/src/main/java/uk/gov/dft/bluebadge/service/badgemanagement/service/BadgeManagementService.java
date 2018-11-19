@@ -208,6 +208,7 @@ public class BadgeManagementService {
     badge.setOrderDate(replaceParams.getStartDate());
     badge.setDeliverToCode(replaceParams.getDeliveryCode());
     badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode());
+    badge.setBadgeStatus(BadgeEntity.Status.ORDERED);
     repository.createBadge(badge);
     log.info("Created replacement badge {}", newBadgeNumber);
 

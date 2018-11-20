@@ -45,7 +45,7 @@ Feature: Verify replace a badge
 	* match replacedBadge.replace_reason_code == 'STOLE'
 
 	* def newBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + newBadgeNo + "'")	    
-	* match newBadge.badge_status == 'ISSUED'
+	* match newBadge.badge_status == 'ORDERED'
 	* match replacedBadge.party_code == newBadge.party_code
 	* match replacedBadge.local_authority_ref == newBadge.local_authority_ref
 	* match replacedBadge.app_channel_code == newBadge.app_channel_code

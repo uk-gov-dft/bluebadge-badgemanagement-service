@@ -47,7 +47,6 @@ public class PhotoServiceTest {
 
     String BUCKET = "bucket";
     config.setS3Bucket(BUCKET);
-    config.setProfile("profile");
     config.setThumbnailHeight(300);
     config.setSignedUrlDurationMs(1000);
     photoService = new PhotoService(amazonS3Client, config);

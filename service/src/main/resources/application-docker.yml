@@ -10,4 +10,4 @@ spring:
     url: jdbc:postgresql://postgresql:5432/bb_dev?currentSchema=badgemanagement
 
 amazon:
-  s3bucket: qa-dft-badges
+  s3bucket: ${bb_badge_bucket:uk-gov-dft-ci-badge}

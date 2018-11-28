@@ -34,7 +34,4 @@ server:
     context-path: /uk-gov-dft/badge-management-service/1.0.0
 
 amazon:
-  profile: ${profile}
-  s3bucket: ${bucket}
-  thumbnail-height-px: 300
-  signed-url-duration-ms: 60000
+  s3bucket: ${bb_badge_bucket}

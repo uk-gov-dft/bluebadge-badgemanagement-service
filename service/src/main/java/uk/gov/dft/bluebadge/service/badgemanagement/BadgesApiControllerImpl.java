@@ -10,10 +10,7 @@ import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
@@ -28,6 +25,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConver
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ReplaceBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 
@@ -117,5 +115,13 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
     String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
 
     return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
+  }
+
+  @Override
+  // TODO
+  // @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
+  public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
+    List<BadgeEntity> badges = service.findBadgesForPrintBatch(printBadgeRequest.getBatchType());
+    return ResponseEntity.ok().build();
   }
 }

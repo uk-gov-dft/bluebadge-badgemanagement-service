@@ -3,6 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper">
 
+    <sql id="badgeFields">
+        badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
+        local_authority_ref As localAuthorityRef, app_date AS appDate,
+        app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
+        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
+        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
+        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
+        contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
+        contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
+        contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, replace_reason_code AS replaceReasonCode,
+        local_authority_short_code AS localAuthorityShortCode
+    </sql>
+
+
     <insert id="createBadge" parameterType="BadgeEntity">
         INSERT INTO badge
         (badge_no, badge_status, party_code,
@@ -50,16 +64,7 @@
 
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
-        badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-        local_authority_ref As localAuthorityRef, app_date AS appDate,
-        app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
-        contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
-        contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-        contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, replace_reason_code AS replaceReasonCode, 
-        local_authority_short_code AS localAuthorityShortCode
+        <include refid="badgeFields"></include>
         FROM badge
         <where>
             <if test="name != null">
@@ -78,6 +83,20 @@
         ORDER BY badge.start_date DESC
         LIMIT 50
     </select>
+
+
+
+    <select id="findBadgesForPrintBatch" parameterType="FindBadgesForPrintBatchParams" resultType="BadgeEntity">
+        SELECT
+        <include refid="badgeFields"></include>
+        FROM badge
+        <where>
+            deliver_option_code LIKE #{batchType}
+            AND badge_status = 'ORDERED'
+        </where>
+    </select>
+
+
 
     <update id="cancelBadge" parameterType="CancelBadgeParams">
         UPDATE badge
@@ -116,7 +135,7 @@
 
     <update id="replaceBadge" parameterType="ReplaceBadgeParams">
         UPDATE badge
-        SET badge_status = #{status}, 
+        SET badge_status = #{status},
         	    replace_reason_code = #{reasonCode}
         WHERE badge_no = #{badgeNumber}
     </update>

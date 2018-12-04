@@ -16,13 +16,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -165,6 +160,17 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badges).isNotEmpty();
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
+    FindBadgesForPrintBatchParams params =
+        FindBadgesForPrintBatchParams.builder().batchType("STAND").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
+    assertThat(badges).hasSize(1);
+    assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
   }
 
   @Test

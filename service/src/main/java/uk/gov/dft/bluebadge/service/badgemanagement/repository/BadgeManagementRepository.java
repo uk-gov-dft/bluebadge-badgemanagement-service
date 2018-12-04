@@ -6,12 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ConvertUtils;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
 /** Provides CRUD operations on BadgeEntity entity. */
@@ -29,6 +24,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String CANCEL = "cancelBadge";
     static final String DELETE = "deleteBadge";
     static final String REPLACE = "replaceBadge";
+    static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
   }
 
   private final SqlSession sqlSession;
@@ -58,6 +54,12 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
       params.setPostcode(ConvertUtils.formatPostcodeForEntity(params.getPostcode()));
     }
     return sqlSession.selectList(Statements.FIND, params);
+  }
+
+  @Override
+  public List<BadgeEntity> findBadgesForPrintBatch(FindBadgesForPrintBatchParams params) {
+    Assert.notNull(params, "params cannot be null");
+    return sqlSession.selectList(Statements.FIND_BADGES_FOR_PRINT_BATCH, params);
   }
 
   @Override

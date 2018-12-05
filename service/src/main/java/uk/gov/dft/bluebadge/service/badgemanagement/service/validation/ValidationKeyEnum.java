@@ -27,7 +27,7 @@ public enum ValidationKeyEnum {
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
-      "expiryDate"),
+      Constants.EXPIRY_DATE_FIELD),
   INVALID_NUMBER_OF_BADGES_PERSON(
       "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
   INVALID_NUMBER_OF_BADGES_ORGANISATION(
@@ -90,5 +90,9 @@ public enum ValidationKeyEnum {
     error.setMessage(key);
     error.setReason(defaultMessage);
     return error;
+  }
+
+  private static class Constants {
+    public static final String EXPIRY_DATE_FIELD = "expiryDate";
   }
 }

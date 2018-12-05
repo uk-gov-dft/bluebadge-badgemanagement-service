@@ -166,7 +166,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("STAND").build();
+        FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
     assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
     assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
@@ -177,7 +177,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadgesForPrintBatch_shouldSearchByBatchTypeFasttrack() {
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("FAST").build();
+        FindBadgesForPrintBatchParams.builder().batchType("FASTTRACK").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
     assertThat(badges).extracting("deliverOptionCode").containsOnly("FAST");
     assertThat(badges).extracting("deliverToCode").containsOnly("HOME");

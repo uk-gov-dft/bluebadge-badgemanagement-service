@@ -158,7 +158,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     BadgeEntity badgeEntity2 = BadgeEntity.builder().build();
     List<BadgeEntity> expectedBadges = Lists.newArrayList(badgeEntity1, badgeEntity2);
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("STAND").build();
+        FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
     when(repositoryMock.findBadgesForPrintBatch(params))
         .thenReturn(Lists.newArrayList(expectedBadges));
 

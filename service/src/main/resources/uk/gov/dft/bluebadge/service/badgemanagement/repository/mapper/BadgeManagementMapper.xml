@@ -96,11 +96,11 @@
                 AND deliver_option_code LIKE 'STAND'
                 AND deliver_to_code LIKE 'COUNCIL'
             </when>
-            <when test="batchType == 'STAND'">
+            <when test="batchType == 'STANDARD'">
                 AND deliver_option_code LIKE 'STAND'
                 AND deliver_to_code LIKE 'HOME'
             </when>
-            <when test="batchType == 'FAST'">
+            <when test="batchType == 'FASTTRACK'">
                 AND deliver_option_code LIKE 'FAST'
                 AND deliver_to_code LIKE 'HOME'
             </when>

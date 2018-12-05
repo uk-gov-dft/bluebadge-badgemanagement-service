@@ -40,6 +40,7 @@ public class BadgeManagementService {
           .stream()
           .map(BadgeEntity.Status::name)
           .collect(Collectors.toSet());
+  public static final String BADGE = "badge";
 
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
@@ -129,21 +130,8 @@ public class BadgeManagementService {
   }
 
   public List<BadgeEntity> findBadgesForPrintBatch(final String batchType) {
-    String batchTypeCode = "";
-    switch (batchType) {
-      case "STANDARD":
-        batchTypeCode = "STAND";
-        break;
-      case "FASTTRACK":
-        batchTypeCode = "FAST";
-        break;
-      case "LA":
-        batchTypeCode = "LA";
-        break;
-    }
-
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType(batchTypeCode).build();
+        FindBadgesForPrintBatchParams.builder().batchType(batchType).build();
     return repository.findBadgesForPrintBatch(params);
   }
 
@@ -152,7 +140,7 @@ public class BadgeManagementService {
     BadgeEntity entity = repository.retrieveBadge(params);
 
     if (null == entity || DELETED == entity.getBadgeStatus()) {
-      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+      throw new NotFoundException(BADGE, NotFoundException.Operation.RETRIEVE);
     }
     entity.setImageLink(photoService.generateSignedS3Url(entity.getImageLink()));
     entity.setImageLinkOriginal(photoService.generateSignedS3Url(entity.getImageLinkOriginal()));

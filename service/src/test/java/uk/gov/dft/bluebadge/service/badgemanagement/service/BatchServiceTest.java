@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static org.mockito.Mockito.*;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.*;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,25 +8,16 @@ import org.mockito.Mock;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 
 public class BatchServiceTest extends BadgeTestBase {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
-  @Mock private BadgeManagementRepository repositoryMock;
-  @Mock private ValidateBadgeOrder validateBadgeOrderMock;
-  @Mock private ValidateCancelBadge validateCancelBadgeMock;
-  @Mock private ValidateReplaceBadge validateReplaceBadgeMock;
+  @Mock private BadgeManagementRepository badgeRepositoryMock;
+
+  @Mock private BatchRepository batchRepositoryMock;
+
   @Mock private SecurityUtils securityUtilsMock;
-  @Mock private PhotoService photoServiceMock;
-  @Mock private BlacklistedCombinationsFilter blacklistFilter;
-  @Mock private BadgeNumberService numberService;
-  @Mock private BadgeAuditLogger badgeAuditLogger;
 
   private BatchService service;
 
@@ -36,23 +26,8 @@ public class BatchServiceTest extends BadgeTestBase {
     when(securityUtilsMock.getCurrentLocalAuthorityShortCode())
         .thenReturn(LOCAL_AUTHORITY_SHORT_CODE);
 
-    service = new BatchService(repositoryMock);
+    service = new BatchService(badgeRepositoryMock, batchRepositoryMock);
   }
-  /*
-    @Test
-    public void findBadgesForPrintBatch_ok() {
-      BadgeEntity badgeEntity1 = BadgeEntity.builder().build();
-      BadgeEntity badgeEntity2 = BadgeEntity.builder().build();
-      List<BadgeEntity> expectedBadges = Lists.newArrayList(badgeEntity1, badgeEntity2);
-      FindBadgesForPrintBatchParams params =
-          FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
-      when(repositoryMock.findBadgesForPrintBatch(params))
-          .thenReturn(Lists.newArrayList(expectedBadges));
-
-      List<BadgeEntity> badges = service.findBadgesForPrintBatch("STANDARD");
-      assertThat(badges).isEqualTo(expectedBadges);
-    }
-  */
 
   @Test
   public void sendPrintBatchSTANDARDBatchType_shouldWork() {

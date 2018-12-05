@@ -1,0 +1,11 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper">
+
+    <insert id="createBatch" parameterType="BatchEntity" useGeneratedKeys="true" keyProperty="id" keyColumn="batch_id">
+        INSERT INTO badgemanagement.batch (batch_filename, batch_created_timestamp, batch_source, batch_purpose)
+        VALUES (#{filename}, #{created}, #{source}, #{purpose})
+    </insert>
+
+</mapper>

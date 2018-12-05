@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Set;
-import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -150,20 +148,6 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     service.findBadges(name, postcode);
     // Then search is done
     verify(repositoryMock, never()).findBadges(any());
-  }
-
-  @Test
-  public void findBadgesForPrintBatch_ok() {
-    BadgeEntity badgeEntity1 = BadgeEntity.builder().build();
-    BadgeEntity badgeEntity2 = BadgeEntity.builder().build();
-    List<BadgeEntity> expectedBadges = Lists.newArrayList(badgeEntity1, badgeEntity2);
-    FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
-    when(repositoryMock.findBadgesForPrintBatch(params))
-        .thenReturn(Lists.newArrayList(expectedBadges));
-
-    List<BadgeEntity> badges = service.findBadgesForPrintBatch("STANDARD");
-    assertThat(badges).isEqualTo(expectedBadges);
   }
 
   @Test

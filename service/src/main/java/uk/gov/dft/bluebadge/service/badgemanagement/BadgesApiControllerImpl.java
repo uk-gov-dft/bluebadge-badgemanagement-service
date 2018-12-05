@@ -28,18 +28,24 @@ import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesA
 import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
 public class BadgesApiControllerImpl extends AbstractController implements BadgesApi {
 
-  private final BadgeManagementService service;
+  private final BadgeManagementService badgeService;
+  private final BatchService batchService;
+
   private final BadgeSummaryConverter badgeSummaryConverter;
 
   @SuppressWarnings("unused")
   @Autowired
   public BadgesApiControllerImpl(
-      BadgeManagementService service, BadgeSummaryConverter badgeSummaryConverter) {
-    this.service = service;
+      BadgeManagementService service,
+      BatchService batchService,
+      BadgeSummaryConverter badgeSummaryConverter) {
+    this.badgeService = service;
+    this.batchService = batchService;
     this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
@@ -49,7 +55,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
-    List<String> createdList = service.createBadge(badgeOrder);
+    List<String> createdList = badgeService.createBadge(badgeOrder);
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));
   }
 
@@ -67,7 +73,8 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
           @RequestParam(value = "postCode", required = false)
           Optional<String> postCode) {
 
-    List<BadgeEntity> badgeEntities = service.findBadges(name.orElse(null), postCode.orElse(null));
+    List<BadgeEntity> badgeEntities =
+        badgeService.findBadges(name.orElse(null), postCode.orElse(null));
     return ResponseEntity.ok(
         new BadgesResponse().data(badgeSummaryConverter.convertToModelList(badgeEntities)));
   }
@@ -78,7 +85,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
       @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     BadgeConverter converter = new BadgeConverter();
-    BadgeEntity entity = service.retrieveBadge(badgeNumber);
+    BadgeEntity entity = badgeService.retrieveBadge(badgeNumber);
     return ResponseEntity.ok(new BadgeResponse().data(converter.convertToModel(entity)));
   }
 
@@ -92,14 +99,14 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
       throw new BadRequestException(INVALID_BADGE_NUMBER.getFieldErrorInstance());
     }
     CancelBadgeRequestConverter converter = new CancelBadgeRequestConverter();
-    service.cancelBadge(converter.convertToEntity(badgeCancel));
+    badgeService.cancelBadge(converter.convertToEntity(badgeCancel));
     return ResponseEntity.ok().build();
   }
 
   @Override
   @PreAuthorize("hasAuthority('PERM_DELETE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> deleteBlueBadge(@PathVariable String badgeNumber) {
-    service.deleteBadge(badgeNumber);
+    badgeService.deleteBadge(badgeNumber);
     return ResponseEntity.ok().build();
   }
 
@@ -112,7 +119,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
     }
 
     ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
-    String newBadgeNumber = service.replaceBadge(converter.convertToEntity(request));
+    String newBadgeNumber = badgeService.replaceBadge(converter.convertToEntity(request));
 
     return ResponseEntity.ok(new BadgeNumberResponse().data(newBadgeNumber));
   }
@@ -121,7 +128,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   // TODO
   // @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
-    List<BadgeEntity> badges = service.findBadgesForPrintBatch(printBadgeRequest.getBatchType());
+    batchService.sendPrintBatch(printBadgeRequest.getBatchType());
     return ResponseEntity.ok().build();
   }
 }

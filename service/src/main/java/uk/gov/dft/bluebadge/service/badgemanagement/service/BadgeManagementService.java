@@ -129,12 +129,6 @@ public class BadgeManagementService {
     return repository.findBadges(params);
   }
 
-  public List<BadgeEntity> findBadgesForPrintBatch(final String batchType) {
-    FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType(batchType).build();
-    return repository.findBadgesForPrintBatch(params);
-  }
-
   public BadgeEntity retrieveBadge(String badgeNumber) {
     RetrieveBadgeParams params = RetrieveBadgeParams.builder().badgeNo(badgeNumber).build();
     BadgeEntity entity = repository.retrieveBadge(params);

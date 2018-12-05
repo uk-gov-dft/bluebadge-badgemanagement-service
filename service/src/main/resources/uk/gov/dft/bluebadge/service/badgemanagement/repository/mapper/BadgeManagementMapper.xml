@@ -90,10 +90,21 @@
         SELECT
         <include refid="badgeFields"></include>
         FROM badge
-        <where>
-            deliver_option_code LIKE #{batchType}
-            AND badge_status = 'ORDERED'
-        </where>
+        WHERE  badge_status = 'ORDERED'
+        <choose>
+            <when test="batchType == 'LA'">
+                AND deliver_option_code LIKE 'STAND'
+                AND deliver_to_code LIKE 'COUNCIL'
+            </when>
+            <when test="batchType == 'STAND'">
+                AND deliver_option_code LIKE 'STAND'
+                AND deliver_to_code LIKE 'HOME'
+            </when>
+            <when test="batchType == 'FAST'">
+                AND deliver_option_code LIKE 'FAST'
+                AND deliver_to_code LIKE 'HOME'
+            </when>
+        </choose>
     </select>
 
 

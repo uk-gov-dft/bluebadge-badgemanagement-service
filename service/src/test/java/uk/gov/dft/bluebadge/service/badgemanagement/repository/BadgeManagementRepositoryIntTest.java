@@ -168,8 +168,30 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     FindBadgesForPrintBatchParams params =
         FindBadgesForPrintBatchParams.builder().batchType("STAND").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
-    assertThat(badges).hasSize(1);
     assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
+    assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadgesForPrintBatch_shouldSearchByBatchTypeFasttrack() {
+    FindBadgesForPrintBatchParams params =
+        FindBadgesForPrintBatchParams.builder().batchType("FAST").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
+    assertThat(badges).extracting("deliverOptionCode").containsOnly("FAST");
+    assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadgesForPrintBatch_shouldSearchByBatchTypeLA() {
+    FindBadgesForPrintBatchParams params =
+        FindBadgesForPrintBatchParams.builder().batchType("LA").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
+    assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
+    assertThat(badges).extracting("deliverToCode").containsOnly("COUNCIL");
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
   }
 

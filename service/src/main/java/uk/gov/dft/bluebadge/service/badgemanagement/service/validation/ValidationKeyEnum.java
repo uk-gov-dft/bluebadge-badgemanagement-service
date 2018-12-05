@@ -51,7 +51,7 @@ public enum ValidationKeyEnum {
       "To search badges require either name or postcode, not both.",
       "name"),
   CANCEL_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
+      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", Constants.EXPIRY_DATE_FIELD),
   CANCEL_STATUS_INVALID(
       "Invalid.badge.cancel.status", "Cannot cancel a badge of this status.", "badgeStatus"),
   CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown"),
@@ -62,7 +62,7 @@ public enum ValidationKeyEnum {
   REPLACE_INVALID_REASON(
       "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
   REPLACE_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
+      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", Constants.EXPIRY_DATE_FIELD),
   REPLACE_INVALID_BADGE_STATUS(
       "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
 

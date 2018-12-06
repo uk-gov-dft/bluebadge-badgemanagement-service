@@ -15,7 +15,7 @@ public class BadgeConverterTest extends BadgeTestBase {
     // When converted to model
     Badge model = new BadgeConverter().convertToModel(entity);
     // Then person data is present but not organisation
-    Assert.assertEquals(model.getParty().getPerson().getBadgeHolderName(), entity.getHolderName());
+    Assert.assertEquals(entity.getHolderName(), model.getParty().getPerson().getBadgeHolderName());
     Assert.assertNull(model.getParty().getOrganisation());
     // And contact details present.
     Assert.assertEquals(
@@ -31,10 +31,10 @@ public class BadgeConverterTest extends BadgeTestBase {
     Badge model = new BadgeConverter().convertToModel(entity);
     // Then person data is present but not organisation
     Assert.assertEquals(
-        model.getParty().getOrganisation().getBadgeHolderName(), entity.getHolderName());
+        entity.getHolderName(), model.getParty().getOrganisation().getBadgeHolderName());
     Assert.assertNull(model.getParty().getPerson());
     // And contact details present.
     Assert.assertEquals(
-        model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
+        entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
   }
 }

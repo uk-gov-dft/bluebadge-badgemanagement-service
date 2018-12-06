@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
@@ -26,13 +25,13 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBad
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @RunWith(SpringRunner.class)
-@SqlGroup({@Sql(scripts = "classpath:/test-data.sql")})
 @Transactional
 public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
   @Autowired BadgeManagementRepository badgeManagementRepository;
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void retrieveBadge_ok() {
     RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
     BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
@@ -46,6 +45,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_ok() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -58,6 +58,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_badgeNotExist() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -70,6 +71,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_existsInDifferentLocalAuthority() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -134,6 +136,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldSearchByStatus() {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
@@ -143,6 +146,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldSearchByStatus_deleted() {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.DELETED.name());
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
@@ -152,6 +156,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldSearchByStatusAndPostCode() {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
     FindBadgeParams params =
@@ -163,6 +168,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void deleteBadge_shouldLogicallyDeleteBadge() {
     DeleteBadgeParams deleteBadgeParams =
         DeleteBadgeParams.builder()
@@ -197,6 +203,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void replaceBadge_shouldUpdateRecord() {
     ReplaceBadgeParams params =
         ReplaceBadgeParams.builder()

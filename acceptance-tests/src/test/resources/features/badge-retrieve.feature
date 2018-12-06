@@ -1,5 +1,5 @@
 @badge-retrieve
-Feature: Verify badge details
+Feature: Verify retrieve badge details
 
   Background:
     * url baseUrl
@@ -27,4 +27,4 @@ Feature: Verify badge details
     Given path 'badges/EEEEEE'
     When method GET
     Then status 200
-    And match $.data.replaceReasonCode contains 'STOLE'
+    And match $.data.replaceReasonCode contains 'DAMAGED'

@@ -198,7 +198,7 @@ public class BadgeManagementService {
         RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
     BadgeEntity badge = repository.retrieveBadge(retrieveParams);
 
-    validationChecks(badge);
+    replaceValidationChecks(badge);
 
     repository.replaceBadge(replaceParams);
     log.info("Repalced badge number {}", replaceParams.getBadgeNumber());
@@ -208,13 +208,14 @@ public class BadgeManagementService {
     badge.setOrderDate(replaceParams.getStartDate());
     badge.setDeliverToCode(replaceParams.getDeliveryCode());
     badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode());
+    badge.setBadgeStatus(BadgeEntity.Status.ORDERED);
     repository.createBadge(badge);
     log.info("Created replacement badge {}", newBadgeNumber);
 
     return newBadgeNumber;
   }
 
-  private void validationChecks(BadgeEntity badge) {
+  private void replaceValidationChecks(BadgeEntity badge) {
     if (null == badge || DELETED == badge.getBadgeStatus()) {
       throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
     }

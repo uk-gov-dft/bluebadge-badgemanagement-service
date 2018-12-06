@@ -15,6 +15,10 @@ public enum ValidationKeyEnum {
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(
       "Invalid.badge.deliverOptionCode", "Invalid delivery option code.", "deliverOptionCode"),
+  INVALID_DELIVER_FAST_TO_COUNCIL(
+      "Invalid.badge.deliverOptionCode",
+      "Only 'standard' delivery option is available when delivering to council.",
+      "deliverToCode"),
   INVALID_CHANNEL_CODE("Invalid.badge.channelCode", "Invalid channel code.", "appChannelCode"),
   INVALID_LA_CODE(
       "Invalid.badge.localAuthority", "Invalid local authority code.", "localAuthorityShortCode"),
@@ -49,9 +53,7 @@ public enum ValidationKeyEnum {
   CANCEL_EXPIRY_DATE_IN_PAST(
       "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
   CANCEL_STATUS_INVALID(
-      "Invalid.badge.cancel.status",
-      "Cannot cancel a badge unless status is ISSUED.",
-      "badgeStatus"),
+      "Invalid.badge.cancel.status", "Cannot cancel a badge of this status.", "badgeStatus"),
   CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown"),
   INVALID_BADGE_NUMBER(
       "Invalid.badgeNumber",
@@ -62,9 +64,7 @@ public enum ValidationKeyEnum {
   REPLACE_EXPIRY_DATE_IN_PAST(
       "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
   REPLACE_INVALID_BADGE_STATUS(
-      "Invalid.badge.replace.badgeStatus",
-      "Cannot replace an already cancelled, replaced or deleted badge.",
-      "badgeStatus");
+      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
 
   private final String key;
   private final String defaultMessage;

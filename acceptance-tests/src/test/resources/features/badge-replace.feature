@@ -34,18 +34,18 @@ Feature: Verify replace a badge
 
 
   Scenario: Verify replace a badge success
-    Given path 'badges/'+ createdBadgeNo + '/replacements'
-    And request {badgeNumber: "#(createdBadgeNo)","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    Given path 'badges/EEEEEF/replacements'
+    And request {badgeNumber: "EEEEEF","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data
 
-	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + createdBadgeNo + "'")
+	* def replacedBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = 'EEEEEF'")
 	* match replacedBadge.badge_status == 'REPLACED'
 	* match replacedBadge.replace_reason_code == 'STOLE'
 
 	* def newBadge = db.readRow("select * from badgemanagement.badge b where b.badge_no = '" + newBadgeNo + "'")	    
-	* match newBadge.badge_status == 'ISSUED'
+	* match newBadge.badge_status == 'ORDERED'
 	* match replacedBadge.party_code == newBadge.party_code
 	* match replacedBadge.local_authority_ref == newBadge.local_authority_ref
 	* match replacedBadge.app_channel_code == newBadge.app_channel_code
@@ -64,7 +64,7 @@ Feature: Verify replace a badge
 	* match replacedBadge.primary_phone_no == newBadge.primary_phone_no
 	* match replacedBadge.secondary_phone_no == newBadge.secondary_phone_no
 	* match replacedBadge.contact_email_address == newBadge.contact_email_address
-	* match replacedBadge.holder_name_upper == newBadge.holder_name_upper
+	* match replacedBadge.holder_name_upper == 'REGINALD'
 	* match replacedBadge.cancel_reason_code == newBadge.cancel_reason_code
 	* match replacedBadge.local_authority_short_code == newBadge.local_authority_short_code
 	* match replacedBadge.image_link_original == newBadge.image_link_original

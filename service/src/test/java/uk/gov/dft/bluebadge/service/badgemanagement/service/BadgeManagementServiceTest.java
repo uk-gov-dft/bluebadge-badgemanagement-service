@@ -6,6 +6,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.CANCELLED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ORDERED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.PROCESSED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REJECT;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REPLACED;
 
 import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
@@ -24,7 +30,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
@@ -115,9 +120,12 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     String name = "abc";
     Set<String> statuses =
         ImmutableSet.of(
-            BadgeEntity.Status.ISSUED.name(),
-            BadgeEntity.Status.CANCELLED.name(),
-            BadgeEntity.Status.REPLACED.name());
+            ISSUED.name(),
+            CANCELLED.name(),
+            REPLACED.name(),
+            PROCESSED.name(),
+            REJECT.name(),
+            ORDERED.name());
     FindBadgeParams params = FindBadgeParams.builder().name(name).statuses(statuses).build();
     // When searching
     service.findBadges(name, null);
@@ -265,7 +273,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     BadgeEntity badge =
         BadgeEntity.builder()
             .badgeNo(badgeNo)
-            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .badgeStatus(ISSUED)
             .expiryDate(LocalDate.now().minus(Period.ofDays(1)))
             .build();
 
@@ -281,7 +289,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     BadgeEntity badge =
         BadgeEntity.builder()
             .badgeNo(badgeNo)
-            .badgeStatus(BadgeEntity.Status.REPLACED)
+            .badgeStatus(REPLACED)
             .expiryDate(LocalDate.now().plus(Period.ofDays(1)))
             .build();
 
@@ -298,7 +306,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
     BadgeEntity badge =
         BadgeEntity.builder()
             .badgeNo(badgeNo)
-            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .badgeStatus(ISSUED)
             .expiryDate(LocalDate.now().plus(Period.ofDays(1)))
             .build();
 
@@ -322,7 +330,7 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
         .deliveryOptionCode(deliveryOption)
         .reasonCode(reason)
         .startDate(LocalDate.now())
-        .status(Status.REPLACED)
+        .status(REPLACED)
         .build();
   }
 }

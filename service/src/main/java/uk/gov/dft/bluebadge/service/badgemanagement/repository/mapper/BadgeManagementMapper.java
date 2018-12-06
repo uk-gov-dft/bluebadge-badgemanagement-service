@@ -35,6 +35,7 @@ public interface BadgeManagementMapper {
    * @param params holds batch type
    * @return List of BadgeEntity
    */
+  // TODO
   List<BadgeEntity> findBadgesForPrintBatch(FindBadgesForPrintBatchParams params);
 
   /**

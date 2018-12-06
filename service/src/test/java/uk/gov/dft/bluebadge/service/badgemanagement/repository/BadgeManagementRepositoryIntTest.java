@@ -162,38 +162,17 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
   }
 
+  /*
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
+        FindBadgesForPrintBatchParams.builder().batchId(1).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
     assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
     assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
-  }
-
-  @Test
-  @Sql(scripts = "classpath:/test-data.sql")
-  public void findBadgesForPrintBatch_shouldSearchByBatchTypeFasttrack() {
-    FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("FASTTRACK").build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
-    assertThat(badges).extracting("deliverOptionCode").containsOnly("FAST");
-    assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
-    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
-  }
-
-  @Test
-  @Sql(scripts = "classpath:/test-data.sql")
-  public void findBadgesForPrintBatch_shouldSearchByBatchTypeLA() {
-    FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("LA").build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
-    assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
-    assertThat(badges).extracting("deliverToCode").containsOnly("COUNCIL");
-    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
-  }
+  }*/
 
   @Test
   @Sql(scripts = "classpath:/test-data.sql")

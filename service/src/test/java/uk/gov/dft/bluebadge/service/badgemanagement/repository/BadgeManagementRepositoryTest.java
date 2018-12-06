@@ -71,7 +71,7 @@ public class BadgeManagementRepositoryTest {
   @Test
   public void findBadgesForPrintBatch() {
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchType("STANDARD").build();
+        FindBadgesForPrintBatchParams.builder().batchId(1).build();
     repository.findBadgesForPrintBatch(params);
     verify(sqlSession).selectList(eq(FIND_BADGES_FOR_PRINT_BATCH), eq(params));
   }

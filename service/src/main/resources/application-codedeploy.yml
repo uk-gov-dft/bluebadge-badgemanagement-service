@@ -11,6 +11,14 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+  printservice:
+    servicehost:
+      host: print-service.${bb_env}.${url}
+      port: 443
+      scheme: https
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/print-service/1.0.0
 
 management:
   server:

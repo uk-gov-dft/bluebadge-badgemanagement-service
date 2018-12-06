@@ -8,5 +8,5 @@ import org.apache.ibatis.type.Alias;
 @Data
 @Builder
 public class FindBadgesForPrintBatchParams {
-  String batchType;
+  Integer batchId;
 }

@@ -3,14 +3,22 @@ blue-badge:
     url: http://localhost:8380/bb_auth
     client-id: bb_user_management_id
      ***REMOVED***
-  reference-data-service:
-    service-host:
+  referencedataservice:
+    servicehost:
       host: localhost
       port: 8580
       scheme: http
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+  printservice:
+    servicehost:
+      host: localhost
+      port: 8880
+      scheme: http
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/print-service/1.0.0
 
 logging:
   level:
@@ -52,5 +60,5 @@ amazon:
   s3bucket: uk-gov-dft-dev-badge
   thumbnail-height-px: 300
   signed-url-duration-ms: 60000
-  
-blacklisted.combinations: babe,c4c4,caca,d34d,dead,f3c35,f3ck,f4ck,fack,feck,‌h338,‌h35h3,‌h383,hebe,heeb,j4d3,jade,kkk  
+
+blacklisted.combinations: babe,c4c4,caca,d34d,dead,f3c35,f3ck,f4ck,fack,feck,‌h338,‌h35h3,‌h383,hebe,heeb,j4d3,jade,kkk

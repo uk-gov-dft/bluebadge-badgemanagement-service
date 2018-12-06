@@ -4,16 +4,16 @@
 <mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper">
 
     <sql id="badgeFields">
-        badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-        local_authority_ref As localAuthorityRef, app_date AS appDate,
-        app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
-        contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
-        contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-        contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, replace_reason_code AS replaceReasonCode,
-        local_authority_short_code AS localAuthorityShortCode
+        b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
+        b.local_authority_ref As localAuthorityRef, b.app_date AS appDate,
+        b.app_channel_code AS appChannelCode, b.start_date AS startDate, b.expiry_date AS expiryDate,
+        b.eligibility_code AS eligibilityCode, b.image_link AS imageLink, b.deliver_to_code AS deliverToCode,
+        b.deliver_option_code AS deliverOptionCode, b.holder_name AS holderName, b.nino AS nino,
+        b.dob AS dob, b.gender_code AS genderCode, b.contact_name AS contactName,
+        b.contact_building_street AS contactBuildingStreet, b.contact_line2 AS contactLine2, b.contact_town_city AS contactTownCity,
+        b.contact_postcode AS contactPostcode, b.primary_phone_no AS primaryPhoneNo, b.secondary_phone_no AS secondaryPhoneNo,
+        b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode, b.replace_reason_code AS replaceReasonCode,
+        b.local_authority_short_code AS localAuthorityShortCode
     </sql>
 
 
@@ -65,22 +65,22 @@
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
         <include refid="badgeFields"></include>
-        FROM badge
+        FROM badge b
         <where>
             <if test="name != null">
-                holder_name_upper LIKE #{name}
+                b.holder_name_upper LIKE #{name}
             </if>
             <if test="postcode != null">
-                AND contact_postcode = #{postcode}
+                AND b.contact_postcode = #{postcode}
             </if>
             <if test="statuses != null">
-                AND badge_status in
+                AND b.badge_status in
                 <foreach item="status" collection="statuses" separator="," open="(" close=")">
                     #{status}
                 </foreach>
             </if>
         </where>
-        ORDER BY badge.start_date DESC
+        ORDER BY b.start_date DESC
         LIMIT 50
     </select>
 
@@ -89,22 +89,8 @@
     <select id="findBadgesForPrintBatch" parameterType="FindBadgesForPrintBatchParams" resultType="BadgeEntity">
         SELECT
         <include refid="badgeFields"></include>
-        FROM badge
-        WHERE  badge_status = 'ORDERED'
-        <choose>
-            <when test="batchType == 'LA'">
-                AND deliver_option_code LIKE 'STAND'
-                AND deliver_to_code LIKE 'COUNCIL'
-            </when>
-            <when test="batchType == 'STANDARD'">
-                AND deliver_option_code LIKE 'STAND'
-                AND deliver_to_code LIKE 'HOME'
-            </when>
-            <when test="batchType == 'FASTTRACK'">
-                AND deliver_option_code LIKE 'FAST'
-                AND deliver_to_code LIKE 'HOME'
-            </when>
-        </choose>
+        FROM badge b INNER JOIN batch_badge bb ON b.badge_no = bb.badge_no
+        WHERE bb.batch_id = #{batchId}
     </select>
 
 

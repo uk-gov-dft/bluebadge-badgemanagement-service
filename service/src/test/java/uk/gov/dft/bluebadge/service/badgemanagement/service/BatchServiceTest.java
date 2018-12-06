@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
@@ -16,6 +17,7 @@ public class BatchServiceTest extends BadgeTestBase {
 
   @Mock private BadgeManagementRepository badgeRepositoryMock;
   @Mock private BatchRepository batchRepositoryMock;
+  @Mock private PrintServiceApiClient printServiceApiClientMock;
 
   @Mock private SecurityUtils securityUtilsMock;
 
@@ -42,7 +44,7 @@ public class BatchServiceTest extends BadgeTestBase {
         BatchEntity.builder().source("DFT").purpose("PRINT").id(1).filename("filename").build();
     when(batchRepositoryMock.createBatch("LA", "DFT", "PRINT")).thenReturn(batchEntityLA);
 
-    service = new BatchService(badgeRepositoryMock, batchRepositoryMock);
+    service = new BatchService(badgeRepositoryMock, batchRepositoryMock, printServiceApiClientMock);
   }
 
   @Test

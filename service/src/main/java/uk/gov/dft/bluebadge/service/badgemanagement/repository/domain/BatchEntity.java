@@ -13,7 +13,7 @@ import org.apache.ibatis.type.Alias;
 public class BatchEntity implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  String id;
+  Integer id;
   String filename;
   LocalDateTime created;
   String source;

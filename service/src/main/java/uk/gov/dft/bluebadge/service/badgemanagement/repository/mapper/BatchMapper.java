@@ -8,4 +8,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntit
 public interface BatchMapper {
 
   BatchEntity createBatch(String batchType, String source, String purpose);
+
+  void appendBadgesToBatch(Integer batchId, String batchType);
 }

@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.AppendBadgesToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper;
 
@@ -21,13 +22,7 @@ public class BatchRepository implements BatchMapper {
     private Statements() {}
 
     static final String CREATE = "createBatch";
-    /*  static final String FIND = "findBadges";
-      static final String RETRIEVE = "retrieveBadge";
-      static final String CANCEL = "cancelBadge";
-      static final String DELETE = "deleteBadge";
-      static final String REPLACE = "replaceBadge";
-      static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
-    */
+    static final String APPEND_BADGES = "appendBadges";
   }
 
   private final SqlSession sqlSession;
@@ -55,6 +50,13 @@ public class BatchRepository implements BatchMapper {
             .build();
     sqlSession.insert(Statements.CREATE, batch);
     return batch;
+  }
+
+  @Override
+  public void appendBadgesToBatch(Integer batchId, String batchType) {
+    AppendBadgesToBatchParams params =
+        AppendBadgesToBatchParams.builder().batchId(batchId).batchType(batchType).build();
+    sqlSession.insert(Statements.APPEND_BADGES, params);
   }
 
   private String getFilename(LocalDateTime localDateTime) {

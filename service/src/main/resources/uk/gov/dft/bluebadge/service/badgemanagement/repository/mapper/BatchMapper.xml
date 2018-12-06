@@ -8,4 +8,24 @@
         VALUES (#{filename}, #{created}, #{source}, #{purpose})
     </insert>
 
+    <insert id="appendBadges" parameterType="AppendBadgesToBatchParams">
+        INSERT INTO badgemanagement.batch_badge (batch_id, badge_no)
+        SELECT #{batchId}, badge_no FROM badge WHERE badge_status = 'ORDERED'
+        <choose>
+            <when test="batchType == 'LA'">
+                AND deliver_option_code LIKE 'STAND'
+                AND deliver_to_code LIKE 'COUNCIL'
+            </when>
+            <when test="batchType == 'STANDARD'">
+                AND deliver_option_code LIKE 'STAND'
+                AND deliver_to_code LIKE 'HOME'
+            </when>
+            <when test="batchType == 'FASTTRACK'">
+                AND deliver_option_code LIKE 'FAST'
+                AND deliver_to_code LIKE 'HOME'
+            </when>
+        </choose>
+
+    </insert>
+
 </mapper>

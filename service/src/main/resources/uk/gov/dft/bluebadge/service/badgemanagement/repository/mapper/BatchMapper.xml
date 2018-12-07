@@ -25,7 +25,6 @@
                 AND deliver_to_code LIKE 'HOME'
             </when>
         </choose>
-
     </insert>
 
 </mapper>

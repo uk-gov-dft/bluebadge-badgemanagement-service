@@ -22,3 +22,8 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
         ,('KKKKKB', 'ORDERED', 'PERSON', 'ABERD', 'to find badge for print batch', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
 ;
+
+insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
+values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'PRINT');
+
+insert into badgemanagement.batch_badge (batch_id, badge_no) values (-1, 'KKKKKA');

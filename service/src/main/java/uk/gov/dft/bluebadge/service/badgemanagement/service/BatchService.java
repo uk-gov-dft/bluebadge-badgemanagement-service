@@ -15,6 +15,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
 @Slf4j
 @Service
@@ -39,14 +40,20 @@ public class BatchService {
     BatchEntity batchEntity = batchRepository.createBatch(batchType, "DFT", "PRINT");
     batchRepository.appendBadgesToBatch(batchEntity.getId(), batchType);
 
-    FindBadgesForPrintBatchParams params2 =
+    FindBadgesForPrintBatchParams findBadgeParams =
         FindBadgesForPrintBatchParams.builder().batchId(batchEntity.getId()).build();
-    List<BadgeEntity> badgesForPrintBatch = badgeRepository.findBadgesForPrintBatch(params2);
+    List<BadgeEntity> badgesForPrintBatch =
+        badgeRepository.findBadgesForPrintBatch(findBadgeParams);
 
     Batch batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
     printServiceApiClient.printBatch(batch);
 
-    // update badges status
+    UpdateBadgesStatusesForBatchParams paramsUpdate =
+        UpdateBadgesStatusesForBatchParams.builder()
+            .batchId(batchEntity.getId())
+            .status("PROCESSED")
+            .build();
+    badgeRepository.updateBadgesStatusesForBatch(paramsUpdate);
   }
 
   private Batch toBatch(String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {

@@ -35,9 +35,9 @@ public class BatchRepository implements BatchMapper {
   public BatchEntity createBatch(String batchType, String source, String purpose) {
     log.debug("Create batch");
 
+    // TODO
     // purpose is ISSUED, REJECTED, PRINT
     // source DFT, THIRDPARTY
-    // BADGEEXTRACT180901191635.xml
 
     LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -60,7 +60,7 @@ public class BatchRepository implements BatchMapper {
   }
 
   private String getFilename(LocalDateTime localDateTime) {
-    StringBuilder filename = new StringBuilder().append("BADGEEXTRACT");
+    StringBuilder filename = new StringBuilder().append("BADGEEXTRACT_");
     DateTimeFormatter dateTimeFormatter =
         new DateTimeFormatterBuilder()
             .appendValue(YEAR, 4)
@@ -68,6 +68,7 @@ public class BatchRepository implements BatchMapper {
             .appendValue(DAY_OF_MONTH, 2)
             .appendValue(HOUR_OF_DAY, 2)
             .appendValue(MINUTE_OF_HOUR, 2)
+            .appendValue(SECOND_OF_MINUTE, 2)
             .toFormatter();
     String localDateTimeString = localDateTime.format(dateTimeFormatter);
     return filename.append(localDateTimeString).toString();

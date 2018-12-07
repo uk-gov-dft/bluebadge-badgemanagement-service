@@ -75,4 +75,12 @@ public class BadgeManagementRepositoryTest {
     repository.findBadgesForPrintBatch(params);
     verify(sqlSession).selectList(eq(FIND_BADGES_FOR_PRINT_BATCH), eq(params));
   }
+
+  @Test
+  public void updateBadgesStatusesForPrintBatch() {
+    UpdateBadgesStatusesForBatchParams params =
+        UpdateBadgesStatusesForBatchParams.builder().batchId(1).status("PROCESSED").build();
+    repository.updateBadgesStatusesForBatch(params);
+    verify(sqlSession).update(eq(UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH), eq(params));
+  }
 }

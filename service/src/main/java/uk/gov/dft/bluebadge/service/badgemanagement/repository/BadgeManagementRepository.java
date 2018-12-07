@@ -25,6 +25,8 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String DELETE = "deleteBadge";
     static final String REPLACE = "replaceBadge";
     static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
+    static final String UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH =
+        "updateBadgesStatusesForPrintBatch";
   }
 
   private final SqlSession sqlSession;
@@ -60,6 +62,12 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   public List<BadgeEntity> findBadgesForPrintBatch(FindBadgesForPrintBatchParams params) {
     Assert.notNull(params, "params cannot be null");
     return sqlSession.selectList(Statements.FIND_BADGES_FOR_PRINT_BATCH, params);
+  }
+
+  @Override
+  public void updateBadgesStatusesForBatch(UpdateBadgesStatusesForBatchParams params) {
+    Assert.notNull(params, "params cannot be null");
+    sqlSession.update(Statements.UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH, params);
   }
 
   @Override

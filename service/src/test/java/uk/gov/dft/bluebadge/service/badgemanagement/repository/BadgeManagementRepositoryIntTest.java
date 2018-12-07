@@ -162,17 +162,30 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
   }
 
-  /*
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
     FindBadgesForPrintBatchParams params =
-        FindBadgesForPrintBatchParams.builder().batchId(1).build();
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
-    assertThat(badges).extracting("deliverOptionCode").containsOnly("STAND");
-    assertThat(badges).extracting("deliverToCode").containsOnly("HOME");
-    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ORDERED);
-  }*/
+    assertThat(badges).hasSize(1);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updatesBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
+    FindBadgesForPrintBatchParams findParams =
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
+    assertThat(badges).hasSize(1);
+
+    UpdateBadgesStatusesForBatchParams params =
+        UpdateBadgesStatusesForBatchParams.builder().batchId(-1).status("PROCESSED").build();
+    badgeManagementRepository.updateBadgesStatusesForBatch(params);
+
+    badges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
+    assertThat(badges).hasSize(0);
+  }
 
   @Test
   @Sql(scripts = "classpath:/test-data.sql")

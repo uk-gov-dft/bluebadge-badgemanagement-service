@@ -91,8 +91,17 @@
         <include refid="badgeFields"></include>
         FROM badge b INNER JOIN batch_badge bb ON b.badge_no = bb.badge_no
         WHERE bb.batch_id = #{batchId}
+        AND b.badge_status = 'ORDERED'
     </select>
 
+
+
+    <update id="updateBadgesStatusesForPrintBatch" parameterType="UpdateBadgesStatusesForBatchParams">
+        UPDATE badge
+        SET badge_status = #{status}
+        FROM batch_badge
+        WHERE badge.badge_no = batch_badge.badge_no AND batch_badge.batch_id = #{batchId} AND badge.badge_status = 'ORDERED'
+    </update>
 
 
     <update id="cancelBadge" parameterType="CancelBadgeParams">

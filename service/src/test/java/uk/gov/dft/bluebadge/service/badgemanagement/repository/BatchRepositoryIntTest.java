@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @Transactional
 public class BatchRepositoryIntTest extends ApplicationContextTests {

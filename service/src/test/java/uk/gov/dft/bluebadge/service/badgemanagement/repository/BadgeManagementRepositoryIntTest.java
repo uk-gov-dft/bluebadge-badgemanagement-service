@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.util.Lists;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 
 @RunWith(SpringRunner.class)
 @Transactional
+@Ignore
 public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
   @Autowired BadgeManagementRepository badgeManagementRepository;

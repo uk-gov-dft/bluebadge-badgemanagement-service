@@ -20,9 +20,8 @@ public class PrintServiceApiClient {
     this.restTemplate = restTemplate;
   }
 
-  /** */
-  public void printBatch(
-      Batch batch) { //}, String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
+  /** Send Print Batch Request. */
+  public void printBatch(Batch batch) {
     log.debug("Print batch.");
 
     String url =

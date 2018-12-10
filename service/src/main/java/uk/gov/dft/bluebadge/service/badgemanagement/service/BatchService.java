@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadg
 
 @Slf4j
 @Service
+@SuppressWarnings("squid:S1612")
 @Transactional(propagation = Propagation.REQUIRED)
 public class BatchService {
 
@@ -66,13 +67,11 @@ public class BatchService {
     List<uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge>
         badgesForPrintRequest =
             (badges.stream().map(b -> toBadgePrintRequest(b))).collect(Collectors.toList());
-    Batch batch =
-        Batch.builder()
-            .batchType(batchType)
-            .filename(batchEntity.getFilename())
-            .badges(badgesForPrintRequest)
-            .build();
-    return batch;
+    return Batch.builder()
+        .batchType(batchType)
+        .filename(batchEntity.getFilename())
+        .badges(badgesForPrintRequest)
+        .build();
   }
 
   private uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge

@@ -35,10 +35,6 @@ public class BatchRepository implements BatchMapper {
   public BatchEntity createBatch(String batchType, String source, String purpose) {
     log.debug("Create batch");
 
-    // TODO
-    // purpose is ISSUED, REJECTED, PRINT
-    // source DFT, THIRDPARTY
-
     LocalDateTime localDateTime = LocalDateTime.now();
 
     BatchEntity batch =

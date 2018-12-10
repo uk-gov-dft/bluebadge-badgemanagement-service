@@ -45,15 +45,21 @@ public class BatchService {
     List<BadgeEntity> badgesForPrintBatch =
         badgeRepository.findBadgesForPrintBatch(findBadgeParams);
 
-    Batch batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
-    printServiceApiClient.printBatch(batch);
+    if (!badgesForPrintBatch.isEmpty()) {
+      Batch batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
+      printServiceApiClient.printBatch(batch);
 
-    UpdateBadgesStatusesForBatchParams paramsUpdate =
-        UpdateBadgesStatusesForBatchParams.builder()
-            .batchId(batchEntity.getId())
-            .status("PROCESSED")
-            .build();
-    badgeRepository.updateBadgesStatusesForBatch(paramsUpdate);
+      UpdateBadgesStatusesForBatchParams paramsUpdate =
+          UpdateBadgesStatusesForBatchParams.builder()
+              .batchId(batchEntity.getId())
+              .status("PROCESSED")
+              .build();
+      badgeRepository.updateBadgesStatusesForBatch(paramsUpdate);
+    } else {
+      log.info(
+          "Print batch request not sent because there are no badges associated to batch id [{}].",
+          batchEntity.getId());
+    }
   }
 
   private Batch toBatch(String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {

@@ -1,7 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import org.assertj.core.util.Lists;
@@ -63,7 +62,7 @@ public class BatchServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void sendPrintBatch_shouldWork() {
+  public void sendPrintBatch_WhenThereAreBadges_shouldWork() {
     when(batchRepositoryMock.createBatch("STANDARD", "DFT", "PRINT")).thenReturn(BATCH_ENTITY);
     when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS)).thenReturn(BADGE_ENTITIES);
 
@@ -72,5 +71,19 @@ public class BatchServiceTest extends BadgeTestBase {
     verify(batchRepositoryMock).appendBadgesToBatch(BATCH_ID, "STANDARD");
     verify(printServiceApiClientMock).printBatch(BATCH);
     verify(badgeRepositoryMock).updateBadgesStatusesForBatch(UPDATE_PARAMS);
+  }
+
+  @Test
+  public void sendPrintBatch_WhenThereAreNoBadges_shouldWork() {
+    when(batchRepositoryMock.createBatch("STANDARD", "DFT", "PRINT")).thenReturn(BATCH_ENTITY);
+    when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS))
+        .thenReturn(Lists.newArrayList());
+
+    service.sendPrintBatch("STANDARD");
+
+    verify(batchRepositoryMock).appendBadgesToBatch(BATCH_ID, "STANDARD");
+    verify(printServiceApiClientMock, times(0)).printBatch(any(Batch.class));
+    verify(badgeRepositoryMock, times(0))
+        .updateBadgesStatusesForBatch(any(UpdateBadgesStatusesForBatchParams.class));
   }
 }

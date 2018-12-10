@@ -1,4 +1,8 @@
-delete from badgemanagement.badge where badge_no in ('KKKKKK', 'KKKKKD', 'KKKKKA', 'KKKKKC');
+delete from badgemanagement.batch_badge where batch_id=-1 and badge_no = 'KKKKKA';
+
+delete from badgemanagement.badge where badge_no in ('KKKKKK', 'KKKKKD', 'KKKKKA', 'KKKKKC', 'KKKKKE', 'KKKKKB');
+
+delete from badgemanagement.batch where batch_id = -1;
 
 insert into badgemanagement.badge (badge_no, badge_status, party_code,
         local_authority_short_code, local_authority_ref,

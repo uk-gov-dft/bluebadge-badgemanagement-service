@@ -9,9 +9,6 @@ Feature: Verify print a batch
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-#    * def createResult = callonce read('./badge-create-person.feature')
-# CREATE SEVERAL BADGES WITH FASTTRACK, STANDARD, LA with different STATUSES
-#    * def createdBadgeNo = createResult.badgeNo
 
   Scenario: Verify print a badge - valid batch type (FASTTRACK)
     Given path 'badges/print-batch'
@@ -36,7 +33,7 @@ Feature: Verify print a batch
     And request {"batchType": "INVALID"}
     When method POST
     Then status 400
-    And match $.error.errors[0].message == 'Pattern.printBatchRequest.batchType'
+    And match $.error.message == 'InvalidFormat.BatchType'
 
   Scenario: Verify print a badge - missing batch type
     Given path 'badges/print-batch'

@@ -7,7 +7,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 
 @Data
 @Builder
-public class Badge {
+public class PrintBatchBadgeRequest {
   private String badgeNumber;
   private Party party;
   private String localAuthorityShortCode;

@@ -13,8 +13,8 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Batch;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
@@ -43,14 +43,14 @@ public class BatchServiceTest extends BadgeTestBase {
   static final List<BadgeEntity> BADGE_ENTITIES = Lists.newArrayList(BADGE_ENTITY);
   static final FindBadgesForPrintBatchParams FIND_BADGE_PARAMS =
       FindBadgesForPrintBatchParams.builder().batchId(BATCH_ID).build();
-  static final Badge BADGE =
-      Badge.builder()
+  static final PrintBatchBadgeRequest BADGE =
+      PrintBatchBadgeRequest.builder()
           .badgeNumber(BADGE_NO)
           .party(new Party().contact(new Contact()).organisation(new Organisation()))
           .build();
-  static final List<Badge> BADGES = Lists.newArrayList(BADGE);
-  static final Batch BATCH =
-      Batch.builder().badges(BADGES).batchType("STANDARD").filename(FILENAME).build();
+  static final List<PrintBatchBadgeRequest> BADGES = Lists.newArrayList(BADGE);
+  static final PrintBatchRequest BATCH =
+      PrintBatchRequest.builder().badges(BADGES).batchType("STANDARD").filename(FILENAME).build();
   static final UpdateBadgesStatusesForBatchParams UPDATE_PARAMS =
       UpdateBadgesStatusesForBatchParams.builder().batchId(BATCH_ID).status("PROCESSED").build();
 
@@ -82,7 +82,7 @@ public class BatchServiceTest extends BadgeTestBase {
     service.sendPrintBatch("STANDARD");
 
     verify(batchRepositoryMock).appendBadgesToBatch(BATCH_ID, "STANDARD");
-    verify(printServiceApiClientMock, times(0)).printBatch(any(Batch.class));
+    verify(printServiceApiClientMock, times(0)).printBatch(any(PrintBatchRequest.class));
     verify(badgeRepositoryMock, times(0))
         .updateBadgesStatusesForBatch(any(UpdateBadgesStatusesForBatchParams.class));
   }

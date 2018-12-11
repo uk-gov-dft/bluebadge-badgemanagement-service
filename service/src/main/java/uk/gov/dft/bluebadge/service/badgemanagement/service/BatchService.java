@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Batch;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
@@ -47,7 +48,7 @@ public class BatchService {
         badgeRepository.findBadgesForPrintBatch(findBadgeParams);
 
     if (!badgesForPrintBatch.isEmpty()) {
-      Batch batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
+      PrintBatchRequest batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
       printServiceApiClient.printBatch(batch);
 
       UpdateBadgesStatusesForBatchParams paramsUpdate =
@@ -63,23 +64,23 @@ public class BatchService {
     }
   }
 
-  private Batch toBatch(String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
-    List<uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge>
+  private PrintBatchRequest toBatch(String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
+    List<PrintBatchBadgeRequest>
         badgesForPrintRequest =
             (badges.stream().map(b -> toBadgePrintRequest(b))).collect(Collectors.toList());
-    return Batch.builder()
+    return PrintBatchRequest.builder()
         .batchType(batchType)
         .filename(batchEntity.getFilename())
         .badges(badgesForPrintRequest)
         .build();
   }
 
-  private uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge
+  private PrintBatchBadgeRequest
       toBadgePrintRequest(BadgeEntity badgeEntity) {
     BadgeConverter converter = new BadgeConverter();
     uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge badge =
         converter.convertToModel(badgeEntity);
-    return uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Badge.builder()
+    return PrintBatchBadgeRequest.builder()
         .badgeNumber(badgeEntity.getBadgeNo())
         .party(badge.getParty())
         .deliverToCode(badgeEntity.getDeliverToCode())

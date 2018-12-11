@@ -55,10 +55,10 @@ public class ValidateBadgeOrder extends ValidateBase {
 
     // Report any failures
     if (!errors.isEmpty()) {
-      log.debug("Badge order failed validation.");
+      log.debug("PrintBatchBadgeRequest order failed validation.");
       throw new BadRequestException(errors);
     }
-    log.debug("Badge order passed validation.");
+    log.debug("PrintBatchBadgeRequest order passed validation.");
   }
 
   private static void validateDobInPast(BadgeEntity entity, List<ErrorErrors> errors) {

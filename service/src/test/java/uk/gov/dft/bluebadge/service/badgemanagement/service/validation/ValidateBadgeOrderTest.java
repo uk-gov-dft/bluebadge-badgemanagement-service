@@ -60,7 +60,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
       BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setExpiryDate((entity.getStartDate().plus(Period.ofYears(3)).plus(Period.ofDays(1))));
       validateBadgeOrder.validate(entity);
-      Assert.fail("Badge valid range validation should throw an exception");
+      Assert.fail("PrintBatchBadgeRequest valid range validation should throw an exception");
     } catch (BadRequestException e) {
       Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
     }
@@ -95,7 +95,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
       BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setNumberOfBadges(10);
       validateBadgeOrder.validate(entity);
-      Assert.fail("Badge valid number of budges validation should throw an exception");
+      Assert.fail("PrintBatchBadgeRequest valid number of budges validation should throw an exception");
     } catch (BadRequestException e) {
       Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
     }
@@ -108,7 +108,7 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
       entity.setDeliverToCode("COUNCIL");
       entity.setDeliverOptionCode("FAST");
       validateBadgeOrder.validate(entity);
-      Assert.fail("Badge deivery rules validation should throw an exception");
+      Assert.fail("PrintBatchBadgeRequest deivery rules validation should throw an exception");
     } catch (BadRequestException e) {
       assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
       String message = e.getResponse().getBody().getError().getErrors().get(0).getMessage();

@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Batch {
+public class PrintBatchRequest {
   private String filename;
   private String batchType;
-  private List<Badge> badges;
+  private List<PrintBatchBadgeRequest> badges;
 }

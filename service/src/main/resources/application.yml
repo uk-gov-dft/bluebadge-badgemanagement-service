@@ -3,16 +3,16 @@ blue-badge:
     url: http://localhost:8380/bb_auth
     client-id: bb_user_management_id
      ***REMOVED***
-  referencedataservice:
-    servicehost:
+  reference-data-service:
+    service-host:
       host: localhost
       port: 8580
       scheme: http
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
-  printservice:
-    servicehost:
+  print-service:
+    service-host:
       host: localhost
       port: 8880
       scheme: http

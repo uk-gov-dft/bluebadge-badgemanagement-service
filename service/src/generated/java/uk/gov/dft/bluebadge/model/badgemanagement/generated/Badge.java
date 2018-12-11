@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 
-/** Badge */
+/** PrintBatchBadgeRequest */
 @Validated
 public class Badge {
   @JsonProperty("badgeNumber")
@@ -404,7 +404,7 @@ public class Badge {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Badge {\n");
+    sb.append("class PrintBatchBadgeRequest {\n");
 
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    party: ").append(toIndentedString(party)).append("\n");

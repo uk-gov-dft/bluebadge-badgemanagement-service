@@ -1,11 +1,11 @@
 blue-badge:
   auth-server:
     url: http://authorisation-service:8380/bb_auth
-  referencedata-service:
-    servicehost:
+  reference-data-service:
+    service-host:
       host: referencedata-service
-  printservice:
-    servicehost:
+  print-service:
+    service-host:
       host: print-service
 
 spring:

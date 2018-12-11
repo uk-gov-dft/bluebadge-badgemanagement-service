@@ -23,7 +23,7 @@ public enum ValidationKeyEnum {
   INVALID_LA_CODE(
       "Invalid.badge.localAuthority", "Invalid local authority code.", "localAuthorityShortCode"),
   START_DATE_IN_PAST(
-      "DateInPast.badge.startDate", "Badge start date cannot be in the past.", "startDate"),
+      "DateInPast.badge.startDate", "PrintBatchBadgeRequest start date cannot be in the past.", "startDate"),
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Batch;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
 
 @Slf4j
 @Service
@@ -20,8 +20,8 @@ public class PrintServiceApiClient {
     this.restTemplate = restTemplate;
   }
 
-  /** Send Print Batch Request. */
-  public void printBatch(Batch batch) {
+  /** Send Print PrintBatchRequest Request. */
+  public void printBatch(PrintBatchRequest batch) {
     log.debug("Print batch.");
 
     String url =

@@ -23,7 +23,7 @@ public class PrintBatchRequest {
    */
   @ApiModelProperty(
     example = "FASTTRACK",
-    value = "'Batch type. Could be FASTTRACK or STANDARD or LA'"
+    value = "'PrintBatchRequest type. Could be FASTTRACK or STANDARD or LA'"
   )
   @NotNull
   public BatchType getBatchType() {

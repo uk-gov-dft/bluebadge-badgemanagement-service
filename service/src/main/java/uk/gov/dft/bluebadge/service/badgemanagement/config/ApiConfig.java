@@ -16,7 +16,7 @@ import uk.gov.dft.bluebadge.common.security.TokenForwardingClientContext;
 public class ApiConfig {
 
   @Validated
-  @ConfigurationProperties("blue-badge.referencedataservice.servicehost")
+  @ConfigurationProperties("blue-badge.reference-data-service.service-host")
   @Bean
   public ServiceConfiguration referenceDataServiceConfiguration() {
     return new ServiceConfiguration();
@@ -42,7 +42,7 @@ public class ApiConfig {
   }
 
   @Validated
-  @ConfigurationProperties("blue-badge.printservice.servicehost")
+  @ConfigurationProperties("blue-badge.print-service.service-host")
   @Bean
   public ServiceConfiguration printServiceConfiguration() {
     return new ServiceConfiguration();

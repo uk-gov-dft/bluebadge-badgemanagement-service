@@ -181,18 +181,23 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     @Test
     @Sql(scripts = "classpath:/test-data.sql")
-    public void updatesBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
+    public void updatesBadgesForPrintBatch_shouldUpdateORDEREDBadges() {
         FindBadgesForPrintBatchParams findParams =
                 FindBadgesForPrintBatchParams.builder().batchId(-1).build();
-        List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
-        assertThat(badges).hasSize(1);
+        List<BadgeEntity> originalBadges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
+        assertThat(originalBadges).hasSize(1);
+        assertThat(originalBadges.get(0).getBadgeStatus()).isEqualTo(Status.ORDERED);
 
-        UpdateBadgesStatusesForBatchParams params =
+        UpdateBadgesStatusesForBatchParams updateParams =
                 UpdateBadgesStatusesForBatchParams.builder().batchId(-1).status("PROCESSED").build();
-        badgeManagementRepository.updateBadgesStatusesForBatch(params);
+        badgeManagementRepository.updateBadgesStatusesForBatch(updateParams);
 
-        badges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
-        assertThat(badges).hasSize(0);
+        RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo(originalBadges.get(0).getBadgeNo()).build();
+        BadgeEntity updatedBadgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+        assertThat(updatedBadgeEntity.getBadgeStatus()).isEqualTo(Status.PROCESSED);
+
+        List<BadgeEntity> updatedBadges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
+        assertThat(updatedBadges).hasSize(0);
     }
 
     @Test

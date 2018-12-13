@@ -2,7 +2,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

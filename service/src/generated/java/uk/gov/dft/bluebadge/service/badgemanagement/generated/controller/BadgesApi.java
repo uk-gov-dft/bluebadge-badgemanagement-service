@@ -59,7 +59,7 @@ public interface BadgesApi {
       "badges",
     }
   )
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "PrintBatchBadgeRequest cancellation requested.")})
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
       @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
@@ -76,7 +76,7 @@ public interface BadgesApi {
   @ApiOperation(
     value = "Delete a badge",
     nickname = "deleteBlueBadge",
-    notes = "Delete a Blue PrintBatchBadgeRequest.",
+    notes = "Delete a Blue Badge.",
     tags = {
       "badges",
     }
@@ -95,7 +95,7 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-    value = "Find a Blue PrintBatchBadgeRequest given the specified query parameters",
+    value = "Find a Blue Badge given the specified query parameters",
     nickname = "findBlueBadge",
     notes =
         "By passing in appropriate options, you can search for available badges in the system.  Options are a partial match and all submitted options must be matched. At least 1 parameter must be provided. ",
@@ -202,7 +202,7 @@ public interface BadgesApi {
     value = {
       @ApiResponse(
         code = 200,
-        message = "PrintBatchBadgeRequest replacement complete.  New badge number returned. ",
+        message = "Badge replacement complete.  New badge number returned. ",
         response = BadgeNumberResponse.class
       )
     }
@@ -231,9 +231,9 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-    value = "Retrieve a Blue PrintBatchBadgeRequest given the Blue PrintBatchBadgeRequest number parameter.",
+    value = "Retrieve a Blue Badge given the Blue Badge number parameter.",
     nickname = "retrieveBlueBadge",
-    notes = "Retrieves a Blue PrintBatchBadgeRequest given the blueBadgeNumber. ",
+    notes = "Retrieves a Blue Badge given the blueBadgeNumber. ",
     response = BadgeResponse.class,
     tags = {
       "badges",
@@ -243,12 +243,12 @@ public interface BadgesApi {
     value = {
       @ApiResponse(
         code = 200,
-        message = "Response when Blue PrintBatchBadgeRequest can be retrieved. ",
+        message = "Response when Blue Badge can be retrieved. ",
         response = BadgeResponse.class
       ),
       @ApiResponse(
         code = 404,
-        message = "A Blue PrintBatchBadgeRequest cannot be found given the parameters specified."
+        message = "A Blue Badge cannot be found given the parameters specified."
       )
     }
   )
@@ -286,15 +286,7 @@ public interface BadgesApi {
       "badges",
     }
   )
-  @ApiResponses(
-    value = {
-      @ApiResponse(
-        code = 200,
-        message = "PrintBatchBadgeRequest replacement complete.  New badge number returned. ",
-        response = BadgeNumberResponse.class
-      )
-    }
-  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Batch print requested ")})
   @RequestMapping(value = "/badges/print-batch", method = RequestMethod.POST)
   default ResponseEntity<Void> printBatch(
       @ApiParam(value = "") @Valid @RequestBody PrintBatchRequest printBadgeRequest) {

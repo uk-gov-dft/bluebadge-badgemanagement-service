@@ -186,14 +186,14 @@ public class BadgeOrderRequest {
   }
 
   /**
-   * The date the Blue PrintBatchBadgeRequest expires. Must be within 3 years of start date.
+   * The date the Blue Badge expires. Must be within 3 years of start date.
    *
    * @return expiryDate
    */
   @ApiModelProperty(
     example = "2019-07-01",
     required = true,
-    value = "The date the Blue PrintBatchBadgeRequest expires.  Must be within 3 years of start date. "
+    value = "The date the Blue Badge expires.  Must be within 3 years of start date. "
   )
   @NotNull
   @Valid

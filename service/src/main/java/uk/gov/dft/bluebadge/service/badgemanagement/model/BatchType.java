@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum BatchType {
   STANDARD,
   FASTTRACK,

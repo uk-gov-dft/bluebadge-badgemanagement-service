@@ -64,10 +64,10 @@ public class BatchService {
     }
   }
 
-  private PrintBatchRequest toBatch(String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
-    List<PrintBatchBadgeRequest>
-        badgesForPrintRequest =
-            (badges.stream().map(b -> toBadgePrintRequest(b))).collect(Collectors.toList());
+  private PrintBatchRequest toBatch(
+      String batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
+    List<PrintBatchBadgeRequest> badgesForPrintRequest =
+        (badges.stream().map(b -> toBadgePrintRequest(b))).collect(Collectors.toList());
     return PrintBatchRequest.builder()
         .batchType(batchType)
         .filename(batchEntity.getFilename())
@@ -75,8 +75,7 @@ public class BatchService {
         .build();
   }
 
-  private PrintBatchBadgeRequest
-      toBadgePrintRequest(BadgeEntity badgeEntity) {
+  private PrintBatchBadgeRequest toBadgePrintRequest(BadgeEntity badgeEntity) {
     BadgeConverter converter = new BadgeConverter();
     uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge badge =
         converter.convertToModel(badgeEntity);

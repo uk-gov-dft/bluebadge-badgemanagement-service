@@ -65,20 +65,20 @@ public class ValidateCancelBadge extends ValidateBase {
    */
   public void validateAfterFailedCancel(BadgeEntity badgeEntity) {
     // Retrieve badge (if possible) and return error from above.
-    // 1. PrintBatchBadgeRequest does not exist
+    // 1. Badge does not exist
     if (null == badgeEntity) {
       throw new NotFoundException("badge", UPDATE);
     }
     log.debug("Validating why cancel failed for {}", badgeEntity.getBadgeNo());
 
-    // 2. PrintBatchBadgeRequest already expired.
+    // 2. Badge already expired.
     validateExpiryDateInFuture(badgeEntity);
 
-    // 3. PrintBatchBadgeRequest status invalid.
+    // 3. Badge status invalid.
     validateStatusValidForCancel(badgeEntity);
 
     // If got here then it is a bit of a mystery why cancel did not work
-    log.error("Cancel badge failed for unexpected reason. PrintBatchBadgeRequest: {}", badgeEntity.getBadgeNo());
+    log.error("Cancel badge failed for unexpected reason. Badge: {}", badgeEntity.getBadgeNo());
     throw new BadRequestException(CANCEL_FAILED_UNEXPECTED.getSystemErrorInstance());
   }
 

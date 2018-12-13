@@ -170,11 +170,11 @@ public class BadgeSummary {
   }
 
   /**
-   * The date the Blue PrintBatchBadgeRequest expires.
+   * The date the Blue Badge expires.
    *
    * @return expiryDate
    */
-  @ApiModelProperty(example = "2019-06-10", value = "The date the Blue PrintBatchBadgeRequest expires.")
+  @ApiModelProperty(example = "2019-06-10", value = "The date the Blue Badge expires.")
   @Valid
   public LocalDate getExpiryDate() {
     return expiryDate;

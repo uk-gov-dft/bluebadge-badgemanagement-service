@@ -43,14 +43,19 @@ public class BatchServiceTest extends BadgeTestBase {
   static final List<BadgeEntity> BADGE_ENTITIES = Lists.newArrayList(BADGE_ENTITY);
   static final FindBadgesForPrintBatchParams FIND_BADGE_PARAMS =
       FindBadgesForPrintBatchParams.builder().batchId(BATCH_ID).build();
-  static final PrintBatchBadgeRequest BADGE =
+  static final PrintBatchBadgeRequest PRINT_BATCH_BADGE =
       PrintBatchBadgeRequest.builder()
           .badgeNumber(BADGE_NO)
           .party(new Party().contact(new Contact()).organisation(new Organisation()))
           .build();
-  static final List<PrintBatchBadgeRequest> BADGES = Lists.newArrayList(BADGE);
+  static final List<PrintBatchBadgeRequest> PRINT_BATCH_BADGES =
+      Lists.newArrayList(PRINT_BATCH_BADGE);
   static final PrintBatchRequest BATCH =
-      PrintBatchRequest.builder().badges(BADGES).batchType("STANDARD").filename(FILENAME).build();
+      PrintBatchRequest.builder()
+          .badges(PRINT_BATCH_BADGES)
+          .batchType("STANDARD")
+          .filename(FILENAME)
+          .build();
   static final UpdateBadgesStatusesForBatchParams UPDATE_PARAMS =
       UpdateBadgesStatusesForBatchParams.builder().batchId(BATCH_ID).status("PROCESSED").build();
 

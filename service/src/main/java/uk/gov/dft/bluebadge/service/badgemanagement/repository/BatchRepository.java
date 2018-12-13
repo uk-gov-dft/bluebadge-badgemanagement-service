@@ -18,14 +18,14 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMappe
 public class BatchRepository implements BatchMapper {
 
   private static final DateTimeFormatter dateTimeFormatter =
-          new DateTimeFormatterBuilder()
-                  .appendValue(YEAR, 4)
-                  .appendValue(MONTH_OF_YEAR, 2)
-                  .appendValue(DAY_OF_MONTH, 2)
-                  .appendValue(HOUR_OF_DAY, 2)
-                  .appendValue(MINUTE_OF_HOUR, 2)
-                  .appendValue(SECOND_OF_MINUTE, 2)
-                  .toFormatter();
+      new DateTimeFormatterBuilder()
+          .appendValue(YEAR, 4)
+          .appendValue(MONTH_OF_YEAR, 2)
+          .appendValue(DAY_OF_MONTH, 2)
+          .appendValue(HOUR_OF_DAY, 2)
+          .appendValue(MINUTE_OF_HOUR, 2)
+          .appendValue(SECOND_OF_MINUTE, 2)
+          .toFormatter();
 
   class Statements {
 

@@ -48,6 +48,7 @@ public class BadgeManagementService {
           .stream()
           .map(BadgeEntity.Status::name)
           .collect(Collectors.toSet());
+  private static final String BADGE = "badge";
 
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;
@@ -141,7 +142,7 @@ public class BadgeManagementService {
     BadgeEntity entity = repository.retrieveBadge(params);
 
     if (null == entity || DELETED == entity.getBadgeStatus()) {
-      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+      throw new NotFoundException(BADGE, NotFoundException.Operation.RETRIEVE);
     }
     entity.setImageLink(photoService.generateSignedS3Url(entity.getImageLink()));
     entity.setImageLinkOriginal(photoService.generateSignedS3Url(entity.getImageLinkOriginal()));
@@ -175,7 +176,7 @@ public class BadgeManagementService {
     BadgeEntity badge = repository.retrieveBadge(params);
 
     if (null == badge || DELETED == badge.getBadgeStatus()) {
-      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+      throw new NotFoundException(BADGE, NotFoundException.Operation.RETRIEVE);
     }
 
     if (null != badge.getImageLink()) {
@@ -217,7 +218,7 @@ public class BadgeManagementService {
 
   private void replaceValidationChecks(BadgeEntity badge) {
     if (null == badge || DELETED == badge.getBadgeStatus()) {
-      throw new NotFoundException("badge", NotFoundException.Operation.RETRIEVE);
+      throw new NotFoundException(BADGE, NotFoundException.Operation.RETRIEVE);
     }
 
     if (badge.getExpiryDate().isBefore(LocalDate.now())) {

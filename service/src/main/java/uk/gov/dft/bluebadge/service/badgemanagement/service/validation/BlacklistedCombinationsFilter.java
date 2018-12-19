@@ -16,8 +16,6 @@ public class BlacklistedCombinationsFilter {
   }
 
   public boolean isValid(String badgeNumber) {
-    return !getCombinations()
-        .stream().anyMatch(i -> badgeNumber.contains(i.toUpperCase()));
-
+    return getCombinations().stream().noneMatch(i -> badgeNumber.contains(i.toUpperCase()));
   }
 }

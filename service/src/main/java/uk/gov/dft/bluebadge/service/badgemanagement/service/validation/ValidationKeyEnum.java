@@ -27,7 +27,7 @@ public enum ValidationKeyEnum {
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
-    Constants.EXPIRY_DATE),
+      Constants.EXPIRY_DATE),
   INVALID_NUMBER_OF_BADGES_PERSON(
       "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
   INVALID_NUMBER_OF_BADGES_ORGANISATION(
@@ -62,7 +62,9 @@ public enum ValidationKeyEnum {
   REPLACE_INVALID_REASON(
       "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
   REPLACE_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", Constants.EXPIRY_DATE),
+      "Invalid.badge.replace.expiryDate",
+      "Cannot replace an expired badge.",
+      Constants.EXPIRY_DATE),
   REPLACE_INVALID_BADGE_STATUS(
       "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
 

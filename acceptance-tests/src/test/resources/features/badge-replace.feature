@@ -72,7 +72,7 @@ Feature: Verify replace a badge
 
   Scenario: Verify replace a badge success with lower case badge number
     Given path 'badges/eeeeea/replacements'
-    And request {badgeNumber: "eeeeea","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request {badgeNumber: "EEEEEA","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
     * def newBadgeNo = $.data

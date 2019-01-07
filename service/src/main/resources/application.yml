@@ -51,6 +51,6 @@ springfox.documentation.swagger.v2.path: /api-docs
 amazon:
   s3bucket: uk-gov-dft-dev-badge
   thumbnail-height-px: 300
-  signed-url-duration-ms: 60000
+  signed-url-duration-ms: 1800000
   
 blacklisted.combinations: babe,c4c4,caca,d34d,dead,f3c35,f3ck,f4ck,fack,feck,‌h338,‌h35h3,‌h383,hebe,heeb,j4d3,jade,kkk  

@@ -10,6 +10,14 @@ Feature: Verify delete a badge
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
+
+* def lowerCase =
+  """
+  function(src) {
+    return src.trim().toLowerCase();
+  } 
+  """
+
   Scenario: Verify 404 response for delete of unknown badge
     Given path 'badges/AAAAAA'
     When method DELETE
@@ -21,6 +29,19 @@ Feature: Verify delete a badge
     Given path 'badges/'+ createdBadgeNo
     When method DELETE
     Then status 200
+
+  Scenario: Verify delete a badge success with badge number in lower case
+    * def createResult = call read('./badge-create-person.feature')
+    * def createdBadgeNo = createResult.badgeNo
+    * def lowerCaseBadgeNo = lowerCase(createdBadgeNo)
+    Given path 'badges/'+ lowerCaseBadgeNo
+    When method DELETE
+    Then status 200
+    Given path 'badges/' + lowerCaseBadgeNo
+    * header Authorization = 'Bearer ' + result.accessToken
+    When method GET
+    Then status 404
+
 
   Scenario: Verify retrieve is not found after delete
     * def createResult = call read('./badge-create-person.feature')

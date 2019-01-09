@@ -27,7 +27,7 @@ public enum ValidationKeyEnum {
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
-      "expiryDate"),
+      Constants.EXPIRY_DATE),
   INVALID_NUMBER_OF_BADGES_PERSON(
       "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
   INVALID_NUMBER_OF_BADGES_ORGANISATION(
@@ -51,7 +51,7 @@ public enum ValidationKeyEnum {
       "To search badges require either name or postcode, not both.",
       "name"),
   CANCEL_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
+      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", Constants.EXPIRY_DATE),
   CANCEL_STATUS_INVALID(
       "Invalid.badge.cancel.status", "Cannot cancel a badge of this status.", "badgeStatus"),
   CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown"),
@@ -62,7 +62,9 @@ public enum ValidationKeyEnum {
   REPLACE_INVALID_REASON(
       "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
   REPLACE_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.replace.expiryDate", "Cannot replace an expired badge.", "expiryDate"),
+      "Invalid.badge.replace.expiryDate",
+      "Cannot replace an expired badge.",
+      Constants.EXPIRY_DATE),
   REPLACE_INVALID_BADGE_STATUS(
       "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
 
@@ -90,5 +92,9 @@ public enum ValidationKeyEnum {
     error.setMessage(key);
     error.setReason(defaultMessage);
     return error;
+  }
+
+  private static class Constants {
+    public static final String EXPIRY_DATE = "expiryDate";
   }
 }

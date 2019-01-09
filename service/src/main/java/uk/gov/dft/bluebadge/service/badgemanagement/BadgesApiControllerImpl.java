@@ -95,7 +95,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
       @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam() @Valid @RequestBody BadgeCancelRequest badgeCancel) {
-    if (!badgeNumber.equals(badgeCancel.getBadgeNumber())) {
+    if (!badgeNumber.equalsIgnoreCase(badgeCancel.getBadgeNumber())) {
       throw new BadRequestException(INVALID_BADGE_NUMBER.getFieldErrorInstance());
     }
     CancelBadgeRequestConverter converter = new CancelBadgeRequestConverter();
@@ -114,7 +114,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
       @PathVariable String badgeNumber, @Valid @RequestBody BadgeReplaceRequest request) {
-    if (!badgeNumber.equals(request.getBadgeNumber())) {
+    if (!badgeNumber.equalsIgnoreCase(request.getBadgeNumber())) {
       throw new BadRequestException(INVALID_BADGE_NUMBER.getSystemErrorInstance());
     }
 

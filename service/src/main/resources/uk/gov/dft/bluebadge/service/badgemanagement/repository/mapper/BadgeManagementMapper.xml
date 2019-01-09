@@ -59,7 +59,7 @@
         order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode, replace_reason_code AS replaceReasonCode
         FROM badge
         WHERE
-          badge_no = #{badgeNo}
+          badge_no = trim(upper(#{badgeNo}))
     </select>
 
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
@@ -107,7 +107,7 @@
     <update id="cancelBadge" parameterType="CancelBadgeParams">
         UPDATE badge
         SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
-        WHERE badge_no = #{badgeNo}
+        WHERE badge_no = trim(upper(#{badgeNo}))
         AND expiry_date &gt;= current_date
         AND badge_status IN ('ISSUED', 'ORDERED')
         <if test="localAuthorityShortCode != null">
@@ -136,14 +136,14 @@
               , holder_name_upper = null
               , image_link_original = null
               , replace_reason_code = null
-        WHERE badge_no = #{badgeNo}
+        WHERE badge_no = trim(upper(#{badgeNo}))
     </update>
 
     <update id="replaceBadge" parameterType="ReplaceBadgeParams">
         UPDATE badge
         SET badge_status = #{status},
         	    replace_reason_code = #{reasonCode}
-        WHERE badge_no = #{badgeNumber}
+        WHERE badge_no = trim(upper(#{badgeNumber}))
     </update>
 
 </mapper>

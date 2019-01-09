@@ -40,7 +40,7 @@ public class BadgeManagementService {
           .stream()
           .map(BadgeEntity.Status::name)
           .collect(Collectors.toSet());
-  public static final String BADGE = "badge";
+  private static final String BADGE = "badge";
 
   private final BadgeManagementRepository repository;
   private final ValidateBadgeOrder validateBadgeOrder;

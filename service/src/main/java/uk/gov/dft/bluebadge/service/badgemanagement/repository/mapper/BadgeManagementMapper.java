@@ -63,4 +63,6 @@ public interface BadgeManagementMapper {
   int deleteBadge(DeleteBadgeParams badgeEntity);
 
   int replaceBadge(ReplaceBadgeParams params);
+
+  int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params);
 }

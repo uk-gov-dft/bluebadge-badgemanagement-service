@@ -128,7 +128,13 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   // TODO
   // @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
-    batchService.sendPrintBatch(printBadgeRequest.getBatchType().toString());
+    batchService.sendPrintBatch(printBadgeRequest.getBatchType());
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  public ResponseEntity<Void> collectBatches() {
+    batchService.collectBatches();
     return ResponseEntity.ok().build();
   }
 }

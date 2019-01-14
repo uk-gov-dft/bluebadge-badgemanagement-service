@@ -64,7 +64,7 @@ public class BatchRepository implements BatchMapper {
   @Override
   public void appendBadgesToBatch(Integer batchId, BatchType batchType) {
     AppendBadgesToBatchParams params =
-        AppendBadgesToBatchParams.builder().batchId(batchId).batchType(batchType).build();
+        AppendBadgesToBatchParams.builder().batchId(batchId).batchType(batchType.name()).build();
     sqlSession.insert(Statements.APPEND_BADGES, params);
   }
 

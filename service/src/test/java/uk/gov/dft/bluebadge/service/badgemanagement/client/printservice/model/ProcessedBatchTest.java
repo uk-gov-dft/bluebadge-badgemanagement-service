@@ -1,8 +1,8 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
 
 public class ProcessedBatchTest {
 

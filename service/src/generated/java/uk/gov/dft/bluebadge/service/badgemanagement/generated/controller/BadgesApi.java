@@ -10,6 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.IOException;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,12 +34,6 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import java.io.IOException;
-import java.util.Optional;
-
 @Api(value = "Badges", description = "the Badges API")
 public interface BadgesApi {
 
@@ -53,12 +52,13 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Request cancel badge",
-      nickname = "cancelBlueBadge",
-      notes = "Cancel a badge with immediate effect.",
-      tags = {
-        "badges",
-      })
+    value = "Request cancel badge",
+    nickname = "cancelBlueBadge",
+    notes = "Cancel a badge with immediate effect.",
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
@@ -74,12 +74,13 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Delete a badge",
-      nickname = "deleteBlueBadge",
-      notes = "Delete a Blue Badge.",
-      tags = {
-        "badges",
-      })
+    value = "Delete a badge",
+    nickname = "deleteBlueBadge",
+    notes = "Delete a Blue Badge.",
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
   @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
   default ResponseEntity<Void> deleteBlueBadge(
@@ -94,26 +95,30 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Find a Blue Badge given the specified query parameters",
-      nickname = "findBlueBadge",
-      notes =
-          "By passing in appropriate options, you can search for available badges in the system.  Options are a partial match and all submitted options must be matched. At least 1 parameter must be provided. ",
-      response = BadgesResponse.class,
-      tags = {
-        "badges",
-      })
+    value = "Find a Blue Badge given the specified query parameters",
+    nickname = "findBlueBadge",
+    notes =
+        "By passing in appropriate options, you can search for available badges in the system.  Options are a partial match and all submitted options must be matched. At least 1 parameter must be provided. ",
+    response = BadgesResponse.class,
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            code = 200,
-            message = "Response when Blue Badges can (or can not) be found. ",
-            response = BadgesResponse.class),
-        @ApiResponse(code = 200, message = "Unexpected error.", response = CommonResponse.class)
-      })
+    value = {
+      @ApiResponse(
+        code = 200,
+        message = "Response when Blue Badges can (or can not) be found. ",
+        response = BadgesResponse.class
+      ),
+      @ApiResponse(code = 200, message = "Unexpected error.", response = CommonResponse.class)
+    }
+  )
   @RequestMapping(
-      value = "/badges",
-      produces = {"application/json"},
-      method = RequestMethod.GET)
+    value = "/badges",
+    produces = {"application/json"},
+    method = RequestMethod.GET
+  )
   default ResponseEntity<BadgesResponse> findBlueBadge(
       @Size(max = 100)
           @ApiParam(value = "Search the badge holder's name.")
@@ -144,22 +149,25 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Order badges",
-      nickname = "orderBlueBadges",
-      notes =
-          "Place an order for a new badge, which will add a new record to the central record immediately and result in a fulfilment request being sent to the printer with no further intervention required.",
-      response = BadgeNumbersResponse.class,
-      tags = {
-        "badges",
-      })
+    value = "Order badges",
+    nickname = "orderBlueBadges",
+    notes =
+        "Place an order for a new badge, which will add a new record to the central record immediately and result in a fulfilment request being sent to the printer with no further intervention required.",
+    response = BadgeNumbersResponse.class,
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(
-      value = {
-        @ApiResponse(code = 200, message = "Badges created.", response = BadgeNumbersResponse.class)
-      })
+    value = {
+      @ApiResponse(code = 200, message = "Badges created.", response = BadgeNumbersResponse.class)
+    }
+  )
   @RequestMapping(
-      value = "/badges",
-      produces = {"application/json"},
-      method = RequestMethod.POST)
+    value = "/badges",
+    produces = {"application/json"},
+    method = RequestMethod.POST
+  )
   default ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam(value = "") @Valid @RequestBody BadgeOrderRequest badgeOrder) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -181,21 +189,24 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Request replacement badge",
-      nickname = "replaceBlueBadge",
-      notes =
-          "Cancel an existing badge and order a new badge with the same details (including expiry date), with a start date of today.",
-      response = BadgeNumberResponse.class,
-      tags = {
-        "badges",
-      })
+    value = "Request replacement badge",
+    nickname = "replaceBlueBadge",
+    notes =
+        "Cancel an existing badge and order a new badge with the same details (including expiry date), with a start date of today.",
+    response = BadgeNumberResponse.class,
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            code = 200,
-            message = "Badge replacement complete.  New badge number returned. ",
-            response = BadgeNumberResponse.class)
-      })
+    value = {
+      @ApiResponse(
+        code = 200,
+        message = "Badge replacement complete.  New badge number returned. ",
+        response = BadgeNumberResponse.class
+      )
+    }
+  )
   @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
   default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
       @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
@@ -220,27 +231,32 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Retrieve a Blue Badge given the Blue Badge number parameter.",
-      nickname = "retrieveBlueBadge",
-      notes = "Retrieves a Blue Badge given the blueBadgeNumber. ",
-      response = BadgeResponse.class,
-      tags = {
-        "badges",
-      })
+    value = "Retrieve a Blue Badge given the Blue Badge number parameter.",
+    nickname = "retrieveBlueBadge",
+    notes = "Retrieves a Blue Badge given the blueBadgeNumber. ",
+    response = BadgeResponse.class,
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            code = 200,
-            message = "Response when Blue Badge can be retrieved. ",
-            response = BadgeResponse.class),
-        @ApiResponse(
-            code = 404,
-            message = "A Blue Badge cannot be found given the parameters specified.")
-      })
+    value = {
+      @ApiResponse(
+        code = 200,
+        message = "Response when Blue Badge can be retrieved. ",
+        response = BadgeResponse.class
+      ),
+      @ApiResponse(
+        code = 404,
+        message = "A Blue Badge cannot be found given the parameters specified."
+      )
+    }
+  )
   @RequestMapping(
-      value = "/badges/{badgeNumber}",
-      produces = {"application/json"},
-      method = RequestMethod.GET)
+    value = "/badges/{badgeNumber}",
+    produces = {"application/json"},
+    method = RequestMethod.GET
+  )
   default ResponseEntity<BadgeResponse> retrieveBlueBadge(
       @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
@@ -263,12 +279,13 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Print a batch",
-      nickname = "printBatch",
-      notes = "Request print batch.",
-      tags = {
-        "badges",
-      })
+    value = "Print a batch",
+    nickname = "printBatch",
+    notes = "Request print batch.",
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Batch print requested ")})
   @RequestMapping(value = "/badges/print-batch", method = RequestMethod.POST)
   default ResponseEntity<Void> printBatch(
@@ -285,12 +302,13 @@ public interface BadgesApi {
   }
 
   @ApiOperation(
-      value = "Process results of print batches",
-      nickname = "collectBatches",
-      notes = "Process print batch results",
-      tags = {
-        "badges",
-      })
+    value = "Process results of print batches",
+    nickname = "collectBatches",
+    notes = "Process print batch results",
+    tags = {
+      "badges",
+    }
+  )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Print batch results processed.")})
   @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.GET)
   default ResponseEntity<Void> collectBatches() {

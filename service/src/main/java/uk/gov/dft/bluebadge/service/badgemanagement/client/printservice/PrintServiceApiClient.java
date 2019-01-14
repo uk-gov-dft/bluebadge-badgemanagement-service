@@ -1,8 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ public class PrintServiceApiClient {
     restTemplate.postForEntity(url, batch, CommonResponse.class);
   }
 
-  public ProcessedBatchesResponse collectPrintBatchResults(){
+  public ProcessedBatchesResponse collectPrintBatchResults() {
     log.debug("Call collect batches print service endpoint.");
 
     String url =
@@ -40,11 +38,14 @@ public class PrintServiceApiClient {
     return restTemplate.getForEntity(url, ProcessedBatchesResponse.class).getBody();
   }
 
-  public void deleteBatchConfirmation(String confirmationFileName){
+  public void deleteBatchConfirmation(String confirmationFileName) {
     log.info("Requesting delete confirmation file {} from print service.", confirmationFileName);
 
     String url =
-        UriComponentsBuilder.newInstance().path("/").pathSegment("processed-batches", confirmationFileName).toUriString();
+        UriComponentsBuilder.newInstance()
+            .path("/")
+            .pathSegment("processed-batches", confirmationFileName)
+            .toUriString();
     restTemplate.delete(url);
   }
 }

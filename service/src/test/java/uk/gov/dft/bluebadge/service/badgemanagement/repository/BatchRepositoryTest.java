@@ -28,7 +28,8 @@ public class BatchRepositoryTest {
 
   @Test
   public void createBatch() {
-    BatchEntity batchEntity = repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD);
+    BatchEntity batchEntity =
+        repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD);
     assertThat(batchEntity).isNotNull();
     verify(sqlSession).insert(eq(CREATE), any(BatchEntity.class));
   }

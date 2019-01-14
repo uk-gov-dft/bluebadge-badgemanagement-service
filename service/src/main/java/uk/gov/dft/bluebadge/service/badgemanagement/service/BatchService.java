@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeT
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
 @SuppressWarnings("squid:S1612")
@@ -47,7 +46,9 @@ public class BatchService {
   }
 
   public void sendPrintBatch(BatchType batchType) {
-    BatchEntity batchEntity = batchRepository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.fromBatchType(batchType));
+    BatchEntity batchEntity =
+        batchRepository.createBatch(
+            BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.fromBatchType(batchType));
     batchRepository.appendBadgesToBatch(batchEntity.getId(), batchType);
 
     FindBadgesForPrintBatchParams findBadgeParams =
@@ -104,7 +105,7 @@ public class BatchService {
     ProcessedBatchesResponse batchesResponse = printServiceApiClient.collectPrintBatchResults();
     for (ProcessedBatch batch : batchesResponse.getData()) {
       if (StringUtils.isEmpty(batch.getErrorMessage())) {
-          processBatch(batch);
+        processBatch(batch);
       } else {
         log.error(
             "Could not process print batch result for {} due to error from print service: {}",
@@ -121,16 +122,24 @@ public class BatchService {
     if (batch.getFileType() == ProcessedBatch.FileTypeEnum.CONFIRMATION) {
       log.info("Processing confirmation of {}", batch.getFilename());
       requiredStatus = BadgeEntity.Status.ISSUED;
-      batchEntity = batchRepository.createBatch(BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED);
+      batchEntity =
+          batchRepository.createBatch(
+              BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED);
     } else {
       log.info("Processing rejection of {}", batch.getFilename());
       requiredStatus = BadgeEntity.Status.REJECT;
-      batchEntity = batchRepository.createBatch(BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED);
+      batchEntity =
+          batchRepository.createBatch(
+              BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED);
     }
     // Update each badge in the batch results file and link to new batch
     for (ProcessedBadge badge : batch.getProcessedBadges()) {
 
-      batchRepository.linkBadgeToBatch(LinkBadgeToBatchParams.builder().badgeId(badge.getBadgeNumber()).batchId(batchEntity.getId()).build());
+      batchRepository.linkBadgeToBatch(
+          LinkBadgeToBatchParams.builder()
+              .badgeId(badge.getBadgeNumber())
+              .batchId(batchEntity.getId())
+              .build());
       int result =
           badgeRepository.updateBadgeStatusFromStatus(
               UpdateBadgeStatusParams.builder()

@@ -27,8 +27,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
     static final String UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH =
         "updateBadgesStatusesForPrintBatch";
-    static final String UPDATE_BADGE_STATUS_FROM_STATUS =
-        "updateBadgeStatusFromStatus";
+    static final String UPDATE_BADGE_STATUS_FROM_STATUS = "updateBadgeStatusFromStatus";
   }
 
   private final SqlSession sqlSession;

@@ -10,5 +10,5 @@ import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 @Builder
 public class AppendBadgesToBatchParams {
   Integer batchId;
-  BatchType batchType;
+  String batchType;
 }

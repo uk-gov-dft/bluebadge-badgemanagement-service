@@ -1,11 +1,10 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model;
 
+import java.time.OffsetDateTime;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
 
 @Validated
 @Data

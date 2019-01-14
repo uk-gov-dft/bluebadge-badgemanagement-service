@@ -1,13 +1,12 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model;
 
+import java.util.List;
+import javax.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Validated
 @Data

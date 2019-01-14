@@ -1,6 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.google.common.collect.ImmutableSet;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,14 +26,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBad
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -319,17 +318,17 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   public void updateStatusToReject() {
     // Can set Rejected
     assertThat(
-        badgeManagementRepository.updateBadgeStatusFromStatus(
-            UpdateBadgeStatusParams.builder()
-                .badgeNumber("KKKKDB")
-                .toStatus(Status.REJECT)
-                .fromStatus(Status.PROCESSED)
-                .build()))
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDB")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
         .isEqualTo(1);
     assertThat(
-        badgeManagementRepository
-            .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDB").build())
-            .getBadgeStatus())
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDB").build())
+                .getBadgeStatus())
         .isEqualTo(Status.REJECT);
   }
 
@@ -338,17 +337,17 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   public void updateStatusWhenDeletedDoesNowt() {
     // Can set Issued
     assertThat(
-        badgeManagementRepository.updateBadgeStatusFromStatus(
-            UpdateBadgeStatusParams.builder()
-                .badgeNumber("KKKKDC")
-                .toStatus(Status.REJECT)
-                .fromStatus(Status.PROCESSED)
-                .build()))
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDC")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
         .isEqualTo(0);
     assertThat(
-        badgeManagementRepository
-            .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDC").build())
-            .getBadgeStatus())
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDC").build())
+                .getBadgeStatus())
         .isEqualTo(Status.DELETED);
   }
 }

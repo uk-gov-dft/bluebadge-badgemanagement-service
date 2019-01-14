@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
@@ -24,7 +23,8 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void createBatch_ok() {
-    BatchEntity batchEntity = repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD);
+    BatchEntity batchEntity =
+        repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD);
     assertThat(batchEntity).isNotNull();
     assertThat(batchEntity.getId()).isNotNull();
     assertThat(batchEntity.getFilename()).startsWith("BADGEEXTRACT_");
@@ -36,7 +36,8 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void appendBadgesToBatch_ok() {
-    BatchEntity batchEntity = repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.FASTTRACK);
+    BatchEntity batchEntity =
+        repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.FASTTRACK);
     repository.appendBadgesToBatch(batchEntity.getId(), BatchType.FASTTRACK);
   }
 
@@ -44,7 +45,10 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void linkBadgeToBatch() {
     // When badge and batch exist, then link created
-    assertThat(repository.linkBadgeToBatch(LinkBadgeToBatchParams.builder().badgeId("KKKKDC").batchId(-2).build())).isEqualTo(1);
+    assertThat(
+            repository.linkBadgeToBatch(
+                LinkBadgeToBatchParams.builder().badgeId("KKKKDC").batchId(-2).build()))
+        .isEqualTo(1);
   }
 
   @Test

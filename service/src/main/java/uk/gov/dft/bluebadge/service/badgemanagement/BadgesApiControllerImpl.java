@@ -125,8 +125,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
-  // TODO
-  // @PreAuthorize("hasAuthority('PERM_REPLACE_BADGE') and @badgeSecurity.isAuthorised(#badgeNumber)")
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
     batchService.sendPrintBatch(printBadgeRequest.getBatchType());
     return ResponseEntity.ok().build();

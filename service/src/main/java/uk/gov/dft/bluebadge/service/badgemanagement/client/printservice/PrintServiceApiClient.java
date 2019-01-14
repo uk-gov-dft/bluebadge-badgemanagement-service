@@ -39,7 +39,7 @@ public class PrintServiceApiClient {
   }
 
   public void deleteBatchConfirmation(String confirmationFileName) {
-    log.info("Requesting delete confirmation file {} from print service.", confirmationFileName);
+    log.info("Requesting delete of confirmation file {} from print service.", confirmationFileName);
 
     String url =
         UriComponentsBuilder.newInstance()

@@ -1,5 +1,5 @@
-@badge-print-batch
-Feature: Verify print a batch
+@batch-collect-results
+Feature: Verify print a batch results processing
 
   Background:
     * url baseUrl

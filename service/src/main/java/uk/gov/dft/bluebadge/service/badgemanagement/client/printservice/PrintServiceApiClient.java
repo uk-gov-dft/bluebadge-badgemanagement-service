@@ -38,10 +38,11 @@ public class PrintServiceApiClient {
         UriComponentsBuilder.newInstance().path("/").pathSegment("processed-batches").toUriString();
     return restTemplate.getForEntity(url, ProcessedBatchesResponse.class).getBody();
   }
-
   public void deleteBatchConfirmation(String confirmationFileName) {
     log.info("Requesting delete of confirmation file {} from print service.", confirmationFileName);
 
+    // Map used for file name parameter rather that uri component.
+    // When tried with filename as component, if it had a space in it, it got encoded twice and rejected by print service.
     HashMap<String, String> vars = new HashMap<>();
     vars.put("fileName", confirmationFileName);
     String url =

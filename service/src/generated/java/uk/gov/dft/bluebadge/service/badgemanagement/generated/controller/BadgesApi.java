@@ -310,13 +310,6 @@ public interface BadgesApi {
     }
   )
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Print batch results processed.")})
-  @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.GET)
-  default ResponseEntity<Void> collectBatches() {
-    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-    } else {
-      log.warn(
-          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
-    }
-    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-  }
+  @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.POST)
+  ResponseEntity<Void> collectBatches();
 }

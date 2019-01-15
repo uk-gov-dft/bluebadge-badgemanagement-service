@@ -17,10 +17,11 @@ Feature: Verify print a batch results processing
 
   Scenario: Verify end point and process pending batches
     Given path 'badges/collect-batches'
-    When method GET
+    And request '{}'
+    When method POST
     Then status 200
 
-  Scenario: Verify batch results
+  Scenario: Verify batch results processing
     * eval db.runScript('batch-acceptance-test-data.sql')
     * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidConfirmation2Badges.xml', 'ValidConfirmation2Badges.xml')
     * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidRejection2Badges.xml', 'ValidRejection2Badges.xml')
@@ -35,7 +36,8 @@ Feature: Verify print a batch results processing
     * assert s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')
     * def batchCountBefore = db.countBatches()
     Given path 'badges/collect-batches'
-    When method GET
+    And request '{}'
+    When method POST
     Then status 200
   # And a batch is created for each result file
     * assert batchCountBefore + 3 == db.countBatches()

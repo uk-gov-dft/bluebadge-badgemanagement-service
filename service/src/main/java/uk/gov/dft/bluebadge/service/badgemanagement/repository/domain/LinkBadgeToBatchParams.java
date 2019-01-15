@@ -9,6 +9,6 @@ import lombok.EqualsAndHashCode;
 @Builder
 @EqualsAndHashCode
 public class LinkBadgeToBatchParams {
-  int batchId;
-  @NotNull String badgeId;
+  private int batchId;
+  @NotNull private String badgeId;
 }

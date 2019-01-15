@@ -19,7 +19,7 @@ public class BatchRepositoryTest {
 
   @Mock SqlSession sqlSession;
 
-  BatchRepository repository;
+  private BatchRepository repository;
 
   public BatchRepositoryTest() {
     MockitoAnnotations.initMocks(this);
@@ -29,7 +29,8 @@ public class BatchRepositoryTest {
   @Test
   public void createBatch() {
     BatchEntity batchEntity =
-        repository.createBatch(BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD);
+        repository.createBatch(
+            BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD, "AFile.txt");
     assertThat(batchEntity).isNotNull();
     verify(sqlSession).insert(eq(CREATE), any(BatchEntity.class));
   }

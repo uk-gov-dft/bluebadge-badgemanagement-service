@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UpdateBadgeStatusParams {
-  String badgeNumber;
-  BadgeEntity.Status toStatus;
-  BadgeEntity.Status fromStatus;
+  private String badgeNumber;
+  private BadgeEntity.Status toStatus;
+  private BadgeEntity.Status fromStatus;
 }

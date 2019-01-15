@@ -9,7 +9,8 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeT
 @Mapper
 public interface BatchMapper {
 
-  BatchEntity createBatch(BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose);
+  BatchEntity createBatch(
+      BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose, String filename);
 
   void appendBadgesToBatch(Integer batchId, BatchType batchType);
 

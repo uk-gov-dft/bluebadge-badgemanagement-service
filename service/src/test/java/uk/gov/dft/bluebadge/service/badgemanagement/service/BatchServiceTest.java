@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -87,7 +88,7 @@ public class BatchServiceTest extends BadgeTestBase {
   @Test
   public void sendPrintBatch_WhenThereAreBadges_shouldWork() {
     when(batchRepositoryMock.createBatch(
-            BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD))
+            eq(BatchEntity.SourceEnum.DFT), eq(BatchEntity.PurposeEnum.STANDARD), any()))
         .thenReturn(BATCH_ENTITY);
     when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS)).thenReturn(BADGE_ENTITIES);
 
@@ -101,7 +102,7 @@ public class BatchServiceTest extends BadgeTestBase {
   @Test
   public void sendPrintBatch_WhenThereAreNoBadges_shouldWork() {
     when(batchRepositoryMock.createBatch(
-            BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD))
+            eq(BatchEntity.SourceEnum.DFT), eq(BatchEntity.PurposeEnum.STANDARD), any()))
         .thenReturn(BATCH_ENTITY);
     when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS))
         .thenReturn(Lists.newArrayList());

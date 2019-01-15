@@ -3,8 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 import static java.time.temporal.ChronoField.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
@@ -18,16 +16,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMappe
 @Component
 @Slf4j
 public class BatchRepository implements BatchMapper {
-
-  private static final DateTimeFormatter dateTimeFormatter =
-      new DateTimeFormatterBuilder()
-          .appendValue(YEAR, 4)
-          .appendValue(MONTH_OF_YEAR, 2)
-          .appendValue(DAY_OF_MONTH, 2)
-          .appendValue(HOUR_OF_DAY, 2)
-          .appendValue(MINUTE_OF_HOUR, 2)
-          .appendValue(SECOND_OF_MINUTE, 2)
-          .toFormatter();
 
   class Statements {
 
@@ -45,10 +33,6 @@ public class BatchRepository implements BatchMapper {
   }
 
   @Override
-  public BatchEntity createBatch(BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose) {
-    return createBatch(source, purpose, getFilename(LocalDateTime.now()));
-  }
-
   public BatchEntity createBatch(
       BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose, String filename) {
     log.debug("Create batch");
@@ -71,12 +55,6 @@ public class BatchRepository implements BatchMapper {
     AppendBadgesToBatchParams params =
         AppendBadgesToBatchParams.builder().batchId(batchId).batchType(batchType.name()).build();
     sqlSession.insert(Statements.APPEND_BADGES, params);
-  }
-
-  private String getFilename(LocalDateTime localDateTime) {
-    StringBuilder filename = new StringBuilder().append("BADGEEXTRACT_");
-    String localDateTimeString = localDateTime.format(dateTimeFormatter);
-    return filename.append(localDateTimeString).toString();
   }
 
   @Override

@@ -132,6 +132,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   }
 
   @Override
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> collectBatches() {
     batchService.collectBatches();
     return ResponseEntity.ok().build();

@@ -9,6 +9,8 @@ Feature: Verify print a batch results processing
     * def setup = callonce db.runScript('batch-acceptance-test-data.sql')
     * def S3Utils = Java.type('uk.gov.service.bluebadge.test.utils.S3Utils')
     * def s3 = new S3Utils()
+    * def System = Java.type('java.lang.System')
+    * def env = System.getenv('bb_env')
     * def inBucketName = 'uk-gov-dft-' + (env == null ? 'ci' : env) +'-badge-in'
     * def result = callonce read('./oauth2-print-batch.feature')
     * header Authorization = 'Bearer ' + result.accessToken
@@ -38,8 +40,8 @@ Feature: Verify print a batch results processing
     * assert batchCountBefore + 3 == db.countBatches()
   # And badge statuses updated where badge existed
     * assert 'PROCESSED' == db.getBadgeStatus('UNC001')
-    * assert 'REJECTED' == db.getBadgeStatus('REJ001')
-    * assert 'REJECTED' == db.getBadgeStatus('REJ002')
+    * assert 'REJECT' == db.getBadgeStatus('REJ001')
+    * assert 'REJECT' == db.getBadgeStatus('REJ002')
     * assert 'ISSUED' == db.getBadgeStatus('CONF02')
     * assert 'ISSUED' == db.getBadgeStatus('CONF02')
   # And the batch result files deleted

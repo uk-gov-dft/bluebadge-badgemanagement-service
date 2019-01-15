@@ -1,7 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadges
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -105,7 +106,12 @@ public class BatchService {
     ProcessedBatchesResponse batchesResponse = printServiceApiClient.collectPrintBatchResults();
     for (ProcessedBatch batch : batchesResponse.getData()) {
       if (StringUtils.isEmpty(batch.getErrorMessage())) {
-        processBatch(batch);
+        try {
+          processBatch(batch);
+        } catch (Exception e) {
+          // Catch any DB exceptions etc.. and process next file.
+          log.error("Unexpected exception processing " + batch.getFilename(), e);
+        }
       } else {
         log.error(
             "Could not process print batch result for {} due to error from print service: {}",
@@ -116,6 +122,7 @@ public class BatchService {
   }
 
   private void processBatch(ProcessedBatch batch) {
+
     BadgeEntity.Status requiredStatus;
     BatchEntity batchEntity;
     // Create new batch to store results.

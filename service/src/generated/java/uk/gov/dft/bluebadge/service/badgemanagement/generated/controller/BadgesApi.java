@@ -32,6 +32,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 
 @Api(value = "Badges", description = "the Badges API")
 public interface BadgesApi {
@@ -269,6 +270,29 @@ public interface BadgesApi {
           log.error("Couldn't serialize response for content type application/json", e);
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Print a batch",
+    nickname = "printBatch",
+    notes = "Request print batch.",
+    tags = {
+      "badges",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Batch print requested ")})
+  @RequestMapping(value = "/badges/print-batch", method = RequestMethod.POST)
+  default ResponseEntity<Void> printBatch(
+      @ApiParam(value = "") @Valid @RequestBody PrintBatchRequest printBadgeRequest) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
       }
     } else {
       log.warn(

@@ -16,7 +16,7 @@ import uk.gov.dft.bluebadge.common.security.TokenForwardingClientContext;
 public class ApiConfig {
 
   @Validated
-  @ConfigurationProperties("blue-badge.reference-data-service.servicehost")
+  @ConfigurationProperties("blue-badge.reference-data-service.service-host")
   @Bean
   public ServiceConfiguration referenceDataServiceConfiguration() {
     return new ServiceConfiguration();
@@ -38,6 +38,32 @@ public class ApiConfig {
     result.setRequestFactory(requestFactory);
     result.setUriTemplateHandler(
         new DefaultUriBuilderFactory(referenceDataServiceConfiguration.getUrlPrefix()));
+    return result;
+  }
+
+  @Validated
+  @ConfigurationProperties("blue-badge.print-service.service-host")
+  @Bean
+  public ServiceConfiguration printServiceConfiguration() {
+    return new ServiceConfiguration();
+  }
+
+  /**
+   * OAuth rest template configured with a token forwarding context. So if a bearer token is found
+   * on the security context, then it is used for the rest template.
+   */
+  @Bean("printServiceRestTemplate")
+  RestTemplate printServiceRestTemplate(
+      ClientCredentialsResourceDetails clientCredentialsResourceDetails,
+      ServiceConfiguration printServiceConfiguration) {
+    OAuth2RestTemplate result =
+        new OAuth2RestTemplate(
+            clientCredentialsResourceDetails, new TokenForwardingClientContext());
+    HttpComponentsClientHttpRequestFactory requestFactory =
+        new HttpComponentsClientHttpRequestFactory();
+    result.setRequestFactory(requestFactory);
+    result.setUriTemplateHandler(
+        new DefaultUriBuilderFactory(printServiceConfiguration.getUrlPrefix()));
     return result;
   }
 }

@@ -3,14 +3,22 @@ blue-badge:
     url: https://authorisation-service.${bb_env}.${url}/bb_auth
     client-id: bb_user_management_id
      ***REMOVED***
-  referencedataservice:
-    servicehost:
+  reference-data-service:
+    service-host:
       host: reference-service.${bb_env}.${url}
       port: 443
       scheme: https
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+  print-service:
+    service-host:
+      host: print-service.${bb_env}.${url}
+      port: 443
+      scheme: https
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/print-service/1.0.0
 
 management:
   server:

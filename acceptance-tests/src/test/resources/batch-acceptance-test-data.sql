@@ -2,7 +2,7 @@ SET search_path = badgemanagement;
 
 DELETE FROM badge WHERE holder_name LIKE ('BatchTestData%');
 DELETE FROM batch WHERE batch_filename
-  IN ('ValidConfirmation2Badges.xml','ValidRejection2Badges.xml','ConfirmationBadgeNotExist.xml');
+  IN ('ValidConfirmation2Badges.xml','ValidRejection2Badges.xml','ConfirmationBadgeNotExist (2).xml');
 insert into badge
 (badge_no, badge_status, party_code,
         local_authority_short_code, local_authority_ref,

@@ -9,6 +9,8 @@ ALTER TABLE badgemanagement.batch_badge
     FOREIGN KEY (batch_id)
       REFERENCES badgemanagement.batch(batch_id)
       ON DELETE CASCADE;
+ALTER TABLE badgemanagement.batch_badge DROP CONSTRAINT batch_badge_pkey;
+CREATE INDEX ix_badge_batch_badge_no ON badgemanagement.batch_badge(badge_no);
 
 
 -- //@UNDO
@@ -25,4 +27,5 @@ ALTER TABLE badgemanagement.batch_badge
   ADD CONSTRAINT batch_badge_batch_id_fk
     FOREIGN KEY (batch_id)
       REFERENCES badgemanagement.batch(batch_id);
+DROP INDEX IF EXISTS ix_badge_batch_badge_no;
 

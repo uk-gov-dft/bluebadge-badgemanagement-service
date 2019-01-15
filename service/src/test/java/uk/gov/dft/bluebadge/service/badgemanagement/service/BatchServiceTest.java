@@ -153,19 +153,26 @@ public class BatchServiceTest extends BadgeTestBase {
                 .data(Lists.newArrayList(rejections, confirmations))
                 .build());
     when(batchRepositoryMock.createBatch(
-            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED))
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED, "rejection.xml"))
         .thenReturn(BatchEntity.builder().id(10).build());
     when(batchRepositoryMock.createBatch(
-            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED))
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED, "confirmation.xml"))
         .thenReturn(BatchEntity.builder().id(20).build());
     when(badgeRepositoryMock.updateBadgeStatusFromStatus(any())).thenReturn(1);
-    service.collectBatches();
+
+    // Call the service...
+    ProcessedBatchesResponse response = service.collectBatches();
+    for (ProcessedBatch batch : response.getData()) {
+      service.processBatch(batch);
+    }
 
     // Then 2 new batches are created
     verify(batchRepositoryMock, times(1))
-        .createBatch(BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED);
+        .createBatch(
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED, "rejection.xml");
     verify(batchRepositoryMock, times(1))
-        .createBatch(BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED);
+        .createBatch(
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED, "confirmation.xml");
 
     // And the badges are linked to the new batch.
     verify(batchRepositoryMock, times(1))

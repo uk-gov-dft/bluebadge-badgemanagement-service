@@ -5,4 +5,9 @@
         <Cancellation>no</Cancellation>
         <DispatchedDate>2018-02-02T14:24:34</DispatchedDate>
     </Confirmation>
+    <Confirmation>
+        <BadgeIdentifier>NOEX01</BadgeIdentifier>
+        <Cancellation>no</Cancellation>
+        <DispatchedDate>2018-02-02T14:24:34</DispatchedDate>
+    </Confirmation>
 </BadgePrintConfirmations>

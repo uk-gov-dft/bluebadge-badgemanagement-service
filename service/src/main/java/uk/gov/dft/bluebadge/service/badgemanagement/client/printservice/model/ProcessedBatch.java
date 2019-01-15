@@ -1,6 +1,5 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -24,13 +23,4 @@ public class ProcessedBatch {
   private String errorMessage;
   @NotNull private FileTypeEnum fileType;
   @NotNull private List<ProcessedBadge> processedBadges;
-
-  @JsonIgnore
-  public String getBatchName() {
-    int suffixLocation = filename.lastIndexOf(".");
-    if (suffixLocation > 0) {
-      return filename.substring(0, suffixLocation);
-    }
-    return filename;
-  }
 }

@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice;
 
+import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,11 +42,13 @@ public class PrintServiceApiClient {
   public void deleteBatchConfirmation(String confirmationFileName) {
     log.info("Requesting delete of confirmation file {} from print service.", confirmationFileName);
 
+    HashMap<String, String> vars = new HashMap<>();
+    vars.put("fileName", confirmationFileName);
     String url =
         UriComponentsBuilder.newInstance()
             .path("/")
-            .pathSegment("processed-batches", confirmationFileName)
+            .pathSegment("processed-batches", "{fileName}")
             .toUriString();
-    restTemplate.delete(url);
+    restTemplate.delete(url, vars);
   }
 }

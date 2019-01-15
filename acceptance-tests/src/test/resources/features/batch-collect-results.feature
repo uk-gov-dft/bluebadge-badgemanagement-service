@@ -6,7 +6,7 @@ Feature: Verify print a batch results processing
     * def dbConfig = { username: 'developer',  ***REMOVED*** }
     * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
-    * def setup = callonce db.runScript('batch-acceptance-test-data.sql')
+    * eval db.runScript('batch-acceptance-test-data.sql')
     * def S3Utils = Java.type('uk.gov.service.bluebadge.test.utils.S3Utils')
     * def s3 = new S3Utils()
     * def System = Java.type('java.lang.System')
@@ -21,9 +21,10 @@ Feature: Verify print a batch results processing
     Then status 200
 
   Scenario: Verify batch results
+    * eval db.runScript('batch-acceptance-test-data.sql')
     * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidConfirmation2Badges.xml', 'ValidConfirmation2Badges.xml')
     * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidRejection2Badges.xml', 'ValidRejection2Badges.xml')
-    * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ConfirmationBadgeNotExist.xml', 'ConfirmationBadgeNotExist.xml')
+    * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ConfirmationBadgeNotExist (2).xml', 'ConfirmationBadgeNotExist (2).xml')
     * assert 'PROCESSED' == db.getBadgeStatus('UNC001')
     * assert 'PROCESSED' == db.getBadgeStatus('REJ001')
     * assert 'PROCESSED' == db.getBadgeStatus('REJ002')
@@ -31,7 +32,7 @@ Feature: Verify print a batch results processing
     * assert 'PROCESSED' == db.getBadgeStatus('CONF02')
     * assert s3.objectExists(inBucketName, 'ValidConfirmation2Badges.xml')
     * assert s3.objectExists(inBucketName, 'ValidRejection2Badges.xml')
-    * assert s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist.xml')
+    * assert s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')
     * def batchCountBefore = db.countBatches()
     Given path 'badges/collect-batches'
     When method GET
@@ -47,5 +48,6 @@ Feature: Verify print a batch results processing
   # And the batch result files deleted
     * assert !s3.objectExists(inBucketName, 'ValidConfirmation2Badges.xml')
     * assert !s3.objectExists(inBucketName, 'ValidRejection2Badges.xml')
-    * assert !s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist.xml')
+    # Check a file with space in name too.
+    * assert !s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')
 

@@ -40,9 +40,10 @@ public class S3Utils {
 
   public String putObject(String bucket, String fileName, String s3key) throws URISyntaxException {
     File f = new File(this.getClass().getResource(fileName).toURI());
-    if (!s3.doesObjectExist(bucket, s3key)) {
-      s3.putObject(bucket, s3key, f);
+    if (s3.doesObjectExist(bucket, s3key)) {
+      s3.deleteObject(bucket, s3key);
     }
+    s3.putObject(bucket, s3key, f);
     return s3key;
   }
 

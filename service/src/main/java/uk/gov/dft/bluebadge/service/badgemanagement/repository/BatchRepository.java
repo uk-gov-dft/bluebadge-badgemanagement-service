@@ -46,6 +46,11 @@ public class BatchRepository implements BatchMapper {
 
   @Override
   public BatchEntity createBatch(BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose) {
+    return createBatch(source, purpose, getFilename(LocalDateTime.now()));
+  }
+
+  public BatchEntity createBatch(
+      BatchEntity.SourceEnum source, BatchEntity.PurposeEnum purpose, String filename) {
     log.debug("Create batch");
 
     LocalDateTime localDateTime = LocalDateTime.now();
@@ -53,7 +58,7 @@ public class BatchRepository implements BatchMapper {
     BatchEntity batch =
         BatchEntity.builder()
             .created(localDateTime)
-            .filename(getFilename(localDateTime))
+            .filename(filename)
             .purpose(purpose)
             .source(source)
             .build();

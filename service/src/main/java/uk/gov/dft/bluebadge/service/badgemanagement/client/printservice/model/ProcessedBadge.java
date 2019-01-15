@@ -16,8 +16,8 @@ public class ProcessedBadge {
     YES;
 
     public static CancellationEnum fromValue(String value) {
-      if ("no".equals(value)) return NO;
-      if ("yes".equals(value)) return YES;
+      if ("no".equalsIgnoreCase(value)) return NO;
+      if ("yes".equalsIgnoreCase(value)) return YES;
       return null;
     }
   }

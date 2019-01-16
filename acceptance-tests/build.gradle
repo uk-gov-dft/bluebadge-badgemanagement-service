@@ -17,6 +17,7 @@ repositories {
 apply plugin: 'java'
 
 dependencies {
+    compile('com.amazonaws:aws-java-sdk-s3:1.11.385')
     testCompile group: 'org.springframework', name:'spring-jdbc', version: '5.0.6.RELEASE'
     testCompile group: 'com.intuit.karate', name: 'karate-apache', version: '0.7.0.2'
     testCompile group: 'com.intuit.karate', name: 'karate-junit4', version: '0.7.0.2'

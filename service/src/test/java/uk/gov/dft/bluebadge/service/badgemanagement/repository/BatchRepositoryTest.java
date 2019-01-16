@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.AppendBadgesToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 
@@ -18,7 +19,7 @@ public class BatchRepositoryTest {
 
   @Mock SqlSession sqlSession;
 
-  BatchRepository repository;
+  private BatchRepository repository;
 
   public BatchRepositoryTest() {
     MockitoAnnotations.initMocks(this);
@@ -27,14 +28,16 @@ public class BatchRepositoryTest {
 
   @Test
   public void createBatch() {
-    BatchEntity batchEntity = repository.createBatch("STANDARD", "DFT", "PRINT");
+    BatchEntity batchEntity =
+        repository.createBatch(
+            BatchEntity.SourceEnum.DFT, BatchEntity.PurposeEnum.STANDARD, "AFile.txt");
     assertThat(batchEntity).isNotNull();
     verify(sqlSession).insert(eq(CREATE), any(BatchEntity.class));
   }
 
   @Test
   public void appendBadgesToBatch() {
-    repository.appendBadgesToBatch(1, "STANDARD");
+    repository.appendBadgesToBatch(1, BatchType.STANDARD);
     verify(sqlSession).insert(eq(APPEND_BADGES), any(AppendBadgesToBatchParams.class));
   }
 }

@@ -27,4 +27,9 @@
         </choose>
     </insert>
 
+    <insert id="linkBadgeToBatch" parameterType="LinkBadgeToBatchParams">
+        INSERT INTO badgemanagement.batch_badge (batch_id, badge_no)
+        VALUES (#{batchId}, #{badgeId});
+    </insert>
+
 </mapper>

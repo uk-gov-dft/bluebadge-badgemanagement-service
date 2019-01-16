@@ -10,7 +10,10 @@ import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
@@ -20,6 +23,8 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
@@ -127,7 +132,23 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @Override
   @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
-    batchService.sendPrintBatch(printBadgeRequest.getBatchType().toString());
+    batchService.sendPrintBatch(printBadgeRequest.getBatchType());
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
+  public ResponseEntity<Void> collectBatches() {
+    ProcessedBatchesResponse batchesResponse = batchService.collectBatches();
+    for (ProcessedBatch batch : batchesResponse.getData()) {
+      try {
+        // Call service per batch, so transaction per batch.
+        batchService.processBatch(batch);
+      } catch (Exception e) {
+        // Catch any DB exceptions etc.. and process next file.
+        log.error("Unexpected exception processing " + batch.getFilename(), e);
+      }
+    }
     return ResponseEntity.ok().build();
   }
 }

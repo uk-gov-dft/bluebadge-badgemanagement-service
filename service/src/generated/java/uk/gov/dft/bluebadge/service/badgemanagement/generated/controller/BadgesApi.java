@@ -300,4 +300,16 @@ public interface BadgesApi {
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
+
+  @ApiOperation(
+    value = "Process results of print batches",
+    nickname = "collectBatches",
+    notes = "Process print batch results",
+    tags = {
+      "badges",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Print batch results processed.")})
+  @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.POST)
+  ResponseEntity<Void> collectBatches();
 }

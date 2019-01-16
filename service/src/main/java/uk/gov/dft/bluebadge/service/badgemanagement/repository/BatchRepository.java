@@ -1,15 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
-import static java.time.temporal.ChronoField.*;
-
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.AppendBadgesToBatchParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchBadgeLinkEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper;
 
 /** Provides CRUD operations on BatchEntity entity. */
@@ -58,7 +56,7 @@ public class BatchRepository implements BatchMapper {
   }
 
   @Override
-  public int linkBadgeToBatch(LinkBadgeToBatchParams params) {
+  public int linkBadgeToBatch(BatchBadgeLinkEntity params) {
     return sqlSession.insert(Statements.LINK_BADGE_TO_BATCH, params);
   }
 }

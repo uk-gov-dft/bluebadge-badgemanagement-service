@@ -93,6 +93,13 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     return sqlSession.update(Statements.REPLACE, params);
   }
 
+  /**
+   * Update badge status.
+   * Will only update if the badge is currently set to the fromStatus.
+   * Returns 1 if update done, 0 else.
+   * @param params fromStatus, toStatus.
+   * @return Update count.
+   */
   @Override
   public int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params) {
     return sqlSession.update(Statements.UPDATE_BADGE_STATUS_FROM_STATUS, params);

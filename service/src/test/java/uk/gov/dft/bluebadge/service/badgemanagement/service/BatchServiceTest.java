@@ -30,9 +30,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchBadgeLinkEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
@@ -177,13 +177,35 @@ public class BatchServiceTest extends BadgeTestBase {
 
     // And the badges are linked to the new batch.
     verify(batchRepositoryMock, times(1))
-        .linkBadgeToBatch(LinkBadgeToBatchParams.builder().batchId(10).badgeId("REJEC1").build());
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(10)
+                .badgeId("REJEC1")
+                .rejectedReason("No picture")
+                .build());
     verify(batchRepositoryMock, times(1))
-        .linkBadgeToBatch(LinkBadgeToBatchParams.builder().batchId(10).badgeId("REJEC2").build());
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(10)
+                .badgeId("REJEC2")
+                .rejectedReason("No picture")
+                .build());
     verify(batchRepositoryMock, times(1))
-        .linkBadgeToBatch(LinkBadgeToBatchParams.builder().batchId(20).badgeId("CONFI1").build());
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(20)
+                .badgeId("CONFI1")
+                .issuedDateTime(LocalDateTime.of(2019, 1, 1, 14, 30, 59).toInstant(ZoneOffset.UTC))
+                .cancellation(ProcessedBadge.CancellationEnum.NO)
+                .build());
     verify(batchRepositoryMock, times(1))
-        .linkBadgeToBatch(LinkBadgeToBatchParams.builder().batchId(20).badgeId("CONFI1").build());
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(20)
+                .badgeId("CONFI1")
+                .issuedDateTime(LocalDateTime.of(2019, 1, 1, 14, 30, 59).toInstant(ZoneOffset.UTC))
+                .cancellation(ProcessedBadge.CancellationEnum.NO)
+                .build());
 
     // And the 2 confirmed badges are set to ISSUED
     verify(badgeRepositoryMock, times(1))

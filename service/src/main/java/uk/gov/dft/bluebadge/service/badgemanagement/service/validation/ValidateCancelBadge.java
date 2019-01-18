@@ -78,7 +78,6 @@ public class ValidateCancelBadge extends ValidateBase {
     validateStatusValidForCancel(badgeEntity);
 
     // If got here then it is a bit of a mystery why cancel did not work
-    log.error("Cancel badge failed for unexpected reason. Badge: {}", badgeEntity.getBadgeNo());
     throw new BadRequestException(CANCEL_FAILED_UNEXPECTED.getSystemErrorInstance());
   }
 

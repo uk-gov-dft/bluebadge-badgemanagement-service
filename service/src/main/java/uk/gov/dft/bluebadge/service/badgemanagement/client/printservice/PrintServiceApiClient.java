@@ -38,6 +38,7 @@ public class PrintServiceApiClient {
         UriComponentsBuilder.newInstance().path("/").pathSegment("processed-batches").toUriString();
     return restTemplate.getForEntity(url, ProcessedBatchesResponse.class).getBody();
   }
+
   public void deleteBatchConfirmation(String confirmationFileName) {
     log.info("Requesting delete of confirmation file {} from print service.", confirmationFileName);
 

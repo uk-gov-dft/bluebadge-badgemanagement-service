@@ -29,9 +29,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchBadgeLinkEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
@@ -149,9 +149,13 @@ public class BatchService {
     for (ProcessedBadge badge : batch.getProcessedBadges()) {
 
       batchRepository.linkBadgeToBatch(
-          LinkBadgeToBatchParams.builder()
+          BatchBadgeLinkEntity.builder()
               .badgeId(badge.getBadgeNumber())
               .batchId(batchEntity.getId())
+              .cancellation(badge.getCancellation())
+              .rejectedReason(badge.getErrorMessage())
+              .issuedDateTime(
+                  null != badge.getDispatchedDate() ? badge.getDispatchedDate().toInstant() : null)
               .build());
       int result =
           badgeRepository.updateBadgeStatusFromStatus(

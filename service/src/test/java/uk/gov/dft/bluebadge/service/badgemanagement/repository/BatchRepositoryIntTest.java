@@ -10,8 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchBadgeLinkEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.LinkBadgeToBatchParams;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -48,7 +48,7 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
     // When badge and batch exist, then link created
     assertThat(
             repository.linkBadgeToBatch(
-                LinkBadgeToBatchParams.builder().badgeId("KKKKDC").batchId(-2).build()))
+                BatchBadgeLinkEntity.builder().badgeId("KKKKDC").batchId(-2).build()))
         .isEqualTo(1);
   }
 }

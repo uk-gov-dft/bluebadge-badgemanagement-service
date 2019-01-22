@@ -16,12 +16,12 @@
 
 -- // BBB-266-replace-badge
 -- Migration SQL that makes the change goes here.
-ALTER TABLE badge ADD COLUMN replace_reason_code VARCHAR(10);
+ALTER TABLE badgemanagement.badge ADD COLUMN replace_reason_code VARCHAR(10);
 
 
 
 -- //@UNDO
 -- SQL to undo the change goes here.
-ALTER TABLE badge DROP COLUMN IF EXISTS replace_reason_code CASCADE;
+ALTER TABLE badgemanagement.badge DROP COLUMN IF EXISTS replace_reason_code CASCADE;
 
 

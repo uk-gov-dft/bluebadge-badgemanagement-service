@@ -16,13 +16,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -165,6 +160,72 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badges).isNotEmpty();
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
+    BadgeEntity expectedBadgeEntity =
+        BadgeEntity.builder()
+            .badgeNo("KKKKKA")
+            .badgeStatus(Status.ORDERED)
+            .partyCode("PERSON")
+            .localAuthorityShortCode("ABERD")
+            .localAuthorityRef("to update")
+            .appDate(LocalDate.of(2018, 6, 1))
+            .appChannelCode("ONLINE")
+            .startDate(LocalDate.of(2025, 5, 1))
+            .expiryDate(LocalDate.of(2028, 5, 1))
+            .eligibilityCode("PIP")
+            .imageLink("")
+            .imageLinkOriginal(null)
+            .deliverToCode("HOME")
+            .deliverOptionCode("STAND")
+            .holderName("Reginald Pai")
+            .nino("")
+            .dob(LocalDate.of(1953, 9, 12))
+            .genderCode("MALE")
+            .contactName("contact name")
+            .contactBuildingStreet("building and street")
+            .contactLine2("")
+            .contactTownCity("Town or city")
+            .contactPostcode("S637EU")
+            .primaryPhoneNo("020 7014 0800")
+            .secondaryPhoneNo(null)
+            .contactEmailAddress("test101@mailinator.com")
+            .cancelReasonCode(null)
+            .replaceReasonCode(null)
+            .orderDate(null)
+            .numberOfBadges(0)
+            .build();
+    FindBadgesForPrintBatchParams params =
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
+    assertThat(badges).hasSize(1);
+    assertThat(badges.get(0)).isEqualTo(expectedBadgeEntity);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updatesBadgesForPrintBatch_shouldUpdateORDEREDBadges() {
+    FindBadgesForPrintBatchParams findParams =
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
+    List<BadgeEntity> originalBadges =
+        badgeManagementRepository.findBadgesForPrintBatch(findParams);
+    assertThat(originalBadges).hasSize(1);
+    assertThat(originalBadges.get(0).getBadgeStatus()).isEqualTo(Status.ORDERED);
+
+    UpdateBadgesStatusesForBatchParams updateParams =
+        UpdateBadgesStatusesForBatchParams.builder().batchId(-1).status("PROCESSED").build();
+    badgeManagementRepository.updateBadgesStatusesForBatch(updateParams);
+
+    RetrieveBadgeParams retrieveParams =
+        RetrieveBadgeParams.builder().badgeNo(originalBadges.get(0).getBadgeNo()).build();
+    BadgeEntity updatedBadgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(updatedBadgeEntity.getBadgeStatus()).isEqualTo(Status.PROCESSED);
+
+    List<BadgeEntity> updatedBadges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
+    assertThat(updatedBadges).hasSize(0);
   }
 
   @Test

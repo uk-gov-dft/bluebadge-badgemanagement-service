@@ -101,6 +101,26 @@
           }
         }
       },
+      "/badges/print-batch" : {
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Request print batch",
+          "operationId" : "printBatch",
+          "description" : "Print a batch",
+          "parameters" : [ {
+            "name" : "printBadgeRequest",
+            "in" : "body",
+            "schema" : {
+              "$ref" : "#/definitions/PrintBatchRequest"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Batch print requested."
+            }
+          }
+        }
+      },
       "/badges" : {
         "get" : {
           "tags" : [ "badges" ],
@@ -271,6 +291,17 @@
           }
         },
         "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ]
+      },
+      "PrintBatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "batchType" : {
+            "type" : "string",
+            "description" : "Batch tupe. Could be FASTTRACK or STANDARD or LA",
+            "example" : "FASTRACK"
+          }
+        },
+        "required" : [ "batchType" ]
       },
       "BadgeNumbersResponse" : {
         "description" : "Contains a list of Badge numbers.",

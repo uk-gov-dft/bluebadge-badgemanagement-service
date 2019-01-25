@@ -25,9 +25,16 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test106@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
         ,('KKKKKB', 'ORDERED', 'PERSON', 'ABERD', 'to find badge for print batch', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDA', 'PROCESSED', 'PERSON', 'ABERD', 'to set issued', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDB', 'PROCESSED', 'PERSON', 'ABERD', 'to set rejected', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDC', 'DELETED', 'PERSON', 'ABERD', 'to not update to issued', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
 ;
 
 insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
-values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'PRINT');
+values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STAND')
+, (-2, 'linkTest.txt', '2010-01-01 01:01:00', 'DFT', 'FASTTRACK');
 
 insert into badgemanagement.batch_badge (batch_id, badge_no) values (-1, 'KKKKKA');

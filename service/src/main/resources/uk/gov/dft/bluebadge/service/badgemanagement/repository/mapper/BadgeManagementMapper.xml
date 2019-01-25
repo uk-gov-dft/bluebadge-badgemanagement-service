@@ -146,4 +146,11 @@
         WHERE badge_no = trim(upper(#{badgeNumber}))
     </update>
 
+    <update id="updateBadgeStatusFromStatus" parameterType="UpdateBadgeStatusParams">
+        UPDATE badge
+        SET badge_status = #{toStatus}
+        , badge_status_timestamp = current_timestamp
+        WHERE badge_no = #{badgeNumber}
+        AND badge_status = #{fromStatus}
+    </update>
 </mapper>

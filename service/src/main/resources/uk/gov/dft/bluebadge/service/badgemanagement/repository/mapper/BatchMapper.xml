@@ -4,27 +4,46 @@
 <mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper">
 
     <insert id="createBatch" parameterType="BatchEntity" useGeneratedKeys="true" keyProperty="id" keyColumn="batch_id">
-        INSERT INTO badgemanagement.batch (batch_filename, batch_created_timestamp, batch_source, batch_purpose)
-        VALUES (#{filename}, #{created}, #{source}, #{purpose})
+        INSERT INTO badgemanagement.batch
+        (batch_filename, batch_created_timestamp, batch_source
+        , batch_purpose
+        )
+        VALUES
+        (#{filename}, #{created}, #{source}
+        , #{purpose}
+        )
     </insert>
 
     <insert id="appendBadges" parameterType="AppendBadgesToBatchParams">
-        INSERT INTO badgemanagement.batch_badge (batch_id, badge_no)
-        SELECT #{batchId}, badge_no FROM badge WHERE badge_status = 'ORDERED'
+        INSERT INTO badgemanagement.batch_badge (batch_id, badge_no, local_authority_short_code)
+        SELECT #{batchId}, badge_no, local_authority_short_code FROM badge WHERE badge_status = 'ORDERED'
         <choose>
             <when test="batchType == 'LA'">
-                AND deliver_option_code LIKE 'STAND'
-                AND deliver_to_code LIKE 'COUNCIL'
+                AND deliver_option_code = 'STAND'
+                AND deliver_to_code = 'COUNCIL'
             </when>
             <when test="batchType == 'STANDARD'">
-                AND deliver_option_code LIKE 'STAND'
-                AND deliver_to_code LIKE 'HOME'
+                AND deliver_option_code = 'STAND'
+                AND deliver_to_code = 'HOME'
             </when>
             <when test="batchType == 'FASTTRACK'">
-                AND deliver_option_code LIKE 'FAST'
-                AND deliver_to_code LIKE 'HOME'
+                AND deliver_option_code = 'FAST'
+                AND deliver_to_code = 'HOME'
             </when>
         </choose>
+    </insert>
+
+    <insert id="linkBadgeToBatch" parameterType="BatchBadgeLinkEntity">
+        INSERT INTO badgemanagement.batch_badge
+        (
+          batch_id, badge_no, local_authority_short_code
+        , issued_date_time, rejected_reason, cancellation
+        )
+        VALUES
+        (
+          #{batchId}, #{badgeId}, #{localAuthorityShortCode}
+        , #{issuedDateTime}, #{rejectedReason}, #{cancellation}
+        );
     </insert>
 
 </mapper>

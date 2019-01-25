@@ -27,11 +27,12 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
     static final String UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH =
         "updateBadgesStatusesForPrintBatch";
+    static final String UPDATE_BADGE_STATUS_FROM_STATUS = "updateBadgeStatusFromStatus";
   }
 
   private final SqlSession sqlSession;
 
-  public BadgeManagementRepository(SqlSession sqlSession) {
+  BadgeManagementRepository(SqlSession sqlSession) {
     this.sqlSession = sqlSession;
   }
 
@@ -90,5 +91,17 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   @Override
   public int replaceBadge(ReplaceBadgeParams params) {
     return sqlSession.update(Statements.REPLACE, params);
+  }
+
+  /**
+   * Update badge status.
+   * Will only update if the badge is currently set to the fromStatus.
+   * Returns 1 if update done, 0 else.
+   * @param params fromStatus, toStatus.
+   * @return Update count.
+   */
+  @Override
+  public int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params) {
+    return sqlSession.update(Statements.UPDATE_BADGE_STATUS_FROM_STATUS, params);
   }
 }

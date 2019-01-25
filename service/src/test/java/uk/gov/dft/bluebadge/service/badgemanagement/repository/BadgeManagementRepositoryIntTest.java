@@ -16,8 +16,16 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -284,5 +292,62 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.REPLACED);
     assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusToIssued() {
+    // Can set Issued
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDA")
+                    .toStatus(Status.ISSUED)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(1);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDA").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.ISSUED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusToReject() {
+    // Can set Rejected
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDB")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(1);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDB").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.REJECT);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusWhenDeletedDoesNowt() {
+    // Can set Issued
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDC")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(0);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDC").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.DELETED);
   }
 }

@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
@@ -14,6 +17,8 @@ import java.util.Map;
 
 public class DbUtils {
   private final JdbcTemplate jdbc;
+  private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
   private static final Logger log = LoggerFactory.getLogger(DbUtils.class);
 
   public DbUtils(Map<String, Object> config) {
@@ -27,6 +32,7 @@ public class DbUtils {
     dataSource.setUsername(username);
     dataSource.setPassword(password);
     jdbc = new JdbcTemplate(dataSource);
+    namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     log.info("init jdbc template: {}", url);
   }
 
@@ -50,5 +56,16 @@ public class DbUtils {
 
   public List<Map<String, Object>> readRows(String query) {
     return jdbc.queryForList(query);
+  }
+
+  public String getBadgeStatus(String badgeNo){
+    String statement = "SELECT badge_status FROM badgemanagement.badge WHERE badge_no = :badgeNo";
+    SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("badgeNo",badgeNo);
+    return namedParameterJdbcTemplate.queryForObject(statement, namedParameters, String.class);
+  }
+
+  public Integer countBatches(){
+    String statement = "SELECT count(*) FROM badgemanagement.batch";
+    return jdbc.queryForObject(statement, Integer.class);
   }
 }

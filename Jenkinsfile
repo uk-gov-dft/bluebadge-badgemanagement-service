@@ -23,7 +23,7 @@ node {
         try {
             sh './gradlew --no-daemon --profile --configure-on-demand  clean build bootJar createDatabaseSchemaZip artifactoryPublish artifactoryDeploy --refresh-dependencies'
             sh 'mv build/reports/profile/profile-*.html build/reports/profile/index.html'
-            stash includes: 'build/**/*', name: 'build'
+            stash includes: 'service/build/**/*', name: 'build'
         }
         finally {
             junit '**/TEST*.xml'

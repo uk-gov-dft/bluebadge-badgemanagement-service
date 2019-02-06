@@ -21,6 +21,7 @@ public class Person {
   private LocalDate dob = null;
 
   @JsonProperty("genderCode")
+  @NotNull
   private String genderCode = null;
 
   public Person badgeHolderName(String badgeHolderName) {

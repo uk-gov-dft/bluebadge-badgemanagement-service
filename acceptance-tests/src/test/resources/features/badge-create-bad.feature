@@ -26,7 +26,7 @@ Feature: Verify Create badge with 400
           badgeHolderName: 'TestData Bloggs',
           nino: 'NY188796B',
           dob: '1972-09-12',
-          genderCode: 'MALE'
+          genderCode: null
         },
         organisation: {
           badgeHolderName: 'The Monroe Institute'
@@ -51,8 +51,9 @@ Feature: Verify Create badge with 400
     When method POST
     Then status 400
     And match $.error.errors contains {field:"party.contact.postCode", reason:"#notnull", message:"#notnull", location:"#null", locationType:"#null"}
+    And match $.error.errors contains {field:"party.person.genderCode", reason:"#notnull", message:"NotNull.badgeOrderRequest.party.person.genderCode", location:"#null", locationType:"#null"}
 
-   Scenario: Verify create more than 1 badge for person 400
+  Scenario: Verify create more than 1 badge for person 400
     * def badgeNotValidNumberPerson =
     """
       {
@@ -114,12 +115,6 @@ Feature: Verify Create badge with 400
           secondaryPhoneNumber: '01616548765',
           emailAddress: 'june@bigbrainknitting.com'
         },
-        person: {
-          badgeHolderName: 'TestData Bloggs',
-          nino: 'NY188796B',
-          dob: '1972-09-12',
-          genderCode: 'MALE'
-        },
         organisation: {
           badgeHolderName: 'The Monroe Institute'
         }
@@ -142,5 +137,5 @@ Feature: Verify Create badge with 400
     And request badgeNotValidNumberOrg
     When method POST
     Then status 400
-    And match $.error.errors contains {field:"numberOfBadges", reason:"#notnull", message:"#notnull", location:"#null", locationType:"#null"}
+    And match $.error.errors contains {field:"numberOfBadges", reason:"#notnull", message:"Max.badgeOrderRequest.numberOfBadges", location:"#null", locationType:"#null"}
     

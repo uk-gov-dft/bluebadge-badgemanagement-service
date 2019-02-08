@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import org.junit.Assert;
 import org.junit.Test;
+import uk.gov.dft.bluebadge.common.api.model.Error;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
@@ -81,12 +83,27 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void null_stuff() {
     BadgeEntity entity = getValidPersonBadgeEntity();
-    // Try a null ref data look up
-    entity.setEligibilityCode(null);
-    validateBadgeOrder.validate(entity);
     // Only other thing that can be null used in validation is dob.
     entity.setDob(null);
     validateBadgeOrder.validate(entity);
+  }
+
+  @Test
+  public void validateCreateBadgeRequest_person_nullEligibilityCode() {
+    try {
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setEligibilityCode(null);
+      validateBadgeOrder.validate(entity);
+      Assert.fail("Badge valid number of budges validation should throw an exception");
+    } catch (BadRequestException e) {
+      Error error = e.getResponse().getBody().getError();
+      Assert.assertEquals(1, error.getErrors().size());
+      ErrorErrors errorErrors = error.getErrors().get(0);
+      Assert.assertEquals("eligibilityCode", errorErrors.getField());
+      Assert.assertEquals(
+          "Eligibility code is mandatory for Person badges.", errorErrors.getReason());
+      Assert.assertEquals("NotNull.badge.eligibilityCode", errorErrors.getMessage());
+    }
   }
 
   @Test

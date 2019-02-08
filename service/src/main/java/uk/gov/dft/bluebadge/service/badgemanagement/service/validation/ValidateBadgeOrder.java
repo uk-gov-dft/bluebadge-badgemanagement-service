@@ -46,6 +46,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     // Person specific validation
     if (entity.isPerson()) {
       validateDobInPast(entity, errors);
+      validateNotNull(NULL_ELIGIBILITY_CODE_PERSON, entity.getEligibilityCode(), errors);
       validateRefData(ELIGIBILITY, INVALID_ELIGIBILITY_CODE, entity.getEligibilityCode(), errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }

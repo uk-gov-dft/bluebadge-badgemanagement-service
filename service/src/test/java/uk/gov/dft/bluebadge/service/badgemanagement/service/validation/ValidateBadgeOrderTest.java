@@ -59,8 +59,30 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   @Test
   public void validateCreateBadgeRequest_start_expiry_range() {
     try {
+      // Dates ok
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setStartDate(LocalDate.now().plusDays(10));
+      entity.setExpiryDate(LocalDate.now().plusDays(20));
+      validateBadgeOrder.validate(entity);
+    } catch (BadRequestException e) {
+      Assert.fail("Date range should have been valid");
+    }
+
+    try {
+      // Dates more than 3 years apart
       BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setExpiryDate((entity.getStartDate().plus(Period.ofYears(3)).plus(Period.ofDays(1))));
+      validateBadgeOrder.validate(entity);
+      Assert.fail("Badge valid range validation should throw an exception");
+    } catch (BadRequestException e) {
+      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
+    }
+
+    try {
+      // Expiry in past
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setStartDate(LocalDate.now().plusDays(10));
+      entity.setExpiryDate(LocalDate.now().minusDays(10));
       validateBadgeOrder.validate(entity);
       Assert.fail("Badge valid range validation should throw an exception");
     } catch (BadRequestException e) {

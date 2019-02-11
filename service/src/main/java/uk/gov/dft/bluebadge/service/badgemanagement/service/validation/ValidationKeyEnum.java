@@ -11,6 +11,10 @@ public enum ValidationKeyEnum {
   INVALID_PARTY_CODE("Invalid.badge.partyCode", "Invalid party code.", "partyCode"),
   INVALID_ELIGIBILITY_CODE(
       "Invalid.badge.eligibilityCode", "Invalid eligibility code.", "eligibilityCode"),
+  NULL_ELIGIBILITY_CODE_PERSON(
+      "NotNull.badge.eligibilityCode",
+      "Eligibility code is mandatory for Person badges.",
+      "eligibilityCode"),
   INVALID_DELIVER_TO_CODE(
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(

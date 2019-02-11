@@ -635,17 +635,17 @@
           },
           "buildingStreet" : {
             "type" : "string",
-            "maxLength" : 100,
+            "maxLength" : 50,
             "example" : "65 Basil Chambers"
           },
           "line2" : {
             "type" : "string",
-            "maxLength" : 100,
+            "maxLength" : 40,
             "example" : "Northern Quarter"
           },
           "townCity" : {
             "type" : "string",
-            "maxLength" : 100,
+            "maxLength" : 40,
             "example" : "Manchester"
           },
           "postCode" : {

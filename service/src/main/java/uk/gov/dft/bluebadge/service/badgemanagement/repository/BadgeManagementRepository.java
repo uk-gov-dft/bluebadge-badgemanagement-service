@@ -94,9 +94,9 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   }
 
   /**
-   * Update badge status.
-   * Will only update if the badge is currently set to the fromStatus.
-   * Returns 1 if update done, 0 else.
+   * Update badge status. Will only update if the badge is currently set to the fromStatus. Returns
+   * 1 if update done, 0 else.
+   *
    * @param params fromStatus, toStatus.
    * @return Update count.
    */

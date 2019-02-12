@@ -22,7 +22,7 @@
 
     <springProfile name="dev">
         <root level="info">
-            <appender-ref ref="json" />
+            <appender-ref ref="STDOUT" />
         </root>
     </springProfile>
 

@@ -121,6 +121,35 @@
           }
         }
       },
+      "/badges/print-batch/{batchId}" : {
+        "parameters" : [ {
+          "$ref" : "#/parameters/BatchIdPathParam"
+        } ],
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Request to resend a print batch",
+          "operationId" : "reprintBatch",
+          "description" : "Reprint a batch",
+          "responses" : {
+            "200" : {
+              "description" : "Reprint Batch requested."
+            }
+          }
+        }
+      },
+      "/badges/collect-batches" : {
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Process results of print batches",
+          "operationId" : "collectBatches",
+          "description" : "Process print batch results",
+          "responses" : {
+            "200" : {
+              "description" : "Print batch results processed."
+            }
+          }
+        }
+      },
       "/badges" : {
         "get" : {
           "tags" : [ "badges" ],
@@ -297,7 +326,7 @@
         "properties" : {
           "batchType" : {
             "type" : "string",
-            "description" : "Batch tupe. Could be FASTTRACK or STANDARD or LA",
+            "description" : "Batch type. Could be FASTTRACK or STANDARD or LA",
             "example" : "FASTRACK"
           }
         },
@@ -468,7 +497,7 @@
           "cancelReasonCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "A short code from the CANCEL group of reference data.",
+          "description" : "A short code from the CANCEL group of reference data.\n",
             "example" : "NOLONG"
           },
           "replaceReasonCode" : {
@@ -533,7 +562,7 @@
           },
           "imageFile" : {
             "type" : "string",
-            "description" : "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
+          "description" : "Base64 encoded.  Must be less than 10MB, and of format JPG, PNG, or GIF."
           },
           "deliverToCode" : {
             "type" : "string",
@@ -601,7 +630,7 @@
           "genderCode" : {
             "type" : "string",
             "example" : "MALE",
-            "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIED."
+          "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIE."
           }
         },
         "required" : [ "badgeHolderName" ],
@@ -700,8 +729,15 @@
         "type" : "string",
         "maxLength" : 20,
         "description" : "A valid postcode with or without spaces."
-      }
-    },
+      },
+      "BatchIdPathParam" : {
+        "in" : "path",
+        "name" : "batchId",
+        "type" : "string",
+        "description" : "A valid batch id.",
+        "required" : true
+        }
+      },
     "host" : "virtserver.swaggerhub.com",
     "basePath" : "/uk-gov-dft/blue-badge/1.0.0",
     "schemes" : [ "https" ]

@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement;
+package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -138,6 +140,13 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 
   @Override
   @PreAuthorize("#oauth2.hasScope('print-batch')")
+  public ResponseEntity<Void> reprintBatch(@Valid @PathVariable("batchId") String batchId) {
+    batchService.rePrintBatch(batchId);
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> collectBatches() {
     ProcessedBatchesResponse batchesResponse = batchService.collectBatches();
     for (ProcessedBatch batch : batchesResponse.getData()) {
@@ -152,3 +161,5 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
     return ResponseEntity.ok().build();
   }
 }
+
+

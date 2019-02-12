@@ -231,9 +231,6 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
         RetrieveBadgeParams.builder().badgeNo(originalBadges.get(0).getBadgeNo()).build();
     BadgeEntity updatedBadgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
     assertThat(updatedBadgeEntity.getBadgeStatus()).isEqualTo(Status.PROCESSED);
-
-    List<BadgeEntity> updatedBadges = badgeManagementRepository.findBadgesForPrintBatch(findParams);
-    assertThat(updatedBadges).hasSize(0);
   }
 
   @Test

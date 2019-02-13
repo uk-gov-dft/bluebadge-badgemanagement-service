@@ -91,7 +91,6 @@
         <include refid="badgeFields"></include>
         FROM badge b INNER JOIN batch_badge bb ON b.badge_no = bb.badge_no
         WHERE bb.batch_id = #{batchId}
-        AND b.badge_status = 'ORDERED'
     </select>
 
 

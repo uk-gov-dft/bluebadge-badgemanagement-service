@@ -9,15 +9,19 @@ import org.springframework.validation.annotation.Validated;
 /** Contact */
 @Validated
 public class Contact {
+
   @JsonProperty("fullName")
   private String fullName = null;
 
+  @Size(max = 50)
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
+  @Size(max = 40)
   @JsonProperty("line2")
   private String line2 = null;
 
+  @Size(max = 40)
   @JsonProperty("townCity")
   private String townCity = null;
 

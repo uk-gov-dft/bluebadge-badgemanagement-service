@@ -81,7 +81,8 @@ public class ValidateBadgeOrder extends ValidateBase {
   private static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
     if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
-        .isBefore(entity.getStartDate()) || entity.getExpiryDate().isBefore(entity.getStartDate())) {
+            .isBefore(entity.getStartDate())
+        || entity.getExpiryDate().isBefore(entity.getStartDate())) {
       errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getFieldErrorInstance());
     }
   }

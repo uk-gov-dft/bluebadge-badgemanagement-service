@@ -16,7 +16,6 @@ import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.verification.VerificationMode;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -60,12 +59,12 @@ public class BatchServiceTest extends BadgeTestBase {
           .filename(FILENAME)
           .build();
   private static final BatchEntity BATCH_ENTITY_FASTTRACK =
-    BatchEntity.builder()
-      .source(BatchEntity.SourceEnum.DFT)
-      .purpose(BatchEntity.PurposeEnum.FASTTRACK)
-      .id(BATCH_ID)
-      .filename(FILENAME)
-      .build();
+      BatchEntity.builder()
+          .source(BatchEntity.SourceEnum.DFT)
+          .purpose(BatchEntity.PurposeEnum.FASTTRACK)
+          .id(BATCH_ID)
+          .filename(FILENAME)
+          .build();
   private static final BadgeEntity BADGE_ENTITY =
       BadgeEntity.builder().badgeNo(BADGE_NO).badgeStatus(BadgeEntity.Status.ORDERED).build();
   private static final List<BadgeEntity> BADGE_ENTITIES = Lists.newArrayList(BADGE_ENTITY);
@@ -120,7 +119,6 @@ public class BatchServiceTest extends BadgeTestBase {
     verify(batchRepositoryMock, never()).createBatch(any(), any(), any());
     verify(batchRepositoryMock, never()).appendBadgesToBatch(any(), any());
     verify(badgeRepositoryMock, never()).updateBadgesStatusesForBatch(UPDATE_PARAMS);
-
   }
 
   @Test
@@ -135,7 +133,8 @@ public class BatchServiceTest extends BadgeTestBase {
 
     verify(batchRepositoryMock).appendBadgesToBatch(BATCH_ID, BatchType.STANDARD);
     verify(printServiceApiClientMock, times(0)).printBatch(any(PrintBatchRequest.class));
-    verify(badgeRepositoryMock).updateBadgesStatusesForBatch(any(UpdateBadgesStatusesForBatchParams.class));
+    verify(badgeRepositoryMock)
+        .updateBadgesStatusesForBatch(any(UpdateBadgesStatusesForBatchParams.class));
   }
 
   @Test

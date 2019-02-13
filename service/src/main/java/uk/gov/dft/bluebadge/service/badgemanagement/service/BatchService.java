@@ -75,6 +75,7 @@ public class BatchService {
 
   /**
    * Re-sends the batch contents again to the print-service without creating new batch records.
+   *
    * @param batchUuid
    */
   public void rePrintBatch(String batchUuid) {
@@ -83,12 +84,11 @@ public class BatchService {
     Integer batchId = parseAndValidateBatchId(batchUuid);
 
     BatchEntity foundBatch = batchRepository.retrieveBatchEntity(batchId);
-    if (null == foundBatch ) {
+    if (null == foundBatch) {
       throw new NotFoundException("batch", NotFoundException.Operation.RETRIEVE);
     }
 
     sendBatchEntity(foundBatch);
-
   }
 
   /**
@@ -233,6 +233,7 @@ public class BatchService {
 
   /**
    * Validate done here temporarily as I expect the parameter will become a real UUID in time.
+   *
    * @param batchUuid
    * @return
    */
@@ -241,8 +242,7 @@ public class BatchService {
     Integer batchId;
     try {
       batchId = Integer.parseInt(batchUuid);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       throw new BadRequestException("batchId", "Not a valid batchId", "Not a valid batchId");
     }
 

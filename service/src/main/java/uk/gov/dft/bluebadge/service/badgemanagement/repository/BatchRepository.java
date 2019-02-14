@@ -66,5 +66,4 @@ public class BatchRepository implements BatchMapper {
     Assert.notNull(batchId, "batchId must not be null");
     return sqlSession.selectOne(Statements.RETRIEVE_BATCH, batchId);
   }
-
 }

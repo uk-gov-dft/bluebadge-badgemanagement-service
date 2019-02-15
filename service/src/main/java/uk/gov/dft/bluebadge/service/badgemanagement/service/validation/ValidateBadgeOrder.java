@@ -40,6 +40,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     validateRefData(LA, INVALID_LA_CODE, entity.getLocalAuthorityShortCode(), errors);
 
     // Business rules
+    validateApplicationDateInPast(entity, errors);
     validateStartDateInFuture(entity, errors);
     validateStartExpiryDateRange(entity, errors);
 
@@ -66,6 +67,14 @@ public class ValidateBadgeOrder extends ValidateBase {
     if (null == entity.getDob()) return;
 
     if (LocalDate.now().isBefore(entity.getDob())) {
+      errors.add(ValidationKeyEnum.DOB_IN_PAST.getFieldErrorInstance());
+    }
+  }
+
+  private static void validateApplicationDateInPast(BadgeEntity entity, List<ErrorErrors> errors) {
+    if (null == entity.getAppDate()) return;
+
+    if (LocalDate.now().isBefore(entity.getAppDate())) {
       errors.add(ValidationKeyEnum.APP_DATE_IN_PAST.getFieldErrorInstance());
     }
   }

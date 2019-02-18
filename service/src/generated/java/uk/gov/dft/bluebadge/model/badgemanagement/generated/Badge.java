@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 
 /** Badge */
 @Validated
@@ -104,7 +105,7 @@ public class Badge {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "BLACK", value = "Short code of local authority")
-  @Pattern(regexp = "^[A-Z]+$")
+  @Pattern(regexp = ValidationPattern.LA_SHORT_CODE)
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
   }

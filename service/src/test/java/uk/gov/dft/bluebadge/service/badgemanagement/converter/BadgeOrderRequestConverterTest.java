@@ -25,6 +25,18 @@ public class BadgeOrderRequestConverterTest extends BadgeTestBase {
   }
 
   @Test
+  public void convertToEntity_mixedCaseSpacedOutNino() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    // To check spaces stripped and upper case
+    request.getParty().getPerson().setNino("Ns 12 34 56 a   ");
+
+    BadgeOrderRequestConverter converter = new BadgeOrderRequestConverter();
+    BadgeEntity entity = converter.convertToEntity(request);
+
+    Assert.assertEquals("NS123456A", entity.getNino());
+  }
+
+  @Test
   public void convertToEntity_Org() {
     BadgeOrderRequest request = getValidBadgeOrderOrgRequest();
     // To check spaces stripped and upper case

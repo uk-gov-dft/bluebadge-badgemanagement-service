@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
@@ -65,28 +68,60 @@ public class BatchService {
   }
 
   public void sendPrintBatch(BatchType batchType) {
+    BatchEntity batchEntity = createBatchEntityForBatchType(batchType);
+    sendBatchEntity(batchEntity);
+    updateBadgeStatus(batchEntity);
+  }
+
+  /**
+   * Re-sends the batch contents again to the print-service without creating new batch records.
+   *
+   * @param batchUuid
+   */
+  public void rePrintBatch(String batchUuid) {
+
+    Assert.notNull(batchUuid, "Must supply a valid batch Uuid.");
+    Integer batchId = parseAndValidateBatchId(batchUuid);
+
+    BatchEntity foundBatch = batchRepository.retrieveBatchEntity(batchId);
+    if (null == foundBatch) {
+      throw new NotFoundException("batch", NotFoundException.Operation.RETRIEVE);
+    }
+
+    sendBatchEntity(foundBatch);
+  }
+
+  /**
+   * Create a batch header row and child batch_badge rows for the chosen batchType.
+   *
+   * @param batchType
+   * @return
+   */
+  private BatchEntity createBatchEntityForBatchType(BatchType batchType) {
     BatchEntity batchEntity =
         batchRepository.createBatch(
             BatchEntity.SourceEnum.DFT,
             BatchEntity.PurposeEnum.fromBatchType(batchType),
             getFilename(LocalDateTime.now()));
     batchRepository.appendBadgesToBatch(batchEntity.getId(), batchType);
+    return batchEntity;
+  }
 
+  /**
+   * Sends a print-batch defined by a BatchEntity to the print-service.
+   *
+   * @param batchEntity
+   */
+  private void sendBatchEntity(BatchEntity batchEntity) {
     FindBadgesForPrintBatchParams findBadgeParams =
         FindBadgesForPrintBatchParams.builder().batchId(batchEntity.getId()).build();
+
     List<BadgeEntity> badgesForPrintBatch =
         badgeRepository.findBadgesForPrintBatch(findBadgeParams);
 
     if (!badgesForPrintBatch.isEmpty()) {
-      PrintBatchRequest batch = toBatch(batchType, batchEntity, badgesForPrintBatch);
+      PrintBatchRequest batch = toBatch(batchEntity, badgesForPrintBatch);
       printServiceApiClient.printBatch(batch);
-
-      UpdateBadgesStatusesForBatchParams paramsUpdate =
-          UpdateBadgesStatusesForBatchParams.builder()
-              .batchId(batchEntity.getId())
-              .status("PROCESSED")
-              .build();
-      badgeRepository.updateBadgesStatusesForBatch(paramsUpdate);
     } else {
       log.info(
           "Print batch request not sent because there are no badges associated to batch id [{}].",
@@ -94,12 +129,20 @@ public class BatchService {
     }
   }
 
-  private PrintBatchRequest toBatch(
-      BatchType batchType, BatchEntity batchEntity, List<BadgeEntity> badges) {
+  private void updateBadgeStatus(BatchEntity batchEntity) {
+    UpdateBadgesStatusesForBatchParams paramsUpdate =
+        UpdateBadgesStatusesForBatchParams.builder()
+            .batchId(batchEntity.getId())
+            .status("PROCESSED")
+            .build();
+    badgeRepository.updateBadgesStatusesForBatch(paramsUpdate);
+  }
+
+  private PrintBatchRequest toBatch(BatchEntity batchEntity, List<BadgeEntity> badges) {
     List<PrintBatchBadgeRequest> badgesForPrintRequest =
         (badges.stream().map(this::toBadgePrintRequest)).collect(Collectors.toList());
     return PrintBatchRequest.builder()
-        .batchType(batchType.name())
+        .batchType(batchEntity.getPurpose().name())
         .filename(batchEntity.getFilename())
         .badges(badgesForPrintRequest)
         .build();
@@ -186,5 +229,27 @@ public class BatchService {
     StringBuilder filename = new StringBuilder().append("BADGEEXTRACT_");
     String localDateTimeString = localDateTime.format(dateTimeFormatter);
     return filename.append(localDateTimeString).toString();
+  }
+
+  /**
+   * Validate done here temporarily as I expect the parameter will become a real UUID in time.
+   *
+   * @param batchUuid
+   * @return
+   */
+  private Integer parseAndValidateBatchId(String batchUuid) {
+    // Done like this for now as we don't have a UUID being passed in
+    Integer batchId;
+    try {
+      batchId = Integer.parseInt(batchUuid);
+    } catch (NumberFormatException e) {
+      throw new BadRequestException("batchId", "Not a valid batchId", "Not a valid batchId");
+    }
+
+    if (batchId <= 0) {
+      throw new BadRequestException("batchId", "Not a valid batchId", "Must be greater than 0");
+    }
+
+    return batchId;
   }
 }

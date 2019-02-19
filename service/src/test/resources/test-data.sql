@@ -34,7 +34,7 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
 ;
 
 insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
-values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STAND')
+values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STANDARD')
 , (-2, 'linkTest.txt', '2010-01-01 01:01:00', 'DFT', 'FASTTRACK');
 
 insert into badgemanagement.batch_badge (batch_id, badge_no) values (-1, 'KKKKKA');

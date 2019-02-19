@@ -28,7 +28,7 @@ Feature: Verify Create badge
     },
     person: {
     badgeHolderName: 'TestData Fred Bloggs',
-    nino: 'NY188796B',
+    nino: 'NY 18 87 96 B',
     dob: '1972-09-12',
     genderCode: 'MALE'
     },

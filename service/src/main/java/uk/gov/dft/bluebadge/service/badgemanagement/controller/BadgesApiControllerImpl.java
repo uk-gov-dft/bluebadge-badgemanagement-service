@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement;
+package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
@@ -133,6 +133,13 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
     batchService.sendPrintBatch(printBadgeRequest.getBatchType());
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
+  public ResponseEntity<Void> reprintBatch(@Valid @PathVariable("batchId") String batchId) {
+    batchService.rePrintBatch(batchId);
     return ResponseEntity.ok().build();
   }
 

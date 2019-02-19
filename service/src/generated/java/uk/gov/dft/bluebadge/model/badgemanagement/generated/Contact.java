@@ -5,19 +5,24 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 
 /** Contact */
 @Validated
 public class Contact {
+
   @JsonProperty("fullName")
   private String fullName = null;
 
+  @Size(max = 50)
   @JsonProperty("buildingStreet")
   private String buildingStreet = null;
 
+  @Size(max = 40)
   @JsonProperty("line2")
   private String line2 = null;
 
+  @Size(max = 40)
   @JsonProperty("townCity")
   private String townCity = null;
 
@@ -130,7 +135,7 @@ public class Contact {
    */
   @ApiModelProperty(example = "SK6 8GH", required = true, value = "")
   @NotNull
-  @Pattern(regexp = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$")
+  @Pattern(regexp = ValidationPattern.POSTCODE_SIMPLE)
   public String getPostCode() {
     return postCode;
   }
@@ -191,7 +196,7 @@ public class Contact {
    * @return emailAddress
    */
   @ApiModelProperty(example = "june@bigbrainknitting.com", value = "")
-  @Pattern(regexp = "^\\S+\\@\\S+")
+  @Pattern(regexp = ValidationPattern.EMPTY_OR_EMAIL)
   @Size(max = 100)
   public String getEmailAddress() {
     return emailAddress;

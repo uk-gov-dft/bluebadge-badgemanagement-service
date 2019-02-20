@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.ReportMapper">
+
+    <select id="findIssuedBadges" parameterType="uk.gov.dft.bluebadge.service.badgemanagement.model.ReportSearch"
+            resultType="uk.gov.dft.bluebadge.service.badgemanagement.model.IssuedBadge">
+        SELECT
+            local_authority_short_code as laShortCode,
+            badge_no as badgeNumber,
+            issued_date_time as issuedTimestamp
+        FROM batch_badge bb
+        <where>
+           bb.issued_date_time >= #{startDate}
+           and bb.issued_date_time &lt; #{endDate}
+        </where>
+        ORDER BY bb.local_authority_short_code ASC, bb.issued_date_time ASC
+    </select>
+</mapper>

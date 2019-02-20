@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.ReportService;
 
 @RestController
 @RequestMapping("/reports")
+@PreAuthorize("#oauth2.hasScope('print-batch')")
 public class ReportController {
   private final ReportService reportService;
 

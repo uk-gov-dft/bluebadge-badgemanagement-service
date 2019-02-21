@@ -49,7 +49,7 @@ values
   -- issued badges
   ,(-12, 'KAKKKB', null, '2019-02-01 00:00:00', null)
   ,(-12, 'KAKKKC', null, '2019-02-01 00:00:00', null)
-  ,(-12, 'KAKKKD', null, '2019-02-01 00:00:00', null)
+  ,(-12, 'KAKKKD', null, '2019-02-01 01:00:00', null)
 
   -- print run 2
   ,(-13, 'KAKKKE', 'TEST_4', null, null)

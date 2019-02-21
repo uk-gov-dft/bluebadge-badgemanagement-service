@@ -21,7 +21,7 @@ public class ReportSearch {
   @AssertTrue(message = "ReportSearch.startDateAfterEndDate")
   public boolean isStartDateAfterEndDate() {
     if (null != startDate && null != endDate) {
-      return startDate.isBefore(endDate);
+      return !startDate.isAfter(endDate);
     }
     return true;
   }

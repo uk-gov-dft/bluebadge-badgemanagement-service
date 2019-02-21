@@ -56,6 +56,23 @@ public class ReportControllerTest {
 
   @Test
   @SneakyThrows
+  public void issuedBadges_sameDate() {
+    mockMvc
+        .perform(
+            get("/reports/issued-badges")
+                .param("startDate", "2019-02-02")
+                .param("endDate", "2019-02-02"))
+        .andExpect(status().isOk());
+
+    ArgumentCaptor<ReportSearch> captor = ArgumentCaptor.forClass(ReportSearch.class);
+    verify(mockReportService).issuedBadgesReport(captor.capture());
+    assertThat(captor.getValue()).isNotNull();
+    assertThat(captor.getValue().getStartDate()).isEqualTo("2019-02-02");
+    assertThat(captor.getValue().getEndDate()).isEqualTo("2019-02-02");
+  }
+
+  @Test
+  @SneakyThrows
   public void issuedBadges_nullStartDate() {
     mockMvc
         .perform(get("/reports/issued-badges").param("endDate", "2019-03-02"))

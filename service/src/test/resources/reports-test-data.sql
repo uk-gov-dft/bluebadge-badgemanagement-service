@@ -1,4 +1,4 @@
-delete from badgemanagement.batch where batch_id in (-10, -11, -12);
+delete from badgemanagement.batch where batch_id in (-10, -11, -12, -13, -14);
 
 delete from badgemanagement.badge where badge_no in ('KAKKKK', 'KAKKKD', 'KAKKKA', 'KAKKKC', 'KAKKKE', 'KAKKKB');
 

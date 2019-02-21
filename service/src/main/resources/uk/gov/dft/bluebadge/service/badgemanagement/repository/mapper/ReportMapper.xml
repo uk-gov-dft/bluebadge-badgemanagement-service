@@ -6,14 +6,16 @@
     <select id="findIssuedBadges" parameterType="uk.gov.dft.bluebadge.service.badgemanagement.model.ReportSearch"
             resultType="uk.gov.dft.bluebadge.service.badgemanagement.model.IssuedBadge">
         SELECT
-            local_authority_short_code as laShortCode,
-            badge_no as badgeNumber,
-            issued_date_time as issuedTimestamp
-        FROM batch_badge bb
-        <where>
+            b.local_authority_short_code as laShortCode,
+            bb.badge_no as badgeNumber,
+            bb.issued_date_time as issuedTimestamp
+        FROM batch ba
+        INNER JOIN batch_badge bb on ba.batch_id = bb.batch_id
+        INNER JOIN badge b on b.badge_no = bb.badge_no
+        WHERE
            bb.issued_date_time >= #{startDate}
            and bb.issued_date_time &lt; #{endDate}
-        </where>
-        ORDER BY bb.local_authority_short_code ASC, bb.issued_date_time ASC
+           AND ba.batch_purpose = 'ISSUED'
+        ORDER BY b.local_authority_short_code ASC, bb.issued_date_time ASC
     </select>
 </mapper>

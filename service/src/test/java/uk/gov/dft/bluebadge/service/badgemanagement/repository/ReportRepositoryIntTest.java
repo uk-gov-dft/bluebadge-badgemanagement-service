@@ -36,9 +36,8 @@ public class ReportRepositoryIntTest extends ApplicationContextTests {
         .extracting("laShortCode", "badgeNumber")
         .containsExactly(
             tuple("TEST_1", "KAKKKC"),
-            tuple("TEST_1", "KAKKKK"),
-            tuple("TEST_2", "KAKKKD"),
-            tuple("TEST_2", "KAKKKB"));
+            tuple("TEST_2", "KAKKKB"),
+            tuple("TEST_2", "KAKKKD"));
     assertThat(issuedBadges).extracting("issuedTimestamp").isNotNull();
   }
 

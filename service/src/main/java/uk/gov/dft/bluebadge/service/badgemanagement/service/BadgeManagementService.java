@@ -2,7 +2,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.DELETED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_FIND_PARAMS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_EXPIRY_DATE_IN_PAST;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_INVALID_BADGE_STATUS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
@@ -23,7 +27,12 @@ import uk.gov.dft.bluebadge.common.util.Base20;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
@@ -74,7 +83,7 @@ public class BadgeManagementService {
     this.validateReplaceBadge = validateReplaceBadge;
   }
 
-  public List<String> createBadge(BadgeOrderRequest model) {
+  public List<String> createBadges(BadgeOrderRequest model) {
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(model);
 
     List<String> createdList = new ArrayList<>();
@@ -83,20 +92,43 @@ public class BadgeManagementService {
     entity.setLocalAuthorityShortCode(securityUtils.getCurrentLocalAuthorityShortCode());
 
     validateBadgeOrder.validate(entity);
+    checkBadgeHashUnique(entity);
 
     for (int i = 0; i < entity.getNumberOfBadges(); i++) {
-      String newBadgeNo = createNewBadgeNumber();
-      entity.setBadgeNo(newBadgeNo);
-      if (entity.isPerson() && !StringUtils.isEmpty(model.getImageFile())) {
-        S3KeyNames names = photoService.photoUpload(model.getImageFile(), newBadgeNo);
-        entity.setImageLink(names.getThumbnailKeyName());
-        entity.setImageLinkOriginal(names.getOriginalKeyName());
-      }
-      repository.createBadge(entity);
-      createdList.add(entity.getBadgeNo());
+      createdList.add(createBadge(entity, model));
     }
     badgeAuditLogger.logCreateAuditMessage(model, createdList, log);
     return createdList;
+  }
+
+  private String createBadge(BadgeEntity entity, BadgeOrderRequest model) {
+    String newBadgeNo = createNewBadgeNumber();
+    entity.setBadgeNo(newBadgeNo);
+    if (entity.isPerson() && !StringUtils.isEmpty(model.getImageFile())) {
+      S3KeyNames names = photoService.photoUpload(model.getImageFile(), newBadgeNo);
+      entity.setImageLink(names.getThumbnailKeyName());
+      entity.setImageLinkOriginal(names.getOriginalKeyName());
+    }
+    repository.createBadge(entity);
+    return entity.getBadgeNo();
+  }
+
+  void checkBadgeHashUnique(BadgeEntity entity) {
+    byte[] badgeHash = BadgeHashService.getBadgeEntityHash(entity);
+    entity.setBadgeHash(badgeHash);
+
+    List<String> existing = repository.findBadgeHash(badgeHash);
+    if (null != existing && !existing.isEmpty()) {
+      StringBuilder existingids = new StringBuilder();
+      for (String badgeNo : existing) {
+        existingids.append(";").append(badgeNo);
+      }
+      log.warn("Attempt to create badge with same hash as following {}", existingids.toString());
+      throw new BadRequestException(
+          new Error()
+              .reason("Cannot order badge, this badge has already been ordered.")
+              .message("AlreadyExists.badge"));
+    }
   }
 
   private String createNewBadgeNumber() {

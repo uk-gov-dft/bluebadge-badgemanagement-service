@@ -65,4 +65,6 @@ public interface BadgeManagementMapper {
   int replaceBadge(ReplaceBadgeParams params);
 
   int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params);
+
+  List<String> findBadgeHash(byte[] hash);
 }

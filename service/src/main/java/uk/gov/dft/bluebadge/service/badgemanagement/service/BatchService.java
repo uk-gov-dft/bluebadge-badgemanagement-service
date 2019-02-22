@@ -43,6 +43,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadg
 @SuppressWarnings("squid:S1612")
 @Transactional(propagation = Propagation.REQUIRED)
 public class BatchService {
+  private static final String NOT_VALID_BATCH_ID = "Not a valid batchId";
   private static final DateTimeFormatter dateTimeFormatter =
       new DateTimeFormatterBuilder()
           .appendValue(YEAR, 4)
@@ -243,11 +244,11 @@ public class BatchService {
     try {
       batchId = Integer.parseInt(batchUuid);
     } catch (NumberFormatException e) {
-      throw new BadRequestException("batchId", "Not a valid batchId", "Not a valid batchId");
+      throw new BadRequestException("batchId", NOT_VALID_BATCH_ID, NOT_VALID_BATCH_ID);
     }
 
     if (batchId <= 0) {
-      throw new BadRequestException("batchId", "Not a valid batchId", "Must be greater than 0");
+      throw new BadRequestException("batchId", NOT_VALID_BATCH_ID, "Must be greater than 0");
     }
 
     return batchId;

@@ -12,6 +12,8 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntit
 @Slf4j
 class BadgeHashService {
 
+  private BadgeHashService() {}
+
   static byte[] getBadgeEntityHash(BadgeEntity badge) {
 
     // Do not change hashing without updating existing hash codes in DB.

@@ -54,6 +54,7 @@ public class BadgeEntity implements Serializable {
   String replaceReasonCode;
   LocalDate orderDate;
   int numberOfBadges;
+  byte[] badgeHash;
 
   public boolean isPerson() {
     return "PERSON".equals(partyCode);

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
@@ -36,7 +35,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
-public class BadgesApiControllerImpl extends AbstractController implements BadgesApi {
+public class BadgesApiControllerImpl implements BadgesApi {
 
   private final BadgeManagementService badgeService;
   private final BatchService batchService;
@@ -60,7 +59,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
-    List<String> createdList = badgeService.createBadge(badgeOrder);
+    List<String> createdList = badgeService.createBadges(badgeOrder);
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));
   }
 

@@ -31,9 +31,10 @@ Feature: Verify print a batch
   Scenario: Verify print a badge - invalid batch type
     Given path 'badges/print-batch'
     And request {"batchType": "INVALID"}
+    * print $.error
     When method POST
     Then status 400
-    And match $.error.message == 'InvalidFormat.BatchType'
+    And match $.error.errors[0].message == 'InvalidFormat.batchType'
 
   Scenario: Verify print a badge - missing batch type
     Given path 'badges/print-batch'

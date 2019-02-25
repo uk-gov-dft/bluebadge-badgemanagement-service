@@ -36,7 +36,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
-public class BadgesApiControllerImpl extends AbstractController implements BadgesApi {
+public class BadgesApiController extends AbstractController implements BadgesApi {
 
   private final BadgeManagementService badgeService;
   private final BatchService batchService;
@@ -45,7 +45,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiControllerImpl(
+  public BadgesApiController(
       BadgeManagementService service,
       BatchService batchService,
       BadgeSummaryConverter badgeSummaryConverter) {

@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement;
+package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.dft.bluebadge.common.controller.AbstractController;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
@@ -36,7 +35,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
-public class BadgesApiControllerImpl extends AbstractController implements BadgesApi {
+public class BadgesApiController implements BadgesApi {
 
   private final BadgeManagementService badgeService;
   private final BatchService batchService;
@@ -45,7 +44,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
 
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiControllerImpl(
+  public BadgesApiController(
       BadgeManagementService service,
       BatchService batchService,
       BadgeSummaryConverter badgeSummaryConverter) {
@@ -60,7 +59,7 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   public ResponseEntity<BadgeNumbersResponse> orderBlueBadges(
       @ApiParam() @Valid @RequestBody BadgeOrderRequest badgeOrder) {
 
-    List<String> createdList = badgeService.createBadge(badgeOrder);
+    List<String> createdList = badgeService.createBadges(badgeOrder);
     return ResponseEntity.ok(new BadgeNumbersResponse().data(createdList));
   }
 
@@ -133,6 +132,13 @@ public class BadgesApiControllerImpl extends AbstractController implements Badge
   @PreAuthorize("#oauth2.hasScope('print-batch')")
   public ResponseEntity<Void> printBatch(@Valid @RequestBody PrintBatchRequest printBadgeRequest) {
     batchService.sendPrintBatch(printBadgeRequest.getBatchType());
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
+  @PreAuthorize("#oauth2.hasScope('print-batch')")
+  public ResponseEntity<Void> reprintBatch(@Valid @PathVariable("batchId") String batchId) {
+    batchService.rePrintBatch(batchId);
     return ResponseEntity.ok().build();
   }
 

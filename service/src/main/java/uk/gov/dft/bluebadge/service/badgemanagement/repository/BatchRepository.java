@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.AppendBadgesToBatchParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BatchBadgeLinkEntity;
@@ -22,6 +23,7 @@ public class BatchRepository implements BatchMapper {
     static final String CREATE = "createBatch";
     static final String APPEND_BADGES = "appendBadges";
     static final String LINK_BADGE_TO_BATCH = "linkBadgeToBatch";
+    static final String RETRIEVE_BATCH = "retrieveBatch";
   }
 
   private final SqlSession sqlSession;
@@ -58,5 +60,10 @@ public class BatchRepository implements BatchMapper {
   @Override
   public int linkBadgeToBatch(BatchBadgeLinkEntity params) {
     return sqlSession.insert(Statements.LINK_BADGE_TO_BATCH, params);
+  }
+
+  public BatchEntity retrieveBatchEntity(Integer batchId) {
+    Assert.notNull(batchId, "batchId must not be null");
+    return sqlSession.selectOne(Statements.RETRIEVE_BATCH, batchId);
   }
 }

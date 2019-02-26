@@ -8,6 +8,7 @@ public enum ValidationKeyEnum {
       "DateInPast.badge.applicationDate",
       "Application date must be in the past.",
       "applicationDate"),
+  DOB_IN_PAST("DateInPast.badge.dob", "DOB must be in the past.", "dob"),
   INVALID_PARTY_CODE("Invalid.badge.partyCode", "Invalid party code.", "partyCode"),
   INVALID_ELIGIBILITY_CODE(
       "Invalid.badge.eligibilityCode", "Invalid eligibility code.", "eligibilityCode"),

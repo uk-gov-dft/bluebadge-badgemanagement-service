@@ -9,7 +9,7 @@ Feature: Verify delete a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-
+    * def createResult = callonce read('./badge-create-person.feature')
 
 * def lowerCase =
   """
@@ -24,33 +24,19 @@ Feature: Verify delete a badge
     Then status 404
 
   Scenario: Verify delete a badge success
-    * def createResult = call read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo
     Given path 'badges/'+ createdBadgeNo
     When method DELETE
     Then status 200
 
-  Scenario: Verify delete a badge success with badge number in lower case
-    * def createResult = call read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
+  Scenario: Verify delete a badge success with badge number in lower case and badge cannot be read after
+    * def createdBadgeNo = createResult.badgeNo2
     * def lowerCaseBadgeNo = lowerCase(createdBadgeNo)
     Given path 'badges/'+ lowerCaseBadgeNo
     When method DELETE
     Then status 200
     Given path 'badges/' + lowerCaseBadgeNo
     * header Authorization = 'Bearer ' + result.accessToken
-    When method GET
-    Then status 404
-
-
-  Scenario: Verify retrieve is not found after delete
-    * def createResult = call read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
-    Given path 'badges/'+ createdBadgeNo
-    When method DELETE
-    Then status 200
-    * header Authorization = 'Bearer ' + result.accessToken
-    Given path 'badges/'+ createdBadgeNo
     When method GET
     Then status 404
 

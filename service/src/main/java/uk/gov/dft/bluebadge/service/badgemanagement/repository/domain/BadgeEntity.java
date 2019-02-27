@@ -24,37 +24,37 @@ public class BadgeEntity implements Serializable {
     REJECT
   }
 
-  String badgeNo;
-  Status badgeStatus;
-  String partyCode;
-  String localAuthorityShortCode;
-  String localAuthorityRef;
-  LocalDate appDate;
-  String appChannelCode;
-  LocalDate startDate;
-  LocalDate expiryDate;
-  String eligibilityCode;
-  String imageLink;
-  String imageLinkOriginal;
-  String deliverToCode;
-  String deliverOptionCode;
-  String holderName;
-  String nino;
-  LocalDate dob;
-  String genderCode;
-  String contactName;
-  String contactBuildingStreet;
-  String contactLine2;
-  String contactTownCity;
-  String contactPostcode;
-  String primaryPhoneNo;
-  String secondaryPhoneNo;
-  String contactEmailAddress;
-  String cancelReasonCode;
-  String replaceReasonCode;
-  LocalDate orderDate;
-  int numberOfBadges;
-  byte[] badgeHash;
+  private String badgeNo;
+  private Status badgeStatus;
+  private String partyCode;
+  private String localAuthorityShortCode;
+  private String localAuthorityRef;
+  private LocalDate appDate;
+  private String appChannelCode;
+  private LocalDate startDate;
+  private LocalDate expiryDate;
+  private String eligibilityCode;
+  private String imageLink;
+  private String imageLinkOriginal;
+  private String deliverToCode;
+  private String deliverOptionCode;
+  private String holderName;
+  private String nino;
+  private LocalDate dob;
+  private String genderCode;
+  private String contactName;
+  private String contactBuildingStreet;
+  private String contactLine2;
+  private String contactTownCity;
+  private String contactPostcode;
+  private String primaryPhoneNo;
+  private String secondaryPhoneNo;
+  private String contactEmailAddress;
+  private String cancelReasonCode;
+  private String replaceReasonCode;
+  private LocalDate orderDate;
+  private int numberOfBadges;
+  private byte[] badgeHash;
 
   public boolean isPerson() {
     return "PERSON".equals(partyCode);

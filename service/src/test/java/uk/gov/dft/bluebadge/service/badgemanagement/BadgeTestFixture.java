@@ -1,35 +1,39 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
-import static org.mockito.Mockito.when;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class BadgeTestBase {
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
+
+public class BadgeTestFixture {
 
   public class DefaultVals {
+    static final String LOCAL_AUTHORITY_CODE_ENGLAND = "BIRM";
+    static final String LOCAL_AUTHORITY_CODE_WALES = "CARDIFF";
+    static final String LOCAL_AUTHORITY_CODE_N_IRELAND = "BELFAST";
+    static final String LOCAL_AUTHORITY_CODE_SCOTLAND = "ABERD";
     static final String ELIGIBILITY_CODE = "PIP";
     static final String DELIVER_TO_CODE_HOME = "HOME";
     static final String DELIVER_TO_CODE_COUNCIL = "COUNCIL";
@@ -42,30 +46,41 @@ public class BadgeTestBase {
     static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
-    static final String LOCAL_AUTHORITY_CODE = "ABERD";
     public static final String REPLACE_REASON = "STOLE";
   }
 
-  protected ReferenceDataService referenceDataService;
+  private BadgeTestFixture() {}
 
-  @Mock private ReferenceDataApiClient referenceDataApiClient;
-
-  public BadgeTestBase() {
-    MockitoAnnotations.initMocks(this);
-    addRefData();
+  public static ReferenceDataApiClient getMockRefDataApiClient() {
+    ReferenceDataApiClient client = mock(ReferenceDataApiClient.class);
+    when(client.retrieveReferenceData()).thenReturn(getRefDataTestList());
+    return client;
   }
 
-  private ReferenceData getNewRefDataItem(RefDataGroupEnum group, String key, String description) {
+  private static ReferenceData getNewRefDataItem(
+      RefDataGroupEnum group, String key, String description) {
     ReferenceData data = new ReferenceData();
     data.setGroupShortCode(group.getGroupKey());
-    data.setShortCode(group.getGroupKey());
     data.setShortCode(key);
     data.setDescription(description);
     data.setDisplayOrder(1);
     return data;
   }
 
-  private void addRefData() {
+  private static LocalAuthorityRefData getNewLaRefDataItem(String key, Nation nation) {
+    LocalAuthorityRefData data = new LocalAuthorityRefData();
+    data.setGroupShortCode(RefDataGroupEnum.LA.getGroupKey());
+    data.setShortCode(key);
+    data.setDisplayOrder(1);
+    LocalAuthorityRefData.LocalAuthorityMetaData meta =
+        new LocalAuthorityRefData.LocalAuthorityMetaData();
+    meta.setNation(nation);
+    data.setLocalAuthorityMetaData(meta);
+
+    return data;
+  }
+
+  private static List<ReferenceData> getRefDataTestList() {
     List<ReferenceData> referenceDataList = new ArrayList<>();
     referenceDataList.add(getNewRefDataItem(APP_SOURCE, DefaultVals.APP_CHANNEL_CODE, null));
     referenceDataList.add(
@@ -75,7 +90,14 @@ public class BadgeTestBase {
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_HOME, null));
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_COUNCIL, null));
     referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
-    referenceDataList.add(getNewRefDataItem(LA, DefaultVals.LOCAL_AUTHORITY_CODE, null));
+    referenceDataList.add(
+        getNewLaRefDataItem(DefaultVals.LOCAL_AUTHORITY_CODE_SCOTLAND, Nation.SCO));
+    referenceDataList.add(
+        getNewLaRefDataItem(DefaultVals.LOCAL_AUTHORITY_CODE_ENGLAND, Nation.ENG));
+    referenceDataList.add(getNewLaRefDataItem(DefaultVals.LOCAL_AUTHORITY_CODE_WALES, Nation.WLS));
+    referenceDataList.add(
+        getNewLaRefDataItem(DefaultVals.LOCAL_AUTHORITY_CODE_N_IRELAND, Nation.NIR));
+
     referenceDataList.add(getNewRefDataItem(PARTY, DefaultVals.PARTY_ORG_CODE, null));
     referenceDataList.add(
         getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
@@ -85,13 +107,10 @@ public class BadgeTestBase {
         getNewRefDataItem(
             RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
     referenceDataList.add(getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
-
-    when(referenceDataApiClient.retrieveReferenceData()).thenReturn(referenceDataList);
-    referenceDataService = new ReferenceDataService(referenceDataApiClient);
-    referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, "MALE");
+    return referenceDataList;
   }
 
-  protected BadgeEntity getValidPersonBadgeEntity() {
+  public static BadgeEntity getValidPersonBadgeEntity() {
 
     return BadgeEntity.builder()
         .appChannelCode(DefaultVals.APP_CHANNEL_CODE)
@@ -124,7 +143,7 @@ public class BadgeTestBase {
         .build();
   }
 
-  protected BadgeOrderRequest getValidBadgeOrderOrgRequest() {
+  public static BadgeOrderRequest getValidBadgeOrderOrgRequest() {
     BadgeOrderRequest request = new BadgeOrderRequest();
     Party party = new Party();
     Contact contact = new Contact();
@@ -150,7 +169,7 @@ public class BadgeTestBase {
     return request;
   }
 
-  protected BadgeOrderRequest getValidBadgeOrderPersonRequest() {
+  public static BadgeOrderRequest getValidBadgeOrderPersonRequest() {
     BadgeOrderRequest request = new BadgeOrderRequest();
     Party party = new Party();
     Contact contact = new Contact();
@@ -178,7 +197,7 @@ public class BadgeTestBase {
     return request;
   }
 
-  protected BadgeEntity getValidOrgBadgeEntity() {
+  public static BadgeEntity getValidOrgBadgeEntity() {
     return BadgeEntity.builder()
         .contactPostcode("WV164AW")
         .contactTownCity("Bridgnorth")

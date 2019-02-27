@@ -8,6 +8,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderPersonRequest;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.CANCELLED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ORDERED;
@@ -25,11 +27,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
@@ -39,7 +41,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateB
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
-public class BadgeManagementServiceTest extends BadgeTestBase {
+public class BadgeManagementServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository repositoryMock;
@@ -53,6 +55,10 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   @Mock private BadgeAuditLogger badgeAuditLogger;
 
   private BadgeManagementService service;
+
+  public BadgeManagementServiceTest() {
+    MockitoAnnotations.initMocks(this);
+  }
 
   @Before
   public void setUp() {

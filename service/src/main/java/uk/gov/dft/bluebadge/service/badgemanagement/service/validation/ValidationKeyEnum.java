@@ -71,7 +71,15 @@ public enum ValidationKeyEnum {
       "Cannot replace an expired badge.",
       Constants.EXPIRY_DATE),
   REPLACE_INVALID_BADGE_STATUS(
-      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
+      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus"),
+  COGNITIVE_NATION(
+      "InvalidNationCognitive.badge.eligibilityCode",
+      "Cognitive impairment is only valid in Wales.",
+      "eligibilityCode"),
+  TRAFFIC_RISK_NATION(
+      "InvalidNationTraffic.badge.eligibilityCode",
+      "Traffic risk is only valid in Scotland.",
+      "eligibilityCode");
 
   private final String key;
   private final String defaultMessage;
@@ -100,6 +108,10 @@ public enum ValidationKeyEnum {
   }
 
   private static class Constants {
-    public static final String EXPIRY_DATE = "expiryDate";
+    static final String EXPIRY_DATE = "expiryDate";
+  }
+
+  public String getKey() {
+    return key;
   }
 }

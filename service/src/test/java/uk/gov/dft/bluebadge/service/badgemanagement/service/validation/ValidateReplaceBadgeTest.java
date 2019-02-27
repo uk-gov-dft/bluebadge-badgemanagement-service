@@ -3,13 +3,14 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 import java.time.LocalDate;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class ValidateReplaceBadgeTest extends BadgeTestBase {
+public class ValidateReplaceBadgeTest {
 
-  private ValidateReplaceBadge validator = new ValidateReplaceBadge(referenceDataService);
+  private ValidateReplaceBadge validator = new ValidateReplaceBadge(new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
 
   @Test
   public void validate_params_ok() {

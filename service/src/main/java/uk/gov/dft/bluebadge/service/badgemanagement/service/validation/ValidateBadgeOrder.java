@@ -1,20 +1,36 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.*;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.*;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_CHANNEL_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_DELIVER_OPTION_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_DELIVER_TO_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_ELIGIBILITY_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_GENDER_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_LA_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_PARTY_CODE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_ELIGIBILITY_CODE_PERSON;
 
 @Component
 @Slf4j
@@ -48,6 +64,8 @@ public class ValidateBadgeOrder extends ValidateBase {
     if (entity.isPerson()) {
       validateDobInPast(entity, errors);
       validateNotNull(NULL_ELIGIBILITY_CODE_PERSON, entity.getEligibilityCode(), errors);
+      validateCognitiveImpairment(entity, errors);
+      validateRiskInTraffic(entity, errors);
       validateRefData(ELIGIBILITY, INVALID_ELIGIBILITY_CODE, entity.getEligibilityCode(), errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }
@@ -63,7 +81,31 @@ public class ValidateBadgeOrder extends ValidateBase {
     log.debug("Badge order passed validation.");
   }
 
-  private static void validateDobInPast(BadgeEntity entity, List<ErrorErrors> errors) {
+  void validateCognitiveImpairment(BadgeEntity entity, List<ErrorErrors> errors){
+    if(null == entity.getEligibilityCode() || !"COGNITIVE".equals(entity.getEligibilityCode())){
+      return;
+    }
+
+    LocalAuthorityRefData la = referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
+    Nation nation = la.getLocalAuthorityMetaData().getNation();
+    if(Nation.WLS == nation){
+      errors.add(ValidationKeyEnum.COGNITIVE_NATION.getFieldErrorInstance());
+    }
+  }
+
+  void validateRiskInTraffic(BadgeEntity entity, List<ErrorErrors> errors){
+    if(null == entity.getEligibilityCode() || !"TRAF_RISK".equals(entity.getEligibilityCode())){
+      return;
+    }
+
+    LocalAuthorityRefData la = referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
+    Nation nation = la.getLocalAuthorityMetaData().getNation();
+    if(Nation.SCO != nation){
+      errors.add(ValidationKeyEnum.TRAFFIC_RISK_NATION.getFieldErrorInstance());
+    }
+  }
+
+  static void validateDobInPast(BadgeEntity entity, List<ErrorErrors> errors) {
     if (null == entity.getDob()) return;
 
     if (LocalDate.now().isBefore(entity.getDob())) {
@@ -71,7 +113,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
-  private static void validateApplicationDateInPast(BadgeEntity entity, List<ErrorErrors> errors) {
+  static void validateApplicationDateInPast(BadgeEntity entity, List<ErrorErrors> errors) {
     if (null == entity.getAppDate()) return;
 
     if (LocalDate.now().isBefore(entity.getAppDate())) {
@@ -79,7 +121,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
-  private static void validateStartDateInFuture(BadgeEntity entity, List<ErrorErrors> errors) {
+  static void validateStartDateInFuture(BadgeEntity entity, List<ErrorErrors> errors) {
     // No null check required. Start date mandatory.
     Assert.notNull(entity.getStartDate(), "Start date should not be null.");
     if (LocalDate.now().isAfter(entity.getStartDate())) {
@@ -87,7 +129,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
-  private static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
+  static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
     if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
             .isBefore(entity.getStartDate())

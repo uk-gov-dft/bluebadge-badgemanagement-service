@@ -1,26 +1,14 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
@@ -37,7 +25,20 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadges
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
-public class BatchServiceTest extends BadgeTestBase {
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class BatchServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository badgeRepositoryMock;
@@ -45,6 +46,10 @@ public class BatchServiceTest extends BadgeTestBase {
   @Mock private PrintServiceApiClient printServiceApiClientMock;
 
   @Mock private SecurityUtils securityUtilsMock;
+
+  public BatchServiceTest() {
+    MockitoAnnotations.initMocks(this);
+  }
 
   private BatchService service;
 

@@ -1,27 +1,18 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class ReferenceDataServiceTest extends BadgeTestBase {
+public class ReferenceDataServiceTest {
 
   @Test
   public void groupContainsKey() {
+    ReferenceDataService service = new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient());
     Assert.assertTrue(
-        referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, DefaultVals.GENDER_CODE));
-    Assert.assertFalse(referenceDataService.groupContainsKey(RefDataGroupEnum.GENDER, "VOLVO"));
-  }
-
-  @Test
-  public void test() {
-    Set<String> items = new HashSet<>();
-
-    items.add("AAA");
-    items.add("BBB");
-    items.add("CCC");
+        service.groupContainsKey(RefDataGroupEnum.GENDER, BadgeTestFixture.DefaultVals.GENDER_CODE));
+    Assert.assertFalse(service.groupContainsKey(RefDataGroupEnum.GENDER, "VOLVO"));
   }
 }

@@ -3,10 +3,12 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
-public class BadgeSummaryConverterTest extends BadgeTestBase {
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
+
+public class BadgeSummaryConverterTest {
 
   @Test
   public void convertToModel_person() {

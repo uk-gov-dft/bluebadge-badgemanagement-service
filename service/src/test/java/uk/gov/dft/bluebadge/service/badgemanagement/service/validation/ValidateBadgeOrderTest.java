@@ -1,84 +1,100 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDate;
-import java.time.Period;
-import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class ValidateBadgeOrderTest extends BadgeTestBase {
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getMockRefDataApiClient;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
+
+public class ValidateBadgeOrderTest {
 
   private ValidateBadgeOrder validateBadgeOrder;
 
   public ValidateBadgeOrderTest() {
-    super();
-    validateBadgeOrder = new ValidateBadgeOrder(referenceDataService);
+
+    validateBadgeOrder =
+        new ValidateBadgeOrder(new ReferenceDataService(getMockRefDataApiClient()));
+  }
+
+  @Test
+  public void validateCognitiveImpairment() {
+
+    ReferenceDataService refDataServiceMock = mock(ReferenceDataService.class);
+    ValidateBadgeOrder validator = new ValidateBadgeOrder(refDataServiceMock);
+    List<ErrorErrors> errors = new ArrayList<>();
+
+    // If eligibility is not CI then validates as ok
+    validator.validateCognitiveImpairment(getValidPersonBadgeEntity(), errors);
   }
 
   @Test
   public void validateCreateBadgeRequest_ok() {
-    try {
-      validateBadgeOrder.validate(getValidPersonBadgeEntity());
-      // If we get here then was valid, else would have been exception thrown.
-    } catch (BadRequestException e) {
-      e.printStackTrace();
-      Assert.fail();
-    }
+    validateBadgeOrder.validate(getValidPersonBadgeEntity());
+    // If we get here then was valid, else would have been exception thrown.
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void validateCreateBadgeRequest_fail() {
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setEligibilityCode("NOT_EXISTS");
+    validateBadgeOrder.validate(getValidPersonBadgeEntity());
+    // If we get here then was valid, else would have been exception thrown.
   }
 
   @Test
-  public void validateCreateBadgeRequest_dob_not_in_past() {
-    try {
-      BadgeEntity entity = getValidPersonBadgeEntity();
-      entity.setDob(LocalDate.now().plus(Period.ofDays(1)));
-      validateBadgeOrder.validate(entity);
-      Assert.fail("DOB validation should throw an exception");
-    } catch (BadRequestException e) {
-      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
-    }
+  public void validateDobInPast() {
+
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setDob(LocalDate.now().plus(Period.ofDays(1)));
+    List<ErrorErrors> errors = new ArrayList<>();
+    ValidateBadgeOrder.validateDobInPast(entity, errors);
+    assertThat(errors.size()).isEqualTo(1);
+    assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.DOB_IN_PAST.getKey());
   }
 
   @Test
-  public void validateCreateBadgeRequest_appDate_not_in_past() {
-    try {
-      BadgeEntity entity = getValidPersonBadgeEntity();
-      entity.setAppDate(LocalDate.now().plus(Period.ofDays(1)));
-      validateBadgeOrder.validate(entity);
-      Assert.fail("Application date validation should throw an exception");
-    } catch (BadRequestException e) {
-      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
-    }
+  public void validateApplicationDateInPast() {
+
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setAppDate(LocalDate.now().plus(Period.ofDays(1)));
+    List<ErrorErrors> errors = new ArrayList<>();
+    ValidateBadgeOrder.validateApplicationDateInPast(entity, errors);
+    assertThat(errors.size()).isEqualTo(1);
+    assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.APP_DATE_IN_PAST.getKey());
   }
 
   @Test
-  public void validateCreateBadgeRequest_start_date_in_future() {
-    try {
-      BadgeEntity entity = getValidPersonBadgeEntity();
-      entity.setStartDate(LocalDate.now().minus(Period.ofDays(1)));
-      validateBadgeOrder.validate(entity);
-      Assert.fail("Start date validation should throw an exception");
-    } catch (BadRequestException e) {
-      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
-    }
+  public void validateStartDateInFuture() {
+
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setStartDate(LocalDate.now().minus(Period.ofDays(1)));
+    List<ErrorErrors> errors = new ArrayList<>();
+    ValidateBadgeOrder.validateStartDateInFuture(entity, errors);
+    assertThat(errors.size()).isEqualTo(1);
+    assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.START_DATE_IN_PAST.getKey());
   }
 
   @Test
   public void validateCreateBadgeRequest_start_expiry_range() {
-    try {
+
       // Dates ok
       BadgeEntity entity = getValidPersonBadgeEntity();
       entity.setStartDate(LocalDate.now().plusDays(10));
       entity.setExpiryDate(LocalDate.now().plusDays(20));
-      validateBadgeOrder.validate(entity);
-    } catch (BadRequestException e) {
-      Assert.fail("Date range should have been valid");
-    }
+      List<ErrorErrors> errors = new ArrayList<>();
+      ValidateBadgeOrder.validateStartExpiryDateRange(entity, errors);
+    assertThat(errors.size()).isEqualTo(0);
 
     try {
       // Dates more than 3 years apart

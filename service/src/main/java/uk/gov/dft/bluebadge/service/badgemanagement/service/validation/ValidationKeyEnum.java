@@ -11,11 +11,11 @@ public enum ValidationKeyEnum {
   DOB_IN_PAST("DateInPast.badge.dob", "DOB must be in the past.", "dob"),
   INVALID_PARTY_CODE("Invalid.badge.partyCode", "Invalid party code.", "partyCode"),
   INVALID_ELIGIBILITY_CODE(
-      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", "eligibilityCode"),
+      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", Constants.ELIGIBILITY_CODE),
   NULL_ELIGIBILITY_CODE_PERSON(
       "NotNull.badge.eligibilityCode",
       "Eligibility code is mandatory for Person badges.",
-      "eligibilityCode"),
+      Constants.ELIGIBILITY_CODE),
   INVALID_DELIVER_TO_CODE(
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(
@@ -75,9 +75,9 @@ public enum ValidationKeyEnum {
   INVALID_ELIGIBILITY_FOR_NATION(
       "InvalidNation.badge.eligibilityCode",
       "Eligibility type not valid for nation.",
-      "eligibilityCode"),
+      Constants.ELIGIBILITY_CODE),
   EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.expiryDate", "Expiry date cannot be in the past.", "expiryDate");
+      "Invalid.badge.expiryDate", "Expiry date cannot be in the past.", Constants.EXPIRY_DATE);
 
   private final String key;
   private final String defaultMessage;
@@ -111,6 +111,7 @@ public enum ValidationKeyEnum {
 
   private static class Constants {
     static final String EXPIRY_DATE = "expiryDate";
+    static final String ELIGIBILITY_CODE = "eligibilityCode";
   }
 
   public String getKey() {

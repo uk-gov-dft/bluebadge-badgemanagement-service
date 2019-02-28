@@ -7,8 +7,6 @@ Feature: Verify Create badge cognitive
     * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
     * def setup = callonce db.runScript('acceptance-test-data.sql')
-
-  Scenario: Verify valid create Cognitive eligibility
     * def badge =
     """
     {
@@ -44,6 +42,7 @@ Feature: Verify Create badge cognitive
     }
     """
 
+  Scenario: Verify valid create Cognitive eligibility
     * def result = callonce read('./oauth2-3rd-party-wales.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * set badge.localAuthorityShortCode = "ANGL"
@@ -53,9 +52,32 @@ Feature: Verify Create badge cognitive
     Then status 200
     And match $.data[*] contains "#notnull"
 
+  Scenario: Verify connot create Cognitive eligibility if Scottish la
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * set badge.localAuthorityShortCode = "ABERD"
+    Given path 'badges'
+    * header Authorization = 'Bearer ' + result.accessToken
+    And request badge
+    When method POST
+    Then status 400
+    And match $.error.errors[0].message == "InvalidNation.badge.eligibilityCode"
+
+  Scenario: Verify connot create Cognitive eligibility if English la
+    * def result = callonce read('./oauth2-3rd-party-england.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
+    * set badge.localAuthorityShortCode = "BIRM"
+    Given path 'badges'
+    * header Authorization = 'Bearer ' + result.accessToken
+    And request badge
+    When method POST
+    Then status 400
+    And match $.error.errors[0].message == "InvalidNation.badge.eligibilityCode"
+
+  Scenario: Verify connot create Cognitive eligibility if N Ireland la
+    * def result = callonce read('./oauth2-3rd-party-nireland.feature')
+    * header Authorization = 'Bearer ' + result.accessToken
+    * set badge.localAuthorityShortCode = "NIRE"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
     And request badge

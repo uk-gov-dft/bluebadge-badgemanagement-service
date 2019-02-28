@@ -72,14 +72,12 @@ public enum ValidationKeyEnum {
       Constants.EXPIRY_DATE),
   REPLACE_INVALID_BADGE_STATUS(
       "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus"),
-  COGNITIVE_NATION(
-      "InvalidNationCognitive.badge.eligibilityCode",
-      "Cognitive impairment is only valid in Wales.",
+  INVALID_ELIGIBILITY_FOR_NATION(
+      "InvalidNation.badge.eligibilityCode",
+      "Eligibility type not valid for nation.",
       "eligibilityCode"),
-  TRAFFIC_RISK_NATION(
-      "InvalidNationTraffic.badge.eligibilityCode",
-      "Traffic risk is only valid in Scotland.",
-      "eligibilityCode");
+  EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.expiryDate", "Expiry date cannot be in the past.", "expiryDate");
 
   private final String key;
   private final String defaultMessage;
@@ -93,10 +91,14 @@ public enum ValidationKeyEnum {
   }
 
   public ErrorErrors getFieldErrorInstance() {
+    return getFieldErrorInstance(defaultMessage);
+  }
+
+  public ErrorErrors getFieldErrorInstance(String reason) {
     ErrorErrors error = new ErrorErrors();
     error.setField(field);
     error.setMessage(key);
-    error.setReason(defaultMessage);
+    error.setReason(reason);
     return error;
   }
 

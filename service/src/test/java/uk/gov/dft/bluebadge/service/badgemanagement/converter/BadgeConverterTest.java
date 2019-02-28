@@ -1,13 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
+
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-
-import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
-import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
 
 public class BadgeConverterTest {
 

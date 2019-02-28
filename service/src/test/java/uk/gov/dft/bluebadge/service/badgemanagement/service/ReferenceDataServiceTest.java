@@ -10,9 +10,11 @@ public class ReferenceDataServiceTest {
 
   @Test
   public void groupContainsKey() {
-    ReferenceDataService service = new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient());
+    ReferenceDataService service =
+        new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient());
     Assert.assertTrue(
-        service.groupContainsKey(RefDataGroupEnum.GENDER, BadgeTestFixture.DefaultVals.GENDER_CODE));
+        service.groupContainsKey(
+            RefDataGroupEnum.GENDER, BadgeTestFixture.DefaultVals.GENDER_CODE));
     Assert.assertFalse(service.groupContainsKey(RefDataGroupEnum.GENDER, "VOLVO"));
   }
 }

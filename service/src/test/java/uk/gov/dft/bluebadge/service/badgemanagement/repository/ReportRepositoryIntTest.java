@@ -3,9 +3,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
-
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +33,7 @@ public class ReportRepositoryIntTest extends ApplicationContextTests {
     assertThat(issuedBadges)
         .extracting("laShortCode", "badgeNumber")
         .containsExactly(
-            tuple("TEST_1", "KAKKKC"),
-            tuple("TEST_2", "KAKKKB"),
-            tuple("TEST_2", "KAKKKD"));
+            tuple("TEST_1", "KAKKKC"), tuple("TEST_2", "KAKKKB"), tuple("TEST_2", "KAKKKD"));
     assertThat(issuedBadges).extracting("issuedTimestamp").isNotNull();
   }
 

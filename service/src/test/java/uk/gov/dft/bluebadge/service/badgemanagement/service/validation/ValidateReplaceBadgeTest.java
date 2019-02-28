@@ -10,7 +10,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.Refere
 
 public class ValidateReplaceBadgeTest {
 
-  private ValidateReplaceBadge validator = new ValidateReplaceBadge(new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
+  private ValidateReplaceBadge validator =
+      new ValidateReplaceBadge(
+          new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
 
   @Test
   public void validate_params_ok() {

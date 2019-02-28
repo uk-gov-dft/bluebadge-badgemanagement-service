@@ -1,5 +1,20 @@
 package uk.gov.dft.bluebadge.service.badgemanagement;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
+import uk.gov.dft.bluebadge.common.service.enums.Nation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
@@ -7,34 +22,18 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Person;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.ReferenceDataApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.REPLACE;
-
 public class BadgeTestFixture {
 
-  public class DefaultVals {
-    static final String LOCAL_AUTHORITY_CODE_ENGLAND = "BIRM";
-    static final String LOCAL_AUTHORITY_CODE_WALES = "CARDIFF";
-    static final String LOCAL_AUTHORITY_CODE_N_IRELAND = "BELFAST";
-    static final String LOCAL_AUTHORITY_CODE_SCOTLAND = "ABERD";
-    static final String ELIGIBILITY_CODE = "PIP";
+  public static class DefaultVals {
+    public static final String LOCAL_AUTHORITY_CODE_ENGLAND = "BIRM";
+    public static final String LOCAL_AUTHORITY_CODE_WALES = "CARDIFF";
+    public static final String LOCAL_AUTHORITY_CODE_N_IRELAND = "BELFAST";
+    public static final String LOCAL_AUTHORITY_CODE_SCOTLAND = "ABERD";
+    static final EligibilityType ELIGIBILITY_CODE = EligibilityType.PIP;
     static final String DELIVER_TO_CODE_HOME = "HOME";
     static final String DELIVER_TO_CODE_COUNCIL = "COUNCIL";
     static final String DELIVER_OPTION_CODE_FAST = "FAST";
@@ -89,7 +88,6 @@ public class BadgeTestFixture {
         getNewRefDataItem(DELIVERY_OPTIONS, DefaultVals.DELIVER_OPTION_CODE_STAND, null));
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_HOME, null));
     referenceDataList.add(getNewRefDataItem(DELIVER_TO, DefaultVals.DELIVER_TO_CODE_COUNCIL, null));
-    referenceDataList.add(getNewRefDataItem(ELIGIBILITY, DefaultVals.ELIGIBILITY_CODE, null));
     referenceDataList.add(
         getNewLaRefDataItem(DefaultVals.LOCAL_AUTHORITY_CODE_SCOTLAND, Nation.SCO));
     referenceDataList.add(

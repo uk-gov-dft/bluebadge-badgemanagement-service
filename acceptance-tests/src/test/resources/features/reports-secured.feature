@@ -4,7 +4,7 @@ Feature: Verify report end points are secured
   Background:
     * url baseUrl
     # Get user token, rather than inter service token
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify issued badge report is secured

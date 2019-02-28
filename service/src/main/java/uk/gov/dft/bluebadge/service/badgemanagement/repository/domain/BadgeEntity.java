@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 
 /** Bean to hold a BadgeEntity record. */
 @Alias("BadgeEntity")
@@ -33,7 +34,7 @@ public class BadgeEntity implements Serializable {
   private String appChannelCode;
   private LocalDate startDate;
   private LocalDate expiryDate;
-  private String eligibilityCode;
+  private EligibilityType eligibilityCode;
   private String imageLink;
   private String imageLinkOriginal;
   private String deliverToCode;

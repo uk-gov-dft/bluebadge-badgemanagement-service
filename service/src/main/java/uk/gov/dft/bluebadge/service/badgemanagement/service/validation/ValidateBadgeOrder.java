@@ -1,36 +1,34 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
-import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.APP_SOURCE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVERY_OPTIONS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.DELIVER_TO;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.ELIGIBILITY;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.GENDER;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.LA;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum.PARTY;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_CHANNEL_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_DELIVER_OPTION_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_DELIVER_TO_CODE;
-import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_ELIGIBILITY_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_GENDER_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_LA_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_PARTY_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_ELIGIBILITY_CODE_PERSON;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
+import uk.gov.dft.bluebadge.common.service.EligibilityService;
+import uk.gov.dft.bluebadge.common.service.enums.Nation;
+import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
+import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 @Component
 @Slf4j
@@ -58,15 +56,14 @@ public class ValidateBadgeOrder extends ValidateBase {
     // Business rules
     validateApplicationDateInPast(entity, errors);
     validateStartDateInFuture(entity, errors);
+    validateExpiryDateInFuture(entity, errors);
     validateStartExpiryDateRange(entity, errors);
 
     // Person specific validation
     if (entity.isPerson()) {
       validateDobInPast(entity, errors);
       validateNotNull(NULL_ELIGIBILITY_CODE_PERSON, entity.getEligibilityCode(), errors);
-      validateCognitiveImpairment(entity, errors);
-      validateRiskInTraffic(entity, errors);
-      validateRefData(ELIGIBILITY, INVALID_ELIGIBILITY_CODE, entity.getEligibilityCode(), errors);
+      validateEligibilityAndNation(entity, errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     }
 
@@ -81,27 +78,19 @@ public class ValidateBadgeOrder extends ValidateBase {
     log.debug("Badge order passed validation.");
   }
 
-  void validateCognitiveImpairment(BadgeEntity entity, List<ErrorErrors> errors){
-    if(null == entity.getEligibilityCode() || !"COGNITIVE".equals(entity.getEligibilityCode())){
+  void validateEligibilityAndNation(BadgeEntity entity, List<ErrorErrors> errors) {
+    if (null == entity.getEligibilityCode()) {
       return;
     }
 
-    LocalAuthorityRefData la = referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
+    LocalAuthorityRefData la =
+        referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
     Nation nation = la.getLocalAuthorityMetaData().getNation();
-    if(Nation.WLS == nation){
-      errors.add(ValidationKeyEnum.COGNITIVE_NATION.getFieldErrorInstance());
-    }
-  }
-
-  void validateRiskInTraffic(BadgeEntity entity, List<ErrorErrors> errors){
-    if(null == entity.getEligibilityCode() || !"TRAF_RISK".equals(entity.getEligibilityCode())){
-      return;
-    }
-
-    LocalAuthorityRefData la = referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
-    Nation nation = la.getLocalAuthorityMetaData().getNation();
-    if(Nation.SCO != nation){
-      errors.add(ValidationKeyEnum.TRAFFIC_RISK_NATION.getFieldErrorInstance());
+    if (!EligibilityService.eligibilityValidForNation(
+        entity.getEligibilityCode().name(), nation.name())) {
+      String message =
+          String.format("%s is not valid for %s.", entity.getEligibilityCode(), nation);
+      errors.add(ValidationKeyEnum.INVALID_ELIGIBILITY_FOR_NATION.getFieldErrorInstance(message));
     }
   }
 
@@ -129,6 +118,14 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
+  static void validateExpiryDateInFuture(BadgeEntity entity, List<ErrorErrors> errors) {
+    // No null check required. Start date mandatory.
+    Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
+    if (LocalDate.now().isAfter(entity.getExpiryDate())) {
+      errors.add(ValidationKeyEnum.EXPIRY_DATE_IN_PAST.getFieldErrorInstance());
+    }
+  }
+
   static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
     if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
@@ -138,7 +135,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
-  private static void validateNumberOfBadges(BadgeEntity entity, List<ErrorErrors> errors) {
+  static void validateNumberOfBadges(BadgeEntity entity, List<ErrorErrors> errors) {
     if (entity.isPerson()) {
       if (entity.getNumberOfBadges() != 1) {
         errors.add(ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_PERSON.getFieldErrorInstance());
@@ -148,7 +145,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     }
   }
 
-  private static void validateDeliveryRules(BadgeEntity entity, List<ErrorErrors> errors) {
+  static void validateDeliveryRules(BadgeEntity entity, List<ErrorErrors> errors) {
     if ("COUNCIL".equals(entity.getDeliverToCode())
         && "FAST".equals(entity.getDeliverOptionCode())) {
       errors.add(ValidationKeyEnum.INVALID_DELIVER_FAST_TO_COUNCIL.getFieldErrorInstance());

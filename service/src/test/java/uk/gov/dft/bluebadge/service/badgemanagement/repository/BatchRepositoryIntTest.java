@@ -51,4 +51,14 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
                 BatchBadgeLinkEntity.builder().badgeId("KKKKDC").batchId(-2).build()))
         .isEqualTo(1);
   }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBatch() {
+    BatchEntity batchEntity = repository.retrieveBatchEntity(-1);
+    assertThat(batchEntity.getId()).isEqualTo(-1);
+    assertThat(batchEntity.getFilename()).isEqualTo("filename.txt");
+    assertThat(batchEntity.getPurpose()).isEqualTo(BatchEntity.PurposeEnum.STANDARD);
+    assertThat(batchEntity.getSource()).isEqualTo(BatchEntity.SourceEnum.DFT);
+  }
 }

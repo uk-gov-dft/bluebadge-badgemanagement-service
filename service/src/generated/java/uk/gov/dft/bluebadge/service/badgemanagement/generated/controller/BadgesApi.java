@@ -312,4 +312,38 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Print batch results processed.")})
   @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.POST)
   ResponseEntity<Void> collectBatches();
+
+  @ApiOperation(
+    value = "Reprint a batch",
+    nickname = "reprintBatch",
+    notes = "Reprints a batch",
+    tags = {
+      "batches",
+    }
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(code = 200, message = "Request to reprint was successful."),
+      @ApiResponse(code = 404, message = "A Batch cannot be found given the parameters specified."),
+      @ApiResponse(code = 401, message = "The request is unauthorised.")
+    }
+  )
+  @RequestMapping(
+    value = "/badges/print-batch/{batchId}",
+    produces = {"application/json"},
+    method = RequestMethod.POST
+  )
+  default ResponseEntity<Void> reprintBatch(
+      @ApiParam(value = "A valid batch number.", required = true) @PathVariable("batchId")
+          String batchId) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
 }

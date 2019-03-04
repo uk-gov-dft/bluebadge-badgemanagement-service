@@ -1,6 +1,8 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -14,6 +16,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.Bad
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REPLACED;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -69,12 +72,12 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
   }
 
   @Test
-  public void createBadge() {
+  public void createBadges() {
     BadgeOrderRequest model = getValidBadgeOrderPersonRequest();
     model.setNumberOfBadges(3);
     when(numberService.getBagdeNumber()).thenReturn(2345);
     when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
-    List<String> result = service.createBadge(model);
+    List<String> result = service.createBadges(model);
 
     // Then get 3 badges create with current user's local authority
     Assert.assertEquals(3, result.size());
@@ -98,11 +101,12 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
 
     entity.setImageLinkOriginal("orig");
     entity.setImageLink("thumb");
+    entity.setBadgeHash(BadgeHashService.getBadgeEntityHash(entity));
 
     when(numberService.getBagdeNumber()).thenReturn(2345);
     when(photoServiceMock.photoUpload(any(), any())).thenReturn(names);
     when(blacklistFilter.isValid(any(String.class))).thenReturn(true);
-    List<String> results = service.createBadge(model);
+    List<String> results = service.createBadges(model);
 
     Assert.assertEquals(1, results.size());
     verify(repositoryMock, times(1)).createBadge(entity);
@@ -328,5 +332,20 @@ public class BadgeManagementServiceTest extends BadgeTestBase {
         .startDate(LocalDate.now())
         .status(REPLACED)
         .build();
+  }
+
+  @Test
+  public void checkBadgeHashUnique_Test() {
+    when(repositoryMock.findBadgeHash(any())).thenReturn(null);
+    service.checkBadgeHashUnique(BadgeEntity.builder().build());
+
+    try {
+      when(repositoryMock.findBadgeHash(any())).thenReturn(Lists.newArrayList("123456"));
+      service.checkBadgeHashUnique(BadgeEntity.builder().build());
+      fail("Should have had bad request exception.");
+    } catch (BadRequestException e) {
+      assertThat(e.getResponse().getBody().getError().getMessage())
+          .isEqualTo("AlreadyExists.badge");
+    }
   }
 }

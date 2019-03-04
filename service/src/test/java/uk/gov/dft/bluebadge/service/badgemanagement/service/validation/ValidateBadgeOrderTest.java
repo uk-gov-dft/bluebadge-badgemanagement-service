@@ -45,6 +45,18 @@ public class ValidateBadgeOrderTest extends BadgeTestBase {
   }
 
   @Test
+  public void validateCreateBadgeRequest_appDate_not_in_past() {
+    try {
+      BadgeEntity entity = getValidPersonBadgeEntity();
+      entity.setAppDate(LocalDate.now().plus(Period.ofDays(1)));
+      validateBadgeOrder.validate(entity);
+      Assert.fail("Application date validation should throw an exception");
+    } catch (BadRequestException e) {
+      Assert.assertEquals(1, e.getResponse().getBody().getError().getErrors().size());
+    }
+  }
+
+  @Test
   public void validateCreateBadgeRequest_start_date_in_future() {
     try {
       BadgeEntity entity = getValidPersonBadgeEntity();

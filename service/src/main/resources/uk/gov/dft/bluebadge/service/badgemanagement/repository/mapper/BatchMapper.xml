@@ -4,7 +4,7 @@
 <mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper">
 
     <insert id="createBatch" parameterType="BatchEntity" useGeneratedKeys="true" keyProperty="id" keyColumn="batch_id">
-        INSERT INTO badgemanagement.batch
+        INSERT INTO batch
         (batch_filename, batch_created_timestamp, batch_source
         , batch_purpose
         )
@@ -15,7 +15,7 @@
     </insert>
 
     <insert id="appendBadges" parameterType="AppendBadgesToBatchParams">
-        INSERT INTO badgemanagement.batch_badge (batch_id, badge_no, local_authority_short_code)
+        INSERT INTO batch_badge (batch_id, badge_no, local_authority_short_code)
         SELECT #{batchId}, badge_no, local_authority_short_code FROM badge WHERE badge_status = 'ORDERED'
         <choose>
             <when test="batchType == 'LA'">
@@ -34,7 +34,7 @@
     </insert>
 
     <insert id="linkBadgeToBatch" parameterType="BatchBadgeLinkEntity">
-        INSERT INTO badgemanagement.batch_badge
+        INSERT INTO batch_badge
         (
           batch_id, badge_no, local_authority_short_code
         , issued_date_time, rejected_reason, cancellation
@@ -46,4 +46,15 @@
         );
     </insert>
 
+    <select id="retrieveBatch" parameterType="Integer" resultType="BatchEntity">
+        SELECT
+          batch_id as id,
+          batch_filename as filename,
+          batch_created_timestamp as created,
+          batch_source as source,
+          batch_purpose as purpose
+        FROM batch
+        WHERE
+          batch_id = #{id}
+    </select>
 </mapper>

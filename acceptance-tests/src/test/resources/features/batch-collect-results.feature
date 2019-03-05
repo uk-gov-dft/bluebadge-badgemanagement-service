@@ -12,7 +12,7 @@ Feature: Verify print a batch results processing
     * def System = Java.type('java.lang.System')
     * def env = System.getenv('bb_env')
     * def inBucketName = 'uk-gov-dft-' + (env == null ? 'ci' : env) +'-badge-in'
-    * def result = callonce read('./oauth2-print-batch.feature')
+    * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify end point and process pending batches

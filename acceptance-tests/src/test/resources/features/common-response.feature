@@ -3,7 +3,7 @@ Feature: Verify Responses wrap a CommonResponse
 
   Background:
     * url baseUrl
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify create 400 with common response for bean validation

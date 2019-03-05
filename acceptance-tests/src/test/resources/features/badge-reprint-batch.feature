@@ -8,7 +8,7 @@ Feature: Verify reprint a batch
     * def db = new DbUtils(dbConfig)
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def setup = callonce db.runScript('acceptance-test-batch-data.sql')
-    * def result = callonce read('./oauth2-print-batch.feature')
+    * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify reprint a badge - valid batchId
@@ -19,7 +19,7 @@ Feature: Verify reprint a batch
     When method POST
     Then status 200
 
-    * def result = callonce read('./oauth2-print-batch.feature')
+    * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * def batchCountBefore = db.countBatches()
     * def lastBatchId = db.getLastBatchId()

@@ -11,11 +11,11 @@ public enum ValidationKeyEnum {
   DOB_IN_PAST("DateInPast.badge.dob", "DOB must be in the past.", "dob"),
   INVALID_PARTY_CODE("Invalid.badge.partyCode", "Invalid party code.", "partyCode"),
   INVALID_ELIGIBILITY_CODE(
-      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", "eligibilityCode"),
+      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", Constants.ELIGIBILITY_CODE),
   NULL_ELIGIBILITY_CODE_PERSON(
       "NotNull.badge.eligibilityCode",
       "Eligibility code is mandatory for Person badges.",
-      "eligibilityCode"),
+      Constants.ELIGIBILITY_CODE),
   INVALID_DELIVER_TO_CODE(
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(
@@ -71,7 +71,13 @@ public enum ValidationKeyEnum {
       "Cannot replace an expired badge.",
       Constants.EXPIRY_DATE),
   REPLACE_INVALID_BADGE_STATUS(
-      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus");
+      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus"),
+  INVALID_ELIGIBILITY_FOR_NATION(
+      "InvalidNation.badge.eligibilityCode",
+      "Eligibility type not valid for nation.",
+      Constants.ELIGIBILITY_CODE),
+  EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.expiryDate", "Expiry date cannot be in the past.", Constants.EXPIRY_DATE);
 
   private final String key;
   private final String defaultMessage;
@@ -85,10 +91,14 @@ public enum ValidationKeyEnum {
   }
 
   public ErrorErrors getFieldErrorInstance() {
+    return getFieldErrorInstance(defaultMessage);
+  }
+
+  public ErrorErrors getFieldErrorInstance(String reason) {
     ErrorErrors error = new ErrorErrors();
     error.setField(field);
     error.setMessage(key);
-    error.setReason(defaultMessage);
+    error.setReason(reason);
     return error;
   }
 
@@ -100,6 +110,11 @@ public enum ValidationKeyEnum {
   }
 
   private static class Constants {
-    public static final String EXPIRY_DATE = "expiryDate";
+    static final String EXPIRY_DATE = "expiryDate";
+    static final String ELIGIBILITY_CODE = "eligibilityCode";
+  }
+
+  public String getKey() {
+    return key;
   }
 }

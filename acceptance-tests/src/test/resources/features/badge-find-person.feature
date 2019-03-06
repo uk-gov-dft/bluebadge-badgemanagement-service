@@ -3,7 +3,7 @@ Feature: Verify find badge for newly created badge
 
   Background:
     * url baseUrl
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * def createResult = callonce read('./badge-create-person.feature')
     * def createdBadgeNo = createResult.badgeNo

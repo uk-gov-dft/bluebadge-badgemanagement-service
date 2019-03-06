@@ -3,7 +3,7 @@ Feature: Verify find newly created org badge
 
   Background:
     * url baseUrl
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * def createResult = callonce read('./badge-create-org.feature')
     * def createdBadgeNo = createResult.badgeNo

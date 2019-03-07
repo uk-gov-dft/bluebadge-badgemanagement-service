@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "1.0.1",
+    "version" : "2.0.0",
     "contact" : {
       "email" : "rob.smallwood@does.not.exist"
     },
@@ -509,6 +509,23 @@
           "type" : "string",
           "description" : "A short code from the STATUS group of reference data. The current status of the badge e.g. ACTIVE, EXPIRED, CANCELLED.",
           "example" : "CANCELLED"
+        },
+        "issuedDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The datetime the badge was issued.",
+          "example" : "2019-03-07T01:01:00"
+        },
+        "sentToPrinterDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The datetime the badge was sent to print.",
+          "example" : "2019-03-07T01:01:00"
+        },
+        "rejectedReason" : {
+          "type" : "string",
+          "description" : "The reason a badge was rejected by print provider",
+          "example" : "missing values"
         }
       }
     },
@@ -663,17 +680,17 @@
         },
         "buildingStreet" : {
           "type" : "string",
-          "maxLength" : 100,
+          "maxLength" : 50,
           "example" : "65 Basil Chambers"
         },
         "line2" : {
           "type" : "string",
-          "maxLength" : 100,
+          "maxLength" : 40,
           "example" : "Northern Quarter"
         },
         "townCity" : {
           "type" : "string",
-          "maxLength" : 100,
+          "maxLength" : 40,
           "example" : "Manchester"
         },
         "postCode" : {
@@ -683,12 +700,12 @@
         },
         "primaryPhoneNumber" : {
           "type" : "string",
-          "maxLength" : 20,
+          "pattern" : "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
           "example" : "01616548765"
         },
         "secondaryPhoneNumber" : {
           "type" : "string",
-          "maxLength" : 20,
+          "pattern" : "^$|^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
           "example" : "01616548765"
         },
         "emailAddress" : {

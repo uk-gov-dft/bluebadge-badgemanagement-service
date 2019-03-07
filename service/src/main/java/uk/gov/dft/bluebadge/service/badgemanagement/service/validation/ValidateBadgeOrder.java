@@ -85,13 +85,13 @@ public class ValidateBadgeOrder extends ValidateBase {
 
     LocalAuthorityRefData la =
         referenceDataService.retrieveLocalAuthority(entity.getLocalAuthorityShortCode());
-    if(null == la){
+    if (null == la) {
       // Will have been validated separately.
       return;
     }
 
     Nation nation = la.getLocalAuthorityMetaData().getNation();
-    
+
     if (!EligibilityService.eligibilityValidForNation(
         entity.getEligibilityCode().name(), nation.name())) {
       String message =

@@ -67,4 +67,6 @@ public interface BadgeManagementMapper {
   int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params);
 
   List<String> findBadgeHash(byte[] hash);
+
+  List<BadgeBulkEntity> retrieveBadgesByLa(String laShortCode);
 }

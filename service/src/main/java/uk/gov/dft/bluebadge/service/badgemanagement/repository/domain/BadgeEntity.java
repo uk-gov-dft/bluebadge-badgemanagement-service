@@ -2,6 +2,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
@@ -56,6 +57,9 @@ public class BadgeEntity implements Serializable {
   private LocalDate orderDate;
   private int numberOfBadges;
   private byte[] badgeHash;
+  private String rejectedReason;
+  private LocalDateTime issuedDate;
+  private LocalDateTime sentToPrinterDate;
 
   public boolean isPerson() {
     return "PERSON".equals(partyCode);

@@ -1,7 +1,9 @@
 delete from badgemanagement.batch_badge where batch_id=-1 and badge_no = 'KKKKKA';
 delete from badgemanagement.batch_badge where batch_id=-3 and badge_no = 'NNNJMJ';
 delete from badgemanagement.batch_badge where batch_id=-4 and badge_no = 'NNNJMH';
-delete from badgemanagement.batch_badge where batch_id=-5 and badge_no = 'NNNJMF';
+delete from badgemanagement.batch_badge where batch_id=-5 and badge_no = 'NNNJMH';
+delete from badgemanagement.batch_badge where batch_id=-6 and badge_no = 'NNNJMF';
+delete from badgemanagement.batch_badge where batch_id=-7 and badge_no = 'NNNJMF';
 
 
 delete from badgemanagement.badge where badge_no in ('KKKKKK', 'KKKKKD', 'KKKKKA', 'KKKKKC', 'KKKKKE', 'KKKKKB', 'KKKKDA', 'KKKKDB', 'KKKKDC', 'NNNJMJ', 'NNNJMH', 'NNNJMF');

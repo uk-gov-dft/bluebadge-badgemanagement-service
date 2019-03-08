@@ -28,6 +28,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH =
         "updateBadgesStatusesForPrintBatch";
     static final String UPDATE_BADGE_STATUS_FROM_STATUS = "updateBadgeStatusFromStatus";
+    static final String FIND_BADGES_WITH_HASH = "findBadgeHash";
   }
 
   private final SqlSession sqlSession;
@@ -103,5 +104,11 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   @Override
   public int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params) {
     return sqlSession.update(Statements.UPDATE_BADGE_STATUS_FROM_STATUS, params);
+  }
+
+  @Override
+  public List<String> findBadgeHash(byte[] hash) {
+    return sqlSession.selectList(
+        Statements.FIND_BADGES_WITH_HASH, FindBadgeHashParams.builder().hash(hash).build());
   }
 }

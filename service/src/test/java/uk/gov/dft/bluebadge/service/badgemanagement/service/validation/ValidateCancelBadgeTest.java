@@ -1,33 +1,36 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
 
 import java.time.LocalDate;
 import java.time.Period;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class ValidateCancelBadgeTest extends BadgeTestBase {
+public class ValidateCancelBadgeTest {
 
   ValidateCancelBadge validator;
 
   public ValidateCancelBadgeTest() {
-    super();
-    validator = new ValidateCancelBadge(referenceDataService);
+
+    validator =
+        new ValidateCancelBadge(
+            new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
   }
 
   @Test
   public void validate_params_ok() {
-    ValidateCancelBadge validator = new ValidateCancelBadge(referenceDataService);
     // Given valid cancel params
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("ABCABC")
-            .cancelReasonCode(DefaultVals.CANCEL_CODE_VALID)
+            .cancelReasonCode(BadgeTestFixture.DefaultVals.CANCEL_CODE_VALID)
             .build();
     // When validated
     validator.validateRequest(params);

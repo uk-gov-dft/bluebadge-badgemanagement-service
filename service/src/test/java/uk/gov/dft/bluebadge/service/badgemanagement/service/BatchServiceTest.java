@@ -3,6 +3,7 @@ package uk.gov.dft.bluebadge.service.badgemanagement.service;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,11 +16,11 @@ import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
@@ -36,7 +37,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadges
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
-public class BatchServiceTest extends BadgeTestBase {
+public class BatchServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository badgeRepositoryMock;
@@ -45,12 +46,23 @@ public class BatchServiceTest extends BadgeTestBase {
 
   @Mock private SecurityUtils securityUtilsMock;
 
+  public BatchServiceTest() {
+    MockitoAnnotations.initMocks(this);
+  }
+
   private BatchService service;
 
   private static final Integer BATCH_ID = 1;
   private static final String BADGE_NO = "KKKKK1";
   private static final String FILENAME = "filename";
-  private static final BatchEntity BATCH_ENTITY =
+  private static final BatchEntity BATCH_ENTITY_STANDARD =
+      BatchEntity.builder()
+          .source(BatchEntity.SourceEnum.DFT)
+          .purpose(BatchEntity.PurposeEnum.STANDARD)
+          .id(BATCH_ID)
+          .filename(FILENAME)
+          .build();
+  private static final BatchEntity BATCH_ENTITY_FASTTRACK =
       BatchEntity.builder()
           .source(BatchEntity.SourceEnum.DFT)
           .purpose(BatchEntity.PurposeEnum.FASTTRACK)
@@ -89,7 +101,7 @@ public class BatchServiceTest extends BadgeTestBase {
   public void sendPrintBatch_WhenThereAreBadges_shouldWork() {
     when(batchRepositoryMock.createBatch(
             eq(BatchEntity.SourceEnum.DFT), eq(BatchEntity.PurposeEnum.STANDARD), any()))
-        .thenReturn(BATCH_ENTITY);
+        .thenReturn(BATCH_ENTITY_STANDARD);
     when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS)).thenReturn(BADGE_ENTITIES);
 
     service.sendPrintBatch(BatchType.STANDARD);
@@ -100,10 +112,24 @@ public class BatchServiceTest extends BadgeTestBase {
   }
 
   @Test
+  public void reprintPrintBatch_GivenBatches() {
+    when(batchRepositoryMock.retrieveBatchEntity(eq(BATCH_ID))).thenReturn(BATCH_ENTITY_STANDARD);
+    when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS)).thenReturn(BADGE_ENTITIES);
+
+    service.rePrintBatch(BATCH_ID.toString());
+
+    verify(batchRepositoryMock).retrieveBatchEntity(BATCH_ID);
+    verify(printServiceApiClientMock).printBatch(BATCH);
+    verify(batchRepositoryMock, never()).createBatch(any(), any(), any());
+    verify(batchRepositoryMock, never()).appendBadgesToBatch(any(), any());
+    verify(badgeRepositoryMock, never()).updateBadgesStatusesForBatch(UPDATE_PARAMS);
+  }
+
+  @Test
   public void sendPrintBatch_WhenThereAreNoBadges_shouldWork() {
     when(batchRepositoryMock.createBatch(
             eq(BatchEntity.SourceEnum.DFT), eq(BatchEntity.PurposeEnum.STANDARD), any()))
-        .thenReturn(BATCH_ENTITY);
+        .thenReturn(BATCH_ENTITY_STANDARD);
     when(badgeRepositoryMock.findBadgesForPrintBatch(FIND_BADGE_PARAMS))
         .thenReturn(Lists.newArrayList());
 
@@ -111,7 +137,7 @@ public class BatchServiceTest extends BadgeTestBase {
 
     verify(batchRepositoryMock).appendBadgesToBatch(BATCH_ID, BatchType.STANDARD);
     verify(printServiceApiClientMock, times(0)).printBatch(any(PrintBatchRequest.class));
-    verify(badgeRepositoryMock, times(0))
+    verify(badgeRepositoryMock)
         .updateBadgesStatusesForBatch(any(UpdateBadgesStatusesForBatchParams.class));
   }
 

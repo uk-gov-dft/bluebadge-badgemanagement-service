@@ -7,7 +7,7 @@ Feature: Verify print a batch
     * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
     * def setup = callonce db.runScript('acceptance-test-data.sql')
-    * def result = callonce read('./oauth2-print-batch.feature')
+    * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify print a badge - valid batch type (FASTTRACK)
@@ -31,9 +31,10 @@ Feature: Verify print a batch
   Scenario: Verify print a badge - invalid batch type
     Given path 'badges/print-batch'
     And request {"batchType": "INVALID"}
+    * print $.error
     When method POST
     Then status 400
-    And match $.error.message == 'InvalidFormat.BatchType'
+    And match $.error.errors[0].message == 'InvalidFormat.batchType'
 
   Scenario: Verify print a badge - missing batch type
     Given path 'badges/print-batch'

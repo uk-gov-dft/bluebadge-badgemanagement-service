@@ -7,6 +7,8 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 
 /** BadgeOrderRequest */
 @Validated
@@ -33,7 +35,7 @@ public class BadgeOrderRequest {
   private LocalDate expiryDate = null;
 
   @JsonProperty("eligibilityCode")
-  private String eligibilityCode = null;
+  private EligibilityType eligibilityCode = null;
 
   @JsonProperty("imageFile")
   private String imageFile = null;
@@ -79,7 +81,7 @@ public class BadgeOrderRequest {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "ABERD", value = "Short code of local authority.")
-  @Pattern(regexp = "^[A-Z]+$")
+  @Pattern(regexp = ValidationPattern.LA_SHORT_CODE)
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
   }
@@ -205,7 +207,7 @@ public class BadgeOrderRequest {
     this.expiryDate = expiryDate;
   }
 
-  public BadgeOrderRequest eligibilityCode(String eligibilityCode) {
+  public BadgeOrderRequest eligibilityCode(EligibilityType eligibilityCode) {
     this.eligibilityCode = eligibilityCode;
     return this;
   }
@@ -219,12 +221,11 @@ public class BadgeOrderRequest {
     example = "CHILDBULK",
     value = "A short code from the ELIGIBILITY group of reference data. Reason for badge."
   )
-  @Size(max = 10)
-  public String getEligibilityCode() {
+  public EligibilityType getEligibilityCode() {
     return eligibilityCode;
   }
 
-  public void setEligibilityCode(String eligibilityCode) {
+  public void setEligibilityCode(EligibilityType eligibilityCode) {
     this.eligibilityCode = eligibilityCode;
   }
 

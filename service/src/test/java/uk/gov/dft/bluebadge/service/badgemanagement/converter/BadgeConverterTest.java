@@ -1,12 +1,15 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
+
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
-public class BadgeConverterTest extends BadgeTestBase {
+public class BadgeConverterTest {
 
   @Test
   public void convertToModel_person() {
@@ -20,7 +23,7 @@ public class BadgeConverterTest extends BadgeTestBase {
     // And contact details present.
     Assert.assertEquals(
         model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
-    Assert.assertEquals(DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
+    Assert.assertEquals(BadgeTestFixture.DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
   }
 
   @Test

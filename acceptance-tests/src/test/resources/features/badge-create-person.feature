@@ -7,7 +7,7 @@ Feature: Verify Create badge
     * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
     * def setup = callonce db.runScript('acceptance-test-data.sql')
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify valid create mixed case postcode
@@ -28,7 +28,7 @@ Feature: Verify Create badge
     },
     person: {
     badgeHolderName: 'TestData Fred Bloggs',
-    nino: 'NY188796B',
+    nino: 'NY 18 87 96 B',
     dob: '1972-09-12',
     genderCode: 'MALE'
     },
@@ -83,7 +83,7 @@ Feature: Verify Create badge
             emailAddress: 'june@bigbrainknitting.com'
           },
           person: {
-            badgeHolderName: 'TestData Bloggs',
+            badgeHolderName: 'TestData Bloggs2',
             nino: 'NY188796B',
             dob: '1972-09-12',
             genderCode: 'MALE'
@@ -109,3 +109,4 @@ Feature: Verify Create badge
     And request createBadgeValidDelivery
     When method POST
     Then status 200
+    * def badgeNo2 = $.data[0]

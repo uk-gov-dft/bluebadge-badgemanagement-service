@@ -18,7 +18,6 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     badge.setApplicationDate(entity.getAppDate());
     badge.setBadgeNumber(entity.getBadgeNo());
     badge.setCancelReasonCode(entity.getCancelReasonCode());
-    badge.setEligibilityCode(entity.getEligibilityCode());
     badge.setExpiryDate(entity.getExpiryDate());
     badge.setImageLink(entity.getImageLink());
     badge.setLocalAuthorityShortCode(entity.getLocalAuthorityShortCode());
@@ -53,6 +52,8 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
       person.setDob(entity.getDob());
       person.setBadgeHolderName(entity.getHolderName());
       person.setNino(entity.getNino());
+      badge.setEligibilityCode(
+          null == entity.getEligibilityCode() ? null : entity.getEligibilityCode().name());
     } else {
       Organisation org = new Organisation();
       party.setOrganisation(org);

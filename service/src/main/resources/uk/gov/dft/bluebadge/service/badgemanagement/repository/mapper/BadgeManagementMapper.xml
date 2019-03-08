@@ -70,11 +70,11 @@
         END rejectedReason
 
         ,
-        (SELECT max(bb.issued_date_time)
+        (SELECT bb.issued_date_time
             FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
             WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'ISSUED') issuedDate
         ,
-        (SELECT max(bt.batch_created_timestamp)
+        (SELECT bt.batch_created_timestamp
             FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
             WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') printDate
 

@@ -516,7 +516,7 @@
           "description" : "The datetime the badge was issued.",
           "example" : "2019-03-07T01:01:00"
         },
-        "sentToPrinterDate" : {
+        "printDate" : {
           "type" : "string",
           "format" : "date-time",
           "description" : "The datetime the badge was sent to print.",

@@ -76,11 +76,10 @@
         ,
         (SELECT max(bt.batch_created_timestamp)
             FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
-            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') sentToPrinterDate
+            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') printDate
 
-        FROM badge b
+        FROM badgemanagement.badge b
 
-        --FROM badge
         WHERE
           badge_no = trim(upper(#{badgeNo}))
     </select>

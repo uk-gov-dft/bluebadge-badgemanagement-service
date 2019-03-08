@@ -63,7 +63,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMJ");
     assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.PROCESSED);
-    assertThat(badgeEntity.getSentToPrinterDate())
+    assertThat(badgeEntity.getPrintDate())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
     assertThat(badgeEntity.getIssuedDate()).isNull();
     assertThat(badgeEntity.getRejectedReason()).isNull();
@@ -79,7 +79,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMH");
     assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
-    assertThat(badgeEntity.getSentToPrinterDate())
+    assertThat(badgeEntity.getPrintDate())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
     assertThat(badgeEntity.getIssuedDate())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:02:00", DATE_TIME_FORMAT));
@@ -96,7 +96,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMF");
     assertThat(badgeEntity.getBadgeStatus()).isEqualTo(Status.REJECT);
-    assertThat(badgeEntity.getSentToPrinterDate())
+    assertThat(badgeEntity.getPrintDate())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:03:00", DATE_TIME_FORMAT));
     assertThat(badgeEntity.getIssuedDate()).isNull();
     assertThat(badgeEntity.getRejectedReason()).isEqualTo("my rejected reason");

@@ -38,8 +38,8 @@ public class Badge {
   @JsonProperty("issuedDate")
   private LocalDateTime issuedDate = null;
 
-  @JsonProperty("sentToPrinterDate")
-  private LocalDateTime sentToPrinterDate = null;
+  @JsonProperty("printDate")
+  private LocalDateTime printDate = null;
 
   @JsonProperty("startDate")
   private LocalDate startDate = null;
@@ -223,23 +223,23 @@ public class Badge {
   /**
    * The date that the batch corresponding to this badge was sent to printer.
    *
-   * @return sentToPrinterDate
+   * @return printDate
    */
   @ApiModelProperty(
     example = "2018-07-07",
     value = "The date that the batch that contains the badge was sent to printer."
   )
   @Valid
-  public LocalDateTime getSentToPrinterDate() {
-    return sentToPrinterDate;
+  public LocalDateTime getPrintDate() {
+    return printDate;
   }
 
-  public void setSentToPrinterDate(LocalDateTime sentToPrinterDate) {
-    this.sentToPrinterDate = sentToPrinterDate;
+  public void setSentPrintDate(LocalDateTime printDate) {
+    this.printDate = printDate;
   }
 
-  public Badge sentToPrinterDate(LocalDateTime sentToPrinterDate) {
-    this.sentToPrinterDate = sentToPrinterDate;
+  public Badge printDate(LocalDateTime printDate) {
+    this.printDate = printDate;
     return this;
   }
 
@@ -454,7 +454,7 @@ public class Badge {
         && Objects.equals(this.applicationChannelCode, badge.applicationChannelCode)
         && Objects.equals(this.orderDate, badge.orderDate)
         && Objects.equals(this.issuedDate, badge.issuedDate)
-        && Objects.equals(this.sentToPrinterDate, badge.sentToPrinterDate)
+        && Objects.equals(this.printDate, badge.printDate)
         && Objects.equals(this.startDate, badge.startDate)
         && Objects.equals(this.expiryDate, badge.expiryDate)
         && Objects.equals(this.eligibilityCode, badge.eligibilityCode)
@@ -476,7 +476,7 @@ public class Badge {
         applicationChannelCode,
         orderDate,
         issuedDate,
-        sentToPrinterDate,
+        printDate,
         startDate,
         expiryDate,
         eligibilityCode,
@@ -504,7 +504,7 @@ public class Badge {
         .append("\n");
     sb.append("    orderDate: ").append(toIndentedString(orderDate)).append("\n");
     sb.append("    issuedDate: ").append(toIndentedString(issuedDate)).append("\n");
-    sb.append("    sentToPrinterDate: ").append(toIndentedString(sentToPrinterDate)).append("\n");
+    sb.append("    printDate: ").append(toIndentedString(printDate)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
     sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");

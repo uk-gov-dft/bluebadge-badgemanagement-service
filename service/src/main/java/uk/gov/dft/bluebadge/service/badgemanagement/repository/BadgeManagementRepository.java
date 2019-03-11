@@ -114,7 +114,8 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   }
 
   @Override
-  public List<BadgeBulkEntity> retrieveBadgesByLa(String laShortCode){
-    return sqlSession.selectList(Statements.RETRIEVE_BADGES_BY_LA, new RetrieveBadgesByLaParams(laShortCode));
+  public List<BadgeZipEntity> retrieveBadgesByLa(String laShortCode) {
+    return sqlSession.selectList(
+        Statements.RETRIEVE_BADGES_BY_LA, new RetrieveBadgesByLaParams(laShortCode));
   }
 }

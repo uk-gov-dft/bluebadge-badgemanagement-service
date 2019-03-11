@@ -64,7 +64,7 @@
           badge_no = trim(upper(#{badgeNo}))
     </select>
 
-    <select id="retrieveBadgesByLa" resultType="BadgeBulkEntity" parameterType="RetrieveBadgesByLaParams">
+    <select id="retrieveBadgesByLa" resultType="BadgeZipEntity" parameterType="RetrieveBadgesByLaParams">
         SELECT
         b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
         b.local_authority_ref As localAuthorityRef, to_char(b.app_date, 'YYYY-MM-DD') AS appDate,
@@ -77,9 +77,9 @@
         b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode,
         b.order_date AS orderDate, b.local_authority_short_code AS localAuthorityShortCode, b.replace_reason_code AS replaceReasonCode,
         bb_reject.rejected_reason rejectedReason,
-        to_char(bt_reject.batch_created_timestamp, 'YYYY-MM-DD hh:mm:ss') rejectedDateTime,
-        to_char(bb_issued.issued_date_time, 'YYYY-MM-DD hh:mm:ss') issuedDateTime,
-        to_char(bt_sent.batch_created_timestamp, 'YYYY-MM-DD hh:mm:ss') sentToPrinterDateTime
+        to_char(bt_reject.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') rejectedDateTime,
+        to_char(bb_issued.issued_date_time, 'YYYY-MM-DD HH24:MI:SS') issuedDateTime,
+        to_char(bt_sent.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') printRequestDateTime
         FROM badgemanagement.badge b
         LEFT JOIN (badgemanagement.batch_badge bb_reject
           JOIN badgemanagement.batch bt_reject ON bt_reject.batch_id = bb_reject.batch_id

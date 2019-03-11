@@ -5,47 +5,44 @@ import lombok.Builder;
 import lombok.Data;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-
 @Builder
 @Data
 @JsonPropertyOrder(
-    value = {
-        "badgeNo",
-        "badgeStatus",
-        "partyCode",
-        "localAuthorityShortCode",
-        "localAuthorityRef",
-        "appDate",
-        "appChannelCode",
-        "startDate",
-        "expiryDate",
-        "eligibilityCode",
-        "deliverToCode",
-        "deliverOptionCode",
-        "holderName",
-        "nino",
-        "dob",
-        "genderCode",
-        "contactName",
-        "contactBuildingStreet",
-        "contactLine2",
-        "contactTownCity",
-        "contactPostcode",
-        "primaryPhoneNo",
-        "secondaryPhoneNo",
-        "contactEmailAddress",
-        "cancelReasonCode",
-        "replaceReasonCode",
-        "orderDate",
-        "rejectedReason",
-        "rejectedDateTime",
-        "issuedDateTime",
-        "sentToPrinterDateTime"
-    }
+  value = {
+    "badgeNo",
+    "badgeStatus",
+    "partyCode",
+    "localAuthorityShortCode",
+    "localAuthorityRef",
+    "appDate",
+    "appChannelCode",
+    "startDate",
+    "expiryDate",
+    "eligibilityCode",
+    "deliverToCode",
+    "deliverOptionCode",
+    "holderName",
+    "nino",
+    "dob",
+    "genderCode",
+    "contactName",
+    "contactBuildingStreet",
+    "contactLine2",
+    "contactTownCity",
+    "contactPostcode",
+    "primaryPhoneNo",
+    "secondaryPhoneNo",
+    "contactEmailAddress",
+    "cancelReasonCode",
+    "replaceReasonCode",
+    "orderDate",
+    "rejectedReason",
+    "rejectedDateTime",
+    "issuedDateTime",
+    "printRequestDateTime"
+  }
 )
-public class BadgeBulkEntity {
+public class BadgeZipEntity {
   private String badgeNo;
   private BadgeEntity.Status badgeStatus;
   private String partyCode;
@@ -76,5 +73,5 @@ public class BadgeBulkEntity {
   private String rejectedReason;
   private String rejectedDateTime;
   private String issuedDateTime;
-  private String sentToPrinterDateTime;
+  private String printRequestDateTime;
 }

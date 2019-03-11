@@ -19,6 +19,7 @@ import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
@@ -100,7 +101,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
           BadgeEntity.builder()
               .badgeNo(String.valueOf(id))
               .badgeStatus(BadgeEntity.Status.ISSUED)
-              .contactName("Jane" + id)
+              .contactName("ZZZZ" + id)
               .partyCode("PAR")
               .localAuthorityShortCode("WINMD")
               .appDate(LocalDate.now())
@@ -109,7 +110,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
               .expiryDate(INITIAL_START_DATE.plusDays(id).plusYears(2))
               .deliverToCode("DE")
               .deliverOptionCode("DOPT")
-              .holderName("Jane" + id)
+              .holderName("ZZZZ" + id)
               .contactBuildingStreet("building" + id)
               .contactTownCity("town" + id)
               .contactPostcode("CPC111")
@@ -120,7 +121,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
       badgeEntityList.add(badgeEntity);
     }
 
-    FindBadgeParams params = FindBadgeParams.builder().name("%JANE%").build();
+    FindBadgeParams params = FindBadgeParams.builder().name("%ZZZZ%").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
 
     Collections.sort(badgeEntityList, (b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
@@ -347,5 +348,24 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
                 .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDC").build())
                 .getBadgeStatus())
         .isEqualTo(Status.DELETED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadgesByLa() {
+    List<BadgeZipEntity> results = badgeManagementRepository.retrieveBadgesByLa("FINDBYLA");
+    assertThat(results.size()).isEqualTo(2);
+    for (BadgeZipEntity entity : results) {
+      if (entity.getBadgeNo().equals("FINDA1")) {
+        assertThat(entity.getBadgeStatus()).isEqualTo(Status.DELETED);
+      } else {
+        assertThat(entity.getBadgeStatus()).isEqualTo(Status.ISSUED);
+        // Should have issued/rejeced/printed data for the other badge.
+        assertThat(entity.getIssuedDateTime()).isNotEmpty();
+        assertThat(entity.getRejectedDateTime()).isEqualTo("2010-02-03 15:16:17");
+        assertThat(entity.getRejectedReason()).isEqualTo("rejected reason");
+        assertThat(entity.getPrintRequestDateTime()).isEqualTo("2011-01-01 03:00:00");
+      }
+    }
   }
 }

@@ -3,7 +3,6 @@ package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
 import io.swagger.annotations.ApiParam;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -166,16 +165,14 @@ public class BadgesApiController implements BadgesApi {
     return ResponseEntity.ok().build();
   }
 
-  // TODO permissions
-  @RequestMapping(
-      value = "/badges",
-      method = RequestMethod.GET
-  )
-  @PreAuthorize("hasAuthority('PERM_FIND_BADGES')")
-  public void retrieveBadgesByLa(@RequestParam(value = "laShortCode", required = true)
-                                         String laShortCode, HttpServletResponse response){
-    String filename = LocalDate.now() + "_" + laShortCode + ".csv";
+  @RequestMapping(value = "/badges", method = RequestMethod.GET, produces = "application/zip")
+  @PreAuthorize(
+      "hasAuthority('PERM_VIEW_BADGE_DETAILS_ZIP') and @securityUtils.isAuthorisedLACode(#laShortCode)")
+  public void retrieveBadgesByLa(
+      @RequestParam(value = "laShortCode") String laShortCode, HttpServletResponse response) {
+    String filename = LocalDate.now() + "_" + laShortCode + ".zip";
     response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename);
+    response.setContentType("application/zip");
     try {
       badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode);
     } catch (IOException e) {

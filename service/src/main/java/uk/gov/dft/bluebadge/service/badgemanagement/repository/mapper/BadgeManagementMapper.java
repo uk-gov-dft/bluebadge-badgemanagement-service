@@ -68,5 +68,5 @@ public interface BadgeManagementMapper {
 
   List<String> findBadgeHash(byte[] hash);
 
-  List<BadgeBulkEntity> retrieveBadgesByLa(String laShortCode);
+  List<BadgeZipEntity> retrieveBadgesByLa(String laShortCode);
 }

@@ -346,5 +346,4 @@ public interface BadgesApi {
     }
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
-
 }

@@ -23,8 +23,15 @@ abstract class ValidateBase {
     }
   }
 
+  void validateField(
+      ValidationKeyEnum validationKeyEnum, boolean isValid, List<ErrorErrors> errors) {
+    if (!isValid) {
+      errors.add(validationKeyEnum.getFieldErrorInstance());
+    }
+  }
+
   void validateNotNull(
-      ValidationKeyEnum validationKeyEnum, String value, List<ErrorErrors> errors) {
+      ValidationKeyEnum validationKeyEnum, Object value, List<ErrorErrors> errors) {
     if (null == value) {
       errors.add(validationKeyEnum.getFieldErrorInstance());
     }

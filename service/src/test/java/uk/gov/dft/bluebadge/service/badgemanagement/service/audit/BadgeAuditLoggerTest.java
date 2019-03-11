@@ -16,11 +16,12 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import uk.gov.dft.bluebadge.common.logging.LogEventBuilder;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
+import uk.gov.dft.bluebadge.common.service.enums.Nation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData.LocalAuthorityMetaData;
-import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.Nation;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
@@ -101,7 +102,7 @@ public class BadgeAuditLoggerTest {
     return new BadgeOrderRequest()
         .applicationChannelCode("CHANNEL")
         .applicationDate(LocalDate.now())
-        .eligibilityCode("WALK")
+        .eligibilityCode(EligibilityType.WALKD)
         .startDate(LocalDate.now())
         .expiryDate(LocalDate.now())
         .localAuthorityShortCode("ABC")

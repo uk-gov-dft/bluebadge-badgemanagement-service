@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -165,7 +166,7 @@ public class BadgesApiController implements BadgesApi {
     return ResponseEntity.ok().build();
   }
 
-  @RequestMapping(value = "/badges", method = RequestMethod.GET, produces = "application/zip")
+  @GetMapping(value = "/badges", produces = "application/zip")
   @PreAuthorize(
       "hasAuthority('PERM_VIEW_BADGE_DETAILS_ZIP') and @securityUtils.isAuthorisedLACode(#laShortCode)")
   public void retrieveBadgesByLa(

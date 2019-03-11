@@ -59,7 +59,7 @@ public class BadgeEntity implements Serializable {
   private byte[] badgeHash;
   private String rejectedReason;
   private LocalDateTime issuedDate;
-  private LocalDateTime printDate;
+  private LocalDateTime printRequestDateTime;
 
   public boolean isPerson() {
     return "PERSON".equals(partyCode);

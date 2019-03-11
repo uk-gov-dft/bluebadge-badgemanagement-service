@@ -9,8 +9,9 @@ Feature: Verify cancel a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
+    #* def createResult = callonce read('./badge-create-person.feature')
+    #* def createdBadgeNo = createResult.badgeNo
+    * callonce read('./badge-create-person.feature')
 
   Scenario: Verify 404 response for cancel of unknown badge
     Given path 'badges/AAAAAA/cancellations'
@@ -19,15 +20,15 @@ Feature: Verify cancel a badge
     Then status 404
 
   Scenario: Verify cancel a badge invalid code
-    Given path 'badges/'+ createdBadgeNo + '/cancellations'
-    And request {badgeNumber: "#(createdBadgeNo)", cancelReasonCode: "WRONGCODE"}
+    Given path 'badges/'+ badgeNo + '/cancellations'
+    And request {badgeNumber: "#(badgeNo)", cancelReasonCode: "WRONGCODE"}
     When method POST
     Then status 400
     And match $.error.errors[0].message == 'Invalid.badgeCancelRequest.cancelReasonCode'
 
   Scenario: Verify cancel a badge success when newly created
-    Given path 'badges/'+ createdBadgeNo + '/cancellations'
-    And request {badgeNumber: "#(createdBadgeNo)", cancelReasonCode: "NOLONG"}
+    Given path 'badges/'+ badgeNo + '/cancellations'
+    And request {badgeNumber: "#(badgeNo)", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 200
 
@@ -51,7 +52,7 @@ Feature: Verify cancel a badge
     Then status 200
 
   Scenario: Verify cancel a badge with different path and body badge numbers
-    Given path 'badges/'+ createdBadgeNo + '/cancellations'
+    Given path 'badges/'+ badgeNo + '/cancellations'
     And request {badgeNumber: "BBBBBB", cancelReasonCode: "NOLONG"}
     When method POST
     Then status 400

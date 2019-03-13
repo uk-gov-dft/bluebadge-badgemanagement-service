@@ -28,10 +28,10 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
 insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
 values
   (-10, 'report-tests.txt', '2011-01-01 03:00:00', 'DFT', 'PRINT') -- outgoing
-, (-11, 'Rejected20990101.xml', '2010-01-01 01:01:00', 'APS', 'REJECTED') --incoming rejected
-, (-12, 'Production20990101.xml', '2010-01-01 01:01:00', 'APS', 'ISSUED') --incoming issued
+, (-11, 'Rejected20990101.xml', '2010-01-01 01:01:00', 'PRINTER', 'REJECTED') --incoming rejected
+, (-12, 'Production20990101.xml', '2010-01-01 01:01:00', 'PRINTER', 'ISSUED') --incoming issued
 , (-13, 'report-tests2.txt', '2011-01-01 03:00:00', 'DFT', 'PRINT') -- outgoing
-, (-14, 'Production20990102.xml', '2010-01-01 01:01:00', 'APS', 'ISSUED'); --incoming issued
+, (-14, 'Production20990102.xml', '2010-01-01 01:01:00', 'PRINTER', 'ISSUED'); --incoming issued
 
 
 insert into badgemanagement.batch_badge

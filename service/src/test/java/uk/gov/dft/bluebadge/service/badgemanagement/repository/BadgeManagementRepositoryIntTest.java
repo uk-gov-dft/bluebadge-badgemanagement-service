@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +35,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadg
 @Transactional
 public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
+  private static final DateTimeFormatter DATE_TIME_FORMAT =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
   @Autowired BadgeManagementRepository badgeManagementRepository;
 
   @Test
@@ -47,6 +52,55 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getImageLink()).isEqualTo("badge/KKKKKK/thumbnail.jpg");
     assertThat(badgeEntity.getImageLinkOriginal()).isEqualTo("badge/KKKKKK/original.jpg");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDate_WhenBadgeWasSentToPrinterProvider() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMJ").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMJ");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.PROCESSED);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate()).isNull();
+    assertThat(badgeEntity.getRejectedReason()).isNull();
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDateAndIssuedDate_WhenBadgeWasIssued() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMH").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMH");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:02:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getRejectedReason()).isNull();
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDateAndRejectedReason_WhenBadgeWasRejected() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMF").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMF");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(Status.REJECT);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:03:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate()).isNull();
+    assertThat(badgeEntity.getRejectedReason()).isEqualTo("my rejected reason");
   }
 
   @Test

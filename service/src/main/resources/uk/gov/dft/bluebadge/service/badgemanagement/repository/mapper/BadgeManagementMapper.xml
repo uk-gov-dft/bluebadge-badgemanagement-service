@@ -59,7 +59,27 @@
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode,
         order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode, replace_reason_code AS replaceReasonCode
-        FROM badge
+
+        ,
+        CASE
+            WHEN badge_status = 'REJECT'
+                THEN
+                    (SELECT rejected_reason from badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+                    WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'REJECTED')
+                ELSE null
+        END rejectedReason
+
+        ,
+        (SELECT bb.issued_date_time
+            FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'ISSUED') issuedDate
+        ,
+        (SELECT bt.batch_created_timestamp
+            FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') printRequestDateTime
+
+        FROM badgemanagement.badge b
+
         WHERE
           badge_no = trim(upper(#{badgeNo}))
     </select>

@@ -22,3 +22,5 @@ client/generated.zip
 generated.zip
 model/generated.zip
 **/dev-env*
+*.log
+run-regression-script.sh

@@ -267,6 +267,7 @@ public class BadgeManagementService {
   public void retrieveBadgesByLa(OutputStream outputStream, String laShortCode) throws IOException {
     CsvMapper csvMapper = new CsvMapper();
     csvMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
     CsvSchema csvSchema =
         CsvSchema.builder()
             .setUseHeader(true)
@@ -275,9 +276,7 @@ public class BadgeManagementService {
     List<BadgeZipEntity> rows = repository.retrieveBadgesByLa(laShortCode);
 
     try (ZipOutputStream zippedOut = new ZipOutputStream(outputStream)) {
-      ZipEntry e;
-
-      e =
+      ZipEntry e =
           new ZipEntry(
               LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_" + laShortCode + ".csv");
       zippedOut.putNextEntry(e);

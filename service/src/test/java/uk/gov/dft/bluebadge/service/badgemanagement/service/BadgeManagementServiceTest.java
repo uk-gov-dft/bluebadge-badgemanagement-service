@@ -395,9 +395,34 @@ public class BadgeManagementServiceTest {
       if (i == 1) {
         assertThat(sc.nextLine()).contains("123456");
       }
-      // Should not have any more lines.
-      assertThat(i).isLessThan(2);
       i++;
     }
+    // Should not have any more lines.
+    assertThat(i).isEqualTo(2);
+  }
+
+  @Test
+  @SneakyThrows
+  public void retrieveBadgesByLa_noResults() {
+    when(repositoryMock.retrieveBadgesByLa(any())).thenReturn(ImmutableList.of());
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    service.retrieveBadgesByLa(stream, "ABCD");
+    ZipInputStream zipInputStream =
+        new ZipInputStream(new ByteArrayInputStream(stream.toByteArray()));
+    ZipEntry entry = zipInputStream.getNextEntry();
+
+    assertThat(entry.getName())
+        .isEqualTo(LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_ABCD.csv");
+    Scanner sc = new Scanner(zipInputStream);
+    int i = 0;
+    while (sc.hasNextLine()) {
+      // Should have header line.
+        assertThat(sc.nextLine())
+            .isEqualTo(
+                "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,holder_name,nino,dob,gender_code,contact_name,contact_building_street,contact_line2,contact_town_city,contact_postcode,primary_phone_no,secondary_phone_no,contact_email_address,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+      i++;
+    }
+    // Should not have any more lines.
+    assertThat(i).isEqualTo(1);
   }
 }

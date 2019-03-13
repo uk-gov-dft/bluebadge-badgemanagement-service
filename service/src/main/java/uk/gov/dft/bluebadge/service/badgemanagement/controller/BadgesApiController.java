@@ -177,7 +177,7 @@ public class BadgesApiController implements BadgesApi {
     try {
       badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode);
     } catch (IOException e) {
-      throw new InternalServerException(e);
+      throw new InternalServerException("Failed creating badge zip file for " + laShortCode, e);
     }
   }
 }

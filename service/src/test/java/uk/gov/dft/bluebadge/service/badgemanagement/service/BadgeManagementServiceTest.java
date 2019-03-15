@@ -417,9 +417,9 @@ public class BadgeManagementServiceTest {
     int i = 0;
     while (sc.hasNextLine()) {
       // Should have header line.
-        assertThat(sc.nextLine())
-            .isEqualTo(
-                "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,holder_name,nino,dob,gender_code,contact_name,contact_building_street,contact_line2,contact_town_city,contact_postcode,primary_phone_no,secondary_phone_no,contact_email_address,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+      assertThat(sc.nextLine())
+          .isEqualTo(
+              "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,holder_name,nino,dob,gender_code,contact_name,contact_building_street,contact_line2,contact_town_city,contact_postcode,primary_phone_no,secondary_phone_no,contact_email_address,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
       i++;
     }
     // Should not have any more lines.

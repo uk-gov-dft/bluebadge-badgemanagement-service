@@ -3,26 +3,19 @@ package uk.gov.dft.bluebadge.service.badgemanagement.controller;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_BADGE_NUMBER;
 
 import io.swagger.annotations.ApiParam;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.dft.bluebadge.common.api.CommonResponseEntityExceptionHandler;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
@@ -43,7 +36,8 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
-public class BadgesApiController implements BadgesApi {
+@CommonResponse
+public class BadgesApiController extends CommonResponseEntityExceptionHandler implements BadgesApi {
 
   private final BadgeManagementService badgeService;
   private final BatchService batchService;
@@ -164,20 +158,5 @@ public class BadgesApiController implements BadgesApi {
       }
     }
     return ResponseEntity.ok().build();
-  }
-
-  @GetMapping(value = "/badges", produces = "application/zip")
-  @PreAuthorize(
-      "hasAuthority('PERM_VIEW_BADGE_DETAILS_ZIP') and @securityUtils.isAuthorisedLACode(#laShortCode)")
-  public void retrieveBadgesByLa(
-      @RequestParam(value = "laShortCode") String laShortCode, HttpServletResponse response) {
-    String filename = LocalDate.now() + "_" + laShortCode + ".zip";
-    response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename);
-    response.setContentType("application/zip");
-    try {
-      badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode);
-    } catch (IOException e) {
-      throw new InternalServerException("Failed creating badge zip file for " + laShortCode, e);
-    }
   }
 }

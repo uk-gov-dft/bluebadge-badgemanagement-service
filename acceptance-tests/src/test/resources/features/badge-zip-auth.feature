@@ -11,16 +11,16 @@ Feature: Verify authentication of badge zip
   Scenario: Verify fail when no auth
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     Given path 'badges'
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ABERD'
     When method GET
-    Then status 401
+    Then assert responseStatus == 401 || responseStatus == 406
 
   Scenario: Verify valid when 3rd party auth ok
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 200
@@ -29,7 +29,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ANGL'
     When method GET
     Then status 403
@@ -38,7 +38,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-client.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ANGL'
     When method GET
     Then status 403
@@ -56,7 +56,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-la-editor-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 403
@@ -73,7 +73,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-dft-admin.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 403
@@ -82,7 +82,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-la-readonly-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip, application/json'
+    And header Accept = 'application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 403

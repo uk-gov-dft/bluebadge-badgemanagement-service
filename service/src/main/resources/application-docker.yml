@@ -12,7 +12,7 @@ spring:
   main:
     banner-mode: "off"
   datasource:
-    url: jdbc:postgresql://postgresql:5432/bb_dev?currentSchema=badgemanagement&sslmode=require
+    url: jdbc:postgresql://postgresql:5432/bb_dev?currentSchema=badgemanagement
 
 amazon:
   s3bucket: ${bb_badge_bucket:uk-gov-dft-ci-badge}

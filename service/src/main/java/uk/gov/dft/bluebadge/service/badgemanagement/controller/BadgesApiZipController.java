@@ -37,13 +37,13 @@ public class BadgesApiZipController {
       "hasAuthority('PERM_VIEW_BADGE_DETAILS_ZIP') and @securityUtils.isAuthorisedLACode(#laShortCode)")
   public void retrieveBadgesByLa(
       @RequestParam(value = "laShortCode") String laShortCode, HttpServletResponse response) {
-    String filename = LocalDate.now() + "_" + laShortCode + ".zip";
+    String filename = LocalDate.now() + "_" + laShortCode.toUpperCase() + ".zip";
     response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename);
     response.setContentType("application/zip");
     try {
-      badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode);
+      badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode.toUpperCase());
     } catch (IOException e) {
-      throw new InternalServerException("Failed creating badge zip file for " + laShortCode, e);
+      throw new InternalServerException("Failed creating badge zip file for " + laShortCode.toUpperCase(), e);
     }
   }
 }

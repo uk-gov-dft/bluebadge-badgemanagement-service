@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "2.0.0",
+    "version" : "1.0.4",
     "contact" : {
       "email" : "rob.smallwood@does.not.exist"
     },
@@ -702,12 +702,12 @@
         },
         "primaryPhoneNumber" : {
           "type" : "string",
-          "pattern" : "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
+          "maxLength" : 20,
           "example" : "01616548765"
         },
         "secondaryPhoneNumber" : {
           "type" : "string",
-          "pattern" : "^$|^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
+          "maxLength" : 20,
           "example" : "01616548765"
         },
         "emailAddress" : {

@@ -6,15 +6,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.dft.bluebadge.common.api.CommonResponseEntityExceptionHandler;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.IssuedBadge;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.IssuedBadgesReportResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.ReportSearch;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.ReportService;
 
+@CommonResponse
 @RestController
 @RequestMapping("/reports")
 @PreAuthorize("#oauth2.hasScope('print-batch')")
-public class ReportController {
+public class ReportController extends CommonResponseEntityExceptionHandler {
   private final ReportService reportService;
 
   public ReportController(ReportService reportService) {

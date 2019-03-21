@@ -9,8 +9,7 @@ Feature: Verify replace a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
+    * callonce read('./badge-create-person.feature')
 
   Scenario: Verify 404 response for replace of unknown badge
     Given path 'badges/AAAAAA/replacements'
@@ -108,7 +107,7 @@ Feature: Verify replace a badge
 	* match newBadge.replace_reason_code == null
 
   Scenario: Verify replace a badge with different path and body badge numbers
-    Given path 'badges/'+ createdBadgeNo + '/replacements'
+    Given path 'badges/'+ badgeNo + '/replacements'
     And request {"badgeNumber": "DDDDDD","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
     When method POST
     Then status 400

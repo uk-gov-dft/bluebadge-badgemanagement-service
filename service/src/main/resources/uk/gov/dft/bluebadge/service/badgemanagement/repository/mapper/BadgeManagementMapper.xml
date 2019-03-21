@@ -84,6 +84,36 @@
           badge_no = trim(upper(#{badgeNo}))
     </select>
 
+    <select id="retrieveBadgesByLa" resultType="BadgeZipEntity" parameterType="RetrieveBadgesByLaParams">
+        SELECT
+        b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
+        b.local_authority_ref As localAuthorityRef, to_char(b.app_date, 'YYYY-MM-DD') AS appDate,
+        b.app_channel_code AS appChannelCode, to_char(b.start_date, 'YYYY-MM-DD') AS startDate, to_char(b.expiry_date, 'YYYY-MM-DD') AS expiryDate,
+        b.eligibility_code AS eligibilityCode,
+        b.deliver_to_code AS deliverToCode, b.deliver_option_code AS deliverOptionCode, b.holder_name AS holderName,
+        b.nino AS nino, to_char(b.dob, 'YYYY-MM-DD') AS dob, b.gender_code AS genderCode, b.contact_name AS contactName,
+        b.contact_building_street AS contactBuildingStreet, b.contact_line2 AS contactLine2, b.contact_town_city AS contactTownCity,
+        b.contact_postcode AS contactPostcode, b.primary_phone_no AS primaryPhoneNo, b.secondary_phone_no AS secondaryPhoneNo,
+        b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode,
+        b.order_date AS orderDate, b.local_authority_short_code AS localAuthorityShortCode, b.replace_reason_code AS replaceReasonCode,
+        bb_reject.rejected_reason rejectedReason,
+        to_char(bt_reject.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') rejectedDateTime,
+        to_char(bb_issued.issued_date_time, 'YYYY-MM-DD HH24:MI:SS') issuedDateTime,
+        to_char(bt_sent.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') printRequestDateTime
+        FROM badgemanagement.badge b
+        LEFT JOIN (badgemanagement.batch_badge bb_reject
+          JOIN badgemanagement.batch bt_reject ON bt_reject.batch_id = bb_reject.batch_id
+          AND bt_reject.batch_source = 'PRINTER' AND bt_reject.batch_purpose = 'REJECTED') ON b.badge_no = bb_reject.badge_no
+        LEFT JOIN (badgemanagement.batch_badge bb_issued
+          JOIN badgemanagement.batch bt_issued ON bt_issued.batch_id = bb_issued.batch_id
+          AND bt_issued.batch_source = 'PRINTER' AND bt_issued.batch_purpose = 'ISSUED') ON b.badge_no = bb_issued.badge_no
+        LEFT JOIN (badgemanagement.batch_badge bb_sent
+          JOIN badgemanagement.batch bt_sent ON bt_sent.batch_id = bb_sent.batch_id
+          AND bt_sent.batch_source = 'DFT') ON b.badge_no = bb_sent.badge_no
+        WHERE
+        b.local_authority_short_code = #{laShortCode}
+    </select>
+
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
         <include refid="badgeFields"></include>

@@ -17,12 +17,20 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.Bad
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REJECT;
 import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REPLACED;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +42,12 @@ import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
@@ -353,5 +366,63 @@ public class BadgeManagementServiceTest {
       assertThat(e.getResponse().getBody().getError().getMessage())
           .isEqualTo("AlreadyExists.badge");
     }
+  }
+
+  @Test
+  @SneakyThrows
+  public void retrieveBadgesByLa() {
+    BadgeZipEntity badge = BadgeZipEntity.builder().badgeNo("123456").build();
+    when(repositoryMock.retrieveBadgesByLa(any())).thenReturn(ImmutableList.of(badge));
+
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    service.retrieveBadgesByLa(stream, "ABCD");
+    ZipInputStream zipInputStream =
+        new ZipInputStream(new ByteArrayInputStream(stream.toByteArray()));
+    ZipEntry entry = zipInputStream.getNextEntry();
+
+    assertThat(entry.getName())
+        .isEqualTo(LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_ABCD.csv");
+    Scanner sc = new Scanner(zipInputStream);
+    int i = 0;
+    while (sc.hasNextLine()) {
+      // Should have header line.
+      if (i == 0) {
+        assertThat(sc.nextLine())
+            .isEqualTo(
+                "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,holder_name,nino,dob,gender_code,contact_name,contact_building_street,contact_line2,contact_town_city,contact_postcode,primary_phone_no,secondary_phone_no,contact_email_address,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+      }
+      // Should have line for badge.
+      if (i == 1) {
+        assertThat(sc.nextLine()).contains("123456");
+      }
+      i++;
+    }
+    // Should not have any more lines.
+    assertThat(i).isEqualTo(2);
+  }
+
+  @Test
+  @SneakyThrows
+  public void retrieveBadgesByLa_noResults() {
+    when(repositoryMock.retrieveBadgesByLa(any())).thenReturn(ImmutableList.of());
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    service.retrieveBadgesByLa(stream, "ABCD");
+    ZipInputStream zipInputStream =
+        new ZipInputStream(new ByteArrayInputStream(stream.toByteArray()));
+    ZipEntry entry = zipInputStream.getNextEntry();
+
+    assertThat(entry.getName())
+        .isEqualTo(LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_ABCD.csv");
+    Scanner sc = new Scanner(zipInputStream);
+    int i = 0;
+    while (sc.hasNextLine()) {
+      // Should have header line.
+      assertThat(sc.nextLine())
+          .isEqualTo(
+              "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,holder_name,nino,dob,gender_code,contact_name,contact_building_street,contact_line2,contact_town_city,contact_postcode,primary_phone_no,secondary_phone_no,contact_email_address,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+      i++;
+    }
+    // Should not have any more lines.
+    assertThat(i).isEqualTo(1);
   }
 }

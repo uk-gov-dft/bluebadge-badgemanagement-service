@@ -29,6 +29,7 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
         "updateBadgesStatusesForPrintBatch";
     static final String UPDATE_BADGE_STATUS_FROM_STATUS = "updateBadgeStatusFromStatus";
     static final String FIND_BADGES_WITH_HASH = "findBadgeHash";
+    static final String RETRIEVE_BADGES_BY_LA = "retrieveBadgesByLa";
   }
 
   private final SqlSession sqlSession;
@@ -110,5 +111,11 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   public List<String> findBadgeHash(byte[] hash) {
     return sqlSession.selectList(
         Statements.FIND_BADGES_WITH_HASH, FindBadgeHashParams.builder().hash(hash).build());
+  }
+
+  @Override
+  public List<BadgeZipEntity> retrieveBadgesByLa(String laShortCode) {
+    return sqlSession.selectList(
+        Statements.RETRIEVE_BADGES_BY_LA, new RetrieveBadgesByLaParams(laShortCode));
   }
 }

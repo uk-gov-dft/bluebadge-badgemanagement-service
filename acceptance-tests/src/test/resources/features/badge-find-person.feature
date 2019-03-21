@@ -5,16 +5,15 @@ Feature: Verify find badge for newly created badge
     * url baseUrl
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    * def createResult = callonce read('./badge-create-person.feature')
-    * def createdBadgeNo = createResult.badgeNo
+    * callonce read('./badge-create-person.feature')
 
   Scenario: Verify findBadges finds the created badge
     Given path 'badges'
-    And param name = 'red'
+    And param name = 'red bloggs'
     When method GET
     Then status 200
     And match $.data[*] contains "#notnull"
-    And match $.data[*].badgeNumber contains createdBadgeNo
+    And match $.data[*].badgeNumber contains badgeNo
 
   Scenario: Verify findBadges finds nothing for unknown name
     Given path 'badges'

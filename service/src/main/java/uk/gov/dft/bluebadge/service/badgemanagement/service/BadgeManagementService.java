@@ -7,12 +7,21 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.REPLACE_INVALID_BADGE_STATUS;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.TOO_MANY_FIND_PARAMS;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SequenceWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +37,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
@@ -251,6 +261,30 @@ public class BadgeManagementService {
 
     if (ISSUED != badge.getBadgeStatus()) {
       throw new BadRequestException(REPLACE_INVALID_BADGE_STATUS.getSystemErrorInstance());
+    }
+  }
+
+  public void retrieveBadgesByLa(OutputStream outputStream, String laShortCode) throws IOException {
+    CsvMapper csvMapper = new CsvMapper();
+    csvMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
+    CsvSchema csvSchema =
+        CsvSchema.builder()
+            .setUseHeader(true)
+            .addColumnsFrom(csvMapper.schemaFor(BadgeZipEntity.class))
+            .build();
+    List<BadgeZipEntity> rows = repository.retrieveBadgesByLa(laShortCode);
+
+    try (ZipOutputStream zippedOut = new ZipOutputStream(outputStream)) {
+      ZipEntry e =
+          new ZipEntry(
+              LocalDate.now().format(DateTimeFormatter.ISO_DATE) + "_" + laShortCode + ".csv");
+      zippedOut.putNextEntry(e);
+
+      SequenceWriter csvWriter = csvMapper.writer(csvSchema).writeValues(zippedOut);
+      csvWriter.write(rows);
+      zippedOut.closeEntry();
+      zippedOut.finish();
     }
   }
 }

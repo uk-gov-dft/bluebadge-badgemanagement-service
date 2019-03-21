@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "2.0.0",
+    "version" : "1.0.4",
     "contact" : {
       "email" : "rob.smallwood@does.not.exist"
     },
@@ -154,16 +154,18 @@
         "tags" : [ "badges" ],
         "summary" : "Find a Blue Badge given the specified query parameters",
         "operationId" : "findBlueBadge",
-        "description" : "By passing in appropriate options, you can search for\navailable badges in the system.  Options are a partial match\nand all submitted options must be matched. At least 1 parameter\nmust be provided.\n",
-        "produces" : [ "application/json" ],
+        "description" : "By passing in appropriate options, you can search for\navailable badges in the system.  Options are a partial match\nand all submitted options must be matched. At least 1 parameter\nmust be provided.\nProvide name and or postcode to filter json response.\nProvide local authority short code and accept application/zip\nto download all Blue Badge data for a local authority.\n",
+        "produces" : [ "application/json", "application/zip" ],
         "parameters" : [ {
           "$ref" : "#/parameters/NameParam"
         }, {
           "$ref" : "#/parameters/PostCodeParam"
+        }, {
+          "$ref" : "#/parameters/LocalAuthorityShortCodeParam"
         } ],
         "responses" : {
           "200" : {
-            "description" : "Response when Blue Badges can (or can not) be found.\n",
+            "description" : "Response when Blue Badges can (or can not) be found.\nEither JSON BadgesResponse or application/zip\n",
             "schema" : {
               "$ref" : "#/definitions/BadgesResponse"
             }
@@ -700,12 +702,12 @@
         },
         "primaryPhoneNumber" : {
           "type" : "string",
-          "pattern" : "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
+          "maxLength" : 20,
           "example" : "01616548765"
         },
         "secondaryPhoneNumber" : {
           "type" : "string",
-          "pattern" : "^$|^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
+          "maxLength" : 20,
           "example" : "01616548765"
         },
         "emailAddress" : {
@@ -719,6 +721,11 @@
     }
   },
   "parameters" : {
+    "LocalAuthorityShortCodeParam" : {
+      "in" : "query",
+      "name" : "laShortCode",
+      "type" : "string"
+    },
     "BadgeNumberParam" : {
       "in" : "query",
       "name" : "badgeNumber",

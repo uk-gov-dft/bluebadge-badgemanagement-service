@@ -21,7 +21,7 @@ public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
   public static final int BEFORE_RESOURCE_SERVER_ORDER = 2;
 
   @Autowired
-  DataSource dataSource;
+  private DataSource dataSource;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

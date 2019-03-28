@@ -29,12 +29,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.api.model.Error;
+import uk.gov.dft.bluebadge.common.api.model.PagedResult;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.common.util.Base20;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -70,6 +74,7 @@ public class BadgeManagementService {
   private final BlacklistedCombinationsFilter blacklistFilter;
   private final BadgeAuditLogger badgeAuditLogger;
   private final BadgeNumberService badgeNumberService;
+  private final BadgeSummaryConverter badgeSummaryConverter;
 
   @Autowired
   BadgeManagementService(
@@ -81,7 +86,8 @@ public class BadgeManagementService {
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
       BlacklistedCombinationsFilter blacklistFilter,
-      BadgeAuditLogger badgeAuditLogger) {
+      BadgeAuditLogger badgeAuditLogger,
+      BadgeSummaryConverter badgeSummaryConverter) {
     this.repository = repository;
     this.validateBadgeOrder = validateBadgeOrder;
     this.validateCancelBadge = validateCancelBadge;
@@ -91,6 +97,7 @@ public class BadgeManagementService {
     this.blacklistFilter = blacklistFilter;
     this.badgeAuditLogger = badgeAuditLogger;
     this.validateReplaceBadge = validateReplaceBadge;
+    this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
   public List<String> createBadges(BadgeOrderRequest model) {
@@ -151,7 +158,8 @@ public class BadgeManagementService {
     return badgeNo;
   }
 
-  public List<BadgeEntity> findBadges(String name, String postCode) {
+  public PagedResult<BadgeSummary> findBadges(
+      String name, String postCode, PagingParams pagingParams) {
     String nameStripped = StringUtils.stripToNull(name);
     String postcodeStripped = StringUtils.stripToNull(postCode);
     if (null == nameStripped && null == postcodeStripped) {
@@ -168,7 +176,9 @@ public class BadgeManagementService {
             .postcode(postcodeStripped)
             .statuses(DEFAULT_SEARCH_STATUSES)
             .build();
-    return repository.findBadges(params);
+
+    return badgeSummaryConverter.convertToModelList(
+        repository.findBadges(params, pagingParams.getPageNum(), pagingParams.getPageSize()));
   }
 
   public BadgeEntity retrieveBadge(String badgeNumber) {

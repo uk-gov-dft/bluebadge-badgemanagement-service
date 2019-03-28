@@ -43,7 +43,8 @@ public class BadgesApiZipController {
     try {
       badgeService.retrieveBadgesByLa(response.getOutputStream(), laShortCode.toUpperCase());
     } catch (IOException e) {
-      throw new InternalServerException("Failed creating badge zip file for " + laShortCode.toUpperCase(), e);
+      throw new InternalServerException(
+          "Failed creating badge zip file for " + laShortCode.toUpperCase(), e);
     }
   }
 }

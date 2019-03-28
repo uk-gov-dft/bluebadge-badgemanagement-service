@@ -32,6 +32,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 
 @Api(value = "Badges", description = "the Badges API")
@@ -129,7 +130,8 @@ public interface BadgesApi {
           @ApiParam(value = "A valid postcode with or without spaces.")
           @Valid
           @RequestParam(value = "postCode", required = false)
-          Optional<String> postCode) {
+          Optional<String> postCode,
+      @Valid PagingParams pagingParams) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {
         try {

@@ -176,7 +176,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     }
 
     FindBadgeParams params = FindBadgeParams.builder().name("%ZZZZ%").build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
 
     Collections.sort(badgeEntityList, (b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
     List<BadgeEntity> expectedBadgeEntityList =
@@ -199,7 +199,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   public void findBadges_shouldSearchByStatus() {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
     assertThat(badges).isNotEmpty();
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
   }
@@ -209,7 +209,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   public void findBadges_shouldSearchByStatus_deleted() {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.DELETED.name());
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
     assertThat(badges).isNotEmpty();
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.DELETED);
   }
@@ -220,10 +220,26 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
     FindBadgeParams params =
         FindBadgeParams.builder().postcode("S637FU").statuses(statuses).build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
     assertThat(badges).isNotEmpty();
     assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldReturnPageSizeNumberOfResults_whenFirstPage() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%a%").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 12);
+    assertThat(badges).hasSize(12);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldReturnPageSizeNumberOfResults_whenNonFirstPage() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%a%").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 5, 5);
+    assertThat(badges).hasSize(5);
   }
 
   @Test

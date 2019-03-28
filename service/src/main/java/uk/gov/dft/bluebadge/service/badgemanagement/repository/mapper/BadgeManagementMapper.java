@@ -27,7 +27,17 @@ public interface BadgeManagementMapper {
    * @param params Object holding search criteria.
    * @return List of BadgeEntity
    */
-  List<BadgeEntity> findBadges(FindBadgeParams params);
+  //  List<BadgeEntity> findBadges(FindBadgeParams params);
+
+  /**
+   * Retrieve list of badges.
+   *
+   * @param params Object holding search criteria.
+   * @param pageNum the page number, first page is 0.
+   * @param pageSize the page size.
+   * @return List of BadgeEntity
+   */
+  List<BadgeEntity> findBadges(FindBadgeParams params, Integer pageNum, Integer pageSize);
 
   /**
    * Retrieve list of badges for print batch.

@@ -33,7 +33,7 @@ public class BadgeManagementRepositoryTest {
   @Test
   public void findBadges() {
     FindBadgeParams params = FindBadgeParams.builder().name("%Bob%").postcode("WV164AW").build();
-    repository.findBadges(params);
+    repository.findBadges(params, 0, 10);
     verify(sqlSession).selectList(eq(FIND), eq(params));
   }
 

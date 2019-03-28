@@ -133,7 +133,6 @@
             </if>
         </where>
         ORDER BY b.start_date DESC
-        LIMIT 50
     </select>
 
 

@@ -4,18 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderPersonRequest;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.CANCELLED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ORDERED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.PROCESSED;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REJECT;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REPLACED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -40,14 +32,11 @@ import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
@@ -66,6 +55,7 @@ public class BadgeManagementServiceTest {
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
   @Mock private BadgeNumberService numberService;
   @Mock private BadgeAuditLogger badgeAuditLogger;
+  @Mock private BadgeSummaryConverter badgeSummaryConverterMock;
 
   private BadgeManagementService service;
 
@@ -87,7 +77,8 @@ public class BadgeManagementServiceTest {
             photoServiceMock,
             numberService,
             blacklistFilter,
-            badgeAuditLogger);
+            badgeAuditLogger,
+            badgeSummaryConverterMock);
   }
 
   @Test
@@ -146,10 +137,13 @@ public class BadgeManagementServiceTest {
             REJECT.name(),
             ORDERED.name());
     FindBadgeParams params = FindBadgeParams.builder().name(name).statuses(statuses).build();
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(0);
+    pagingParams.setPageSize(50);
     // When searching
-    service.findBadges(name, null);
+    service.findBadges(name, null, pagingParams);
     // Then search is done
-    verify(repositoryMock, times(1)).findBadges(params);
+    verify(repositoryMock, times(1)).findBadges(params, 0, 50);
   }
 
   @Test(expected = BadRequestException.class)
@@ -157,9 +151,12 @@ public class BadgeManagementServiceTest {
     // Given search params valid when searching
     String name = "  ";
     // When searching
-    service.findBadges(name, null);
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(0);
+    pagingParams.setPageSize(50);
+    service.findBadges(name, null, pagingParams);
     // Then search is done
-    verify(repositoryMock, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any(), eq(0), eq(50));
   }
 
   @Test(expected = BadRequestException.class)
@@ -168,9 +165,12 @@ public class BadgeManagementServiceTest {
     String name = "abc";
     String postcode = "def";
     // When searching
-    service.findBadges(name, postcode);
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(0);
+    pagingParams.setPageSize(50);
+    service.findBadges(name, postcode, pagingParams);
     // Then search is done
-    verify(repositoryMock, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any(), eq(0), eq(50));
   }
 
   @Test

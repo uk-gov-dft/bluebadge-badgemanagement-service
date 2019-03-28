@@ -15,14 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dft.bluebadge.common.api.CommonResponseEntityExceptionHandler;
+import uk.gov.dft.bluebadge.common.api.model.PagedResult;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
@@ -77,12 +72,19 @@ public class BadgesApiController extends CommonResponseEntityExceptionHandler im
           @ApiParam(value = "A valid postcode with or without spaces.")
           @Valid
           @RequestParam(value = "postCode", required = false)
-          Optional<String> postCode) {
-
+          Optional<String> postCode,
+      @Valid PagingParams pagingParams) {
+    log.info("Find blue badges");
+    /*
     List<BadgeEntity> badgeEntities =
         badgeService.findBadges(name.orElse(null), postCode.orElse(null));
     return ResponseEntity.ok(
-        new BadgesResponse().data(badgeSummaryConverter.convertToModelList(badgeEntities)));
+        new BadgesResponse().data(badgeSummaryConverter.convertToModelList(badgeEntities)));*/
+    PagedResult<BadgeSummary> results =
+        badgeService.findBadges(name.orElse(null), postCode.orElse(null), pagingParams);
+    return ResponseEntity.ok(
+        (BadgesResponse)
+            new BadgesResponse().data(results.getData()).pagingInfo(results.getPagingInfo()));
   }
 
   @Override

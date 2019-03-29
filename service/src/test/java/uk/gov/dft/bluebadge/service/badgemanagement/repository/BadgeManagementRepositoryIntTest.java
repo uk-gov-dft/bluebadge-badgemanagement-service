@@ -238,7 +238,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldReturnPageSizeNumberOfResults_whenNonFirstPage() {
     FindBadgeParams params = FindBadgeParams.builder().name("%a%").build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 5, 5);
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 2, 5);
     assertThat(badges).hasSize(5);
   }
 

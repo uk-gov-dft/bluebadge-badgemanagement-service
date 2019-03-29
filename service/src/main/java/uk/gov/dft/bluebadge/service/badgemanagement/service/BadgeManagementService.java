@@ -246,7 +246,7 @@ public class BadgeManagementService {
     replaceValidationChecks(badge);
 
     repository.replaceBadge(replaceParams);
-    log.info("Repalced badge number {}", replaceParams.getBadgeNumber());
+    log.info("Replaced badge number {}", replaceParams.getBadgeNumber());
 
     String newBadgeNumber = createNewBadgeNumber();
     badge.setBadgeNo(newBadgeNumber);

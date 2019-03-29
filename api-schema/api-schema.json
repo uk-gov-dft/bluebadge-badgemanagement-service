@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "1.0.4",
+    "version" : "1.0.5",
     "contact" : {
       "email" : "rob.smallwood@does.not.exist"
     },
@@ -162,6 +162,10 @@
           "$ref" : "#/parameters/PostCodeParam"
         }, {
           "$ref" : "#/parameters/LocalAuthorityShortCodeParam"
+        }, {
+          "$ref" : "#/parameters/PageNumParam"
+        }, {
+          "$ref" : "#/parameters/PageSizeParam"
         } ],
         "responses" : {
           "200" : {
@@ -752,6 +756,18 @@
       "type" : "string",
       "maxLength" : 20,
       "description" : "A valid postcode with or without spaces."
+    },
+    "PageNumParam" : {
+      "in" : "query",
+      "name" : "pageNum",
+      "type" : "integer",
+      "description" : "The page to return. Must be a positive number. Default is 1."
+    },
+    "PageSizeParam" : {
+      "in" : "query",
+      "name" : "pageSize",
+      "type" : "integer",
+      "description" : "The number of results. Min 1 max 200. Default 50"
     },
     "BatchIdPathParam" : {
       "in" : "path",

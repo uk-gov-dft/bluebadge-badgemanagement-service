@@ -28,7 +28,6 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
-import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.CancelBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ReplaceBadgeRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.generated.controller.BadgesApi;
@@ -44,17 +43,11 @@ public class BadgesApiController extends CommonResponseEntityExceptionHandler im
   private final BadgeManagementService badgeService;
   private final BatchService batchService;
 
-  private final BadgeSummaryConverter badgeSummaryConverter;
-
   @SuppressWarnings("unused")
   @Autowired
-  public BadgesApiController(
-      BadgeManagementService service,
-      BatchService batchService,
-      BadgeSummaryConverter badgeSummaryConverter) {
+  public BadgesApiController(BadgeManagementService service, BatchService batchService) {
     this.badgeService = service;
     this.batchService = batchService;
-    this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
   @Override

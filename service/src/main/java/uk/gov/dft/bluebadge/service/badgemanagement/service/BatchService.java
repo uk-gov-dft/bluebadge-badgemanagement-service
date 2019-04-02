@@ -173,7 +173,6 @@ public class BatchService {
   public void processBatch(ProcessedBatch batch) {
 
     if (StringUtils.isNotEmpty(batch.getErrorMessage())) {
-      // TODO: This should perhaps be written to batch table in a new column
       log.error(
           "Could not process print batch result for {} due to error from print service: {}",
           batch.getFilename(),

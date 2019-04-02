@@ -64,7 +64,7 @@ Feature: Verify find badge for newly created badge
     And match $.pagingInfo.pageSize == 2
     And match $.pagingInfo.pages == 1
 
-  Scenario: Verify findBadges finds the created badge (page size too big + invalid page number)
+  Scenario: Verify findBadges finds the created badge (page size too big + invalid page number) results in 400
     Given path 'badges'
     And param name = 'TestData'
     And param pageNum = 0
@@ -73,7 +73,7 @@ Feature: Verify find badge for newly created badge
     Then status 400
     And match $.error.errors[*].message contains only ['Min.pagingParams.pageNum', 'Max.pagingParams.pageSize']
 
-  Scenario: Verify findBadges finds the created badge (page size too small + invalid page  number)
+  Scenario: Verify findBadges finds the created badge (page size too small + invalid page  number) results in 400
     Given path 'badges'
     And param name = 'TestData'
     And param pageNum = 0
@@ -81,6 +81,24 @@ Feature: Verify find badge for newly created badge
     When method GET
     Then status 400
     And match $.error.errors[*].message contains only ['Min.pagingParams.pageNum', 'Min.pagingParams.pageSize']
+
+  Scenario: Verify findBadges - invalid paging params (pageSize = only spaces string) results in 400
+    Given path 'badges'
+    And param name = 'TestData'
+    And param pageSize = '     '
+    And param pageNum = 1
+    When method GET
+    Then status 400
+    And match $.error.errors contains {field:"#notnull", reason:"#notnull", message:"NotNull.pagingParams.pageSize", location:"#null", locationType:"#null"}
+
+  Scenario: Verify findBadges - invalid paging params (pageNum = only spaces string) results in 400
+    Given path 'badges'
+    And param name = 'TestData'
+    And param pageSize = 10
+    And param pageNum = '     '
+    When method GET
+    Then status 400
+    And match $.error.errors contains {field:"#notnull", reason:"#notnull", message:"NotNull.pagingParams.pageNum", location:"#null", locationType:"#null"}
 
   Scenario: Verify findBadges finds nothing for unknown name
     Given path 'badges'

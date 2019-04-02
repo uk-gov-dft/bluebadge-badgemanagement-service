@@ -52,7 +52,7 @@ Feature: Verify Create badge cognitive
     Then status 200
     And match $.data[*] contains "#notnull"
 
-  Scenario: Verify connot create Cognitive eligibility if Scottish la
+  Scenario: Verify cannot create Cognitive eligibility if Scottish la
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * set badge.localAuthorityShortCode = "ABERD"
@@ -63,7 +63,7 @@ Feature: Verify Create badge cognitive
     Then status 400
     And match $.error.errors[0].message == "InvalidNation.badge.eligibilityCode"
 
-  Scenario: Verify connot create Cognitive eligibility if English la
+  Scenario: Verify cannot create Cognitive eligibility if English la
     * def result = callonce read('./oauth2-3rd-party-england.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * set badge.localAuthorityShortCode = "BIRM"
@@ -74,7 +74,7 @@ Feature: Verify Create badge cognitive
     Then status 400
     And match $.error.errors[0].message == "InvalidNation.badge.eligibilityCode"
 
-  Scenario: Verify connot create Cognitive eligibility if N Ireland la
+  Scenario: Verify cannot create Cognitive eligibility if N Ireland la
     * def result = callonce read('./oauth2-3rd-party-nireland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * set badge.localAuthorityShortCode = "NIRE"

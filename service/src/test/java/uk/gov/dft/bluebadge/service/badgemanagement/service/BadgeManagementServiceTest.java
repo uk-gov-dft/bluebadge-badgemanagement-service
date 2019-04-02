@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,7 +41,9 @@ import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -66,6 +69,7 @@ public class BadgeManagementServiceTest {
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
   @Mock private BadgeNumberService numberService;
   @Mock private BadgeAuditLogger badgeAuditLogger;
+  @Mock private BadgeSummaryConverter badgeSummaryConverterMock;
 
   private BadgeManagementService service;
 
@@ -87,7 +91,8 @@ public class BadgeManagementServiceTest {
             photoServiceMock,
             numberService,
             blacklistFilter,
-            badgeAuditLogger);
+            badgeAuditLogger,
+            badgeSummaryConverterMock);
   }
 
   @Test
@@ -146,10 +151,14 @@ public class BadgeManagementServiceTest {
             REJECT.name(),
             ORDERED.name());
     FindBadgeParams params = FindBadgeParams.builder().name(name).statuses(statuses).build();
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(1);
+    pagingParams.setPageSize(50);
     // When searching
-    service.findBadges(name, null);
+    service.findBadges(name, null, pagingParams);
     // Then search is done
-    verify(repositoryMock, times(1)).findBadges(params);
+    verify(repositoryMock, times(1)).findBadges(params, 1, 50);
+    verify(badgeSummaryConverterMock, times(1)).convertToModelList(any());
   }
 
   @Test(expected = BadRequestException.class)
@@ -157,9 +166,13 @@ public class BadgeManagementServiceTest {
     // Given search params valid when searching
     String name = "  ";
     // When searching
-    service.findBadges(name, null);
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(1);
+    pagingParams.setPageSize(50);
+    service.findBadges(name, null, pagingParams);
     // Then search is done
-    verify(repositoryMock, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any(), any(), any());
+    verify(badgeSummaryConverterMock, never()).convertToModelList(any());
   }
 
   @Test(expected = BadRequestException.class)
@@ -168,9 +181,12 @@ public class BadgeManagementServiceTest {
     String name = "abc";
     String postcode = "def";
     // When searching
-    service.findBadges(name, postcode);
+    PagingParams pagingParams = new PagingParams();
+    pagingParams.setPageNum(1);
+    pagingParams.setPageSize(50);
+    service.findBadges(name, postcode, pagingParams);
     // Then search is done
-    verify(repositoryMock, never()).findBadges(any());
+    verify(repositoryMock, never()).findBadges(any(), eq(1), eq(50));
   }
 
   @Test

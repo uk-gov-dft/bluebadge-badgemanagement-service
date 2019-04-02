@@ -2,16 +2,29 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.*;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.CANCEL;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.CREATE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.FIND;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.FIND_BADGES_FOR_PRINT_BATCH;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.REPLACE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.RETRIEVE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository.Statements.UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH;
 
 import java.time.LocalDate;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
 public class BadgeManagementRepositoryTest {
 
@@ -33,8 +46,22 @@ public class BadgeManagementRepositoryTest {
   @Test
   public void findBadges() {
     FindBadgeParams params = FindBadgeParams.builder().name("%Bob%").postcode("WV164AW").build();
-    repository.findBadges(params);
+    repository.findBadges(params, 1, 10);
     verify(sqlSession).selectList(eq(FIND), eq(params));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void findBadges_shouldThrowIllegalArgumentException_whenPageNumIsNull() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%Bob%").postcode("WV164AW").build();
+    repository.findBadges(params, null, 10);
+    verify(sqlSession, never()).selectList(any(), any());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void findBadges_shouldThrowIllegalArgumentException_whenPageSizeIsNull() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%Bob%").postcode("WV164AW").build();
+    repository.findBadges(params, 1, null);
+    verify(sqlSession, never()).selectList(any(), any());
   }
 
   @Test

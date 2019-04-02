@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -50,15 +52,20 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   }
 
   @Override
-  public List<BadgeEntity> findBadges(FindBadgeParams params) {
+  public Page<BadgeEntity> findBadges(FindBadgeParams params, Integer pageNum, Integer pageSize) {
     Assert.notNull(params, "params cannot be null.");
+    Assert.notNull(pageNum, "pageNum cannot be null");
+    Assert.notNull(pageSize, "pageSize cannot be null");
+
     if (null != params.getName()) {
       params.setName(ConvertUtils.convertToUpperFullTextSearchParam(params.getName()));
     }
     if (null != params.getPostcode()) {
       params.setPostcode(ConvertUtils.formatPostcodeForEntity(params.getPostcode()));
     }
-    return sqlSession.selectList(Statements.FIND, params);
+
+    return PageHelper.startPage(pageNum, pageSize, true)
+        .doSelectPage(() -> sqlSession.selectList(Statements.FIND, params));
   }
 
   @Override

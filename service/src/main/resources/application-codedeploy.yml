@@ -26,7 +26,7 @@ spring:
   datasource:
      ***REMOVED***
     username: ${bb_db_username}
-    url: jdbc:postgresql://${RDS_HOSTNAME}:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement&sslmode=verify-full
+    url: jdbc:postgresql://${RDS_HOSTNAME}:5432/${bb_database}?currentSchema=badgemanagement&sslmode=verify-full
 
 server:
   port: ${bb_port:8080}

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 
 /** BadgeSummary */
 @Validated
@@ -47,7 +48,6 @@ public class BadgeSummary {
    * @return badgeNumber
    */
   @ApiModelProperty(example = "095215", value = "The unique badge number for this badge.")
-  @Pattern(regexp = "^[0-9A-HJK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -113,10 +113,7 @@ public class BadgeSummary {
    * @return nino
    */
   @ApiModelProperty(example = "NY186548E", value = "The badge holder's National Insurance number.")
-  @Pattern(
-    regexp =
-        "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)(?:[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z])(?:\\s*\\d\\s*){6}([A-D]|\\s)$"
-  )
+  @Pattern(regexp = ValidationPattern.NINO_CASE_INSENSITIVE)
   public String getNino() {
     return nino;
   }
@@ -136,7 +133,7 @@ public class BadgeSummary {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "BLACK", value = "Short code of local authority")
-  @Pattern(regexp = "^[A-Z]+$")
+  @Pattern(regexp = ValidationPattern.LA_SHORT_CODE)
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
   }
@@ -156,7 +153,7 @@ public class BadgeSummary {
    * @return postCode
    */
   @ApiModelProperty(example = "SK6 8GH", value = "")
-  @Pattern(regexp = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$")
+  @Pattern(regexp = ValidationPattern.POSTCODE_SIMPLE)
   public String getPostCode() {
     return postCode;
   }
@@ -244,6 +241,7 @@ public class BadgeSummary {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BadgeSummary {\n");
+
     sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
     sb.append("    partyTypeCode: ").append(toIndentedString(partyTypeCode)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");

@@ -5,12 +5,16 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.generated.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.io.IOException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,8 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;
+import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 
 @Api(value = "Badges", description = "the Badges API")
 public interface BadgesApi {
@@ -54,12 +60,10 @@ public interface BadgesApi {
       "badges",
     }
   )
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge replacement requested.")})
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Badge cancellation requested.")})
   @RequestMapping(value = "/badges/{badgeNumber}/cancellations", method = RequestMethod.POST)
   default ResponseEntity<Void> cancelBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeCancelRequest badgeCancel) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -81,9 +85,7 @@ public interface BadgesApi {
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Deleted.")})
   @RequestMapping(value = "/badges/{badgeNumber}", method = RequestMethod.DELETE)
   default ResponseEntity<Void> deleteBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
     } else {
@@ -128,7 +130,8 @@ public interface BadgesApi {
           @ApiParam(value = "A valid postcode with or without spaces.")
           @Valid
           @RequestParam(value = "postCode", required = false)
-          Optional<String> postCode) {
+          Optional<String> postCode,
+      @Valid PagingParams pagingParams) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {
         try {
@@ -208,9 +211,7 @@ public interface BadgesApi {
   )
   @RequestMapping(value = "/badges/{badgeNumber}/replacements", method = RequestMethod.POST)
   default ResponseEntity<BadgeNumberResponse> replaceBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber,
       @ApiParam(value = "") @Valid @RequestBody BadgeReplaceRequest badgeReplace) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
@@ -259,9 +260,7 @@ public interface BadgesApi {
     method = RequestMethod.GET
   )
   default ResponseEntity<BadgeResponse> retrieveBlueBadge(
-      @Pattern(regexp = "^[0-9A-HJK]{6}$")
-          @ApiParam(value = "A valid badge number.", required = true)
-          @PathVariable("badgeNumber")
+      @ApiParam(value = "A valid badge number.", required = true) @PathVariable("badgeNumber")
           String badgeNumber) {
     if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
       if (getAcceptHeader().get().contains("application/json")) {
@@ -273,6 +272,75 @@ public interface BadgesApi {
           log.error("Couldn't serialize response for content type application/json", e);
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Print a batch",
+    nickname = "printBatch",
+    notes = "Request print batch.",
+    tags = {
+      "badges",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Batch print requested ")})
+  @RequestMapping(value = "/badges/print-batch", method = RequestMethod.POST)
+  default ResponseEntity<Void> printBatch(
+      @ApiParam(value = "") @Valid @RequestBody PrintBatchRequest printBadgeRequest) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+      }
+    } else {
+      log.warn(
+          "ObjectMapper or HttpServletRequest not configured in default BadgesApi interface so no example is generated");
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+  }
+
+  @ApiOperation(
+    value = "Process results of print batches",
+    nickname = "collectBatches",
+    notes = "Process print batch results",
+    tags = {
+      "badges",
+    }
+  )
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Print batch results processed.")})
+  @RequestMapping(value = "/badges/collect-batches", method = RequestMethod.POST)
+  ResponseEntity<Void> collectBatches();
+
+  @ApiOperation(
+    value = "Reprint a batch",
+    nickname = "reprintBatch",
+    notes = "Reprints a batch",
+    tags = {
+      "batches",
+    }
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(code = 200, message = "Request to reprint was successful."),
+      @ApiResponse(code = 404, message = "A Batch cannot be found given the parameters specified."),
+      @ApiResponse(code = 401, message = "The request is unauthorised.")
+    }
+  )
+  @RequestMapping(
+    value = "/badges/print-batch/{batchId}",
+    produces = {"application/json"},
+    method = RequestMethod.POST
+  )
+  default ResponseEntity<Void> reprintBatch(
+      @ApiParam(value = "A valid batch number.", required = true) @PathVariable("batchId")
+          String batchId) {
+    if (getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
+      if (getAcceptHeader().get().contains("application/json")) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
       }
     } else {
       log.warn(

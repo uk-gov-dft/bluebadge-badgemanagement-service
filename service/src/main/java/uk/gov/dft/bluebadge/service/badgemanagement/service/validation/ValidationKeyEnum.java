@@ -8,13 +8,22 @@ public enum ValidationKeyEnum {
       "DateInPast.badge.applicationDate",
       "Application date must be in the past.",
       "applicationDate"),
+  DOB_IN_PAST("DateInPast.badge.dob", "DOB must be in the past.", "dob"),
   INVALID_PARTY_CODE("Invalid.badge.partyCode", "Invalid party code.", "partyCode"),
   INVALID_ELIGIBILITY_CODE(
-      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", "eligibilityCode"),
+      "Invalid.badge.eligibilityCode", "Invalid eligibility code.", Constants.ELIGIBILITY_CODE),
+  NULL_ELIGIBILITY_CODE_PERSON(
+      "NotNull.badge.eligibilityCode",
+      "Eligibility code is mandatory for Person badges.",
+      Constants.ELIGIBILITY_CODE),
   INVALID_DELIVER_TO_CODE(
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(
       "Invalid.badge.deliverOptionCode", "Invalid delivery option code.", "deliverOptionCode"),
+  INVALID_DELIVER_FAST_TO_COUNCIL(
+      "Invalid.badge.deliverOptionCode",
+      "Only 'standard' delivery option is available when delivering to council.",
+      "deliverToCode"),
   INVALID_CHANNEL_CODE("Invalid.badge.channelCode", "Invalid channel code.", "appChannelCode"),
   INVALID_LA_CODE(
       "Invalid.badge.localAuthority", "Invalid local authority code.", "localAuthorityShortCode"),
@@ -23,7 +32,13 @@ public enum ValidationKeyEnum {
   START_EXPIRY_DATE_RANGE(
       "DateRange.badge.expiryDate",
       "Expiry date must be within 3 years of start date.",
-      "expiryDate"),
+      Constants.EXPIRY_DATE),
+  INVALID_NUMBER_OF_BADGES_PERSON(
+      "Invalid.badge.numberOfBadges", "Number of badges for person should be 1", "numberOfBadges"),
+  INVALID_NUMBER_OF_BADGES_ORGANISATION(
+      "Invalid.badge.numberOfBadges",
+      "Number of badges should be between 1 and 999",
+      "numberOfBadges"),
   INVALID_GENDER_CODE(
       "Invalid.badge.genderCode", "Invalid gender code.", "party.person.genderCode"),
   INVALID_CANCEL_CODE(
@@ -41,12 +56,28 @@ public enum ValidationKeyEnum {
       "To search badges require either name or postcode, not both.",
       "name"),
   CANCEL_EXPIRY_DATE_IN_PAST(
-      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", "expiryDate"),
+      "Invalid.badge.cancel.expiryDate", "Cannot cancel an expired badge.", Constants.EXPIRY_DATE),
   CANCEL_STATUS_INVALID(
-      "Invalid.badge.cancel.status",
-      "Cannot cancel a badge unless status is ISSUED.",
-      "badgeStatus"),
-  CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown");
+      "Invalid.badge.cancel.status", "Cannot cancel a badge of this status.", "badgeStatus"),
+  CANCEL_FAILED_UNEXPECTED("Unexpected.cancel.fail", "Cancel failed.", "unknown"),
+  INVALID_BADGE_NUMBER(
+      "Invalid.badgeNumber",
+      "Invalid badge number or the body does not match the request.",
+      "badgeNumber"),
+  REPLACE_INVALID_REASON(
+      "Invalid.badge.replace.replaceReason", "Invalid replace reason.", "replaceReason"),
+  REPLACE_EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.replace.expiryDate",
+      "Cannot replace an expired badge.",
+      Constants.EXPIRY_DATE),
+  REPLACE_INVALID_BADGE_STATUS(
+      "Invalid.badge.replace.badgeStatus", "Cannot replace a badge of this status.", "badgeStatus"),
+  INVALID_ELIGIBILITY_FOR_NATION(
+      "InvalidNation.badge.eligibilityCode",
+      "Eligibility type not valid for nation.",
+      Constants.ELIGIBILITY_CODE),
+  EXPIRY_DATE_IN_PAST(
+      "Invalid.badge.expiryDate", "Expiry date cannot be in the past.", Constants.EXPIRY_DATE);
 
   private final String key;
   private final String defaultMessage;
@@ -60,10 +91,14 @@ public enum ValidationKeyEnum {
   }
 
   public ErrorErrors getFieldErrorInstance() {
+    return getFieldErrorInstance(defaultMessage);
+  }
+
+  public ErrorErrors getFieldErrorInstance(String reason) {
     ErrorErrors error = new ErrorErrors();
     error.setField(field);
     error.setMessage(key);
-    error.setReason(defaultMessage);
+    error.setReason(reason);
     return error;
   }
 
@@ -72,5 +107,14 @@ public enum ValidationKeyEnum {
     error.setMessage(key);
     error.setReason(defaultMessage);
     return error;
+  }
+
+  private static class Constants {
+    static final String EXPIRY_DATE = "expiryDate";
+    static final String ELIGIBILITY_CODE = "eligibilityCode";
+  }
+
+  public String getKey() {
+    return key;
   }
 }

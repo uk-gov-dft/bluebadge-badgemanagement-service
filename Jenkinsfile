@@ -3,6 +3,10 @@ def REPONAME = "${scm.getUserRemoteConfigs()[0].getUrl()}"
 
 node {
     
+    stage('clean workspace') {
+        cleanWs()
+    }
+
     stage('Clone sources') {
       git(
            url: "${REPONAME}",
@@ -17,12 +21,57 @@ node {
             env.SPRING_APPLICATION_JSON = '{"spring":{"datasource":{"url":"jdbc:postgresql://postgresql:5432/bb_dev?currentSchema=badgemanagement"}}}'
         }
         try {
-            sh './gradlew clean build bootJar createDatabaseSchemaZip artifactoryPublish artifactoryDeploy --refresh-dependencies'
+            sh './gradlew --no-daemon --profile --configure-on-demand  clean build bootJar createDatabaseSchemaZip artifactoryPublish artifactoryDeploy --refresh-dependencies'
+            sh 'mv build/reports/profile/profile-*.html build/reports/profile/index.html'
+            stash includes: 'service/build/**/*', name: 'build'
         }
         finally {
             junit '**/TEST*.xml'
 
         }
+        publishHTML (target: [
+          allowMissing: false,
+          alwaysLinkToLastBuild: false,
+          keepAll: true,
+          reportDir: 'build/reports/profile',
+          reportFiles: 'index.html',
+          reportName: "Gradle Profile Report"
+        ])
+    }
+
+    stage ('DockerPublish') {
+      node('Functional') {
+        git(
+           url: "${REPONAME}",
+           credentialsId: 'dft-buildbot-valtech',
+           branch: "${BRANCH_NAME}"
+        )
+
+        unstash 'build'
+      
+        sh 'ls -la'
+
+        withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+          sh '''
+            curl -s -o docker-publish.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/docker-publish.sh
+            ls -la
+            bash docker-publish.sh
+          '''
+        }
+      }
+    }
+
+    stage ('OWASP Dependency Check') {
+        sh './gradlew dependencyCheckUpdate dependencyCheckAggregate'
+
+        publishHTML (target: [
+         allowMissing: false,
+         alwaysLinkToLastBuild: false,
+         keepAll: true,
+         reportDir: 'build/reports',
+         reportFiles: 'dependency-check-report.html',
+         reportName: "OWASP Dependency Check"
+        ])
     }
 
     stage('SonarQube analysis') {
@@ -52,12 +101,20 @@ node {
             )
 
             timeout(time: 10, unit: 'MINUTES') {
-                try {
-                    sh 'bash -c "echo $PATH && cd acceptance-tests && ./run-regression.sh"'
-                }
-                finally {
-                    archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
-                    junit '**/TEST*.xml'
+                  withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+                  try {
+                      sh '''
+                        cd acceptance-tests
+                        curl -s -o run-regression-script.sh -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -O -L https://raw.githubusercontent.com/uk-gov-dft/shell-scripts/master/run-regression.sh
+
+                        chmod +x run-regression-script.sh
+                        ./run-regression-script.sh
+                      '''
+                  }
+                  finally {
+                      archiveArtifacts allowEmptyArchive: true, artifacts: '**/docker.log'
+                      junit '**/TEST*.xml'
+                  }
                 }
             }
         }

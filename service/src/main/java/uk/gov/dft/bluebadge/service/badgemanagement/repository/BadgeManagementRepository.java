@@ -1,15 +1,14 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.ConvertUtils;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.*;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper;
 
 /** Provides CRUD operations on BadgeEntity entity. */
@@ -25,11 +24,19 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
     static final String FIND = "findBadges";
     static final String RETRIEVE = "retrieveBadge";
     static final String CANCEL = "cancelBadge";
+    static final String DELETE = "deleteBadge";
+    static final String REPLACE = "replaceBadge";
+    static final String FIND_BADGES_FOR_PRINT_BATCH = "findBadgesForPrintBatch";
+    static final String UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH =
+        "updateBadgesStatusesForPrintBatch";
+    static final String UPDATE_BADGE_STATUS_FROM_STATUS = "updateBadgeStatusFromStatus";
+    static final String FIND_BADGES_WITH_HASH = "findBadgeHash";
+    static final String RETRIEVE_BADGES_BY_LA = "retrieveBadgesByLa";
   }
 
   private final SqlSession sqlSession;
 
-  public BadgeManagementRepository(SqlSession sqlSession) {
+  BadgeManagementRepository(SqlSession sqlSession) {
     this.sqlSession = sqlSession;
   }
 
@@ -45,15 +52,32 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   }
 
   @Override
-  public List<BadgeEntity> findBadges(FindBadgeParams params) {
+  public Page<BadgeEntity> findBadges(FindBadgeParams params, Integer pageNum, Integer pageSize) {
     Assert.notNull(params, "params cannot be null.");
+    Assert.notNull(pageNum, "pageNum cannot be null");
+    Assert.notNull(pageSize, "pageSize cannot be null");
+
     if (null != params.getName()) {
       params.setName(ConvertUtils.convertToUpperFullTextSearchParam(params.getName()));
     }
     if (null != params.getPostcode()) {
       params.setPostcode(ConvertUtils.formatPostcodeForEntity(params.getPostcode()));
     }
-    return sqlSession.selectList(Statements.FIND, params);
+
+    return PageHelper.startPage(pageNum, pageSize, true)
+        .doSelectPage(() -> sqlSession.selectList(Statements.FIND, params));
+  }
+
+  @Override
+  public List<BadgeEntity> findBadgesForPrintBatch(FindBadgesForPrintBatchParams params) {
+    Assert.notNull(params, "params cannot be null");
+    return sqlSession.selectList(Statements.FIND_BADGES_FOR_PRINT_BATCH, params);
+  }
+
+  @Override
+  public void updateBadgesStatusesForBatch(UpdateBadgesStatusesForBatchParams params) {
+    Assert.notNull(params, "params cannot be null");
+    sqlSession.update(Statements.UPDATE_BADGES_STATUSES_FOR_PRINT_BATCH, params);
   }
 
   @Override
@@ -66,5 +90,39 @@ public class BadgeManagementRepository implements BadgeManagementMapper {
   @Override
   public int cancelBadge(CancelBadgeParams params) {
     return sqlSession.update(Statements.CANCEL, params);
+  }
+
+  @Override
+  public int deleteBadge(DeleteBadgeParams deleteBadgeParams) {
+    return sqlSession.update(Statements.DELETE, deleteBadgeParams);
+  }
+
+  @Override
+  public int replaceBadge(ReplaceBadgeParams params) {
+    return sqlSession.update(Statements.REPLACE, params);
+  }
+
+  /**
+   * Update badge status. Will only update if the badge is currently set to the fromStatus. Returns
+   * 1 if update done, 0 else.
+   *
+   * @param params fromStatus, toStatus.
+   * @return Update count.
+   */
+  @Override
+  public int updateBadgeStatusFromStatus(UpdateBadgeStatusParams params) {
+    return sqlSession.update(Statements.UPDATE_BADGE_STATUS_FROM_STATUS, params);
+  }
+
+  @Override
+  public List<String> findBadgeHash(byte[] hash) {
+    return sqlSession.selectList(
+        Statements.FIND_BADGES_WITH_HASH, FindBadgeHashParams.builder().hash(hash).build());
+  }
+
+  @Override
+  public List<BadgeZipEntity> retrieveBadgesByLa(String laShortCode) {
+    return sqlSession.selectList(
+        Statements.RETRIEVE_BADGES_BY_LA, new RetrieveBadgesByLaParams(laShortCode));
   }
 }

@@ -11,12 +11,20 @@ blue-badge:
       connectiontimeout: 6000
       requesttimeout: 6000
       contextpath: /uk-gov-dft/reference-data-service/1.0.0
+  print-service:
+    service-host:
+      host: localhost
+      port: 8880
+      scheme: http
+      connectiontimeout: 6000
+      requesttimeout: 6000
+      contextpath: /uk-gov-dft/print-service/1.0.0
 
 logging:
   level:
-    root: ${APP_LOGGING_LEVEL:-INFO}
+    root: ${APP_LOGGING_LEVEL:INFO}
     sample.mybatis.mapper: WARN
-    uk.gov.dft.bluebadge.service: ${APP_LOGGING_LEVEL:-DEBUG}
+    uk.gov.dft.bluebadge.service: ${APP_LOGGING_LEVEL:DEBUG}
 
 management:
   server:
@@ -40,8 +48,6 @@ spring:
     date-format: uk.gov.dft.bluebadge.common.api.RFC3339DateFormat
     serialization:
       write-dates-as-timestamps: false
-  profiles:
-    active: dev
 
 server:
   port: 8280
@@ -51,7 +57,8 @@ server:
 springfox.documentation.swagger.v2.path: /api-docs
 
 amazon:
-  profile: default
-  s3bucket: dev-dft-badges
+  s3bucket: uk-gov-dft-dev-badge
   thumbnail-height-px: 300
-  signed-url-duration-ms: 60000
+  signed-url-duration-ms: 1800000
+  
+blacklisted.combinations: babe,c4c4,caca,d34d,dead,f3c35,f3ck,f4ck,fack,feck,‌h338,‌h35h3,‌h383,hebe,heeb,j4d3,jade,kkk  

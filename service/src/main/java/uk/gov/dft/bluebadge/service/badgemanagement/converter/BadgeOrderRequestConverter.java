@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
@@ -29,7 +30,7 @@ public class BadgeOrderRequestConverter
     BadgeEntity badgeEntity =
         BadgeEntity.builder()
             .partyCode(model.getParty().getTypeCode())
-            .badgeStatus(BadgeEntity.Status.ISSUED)
+            .badgeStatus(BadgeEntity.Status.ORDERED)
             .localAuthorityRef(model.getLocalAuthorityRef())
             .appDate(model.getApplicationDate())
             .appChannelCode(model.getApplicationChannelCode())
@@ -57,7 +58,8 @@ public class BadgeOrderRequestConverter
         throw new BadRequestException(MISSING_PERSON_OBJECT.getFieldErrorInstance());
       }
       badgeEntity.setHolderName(person.getBadgeHolderName());
-      badgeEntity.setNino(person.getNino());
+      String nino = StringUtils.removeAll(person.getNino(), "\\s");
+      badgeEntity.setNino(StringUtils.upperCase(nino));
       badgeEntity.setDob(person.getDob());
       badgeEntity.setGenderCode(person.getGenderCode());
     } else {

@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BatchMapper">
+
+    <insert id="createBatch" parameterType="BatchEntity" useGeneratedKeys="true" keyProperty="id" keyColumn="batch_id">
+        INSERT INTO batch
+        (batch_filename, batch_created_timestamp, batch_source
+        , batch_purpose
+        )
+        VALUES
+        (#{filename}, #{created}, #{source}
+        , #{purpose}
+        )
+    </insert>
+
+    <insert id="appendBadges" parameterType="AppendBadgesToBatchParams">
+        INSERT INTO batch_badge (batch_id, badge_no, local_authority_short_code)
+        SELECT #{batchId}, badge_no, local_authority_short_code FROM badge WHERE badge_status = 'ORDERED'
+        <choose>
+            <when test="batchType == 'LA'">
+                AND deliver_option_code = 'STAND'
+                AND deliver_to_code = 'COUNCIL'
+            </when>
+            <when test="batchType == 'STANDARD'">
+                AND deliver_option_code = 'STAND'
+                AND deliver_to_code = 'HOME'
+            </when>
+            <when test="batchType == 'FASTTRACK'">
+                AND deliver_option_code = 'FAST'
+                AND deliver_to_code = 'HOME'
+            </when>
+        </choose>
+    </insert>
+
+    <insert id="linkBadgeToBatch" parameterType="BatchBadgeLinkEntity">
+        INSERT INTO batch_badge
+        (
+          batch_id, badge_no, local_authority_short_code
+        , issued_date_time, rejected_reason, cancellation
+        )
+        VALUES
+        (
+          #{batchId}, #{badgeId}, #{localAuthorityShortCode}
+        , #{issuedDateTime}, #{rejectedReason}, #{cancellation}
+        );
+    </insert>
+
+    <select id="retrieveBatch" parameterType="Integer" resultType="BatchEntity">
+        SELECT
+          batch_id as id,
+          batch_filename as filename,
+          batch_created_timestamp as created,
+          batch_source as source,
+          batch_purpose as purpose
+        FROM batch
+        WHERE
+          batch_id = #{id}
+    </select>
+</mapper>

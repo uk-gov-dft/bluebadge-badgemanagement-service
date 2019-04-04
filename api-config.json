@@ -96,7 +96,56 @@
           } ],
           "responses" : {
             "200" : {
-              "description" : "Badge replacement requested."
+              "description" : "Badge cancellation requested."
+            }
+          }
+        }
+      },
+      "/badges/print-batch" : {
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Request print batch",
+          "operationId" : "printBatch",
+          "description" : "Print a batch",
+          "parameters" : [ {
+            "name" : "printBadgeRequest",
+            "in" : "body",
+            "schema" : {
+              "$ref" : "#/definitions/PrintBatchRequest"
+            }
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "Batch print requested."
+            }
+          }
+        }
+      },
+      "/badges/print-batch/{batchId}" : {
+        "parameters" : [ {
+          "$ref" : "#/parameters/BatchIdPathParam"
+        } ],
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Request to resend a print batch",
+          "operationId" : "reprintBatch",
+          "description" : "Reprint a batch",
+          "responses" : {
+            "200" : {
+              "description" : "Reprint Batch requested."
+            }
+          }
+        }
+      },
+      "/badges/collect-batches" : {
+        "post" : {
+          "tags" : [ "badges" ],
+          "summary" : "Process results of print batches",
+          "operationId" : "collectBatches",
+          "description" : "Process print batch results",
+          "responses" : {
+            "200" : {
+              "description" : "Print batch results processed."
             }
           }
         }
@@ -232,7 +281,6 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "72B9HA",
-            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "cancelReasonCode" : {
@@ -249,7 +297,6 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "72B9HA"
           },
@@ -257,7 +304,7 @@
             "type" : "string",
             "maxLength" : 10,
             "description" : "A short code from the REPLACE group of reference data.",
-            "example" : "STOLEN"
+            "example" : "STOLE"
           },
           "deliverToCode" : {
             "type" : "string",
@@ -268,11 +315,22 @@
           "deliveryOptionCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "A short code from the DELROPT group of reference data.",
-            "example" : "STANDARD"
+            "description" : "A short code from the DELOP group of reference data.",
+            "example" : "STAND"
           }
         },
         "required" : [ "badgeNumber", "replaceReasonCode", "deliverToCode", "deliveryOptionCode" ]
+      },
+      "PrintBatchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "batchType" : {
+            "type" : "string",
+            "description" : "Batch type. Could be FASTTRACK or STANDARD or LA",
+            "example" : "FASTRACK"
+          }
+        },
+        "required" : [ "batchType" ]
       },
       "BadgeNumbersResponse" : {
         "description" : "Contains a list of Badge numbers.",
@@ -286,7 +344,6 @@
               "type" : "array",
               "items" : {
                 "type" : "string",
-                "pattern" : "^[0-9A-HJK]{6}$",
                 "example" : "095215",
                 "description" : "The unique badge number for this badge."
               }
@@ -328,7 +385,6 @@
         "properties" : {
           "badgeNumber" : {
             "type" : "string",
-            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge.",
             "example" : "095215"
           },
@@ -381,7 +437,6 @@
           "badgeNumber" : {
             "type" : "string",
             "example" : "091215",
-            "pattern" : "^[0-9A-HJK]{6}$",
             "description" : "The unique badge number for this badge."
           },
           "party" : {
@@ -442,8 +497,14 @@
           "cancelReasonCode" : {
             "type" : "string",
             "maxLength" : 10,
-            "description" : "A short code from the CANCEL group of reference data.\n",
+          "description" : "A short code from the CANCEL group of reference data.\n",
             "example" : "NOLONG"
+          },
+          "replaceReasonCode" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "A short code from the REPLACE group of reference data.",
+            "example" : "STOLE"
           },
           "statusCode" : {
             "type" : "string",
@@ -501,7 +562,7 @@
           },
           "imageFile" : {
             "type" : "string",
-            "description" : "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
+          "description" : "Base64 encoded.  Must be less than 10MB, and of format JPG, PNG, or GIF."
           },
           "deliverToCode" : {
             "type" : "string",
@@ -569,7 +630,7 @@
           "genderCode" : {
             "type" : "string",
             "example" : "MALE",
-            "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIED."
+          "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIE."
           }
         },
         "required" : [ "badgeHolderName" ],
@@ -603,17 +664,17 @@
           },
           "buildingStreet" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 50,
             "example" : "65 Basil Chambers"
           },
           "line2" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 40,
             "example" : "Northern Quarter"
           },
           "townCity" : {
             "type" : "string",
-            "maxLength" : 255,
+            "maxLength" : 40,
             "example" : "Manchester"
           },
           "postCode" : {
@@ -623,22 +684,22 @@
           },
           "primaryPhoneNumber" : {
             "type" : "string",
-            "maxLength" : 50,
+            "maxLength" : 20,
             "example" : "01616548765"
           },
           "secondaryPhoneNumber" : {
             "type" : "string",
-            "maxLength" : 50,
+            "maxLength" : 20,
             "example" : "01616548765"
           },
           "emailAddress" : {
             "type" : "string",
             "pattern" : "^\\S+\\@\\S+",
-            "maxLength" : 255,
+            "maxLength" : 100,
             "example" : "june@bigbrainknitting.com"
           }
         },
-        "required" : [ "buildingStreet", "townCity", "postCode" ]
+        "required" : [ "buildingStreet", "townCity", "postCode", "primaryPhoneNumber" ]
       }
     },
     "parameters" : {
@@ -646,14 +707,12 @@
         "in" : "query",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number."
       },
       "BadgeNumberPathParam" : {
         "in" : "path",
         "name" : "badgeNumber",
         "type" : "string",
-        "pattern" : "^[0-9A-HJK]{6}$",
         "description" : "A valid badge number.",
         "required" : true
       },
@@ -670,8 +729,15 @@
         "type" : "string",
         "maxLength" : 20,
         "description" : "A valid postcode with or without spaces."
-      }
-    },
+      },
+      "BatchIdPathParam" : {
+        "in" : "path",
+        "name" : "batchId",
+        "type" : "string",
+        "description" : "A valid batch id.",
+        "required" : true
+        }
+      },
     "host" : "virtserver.swaggerhub.com",
     "basePath" : "/uk-gov-dft/blue-badge/1.0.0",
     "schemes" : [ "https" ]

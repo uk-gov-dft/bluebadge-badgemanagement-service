@@ -3,11 +3,14 @@ package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.dft.bluebadge.common.util.ValidationPattern;
 
 /** Badge */
 @Validated
@@ -33,6 +36,12 @@ public class Badge {
   @JsonProperty("orderDate")
   private LocalDate orderDate = null;
 
+  @JsonProperty("issuedDate")
+  private LocalDateTime issuedDate = null;
+
+  @JsonProperty("printRequestDateTime")
+  private LocalDateTime printRequestDateTime = null;
+
   @JsonProperty("startDate")
   private LocalDate startDate = null;
 
@@ -48,6 +57,12 @@ public class Badge {
   @JsonProperty("cancelReasonCode")
   private String cancelReasonCode = null;
 
+  @JsonProperty("replaceReasonCode")
+  private String replaceReasonCode = null;
+
+  @JsonProperty("rejectedReason")
+  private String rejectedReason;
+
   @JsonProperty("statusCode")
   private String statusCode = null;
 
@@ -62,7 +77,6 @@ public class Badge {
    * @return badgeNumber
    */
   @ApiModelProperty(example = "091215", value = "The unique badge number for this badge.")
-  @Pattern(regexp = "^[0-9A-HJK]{6}$")
   public String getBadgeNumber() {
     return badgeNumber;
   }
@@ -102,7 +116,7 @@ public class Badge {
    * @return localAuthorityShortCode
    */
   @ApiModelProperty(example = "BLACK", value = "Short code of local authority")
-  @Pattern(regexp = "^[A-Z]+$")
+  @Pattern(regexp = ValidationPattern.LA_SHORT_CODE)
   public String getLocalAuthorityShortCode() {
     return localAuthorityShortCode;
   }
@@ -181,6 +195,52 @@ public class Badge {
 
   public Badge orderDate(LocalDate orderDate) {
     this.orderDate = orderDate;
+    return this;
+  }
+
+  /**
+   * The date that the badge was ordered by the issuing local authority.
+   *
+   * @return orderDate
+   */
+  @ApiModelProperty(
+    example = "2018-07-07",
+    value = "The date that the badge was issued by the issuing local authority."
+  )
+  @Valid
+  public LocalDateTime getIssuedDate() {
+    return issuedDate;
+  }
+
+  public void setIssuedDate(LocalDateTime issuedDate) {
+    this.issuedDate = issuedDate;
+  }
+
+  public Badge issuedDate(LocalDateTime issuedDate) {
+    this.issuedDate = issuedDate;
+    return this;
+  }
+
+  /**
+   * The date that the batch corresponding to this badge was sent to printer.
+   *
+   * @return printRequestDateTime
+   */
+  @ApiModelProperty(
+    example = "2018-07-07",
+    value = "The date that the batch that contains the badge was sent to printer."
+  )
+  @Valid
+  public LocalDateTime getPrintRequestDateTime() {
+    return printRequestDateTime;
+  }
+
+  public void setSentPrintDate(LocalDateTime printRequestDateTime) {
+    this.printRequestDateTime = printRequestDateTime;
+  }
+
+  public Badge printRequestDateTime(LocalDateTime printRequestDateTime) {
+    this.printRequestDateTime = printRequestDateTime;
     return this;
   }
 
@@ -297,7 +357,7 @@ public class Badge {
    */
   @ApiModelProperty(
     example = "NOLONG",
-    value = "A short code from the CANCEL group of reference data. "
+    value = "A short code from the CANCEL group of reference data."
   )
   @Size(max = 10)
   public String getCancelReasonCode() {
@@ -306,6 +366,52 @@ public class Badge {
 
   public void setCancelReasonCode(String cancelReasonCode) {
     this.cancelReasonCode = cancelReasonCode;
+  }
+
+  public Badge replaceReasonCode(String replaceReasonCode) {
+    this.replaceReasonCode = replaceReasonCode;
+    return this;
+  }
+
+  /**
+   * A short code from the REPLACE group of reference data.
+   *
+   * @return replaceReasonCode
+   */
+  @ApiModelProperty(
+    example = "STOLE",
+    value = "A short code from the REPLACE group of reference data."
+  )
+  @Size(max = 10)
+  public String getReplaceReasonCode() {
+    return replaceReasonCode;
+  }
+
+  public void setReplaceReasonCode(String replaceReasonCode) {
+    this.replaceReasonCode = replaceReasonCode;
+  }
+
+  public Badge rejectedReason(String rejectedReason) {
+    this.rejectedReason = rejectedReason;
+    return this;
+  }
+
+  /**
+   * A short code from the REPLACE group of reference data.
+   *
+   * @return replaceReasonCode
+   */
+  @ApiModelProperty(
+    example = "TODO: STOLE",
+    value = "TODO: A short code from the REPLACE group of reference data."
+  )
+  @Size(max = 10)
+  public String getRejectedReason() {
+    return rejectedReason;
+  }
+
+  public void setRejectedReason(String rejectedReason) {
+    this.rejectedReason = rejectedReason;
   }
 
   public Badge statusCode(String statusCode) {
@@ -348,11 +454,15 @@ public class Badge {
         && Objects.equals(this.applicationDate, badge.applicationDate)
         && Objects.equals(this.applicationChannelCode, badge.applicationChannelCode)
         && Objects.equals(this.orderDate, badge.orderDate)
+        && Objects.equals(this.issuedDate, badge.issuedDate)
+        && Objects.equals(this.printRequestDateTime, badge.printRequestDateTime)
         && Objects.equals(this.startDate, badge.startDate)
         && Objects.equals(this.expiryDate, badge.expiryDate)
         && Objects.equals(this.eligibilityCode, badge.eligibilityCode)
         && Objects.equals(this.imageLink, badge.imageLink)
         && Objects.equals(this.cancelReasonCode, badge.cancelReasonCode)
+        && Objects.equals(this.replaceReasonCode, badge.replaceReasonCode)
+        && Objects.equals(this.rejectedReason, badge.rejectedReason)
         && Objects.equals(this.statusCode, badge.statusCode);
   }
 
@@ -366,47 +476,38 @@ public class Badge {
         applicationDate,
         applicationChannelCode,
         orderDate,
+        issuedDate,
+        printRequestDateTime,
         startDate,
         expiryDate,
         eligibilityCode,
         imageLink,
         cancelReasonCode,
+        replaceReasonCode,
+        rejectedReason,
         statusCode);
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Badge {\n");
-
-    sb.append("    badgeNumber: ").append(toIndentedString(badgeNumber)).append("\n");
-    sb.append("    party: ").append(toIndentedString(party)).append("\n");
-    sb.append("    localAuthorityShortCode: ")
-        .append(toIndentedString(localAuthorityShortCode))
-        .append("\n");
-    sb.append("    localAuthorityRef: ").append(toIndentedString(localAuthorityRef)).append("\n");
-    sb.append("    applicationDate: ").append(toIndentedString(applicationDate)).append("\n");
-    sb.append("    applicationChannelCode: ")
-        .append(toIndentedString(applicationChannelCode))
-        .append("\n");
-    sb.append("    orderDate: ").append(toIndentedString(orderDate)).append("\n");
-    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
-    sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
-    sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");
-    sb.append("    imageLink: ").append(toIndentedString(imageLink)).append("\n");
-    sb.append("    cancelReasonCode: ").append(toIndentedString(cancelReasonCode)).append("\n");
-    sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return new ToStringBuilder(this)
+        .append("badgeNumber", badgeNumber)
+        .append("party", party)
+        .append("localAuthorityShortCode", localAuthorityShortCode)
+        .append("localAuthorityRef", localAuthorityRef)
+        .append("applicationDate", applicationDate)
+        .append("applicationChannelCode", applicationChannelCode)
+        .append("orderDate", orderDate)
+        .append("issuedDate", issuedDate)
+        .append("printRequestDateTime", printRequestDateTime)
+        .append("startDate", startDate)
+        .append("expiryDate", expiryDate)
+        .append("eligibilityCode", eligibilityCode)
+        .append("imageLink", imageLink)
+        .append("cancelReasonCode", cancelReasonCode)
+        .append("replaceReasonCode", replaceReasonCode)
+        .append("rejectedReason", rejectedReason)
+        .append("statusCode", statusCode)
+        .toString();
   }
 }

@@ -1,6 +1,9 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.amazonaws.AmazonServiceException;
@@ -13,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.service.exception.InternalServerException;
 import uk.gov.dft.bluebadge.service.badgemanagement.config.S3Config;
@@ -43,7 +47,6 @@ public class PhotoServiceTest {
 
     String BUCKET = "bucket";
     config.setS3Bucket(BUCKET);
-    config.setProfile("profile");
     config.setThumbnailHeight(300);
     config.setSignedUrlDurationMs(1000);
     photoService = new PhotoService(amazonS3Client, config);
@@ -120,5 +123,17 @@ public class PhotoServiceTest {
   public void awsClientError_getUrl() {
     when(amazonS3Client.generatePresignedUrl(any())).thenThrow(SdkClientException.class);
     photoService.generateSignedS3Url("abc");
+  }
+
+  @Test
+  public void deletePhoto() {
+    photoService.deletePhoto("BadgeNo", "imageKey");
+    verify(amazonS3Client, times(1)).deleteObject(any(), Mockito.eq("imageKey"));
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void deletePhoto_whenNullImageKey_thenNullPointer() {
+    photoService.deletePhoto("BadgeNo", null);
+    verify(amazonS3Client, never()).deleteObject(any(), any());
   }
 }

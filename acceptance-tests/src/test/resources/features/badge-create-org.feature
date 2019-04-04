@@ -7,7 +7,7 @@ Feature: Verify Create badge of type org
     * def DbUtils = Java.type('uk.gov.service.bluebadge.test.utils.DbUtils')
     * def db = new DbUtils(dbConfig)
     * def setup = callonce db.runScript('acceptance-test-data.sql')
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
 
   Scenario: Verify valid create
@@ -30,7 +30,7 @@ Feature: Verify Create badge of type org
     badgeHolderName: 'TestData ORGTEST1234'
     }
     },
-    localAuthorityShortCode: 'GLAM',
+    localAuthorityShortCode: 'ABERD',
     localAuthorityRef: 'YOURCODE',
     applicationDate: '2018-04-23',
     applicationChannelCode: 'ONLINE',

@@ -1,12 +1,15 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.service.validation;
 
 import static uk.gov.dft.bluebadge.common.service.exception.NotFoundException.Operation.UPDATE;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ORDERED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_EXPIRY_DATE_IN_PAST;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_FAILED_UNEXPECTED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_STATUS_INVALID;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,18 +63,13 @@ public class ValidateCancelBadge extends ValidateBase {
    *
    * @param badgeEntity Entity that could not be cancelled.
    */
-  public void validateAfterFailedCancel(BadgeEntity badgeEntity, String localAuthorityShortCode) {
+  public void validateAfterFailedCancel(BadgeEntity badgeEntity) {
     // Retrieve badge (if possible) and return error from above.
     // 1. Badge does not exist
     if (null == badgeEntity) {
       throw new NotFoundException("badge", UPDATE);
     }
     log.debug("Validating why cancel failed for {}", badgeEntity.getBadgeNo());
-
-    // 2. Badge local authority != given local authority (current users's local authority)
-    if (!localAuthorityShortCode.equals(badgeEntity.getLocalAuthorityShortCode())) {
-      throw new NotFoundException("badge", UPDATE);
-    }
 
     // 2. Badge already expired.
     validateExpiryDateInFuture(badgeEntity);
@@ -80,12 +78,11 @@ public class ValidateCancelBadge extends ValidateBase {
     validateStatusValidForCancel(badgeEntity);
 
     // If got here then it is a bit of a mystery why cancel did not work
-    log.error("Cancel badge failed for unexpected reason. Badge: {}", badgeEntity.getBadgeNo());
     throw new BadRequestException(CANCEL_FAILED_UNEXPECTED.getSystemErrorInstance());
   }
 
   private void validateStatusValidForCancel(BadgeEntity badgeEntity) {
-    if (!BadgeEntity.Status.ISSUED.equals(badgeEntity.getBadgeStatus())) {
+    if (!EnumSet.of(ISSUED, ORDERED).contains(badgeEntity.getBadgeStatus())) {
       throw new BadRequestException(CANCEL_STATUS_INVALID.getSystemErrorInstance());
     }
   }

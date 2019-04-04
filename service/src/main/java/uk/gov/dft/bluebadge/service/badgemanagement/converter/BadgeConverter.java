@@ -18,14 +18,18 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     badge.setApplicationDate(entity.getAppDate());
     badge.setBadgeNumber(entity.getBadgeNo());
     badge.setCancelReasonCode(entity.getCancelReasonCode());
-    badge.setEligibilityCode(entity.getEligibilityCode());
     badge.setExpiryDate(entity.getExpiryDate());
     badge.setImageLink(entity.getImageLink());
     badge.setLocalAuthorityShortCode(entity.getLocalAuthorityShortCode());
     badge.setLocalAuthorityRef(entity.getLocalAuthorityRef());
     badge.setOrderDate(entity.getOrderDate());
     badge.setStartDate(entity.getStartDate());
-    badge.setStatusCode(entity.getBadgeStatus().toString());
+    badge.setStatusCode(
+        entity.getBadgeStatus() != null ? entity.getBadgeStatus().toString() : null);
+    badge.setReplaceReasonCode(entity.getReplaceReasonCode());
+    badge.setRejectedReason(entity.getRejectedReason());
+    badge.setIssuedDate(entity.getIssuedDate());
+    badge.setSentPrintDate(entity.getPrintRequestDateTime());
 
     Party party = new Party();
     badge.setParty(party);
@@ -51,6 +55,8 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
       person.setDob(entity.getDob());
       person.setBadgeHolderName(entity.getHolderName());
       person.setNino(entity.getNino());
+      badge.setEligibilityCode(
+          null == entity.getEligibilityCode() ? null : entity.getEligibilityCode().name());
     } else {
       Organisation org = new Organisation();
       party.setOrganisation(org);

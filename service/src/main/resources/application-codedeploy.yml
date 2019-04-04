@@ -1,32 +1,35 @@
 blue-badge:
   auth-server:
     url: https://api.${bb_env}.${url}/bb_auth
-    
-  referencedataservice:
-    servicehost:
+    client-id: bb_user_management_id
+     ***REMOVED***
+  reference-data-service:
+    service-host:
       host: api.${bb_env}.${url}
       port: 443
       scheme: https
-      contextpath: /reference-data1
-
-logging:
-  level:
-    root: ${APP_LOGGING_LEVEL:-INFO}
-    uk.gov.dft.bluebadge.service: ${APP_LOGGING_LEVEL:-DEBUG}
+      contextpath: /
+  print-service:
+    service-host:
+      host: api.${bb_env}.${url}
+      port: 443
+      scheme: https
+      contextpath: /
 
 management:
   server:
-    port: ${bb_health:-8081}
+    port: ${bb_health:8081}
 
 spring:
+  main:
+    banner-mode: "off"
   datasource:
      ***REMOVED***
-    username: ${bb_db_username:-developer}
-    url: jdbc:postgresql://postgres-service.${bb_env}.${url}:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement
+    username: ${bb_db_username}
+    url: jdbc:postgresql://${RDS_HOSTNAME}:5432/${bb_database:-bb_dev}?currentSchema=badgemanagement&sslmode=verify-full
 
 server:
-  port: ${bb_port:-8080}
+  port: ${bb_port:8080}
 
 amazon:
-  profile: ${profile}
-  s3bucket: ${bucket}
+  s3bucket: ${bb_badge_bucket}

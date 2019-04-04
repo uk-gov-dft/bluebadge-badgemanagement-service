@@ -2,11 +2,15 @@ package uk.gov.dft.bluebadge.service.badgemanagement.config;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.config.ActuatorSecurityConfig.BEFORE_RESOURCE_SERVER_ORDER;
 
+import javax.sql.DataSource;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import uk.gov.dft.bluebadge.common.actuator.MyBatisInfo;
 
 @Configuration
 @Order(BEFORE_RESOURCE_SERVER_ORDER)
@@ -20,5 +24,10 @@ public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .anyRequest()
         .permitAll();
+  }
+
+  @Bean
+  public MyBatisInfo getMyBatisInfo(DataSource dataSource) {
+    return new MyBatisInfo(new JdbcTemplate(dataSource));
   }
 }

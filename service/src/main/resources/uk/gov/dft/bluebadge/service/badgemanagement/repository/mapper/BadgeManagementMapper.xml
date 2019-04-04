@@ -3,6 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="uk.gov.dft.bluebadge.service.badgemanagement.repository.mapper.BadgeManagementMapper">
 
+    <sql id="badgeFields">
+        b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
+        b.local_authority_ref As localAuthorityRef, b.app_date AS appDate,
+        b.app_channel_code AS appChannelCode, b.start_date AS startDate, b.expiry_date AS expiryDate,
+        b.eligibility_code AS eligibilityCode, b.image_link AS imageLink, b.deliver_to_code AS deliverToCode,
+        b.deliver_option_code AS deliverOptionCode, b.holder_name AS holderName, b.nino AS nino,
+        b.dob AS dob, b.gender_code AS genderCode, b.contact_name AS contactName,
+        b.contact_building_street AS contactBuildingStreet, b.contact_line2 AS contactLine2, b.contact_town_city AS contactTownCity,
+        b.contact_postcode AS contactPostcode, b.primary_phone_no AS primaryPhoneNo, b.secondary_phone_no AS secondaryPhoneNo,
+        b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode, b.replace_reason_code AS replaceReasonCode,
+        b.local_authority_short_code AS localAuthorityShortCode
+    </sql>
+
+
     <insert id="createBadge" parameterType="BadgeEntity">
         INSERT INTO badge
         (badge_no, badge_status, party_code,
@@ -13,7 +27,8 @@
         dob, gender_code, contact_name,
         contact_building_street, contact_line2, contact_town_city,
         contact_postcode, primary_phone_no, secondary_phone_no,
-        contact_email_address, holder_name_upper, order_date)
+        contact_email_address, holder_name_upper, order_date,
+        badge_hash)
         VALUES
         (#{badgeNo}, #{badgeStatus}, #{partyCode},
         #{localAuthorityShortCode}, #{localAuthorityRef}, #{appDate},
@@ -23,7 +38,8 @@
         #{dob}, #{genderCode}, #{contactName},
         #{contactBuildingStreet}, #{contactLine2}, #{contactTownCity},
         #{contactPostcode}, #{primaryPhoneNo}, #{secondaryPhoneNo},
-        #{contactEmailAddress}, UPPER(#{holderName}), #{orderDate}
+        #{contactEmailAddress}, UPPER(#{holderName}), #{orderDate},
+        #{badgeHash}
         )
     </insert>
 
@@ -36,49 +52,163 @@
         badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
         local_authority_ref As localAuthorityRef, app_date AS appDate,
         app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-        eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-        deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-        dob AS dob, gender_code AS genderCode, contact_name AS contactName,
+        eligibility_code AS eligibilityCode, image_link AS imageLink, image_link_original AS imageLinkOriginal,
+        deliver_to_code AS deliverToCode, deliver_option_code AS deliverOptionCode, holder_name AS holderName,
+        nino AS nino, dob AS dob, gender_code AS genderCode, contact_name AS contactName,
         contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
         contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
         contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode,
-        order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode
-        FROM badge
+        order_date AS orderDate, local_authority_short_code AS localAuthorityShortCode, replace_reason_code AS replaceReasonCode
+
+        ,
+        CASE
+            WHEN badge_status = 'REJECT'
+                THEN
+                    (SELECT rejected_reason from badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+                    WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'REJECTED')
+                ELSE null
+        END rejectedReason
+
+        ,
+        (SELECT bb.issued_date_time
+            FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'ISSUED') issuedDate
+        ,
+        (SELECT bt.batch_created_timestamp
+            FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+            WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') printRequestDateTime
+
+        FROM badgemanagement.badge b
+
         WHERE
-          badge_no = #{badgeNo}
+          badge_no = trim(upper(#{badgeNo}))
+    </select>
+
+    <select id="retrieveBadgesByLa" resultType="BadgeZipEntity" parameterType="RetrieveBadgesByLaParams">
+        SELECT
+        b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
+        b.local_authority_ref As localAuthorityRef, to_char(b.app_date, 'YYYY-MM-DD') AS appDate,
+        b.app_channel_code AS appChannelCode, to_char(b.start_date, 'YYYY-MM-DD') AS startDate, to_char(b.expiry_date, 'YYYY-MM-DD') AS expiryDate,
+        b.eligibility_code AS eligibilityCode,
+        b.deliver_to_code AS deliverToCode, b.deliver_option_code AS deliverOptionCode, b.holder_name AS holderName,
+        b.nino AS nino, to_char(b.dob, 'YYYY-MM-DD') AS dob, b.gender_code AS genderCode, b.contact_name AS contactName,
+        b.contact_building_street AS contactBuildingStreet, b.contact_line2 AS contactLine2, b.contact_town_city AS contactTownCity,
+        b.contact_postcode AS contactPostcode, b.primary_phone_no AS primaryPhoneNo, b.secondary_phone_no AS secondaryPhoneNo,
+        b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode,
+        b.order_date AS orderDate, b.local_authority_short_code AS localAuthorityShortCode, b.replace_reason_code AS replaceReasonCode,
+        bb_reject.rejected_reason rejectedReason,
+        to_char(bt_reject.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') rejectedDateTime,
+        to_char(bb_issued.issued_date_time, 'YYYY-MM-DD HH24:MI:SS') issuedDateTime,
+        to_char(bt_sent.batch_created_timestamp, 'YYYY-MM-DD HH24:MI:SS') printRequestDateTime
+        FROM badgemanagement.badge b
+        LEFT JOIN (badgemanagement.batch_badge bb_reject
+          JOIN badgemanagement.batch bt_reject ON bt_reject.batch_id = bb_reject.batch_id
+          AND bt_reject.batch_source = 'PRINTER' AND bt_reject.batch_purpose = 'REJECTED') ON b.badge_no = bb_reject.badge_no
+        LEFT JOIN (badgemanagement.batch_badge bb_issued
+          JOIN badgemanagement.batch bt_issued ON bt_issued.batch_id = bb_issued.batch_id
+          AND bt_issued.batch_source = 'PRINTER' AND bt_issued.batch_purpose = 'ISSUED') ON b.badge_no = bb_issued.badge_no
+        LEFT JOIN (badgemanagement.batch_badge bb_sent
+          JOIN badgemanagement.batch bt_sent ON bt_sent.batch_id = bb_sent.batch_id
+          AND bt_sent.batch_source = 'DFT') ON b.badge_no = bb_sent.badge_no
+        WHERE
+        b.local_authority_short_code = #{laShortCode}
     </select>
 
     <select id="findBadges" parameterType="FindBadgeParams" resultType="BadgeEntity">
         SELECT
-          badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
-          local_authority_ref As localAuthorityRef, app_date AS appDate,
-          app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-          eligibility_code AS eligibilityCode, image_link AS imageLink, deliver_to_code AS deliverToCode,
-          deliver_option_code AS deliverOptionCode, holder_name AS holderName, nino AS nino,
-          dob AS dob, gender_code AS genderCode, contact_name AS contactName,
-          contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
-          contact_postcode AS contactPostcode, primary_phone_no AS primaryPhoneNo, secondary_phone_no AS secondaryPhoneNo,
-          contact_email_address AS contactEmailAddress, cancel_reason_code as cancelReasonCode, local_authority_short_code AS localAuthorityShortCode
-        FROM badge
-        WHERE
-          <if test="name != null">
-              holder_name_upper LIKE #{name}
-          </if>
-          <if test="postcode != null">
-              contact_postcode = #{postcode}
-          </if>
-        ORDER BY badge.start_date DESC
-        LIMIT 50
+        <include refid="badgeFields"></include>
+        FROM badge b
+        <where>
+            <if test="name != null">
+                b.holder_name_upper LIKE #{name}
+            </if>
+            <if test="postcode != null">
+                AND b.contact_postcode = #{postcode}
+            </if>
+            <if test="statuses != null">
+                AND b.badge_status in
+                <foreach item="status" collection="statuses" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY b.start_date DESC
     </select>
+
+
+
+    <select id="findBadgesForPrintBatch" parameterType="FindBadgesForPrintBatchParams" resultType="BadgeEntity">
+        SELECT
+        <include refid="badgeFields"></include>
+        FROM badge b INNER JOIN batch_badge bb ON b.badge_no = bb.badge_no
+        WHERE bb.batch_id = #{batchId}
+    </select>
+
+
+
+    <update id="updateBadgesStatusesForPrintBatch" parameterType="UpdateBadgesStatusesForBatchParams">
+        UPDATE badge
+        SET badge_status = #{status}
+        FROM batch_badge
+        WHERE badge.badge_no = batch_badge.badge_no AND batch_badge.batch_id = #{batchId} AND badge.badge_status = 'ORDERED'
+    </update>
+
 
     <update id="cancelBadge" parameterType="CancelBadgeParams">
         UPDATE badge
-          SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}
-        WHERE badge_no = #{badgeNo}
+        SET badge_status = 'CANCELLED', cancel_reason_code = #{cancelReasonCode}, badge_hash = null
+        WHERE badge_no = trim(upper(#{badgeNo}))
         AND expiry_date &gt;= current_date
-        AND badge_status = 'ISSUED'
+        AND badge_status IN ('ISSUED', 'ORDERED')
         <if test="localAuthorityShortCode != null">
             AND local_authority_short_code = #{localAuthorityShortCode}
         </if>
     </update>
+
+    <update id="deleteBadge" parameterType="DeleteBadgeParams">
+        UPDATE badge
+          SET badge_status = #{deleteStatus}
+              , image_link = null
+              , deliver_to_code = 'DELETED'
+              , deliver_option_code = 'DELETED'
+              , holder_name = 'DELETED'
+              , nino = null
+              , dob = null
+              , gender_code = null
+              , contact_name = null
+              , contact_building_street = 'DELETED'
+              , contact_line2 = null
+              , contact_town_city = 'DELETED'
+              , contact_postcode = 'DELETED'
+              , primary_phone_no = 'DELETED'
+              , secondary_phone_no = null
+              , contact_email_address = null
+              , holder_name_upper = null
+              , image_link_original = null
+              , replace_reason_code = null
+              , badge_hash = null
+        WHERE badge_no = trim(upper(#{badgeNo}))
+    </update>
+
+    <update id="replaceBadge" parameterType="ReplaceBadgeParams">
+        UPDATE badge
+        SET badge_status = #{status},
+        	    replace_reason_code = #{reasonCode}
+        WHERE badge_no = trim(upper(#{badgeNumber}))
+    </update>
+
+    <update id="updateBadgeStatusFromStatus" parameterType="UpdateBadgeStatusParams">
+        UPDATE badge
+        SET badge_status = #{toStatus}
+        , badge_status_timestamp = current_timestamp
+        WHERE badge_no = #{badgeNumber}
+        AND badge_status = #{fromStatus}
+    </update>
+
+    <select id="findBadgeHash" resultType="String" parameterType="FindBadgeHashParams">
+        SELECT badge_no
+        FROM badge
+        WHERE badge_hash = #{hash, typeHandler=org.apache.ibatis.type.ByteArrayTypeHandler}
+        AND badge_status NOT IN ('CANCELLED', 'DELETED', 'REJECT')
+    </select>
 </mapper>

@@ -1,68 +1,13 @@
+delete from badgemanagement.batch_badge where batch_id < 0;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
+delete from badgemanagement.badge where badge_no in
+('KKKKKK', 'KKKKKD', 'KKKKKA', 'KKKKKC', 'KKKKKE',
+'KKKKKB', 'KKKKDA', 'KKKKDB', 'KKKKDC', 'NNNJMJ',
+'NNNJMH', 'NNNJMF', 'FINDA1', 'FINDA2');
 
-DROP SCHEMA IF EXISTS badgemanagement_unittest CASCADE;
-CREATE SCHEMA badgemanagement_unittest;
+delete from badgemanagement.batch where batch_id < 0;
 
-SET search_path = badgemanagement_unittest;
-
-CREATE TABLE badgemanagement_unittest.badge (
-    badge_no character varying(6) NOT NULL,
-    badge_status character varying(10),
-    party_code character varying(10) NOT NULL,
-    local_authority_ref character varying(100),
-    app_channel_code character varying(10) NOT NULL,
-    start_date date NOT NULL,
-    expiry_date date NOT NULL,
-    eligibility_code character varying(10),
-    image_link character varying(255),
-    deliver_to_code character varying(10) NOT NULL,
-    deliver_option_code character varying(10) NOT NULL,
-    holder_name character varying(100) NOT NULL,
-    nino character varying(9),
-    dob date,
-    gender_code character varying(10),
-    contact_name character varying(100),
-    contact_building_street character varying(100) NOT NULL,
-    contact_line2 character varying(100),
-    contact_town_city character varying(100) NOT NULL,
-    contact_postcode character varying(8) NOT NULL,
-    primary_phone_no character varying(20),
-    secondary_phone_no character varying(20),
-    contact_email_address character varying(100),
-    holder_name_upper character varying(100),
-    cancel_reason_code character varying(10),
-    order_date date DEFAULT now() NOT NULL,
-    app_date date DEFAULT now(),
-    local_authority_short_code character varying(10) NOT NULL,
-    image_link_original character varying(255)
-);
-
-CREATE SEQUENCE badgemanagement_unittest.badge_no
-    START WITH 63999999
-    INCREMENT BY -1
-    NO MINVALUE
-    MAXVALUE 63999999
-    CACHE 1;
-
-SELECT pg_catalog.setval('badgemanagement_unittest.badge_no', 63999957, true);
-
-ALTER TABLE ONLY badgemanagement_unittest.badge
-    ADD CONSTRAINT badge_pkey PRIMARY KEY (badge_no);
-
-CREATE INDEX badge_postcode_ix ON badgemanagement_unittest.badge USING btree (contact_postcode);
-
-
--- Test data
-
-insert into badgemanagement_unittest.badge (badge_no, badge_status, party_code,
+insert into badgemanagement.badge (badge_no, badge_status, party_code,
         local_authority_short_code, local_authority_ref,
         app_channel_code, start_date, expiry_date,
         eligibility_code, image_link, image_link_original, deliver_to_code,
@@ -71,9 +16,59 @@ insert into badgemanagement_unittest.badge (badge_no, badge_status, party_code,
         contact_building_street, contact_line2, contact_town_city,
         contact_postcode, primary_phone_no, secondary_phone_no,
         contact_email_address, holder_name_upper, order_date, app_date) values (
-        'KKKKKK', 'ISSUED', 'PERSON', 'ABERD', 'to delete', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', 'badge/KKKKKK/thumbnail.jpg', '', 'HOME', 'STAND', 'Reginald Pai', '',
-        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01'),
-        ('KKKKKD', 'ISSUED', 'PERSON', 'ABERD', 'to retrieve', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'STAND', 'Reginald Pai', '',
-        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01'),
-        ('KKKKKA', 'ISSUED', 'PERSON', 'ABERD', 'to update', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'STAND', 'Reginald Pai', '',
-        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01');
+        'KKKKKK', 'ISSUED', 'PERSON', 'ABERD', 'to delete', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', 'badge/KKKKKK/thumbnail.jpg', 'badge/KKKKKK/original.jpg', 'HOME', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKKD', 'ISSUED', 'PERSON', 'ABERD', 'to retrieve', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637DU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKKA', 'ORDERED', 'PERSON', 'ABERD', 'to update', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKKC', 'DELETED', 'PERSON', 'ABERD', 'deleted', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637FU', '020 7014 0800', null, 'test101@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKKE', 'ORDERED', 'PERSON', 'ABERD', 'to find badge for print batch', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'HOME', 'FAST', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test106@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKKB', 'ORDERED', 'PERSON', 'ABERD', 'to find badge for print batch', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDA', 'PROCESSED', 'PERSON', 'ABERD', 'to set issued', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDB', 'PROCESSED', 'PERSON', 'ABERD', 'to set rejected', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('KKKKDC', 'DELETED', 'PERSON', 'ABERD', 'to not update to issued', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('NNNJMJ', 'PROCESSED', 'PERSON', 'ABERD', 'sent printer date test', 'ONLINE', '2020-03-05', '2021-02-08', 'DLA', '', '','HOME', 'STAND', 'Sopoline Rasmussen', 'NS123456A',
+        '1977-10-11', 'UNSPECIFIE', 'Miranda Clark', '19 South Milton Boulevard', '328 East Green Fabien Drive', '781 Nobel Avenue', 'M41FS', '07951546060', '07951546060', 'zode@mailinator.net', 'SOPOLINE RASMUSSEN', '2019-03-07', '2000-04-21')
+        ,('NNNJMH', 'ISSUED', 'PERSON', 'ABERD', 'issued date test', 'ONLINE', '2020-11-25', '2021-10-10', 'AFRFCS', '', '', 'HOME', 'STAND', 'Guinevere Terrell', 'NS123456A',
+         '1977-06-11', 'MALE', 'Hadassah Flowers', '55 North First Street', '131 North Oak Court', '24 Rocky Fabien Boulevard', 'UV665DQ', '07951546060', '07951546060', 'josotehe@mailinator.net', 'GUINEVERE TERRELL', '2019-03-07', '2000-05-20')
+        ,('NNNJMF', 'REJECT', 'PERSON', 'ABERD', 'reject date test', 'ONLINE', '2020-09-19', '2022-12-02', 'ARMS', '', '', 'HOME', 'STAND', 'Pascale Velez', 'NS123456A',
+        '2000-01-26', 'UNSPECIFIE', 'Odette Dyer', '51 Nobel Freeway', '128 South Clarendon Avenue', '45 West Rocky Second Boulevard', 'KP081PF', '07951546060', '07951546060', 'liduti@mailinator.com', 'PASCALE VELEZ', '2019-03-07', '1988-07-16')
+        ,('FINDA1', 'DELETED', 'PERSON', 'FINDBYLA', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('FINDA2', 'ISSUED', 'PERSON', 'FINDBYLA', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+;
+
+insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
+values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STANDARD')
+, (-2, 'linkTest.txt', '2010-01-01 01:01:00', 'DFT', 'FASTTRACK')
+, (-3, 'la_exportissuedTest.txt', '2010-02-02 01:01:00', 'PRINTER', 'ISSUED')
+, (-4, 'laExportrejectedTest.txt', '2010-02-03 15:16:17', 'PRINTER', 'REJECTED')
+, (-5, 'laExportPrint.txt', '2011-01-01 03:00:00', 'DFT', 'STANDARD')
+, (-6, 'linkTest.txt',      '2010-01-01 01:01:00', 'DFT', 'FASTTRACK')
+, (-7, 'printed.txt',       '2019-03-07 01:01:00', 'DFT', 'STANDARD')
+, (-8, 'toBeIssued.txt',    '2019-03-07 01:01:00', 'DFT', 'STANDARD')
+, (-9, 'issued.txt',        '2019-03-07 01:02:00', 'PRINTER', 'ISSUED')
+, (-10, 'toBeRejected.txt',  '2019-03-07 01:03:00', 'DFT', 'STANDARD')
+, (-11, 'rejected.txt',      '2019-03-07 01:04:00', 'PRINTER', 'REJECTED')
+;
+
+insert into badgemanagement.batch_badge (batch_id, badge_no, local_authority_short_code, issued_date_time, rejected_reason)
+values (-1, 'KKKKKA', null, null, null)
+, (-7, 'NNNJMJ', 'ABERD', null, null)
+, (-8, 'NNNJMH', 'ABERD', null, null)
+, (-9, 'NNNJMH', null, '2019-03-07 01:02:00', null)
+, (-10, 'NNNJMF', 'ABERD', null, null)
+, (-11, 'NNNJMF', null, null, 'my rejected reason')
+;
+
+insert into badgemanagement.batch_badge (batch_id, badge_no) values (-5, 'FINDA2');
+insert into badgemanagement.batch_badge (batch_id, badge_no, issued_date_time) values (-3, 'FINDA2', current_timestamp);
+insert into badgemanagement.batch_badge (batch_id, badge_no, rejected_reason) values (-4, 'FINDA2', 'rejected reason');

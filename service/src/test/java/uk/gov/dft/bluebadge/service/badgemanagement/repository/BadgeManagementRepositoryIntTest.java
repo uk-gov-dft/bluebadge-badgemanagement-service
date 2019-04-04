@@ -2,31 +2,109 @@ package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgesForPrintBatchParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgeStatusParams;
+import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.UpdateBadgesStatusesForBatchParams;
 
 @RunWith(SpringRunner.class)
-@SqlGroup({@Sql(scripts = "classpath:/test-data.sql")})
 @Transactional
 public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
+
+  private static final DateTimeFormatter DATE_TIME_FORMAT =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   @Autowired BadgeManagementRepository badgeManagementRepository;
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadge_ok() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("KKKKKK");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+
+    assertThat(badgeEntity.getImageLink()).isEqualTo("badge/KKKKKK/thumbnail.jpg");
+    assertThat(badgeEntity.getImageLinkOriginal()).isEqualTo("badge/KKKKKK/original.jpg");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDate_WhenBadgeWasSentToPrinterProvider() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMJ").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMJ");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.PROCESSED);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate()).isNull();
+    assertThat(badgeEntity.getRejectedReason()).isNull();
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDateAndIssuedDate_WhenBadgeWasIssued() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMH").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMH");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:02:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getRejectedReason()).isNull();
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void
+      retrieveBadge_shouldReturnDetailsAndSentPrinterDateAndRejectedReason_WhenBadgeWasRejected() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("NNNJMF").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMF");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(Status.REJECT);
+    assertThat(badgeEntity.getPrintRequestDateTime())
+        .isEqualTo(LocalDateTime.parse("2019-03-07 01:03:00", DATE_TIME_FORMAT));
+    assertThat(badgeEntity.getIssuedDate()).isNull();
+    assertThat(badgeEntity.getRejectedReason()).isEqualTo("my rejected reason");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_ok() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -39,6 +117,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_badgeNotExist() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -51,6 +130,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   }
 
   @Test
+  @Sql(scripts = "classpath:/test-data.sql")
   public void cancelBadge_existsInDifferentLocalAuthority() {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
@@ -74,7 +154,8 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
       BadgeEntity badgeEntity =
           BadgeEntity.builder()
               .badgeNo(String.valueOf(id))
-              .contactName("Jane" + id)
+              .badgeStatus(BadgeEntity.Status.ISSUED)
+              .contactName("ZZZZ" + id)
               .partyCode("PAR")
               .localAuthorityShortCode("WINMD")
               .appDate(LocalDate.now())
@@ -83,18 +164,19 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
               .expiryDate(INITIAL_START_DATE.plusDays(id).plusYears(2))
               .deliverToCode("DE")
               .deliverOptionCode("DOPT")
-              .holderName("Jane" + id)
+              .holderName("ZZZZ" + id)
               .contactBuildingStreet("building" + id)
               .contactTownCity("town" + id)
               .contactPostcode("CPC111")
+              .primaryPhoneNo("01478523698")
               .orderDate(LocalDate.now())
               .build();
       badgeManagementRepository.createBadge(badgeEntity);
       badgeEntityList.add(badgeEntity);
     }
 
-    FindBadgeParams params = FindBadgeParams.builder().name("%JANE%").build();
-    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params);
+    FindBadgeParams params = FindBadgeParams.builder().name("%ZZZZ%").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
 
     Collections.sort(badgeEntityList, (b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
     List<BadgeEntity> expectedBadgeEntityList =
@@ -110,5 +192,250 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badges).hasSize(RESULTS_LIMIT);
     assertThat(badges).isEqualTo(expectedBadgeEntityList);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldSearchByStatus() {
+    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
+    FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
+    assertThat(badges).isNotEmpty();
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldSearchByStatus_deleted() {
+    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.DELETED.name());
+    FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
+    assertThat(badges).isNotEmpty();
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.DELETED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldSearchByStatusAndPostCode() {
+    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
+    FindBadgeParams params =
+        FindBadgeParams.builder().postcode("S637FU").statuses(statuses).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
+    assertThat(badges).isNotEmpty();
+    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
+    assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldReturnPageSizeNumberOfResults_whenFirstPage() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%a%").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 12);
+    assertThat(badges).hasSize(12);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadges_shouldReturnPageSizeNumberOfResults_whenNonFirstPage() {
+    FindBadgeParams params = FindBadgeParams.builder().name("%a%").build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 2, 5);
+    assertThat(badges).hasSize(5);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void findBadgesForPrintBatch_shouldSearchByBatchTypeStandard() {
+    BadgeEntity expectedBadgeEntity =
+        BadgeEntity.builder()
+            .badgeNo("KKKKKA")
+            .badgeStatus(Status.ORDERED)
+            .partyCode("PERSON")
+            .localAuthorityShortCode("ABERD")
+            .localAuthorityRef("to update")
+            .appDate(LocalDate.of(2018, 6, 1))
+            .appChannelCode("ONLINE")
+            .startDate(LocalDate.of(2025, 5, 1))
+            .expiryDate(LocalDate.of(2028, 5, 1))
+            .eligibilityCode(EligibilityType.PIP)
+            .imageLink("")
+            .imageLinkOriginal(null)
+            .deliverToCode("HOME")
+            .deliverOptionCode("STAND")
+            .holderName("Reginald Pai")
+            .nino("")
+            .dob(LocalDate.of(1953, 9, 12))
+            .genderCode("MALE")
+            .contactName("contact name")
+            .contactBuildingStreet("building and street")
+            .contactLine2("")
+            .contactTownCity("Town or city")
+            .contactPostcode("S637EU")
+            .primaryPhoneNo("020 7014 0800")
+            .secondaryPhoneNo(null)
+            .contactEmailAddress("test101@mailinator.com")
+            .cancelReasonCode(null)
+            .replaceReasonCode(null)
+            .orderDate(null)
+            .numberOfBadges(0)
+            .build();
+    FindBadgesForPrintBatchParams params =
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
+    List<BadgeEntity> badges = badgeManagementRepository.findBadgesForPrintBatch(params);
+    assertThat(badges).hasSize(1);
+    assertThat(badges.get(0)).isEqualTo(expectedBadgeEntity);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updatesBadgesForPrintBatch_shouldUpdateORDEREDBadges() {
+    FindBadgesForPrintBatchParams findParams =
+        FindBadgesForPrintBatchParams.builder().batchId(-1).build();
+    List<BadgeEntity> originalBadges =
+        badgeManagementRepository.findBadgesForPrintBatch(findParams);
+    assertThat(originalBadges).hasSize(1);
+    assertThat(originalBadges.get(0).getBadgeStatus()).isEqualTo(Status.ORDERED);
+
+    UpdateBadgesStatusesForBatchParams updateParams =
+        UpdateBadgesStatusesForBatchParams.builder().batchId(-1).status("PROCESSED").build();
+    badgeManagementRepository.updateBadgesStatusesForBatch(updateParams);
+
+    RetrieveBadgeParams retrieveParams =
+        RetrieveBadgeParams.builder().badgeNo(originalBadges.get(0).getBadgeNo()).build();
+    BadgeEntity updatedBadgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(updatedBadgeEntity.getBadgeStatus()).isEqualTo(Status.PROCESSED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void deleteBadge_shouldLogicallyDeleteBadge() {
+    DeleteBadgeParams deleteBadgeParams =
+        DeleteBadgeParams.builder()
+            .deleteStatus(BadgeEntity.Status.DELETED)
+            .badgeNo("KKKKKK")
+            .build();
+
+    badgeManagementRepository.deleteBadge(deleteBadgeParams);
+
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.DELETED);
+    assertThat(badgeEntity.getDeliverToCode()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getDeliverOptionCode()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getHolderName()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getContactBuildingStreet()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getContactTownCity()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getContactPostcode()).isEqualTo("DELETED");
+    assertThat(badgeEntity.getPrimaryPhoneNo()).isEqualTo("DELETED");
+
+    assertThat(badgeEntity.getImageLink()).isNull();
+    assertThat(badgeEntity.getNino()).isNull();
+    assertThat(badgeEntity.getDob()).isNull();
+    assertThat(badgeEntity.getGenderCode()).isNull();
+    assertThat(badgeEntity.getContactName()).isNull();
+    assertThat(badgeEntity.getContactLine2()).isNull();
+    assertThat(badgeEntity.getSecondaryPhoneNo()).isNull();
+    assertThat(badgeEntity.getContactEmailAddress()).isNull();
+    assertThat(badgeEntity.getImageLinkOriginal()).isNull();
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void replaceBadge_shouldUpdateRecord() {
+    ReplaceBadgeParams params =
+        ReplaceBadgeParams.builder()
+            .badgeNumber("KKKKKK")
+            .deliveryCode("HOME")
+            .deliveryOptionCode("FAST")
+            .reasonCode("DAMAGED")
+            .startDate(LocalDate.now())
+            .status(Status.REPLACED)
+            .build();
+
+    badgeManagementRepository.replaceBadge(params);
+
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKK").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.REPLACED);
+    assertThat(badgeEntity.getReplaceReasonCode()).isEqualTo("DAMAGED");
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusToIssued() {
+    // Can set Issued
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDA")
+                    .toStatus(Status.ISSUED)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(1);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDA").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.ISSUED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusToReject() {
+    // Can set Rejected
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDB")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(1);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDB").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.REJECT);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void updateStatusWhenDeletedDoesNowt() {
+    // Can set Issued
+    assertThat(
+            badgeManagementRepository.updateBadgeStatusFromStatus(
+                UpdateBadgeStatusParams.builder()
+                    .badgeNumber("KKKKDC")
+                    .toStatus(Status.REJECT)
+                    .fromStatus(Status.PROCESSED)
+                    .build()))
+        .isEqualTo(0);
+    assertThat(
+            badgeManagementRepository
+                .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDC").build())
+                .getBadgeStatus())
+        .isEqualTo(Status.DELETED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadgesByLa() {
+    List<BadgeZipEntity> results = badgeManagementRepository.retrieveBadgesByLa("FINDBYLA");
+    assertThat(results.size()).isEqualTo(2);
+    for (BadgeZipEntity entity : results) {
+      if (entity.getBadgeNo().equals("FINDA1")) {
+        assertThat(entity.getBadgeStatus()).isEqualTo(Status.DELETED);
+      } else {
+        assertThat(entity.getBadgeStatus()).isEqualTo(Status.ISSUED);
+        // Should have issued/rejeced/printed data for the other badge.
+        assertThat(entity.getIssuedDateTime()).isNotEmpty();
+        assertThat(entity.getRejectedDateTime()).isEqualTo("2010-02-03 15:16:17");
+        assertThat(entity.getRejectedReason()).isEqualTo("rejected reason");
+        assertThat(entity.getPrintRequestDateTime()).isEqualTo("2011-01-01 03:00:00");
+      }
+    }
   }
 }

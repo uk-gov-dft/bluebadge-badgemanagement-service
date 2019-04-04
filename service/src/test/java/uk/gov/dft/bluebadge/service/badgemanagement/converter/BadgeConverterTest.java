@@ -1,12 +1,15 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
+
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
-import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestBase;
+import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
-public class BadgeConverterTest extends BadgeTestBase {
+public class BadgeConverterTest {
 
   @Test
   public void convertToModel_person() {
@@ -15,11 +18,12 @@ public class BadgeConverterTest extends BadgeTestBase {
     // When converted to model
     Badge model = new BadgeConverter().convertToModel(entity);
     // Then person data is present but not organisation
-    Assert.assertEquals(model.getParty().getPerson().getBadgeHolderName(), entity.getHolderName());
+    Assert.assertEquals(entity.getHolderName(), model.getParty().getPerson().getBadgeHolderName());
     Assert.assertNull(model.getParty().getOrganisation());
     // And contact details present.
     Assert.assertEquals(
         model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
+    Assert.assertEquals(BadgeTestFixture.DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
   }
 
   @Test
@@ -30,10 +34,10 @@ public class BadgeConverterTest extends BadgeTestBase {
     Badge model = new BadgeConverter().convertToModel(entity);
     // Then person data is present but not organisation
     Assert.assertEquals(
-        model.getParty().getOrganisation().getBadgeHolderName(), entity.getHolderName());
+        entity.getHolderName(), model.getParty().getOrganisation().getBadgeHolderName());
     Assert.assertNull(model.getParty().getPerson());
     // And contact details present.
     Assert.assertEquals(
-        model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
+        entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
   }
 }

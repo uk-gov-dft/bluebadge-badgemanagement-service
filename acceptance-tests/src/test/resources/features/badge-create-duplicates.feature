@@ -57,6 +57,7 @@ Feature: Verify Cannot create duplicate badge
     # Try to create the same.
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badgeOrg
     When method POST
     Then status 400
@@ -65,16 +66,19 @@ Feature: Verify Cannot create duplicate badge
     # Set previously created badge to deleted
     Given path 'badges/' + badgeNoOrg1
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     When method DELETE
     Then status 200
     Given path 'badges/' + badgeNoOrg2
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     When method DELETE
     Then status 200
 
     # Can now create badge again
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badgeOrg
     When method POST
     Then status 200
@@ -127,6 +131,7 @@ Feature: Verify Cannot create duplicate badge
     # Try to create the same.
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badgePerson
     When method POST
     Then status 400
@@ -136,12 +141,14 @@ Feature: Verify Cannot create duplicate badge
     Given path 'badges/' + badgeNoPerson + '/cancellations'
     And request {badgeNumber: "#(badgeNoPerson)", cancelReasonCode: "NOLONG"}
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     When method POST
     Then status 200
 
     # Can now create badge again
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badgePerson
     When method POST
     Then status 200

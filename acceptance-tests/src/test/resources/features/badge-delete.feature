@@ -35,6 +35,7 @@ Feature: Verify delete a badge
     Then status 200
     Given path 'badges/' + lowerCase(badgeNo2)
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     When method GET
     Then status 404
 

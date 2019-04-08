@@ -47,6 +47,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-client.feature')
     Given path 'reports/issued-badges'
     And header Authorization = 'Bearer ' + result.accessToken
+    And header Accept = 'application/vnd.bluebadge-api.v1+json, application/zip'
     And param startDate = '2019-02-01'
     And param endDate = '2019-02-02'
     When method GET
@@ -65,6 +66,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-la-editor-scotland.feature')
     Given path 'badges/EEEEEF/replacements'
     And header Authorization = 'Bearer ' + result.accessToken
+    And header Accept = 'application/vnd.bluebadge-api.v1+json, application/zip'
     And request {badgeNumber: "EEEEEF","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
     When method POST
     Then status 200
@@ -82,7 +84,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-la-readonly-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip'
+    And header Accept = 'application/vnd.bluebadge-api.v1+json, application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 403
@@ -91,6 +93,7 @@ Feature: Verify authentication of badge zip
     * def result = callonce read('./oauth2-la-readonly-scotland.feature')
     Given path 'badges/EEEEEE'
     And header Authorization = 'Bearer ' + result.accessToken
+    And header Accept = jsonVersionHeader
     When method GET
     Then status 200
 

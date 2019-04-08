@@ -3,7 +3,7 @@ Feature: Verify incorrect version fails
 
   Background:
     * url baseUrl
-    * def result = callonce read('./oauth2.feature')
+    * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * header Accept = 'application/vnd.bluebadge-api.v0+json, application/json'
 

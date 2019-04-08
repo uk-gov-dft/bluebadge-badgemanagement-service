@@ -9,8 +9,7 @@ Feature: Verify cancel a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
-    #* def createResult = callonce read('./badge-create-person.feature')
-    #* def createdBadgeNo = createResult.badgeNo
+    * header Accept = 'application/vnd.bluebadge-api.v1+json, application/json'
     * callonce read('./badge-create-person.feature')
 
   Scenario: Verify 404 response for cancel of unknown badge

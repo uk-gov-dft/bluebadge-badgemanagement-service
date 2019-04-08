@@ -9,6 +9,7 @@ Feature: Verify print a batch
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify issued badges report
     Given path 'reports/issued-badges'

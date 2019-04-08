@@ -5,6 +5,7 @@ Feature: Verify Create badge with 400
     * url baseUrl
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify create 400
     * def badge =

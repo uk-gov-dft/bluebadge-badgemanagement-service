@@ -45,6 +45,7 @@ Feature: Verify Create badge cognitive
   Scenario: Verify valid create Cognitive eligibility
     * def result = callonce read('./oauth2-3rd-party-wales.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "ANGL"
     Given path 'badges'
     And request badge
@@ -55,6 +56,7 @@ Feature: Verify Create badge cognitive
   Scenario: Verify cannot create Cognitive eligibility if Scottish la
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "ABERD"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
@@ -66,9 +68,11 @@ Feature: Verify Create badge cognitive
   Scenario: Verify cannot create Cognitive eligibility if English la
     * def result = callonce read('./oauth2-3rd-party-england.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "BIRM"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badge
     When method POST
     Then status 400
@@ -77,9 +81,11 @@ Feature: Verify Create badge cognitive
   Scenario: Verify cannot create Cognitive eligibility if N Ireland la
     * def result = callonce read('./oauth2-3rd-party-nireland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "NIRE"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badge
     When method POST
     Then status 400

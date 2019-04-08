@@ -9,6 +9,7 @@ Feature: Verify Create badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify valid create mixed case postcode
     * def badge =
@@ -59,6 +60,7 @@ Feature: Verify Create badge
 
     Given path 'badges/' + badgeNo
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     When method GET
     Then status 200
     And def result = $.data

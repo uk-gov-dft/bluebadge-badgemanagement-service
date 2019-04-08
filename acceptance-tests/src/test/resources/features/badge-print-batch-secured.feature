@@ -6,6 +6,7 @@ Feature: Verify print a batch end point is secured
     # Get user token, rather than inter service token
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify print a badge - valid batch type (FASTTRACK)
     Given path 'badges/print-batch'

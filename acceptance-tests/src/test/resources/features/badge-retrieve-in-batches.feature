@@ -9,6 +9,7 @@ Feature: Verify retrieve badge details
     * def setup = callonce db.runScript('acceptance-test-data-retrieve-with-badges.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify retrieve a badge - sent to printer
     Given path 'badges/NNNJMJ'

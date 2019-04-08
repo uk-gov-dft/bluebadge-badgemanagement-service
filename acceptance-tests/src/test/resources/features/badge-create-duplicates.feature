@@ -9,6 +9,7 @@ Feature: Verify Cannot create duplicate badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Can't create when hash matches org but can when existing deleted
     * def badgeOrg =

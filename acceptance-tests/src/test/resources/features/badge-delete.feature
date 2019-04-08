@@ -9,6 +9,7 @@ Feature: Verify delete a badge
     * def setup = callonce db.runScript('acceptance-test-data.sql')
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * callonce read('./badge-create-person.feature')
 
 * def lowerCase =
@@ -51,6 +52,7 @@ Feature: Verify delete a badge
 
     * url baseUrl
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     Given path 'badges/'+ badgeNo
     When method DELETE
     Then status 200

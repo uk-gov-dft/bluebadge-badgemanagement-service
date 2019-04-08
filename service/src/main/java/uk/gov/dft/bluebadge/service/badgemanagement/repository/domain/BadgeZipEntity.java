@@ -21,18 +21,6 @@ import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
     "eligibilityCode",
     "deliverToCode",
     "deliverOptionCode",
-    "holderName",
-    "nino",
-    "dob",
-    "genderCode",
-    "contactName",
-    "contactBuildingStreet",
-    "contactLine2",
-    "contactTownCity",
-    "contactPostcode",
-    "primaryPhoneNo",
-    "secondaryPhoneNo",
-    "contactEmailAddress",
     "cancelReasonCode",
     "replaceReasonCode",
     "orderDate",
@@ -55,18 +43,6 @@ public class BadgeZipEntity {
   private EligibilityType eligibilityCode;
   private String deliverToCode;
   private String deliverOptionCode;
-  private String holderName;
-  private String nino;
-  private String dob;
-  private String genderCode;
-  private String contactName;
-  private String contactBuildingStreet;
-  private String contactLine2;
-  private String contactTownCity;
-  private String contactPostcode;
-  private String primaryPhoneNo;
-  private String secondaryPhoneNo;
-  private String contactEmailAddress;
   private String cancelReasonCode;
   private String replaceReasonCode;
   private String orderDate;

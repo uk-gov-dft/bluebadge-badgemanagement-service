@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dft.bluebadge.common.api.CommonResponseEntityExceptionHandler;
+import uk.gov.dft.bluebadge.common.api.common.CommonResponseHandler;
 import uk.gov.dft.bluebadge.common.api.model.PagedResult;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
@@ -37,7 +38,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementServi
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
 
 @RestController
-@CommonResponse
+@CommonResponseHandler
 public class BadgesApiController extends CommonResponseEntityExceptionHandler implements BadgesApi {
 
   private final BadgeManagementService badgeService;

@@ -1,5 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.DefaultVals.PRIMARY_PHONE_NUMBER_TRIMMED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.DefaultVals.SECONDARY_PHONE_NUMBER_TRIMMED;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderOrgRequest;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderPersonRequest;
 
@@ -24,6 +26,8 @@ public class BadgeOrderRequestConverterTest {
     Assert.assertEquals(
         request.getParty().getPerson().getBadgeHolderName(), entity.getHolderName());
     Assert.assertNotNull(entity.getOrderDate());
+    Assert.assertEquals(PRIMARY_PHONE_NUMBER_TRIMMED, entity.getPrimaryPhoneNo());
+    Assert.assertEquals(SECONDARY_PHONE_NUMBER_TRIMMED, entity.getSecondaryPhoneNo());
   }
 
   @Test
@@ -50,6 +54,8 @@ public class BadgeOrderRequestConverterTest {
     Assert.assertEquals("WV164AW", entity.getContactPostcode());
     Assert.assertEquals(
         request.getParty().getOrganisation().getBadgeHolderName(), entity.getHolderName());
+    Assert.assertEquals(PRIMARY_PHONE_NUMBER_TRIMMED, entity.getPrimaryPhoneNo());
+    Assert.assertEquals(null, entity.getSecondaryPhoneNo());
   }
 
   @Test(expected = BadRequestException.class)

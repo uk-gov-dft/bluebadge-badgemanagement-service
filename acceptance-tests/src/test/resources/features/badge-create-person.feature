@@ -22,8 +22,8 @@ Feature: Verify Create badge
     line2: 'Northern Quarter',
     townCity: 'Manchester',
     postCode: 'wK6 8GH',
-    primaryPhoneNumber: '01616548765',
-    secondaryPhoneNumber: '01616548765',
+    primaryPhoneNumber: ' 0 1 6 16548765 ',
+    secondaryPhoneNumber: ' +44161 654 8765 ',
     emailAddress: 'june@bigbrainknitting.com'
     },
     person: {

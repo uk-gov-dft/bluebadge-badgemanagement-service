@@ -45,8 +45,12 @@ public class BadgeOrderRequestConverter
             .contactTownCity(contact.getTownCity())
             .contactEmailAddress(contact.getEmailAddress())
             .contactPostcode(ConvertUtils.formatPostcodeForEntity(contact.getPostCode()))
-            .primaryPhoneNo(contact.getPrimaryPhoneNumber())
-            .secondaryPhoneNo(contact.getSecondaryPhoneNumber())
+            .primaryPhoneNo(
+                org.springframework.util.StringUtils.trimAllWhitespace(
+                    contact.getPrimaryPhoneNumber()))
+            .secondaryPhoneNo(
+                org.springframework.util.StringUtils.trimAllWhitespace(
+                    contact.getSecondaryPhoneNumber()))
             .numberOfBadges(null == model.getNumberOfBadges() ? 1 : model.getNumberOfBadges())
             .orderDate(LocalDate.now())
             .build();

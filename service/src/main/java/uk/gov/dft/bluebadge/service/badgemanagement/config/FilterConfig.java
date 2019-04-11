@@ -1,5 +1,6 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.config;
 
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +9,6 @@ import org.springframework.core.annotation.Order;
 import uk.gov.dft.bluebadge.common.esapi.EsapiFilter;
 import uk.gov.dft.bluebadge.common.logging.JwtMdcFilter;
 import uk.gov.dft.bluebadge.common.logging.VersionFilter;
-
-import javax.validation.constraints.NotNull;
 
 @Configuration
 @PropertySource(value = "classpath:version.properties")

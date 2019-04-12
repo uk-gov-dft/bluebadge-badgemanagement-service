@@ -13,6 +13,8 @@ Feature: Verify retrieve badge details
     When method GET
     Then status 200
     And match $.data.party.contact.fullName contains 'June Whitfield'
+    And match $.data.party.contact.primaryPhoneNumber == '01616548765'
+    And match $.data.party.contact.secondaryPhoneNumber == '+441616548765'
     And def apptime = $.data
 
   Scenario: Verify retrieve responds with 404 for unknown badge number

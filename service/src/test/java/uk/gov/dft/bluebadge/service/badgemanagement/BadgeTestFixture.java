@@ -46,6 +46,10 @@ public class BadgeTestFixture {
     static final String PARTY_ORG_CODE = "ORG";
     public static final String CANCEL_CODE_VALID = "NOLONG";
     public static final String REPLACE_REASON = "STOLE";
+    public static final String PRIMARY_PHONE_NUMBER = "1 2 3 4567 8901";
+    public static final String PRIMARY_PHONE_NUMBER_TRIMMED = "12345678901";
+    public static final String SECONDARY_PHONE_NUMBER = "+447777 77 77 9";
+    public static final String SECONDARY_PHONE_NUMBER_TRIMMED = "+44777777779";
   }
 
   private BadgeTestFixture() {}
@@ -116,8 +120,8 @@ public class BadgeTestFixture {
         .contactBuildingStreet("29 Listley Street")
         .contactLine2(null)
         .contactName("Robert McRoberts")
-        .primaryPhoneNo("01234123456")
-        .secondaryPhoneNo(null)
+        .primaryPhoneNo(DefaultVals.PRIMARY_PHONE_NUMBER_TRIMMED)
+        .secondaryPhoneNo(DefaultVals.SECONDARY_PHONE_NUMBER_TRIMMED)
         .contactPostcode("WV16 4AW")
         .contactTownCity("Bridgnorth")
         .deliverOptionCode(DefaultVals.DELIVER_OPTION_CODE_FAST)
@@ -161,7 +165,7 @@ public class BadgeTestFixture {
     contact.setBuildingStreet("12 The Rd");
     contact.setEmailAddress("a@b.com");
     contact.setFullName("contact name");
-    contact.primaryPhoneNumber("12345678901");
+    contact.primaryPhoneNumber(DefaultVals.PRIMARY_PHONE_NUMBER);
     contact.setPostCode("WV16 4AW");
     contact.setTownCity("Bridgnorth");
     return request;
@@ -189,7 +193,8 @@ public class BadgeTestFixture {
     contact.setBuildingStreet("12 The Rd");
     contact.setEmailAddress("a@b.com");
     contact.setFullName("contact name");
-    contact.primaryPhoneNumber("12345678901");
+    contact.primaryPhoneNumber(DefaultVals.PRIMARY_PHONE_NUMBER);
+    contact.secondaryPhoneNumber(DefaultVals.SECONDARY_PHONE_NUMBER);
     contact.setPostCode("WV16 4AW");
     contact.setTownCity("Bridgnorth");
     return request;
@@ -220,7 +225,7 @@ public class BadgeTestFixture {
         .badgeNo("KKKKKK")
         .badgeStatus(BadgeEntity.Status.ISSUED)
         .numberOfBadges(1)
-        .primaryPhoneNo("01234512312")
+        .primaryPhoneNo(DefaultVals.PRIMARY_PHONE_NUMBER_TRIMMED)
         .secondaryPhoneNo(null)
         .contactEmailAddress("a@b.c")
         .build();

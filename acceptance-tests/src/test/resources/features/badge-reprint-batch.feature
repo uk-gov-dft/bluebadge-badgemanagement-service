@@ -10,6 +10,7 @@ Feature: Verify reprint a batch
     * def setup = callonce db.runScript('acceptance-test-batch-data.sql')
     * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify reprint a badge - valid batchId
 
@@ -21,6 +22,7 @@ Feature: Verify reprint a batch
 
     * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * def batchCountBefore = db.countBatches()
     * def lastBatchId = db.getLastBatchId()
     Given path 'badges/print-batch/' + lastBatchId

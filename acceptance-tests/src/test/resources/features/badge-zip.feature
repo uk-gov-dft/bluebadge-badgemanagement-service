@@ -14,7 +14,7 @@ Feature: Verify badge zip badge zip
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     Given path 'badges'
     And header Authorization = 'Bearer ' + result.accessToken
-    And header Accept = 'application/zip'
+    And header Accept = 'application/vnd.bluebadge-api.v1+json, application/zip'
     And param laShortCode = 'ABERD'
     When method GET
     Then status 200

@@ -5,6 +5,7 @@ Feature: Verify find badge for newly created badge
     * url baseUrl
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * callonce read('./badge-create-person.feature')
 
   Scenario: Verify findBadges finds the created badge, using default paging params

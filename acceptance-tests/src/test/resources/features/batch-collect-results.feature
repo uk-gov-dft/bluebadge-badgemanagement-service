@@ -14,6 +14,7 @@ Feature: Verify print a batch results processing
     * def inBucketName = 'uk-gov-dft-' + (env == null ? 'ci' : env) +'-badge-in'
     * def result = callonce read('./oauth2-client.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
 
   Scenario: Verify end point and process pending batches
     Given path 'badges/collect-batches'

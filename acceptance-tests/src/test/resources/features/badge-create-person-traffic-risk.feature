@@ -44,6 +44,7 @@ Feature: Verify Create badge traffic risk
   Scenario: Verify valid create traffic risk
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "ABERD"
     Given path 'badges'
     And request badge
@@ -54,9 +55,11 @@ Feature: Verify Create badge traffic risk
   Scenario: Verify cannot create traffic risk if Welsh LA
     * def result = callonce read('./oauth2-3rd-party-wales.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "ANGL"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badge
     When method POST
     Then status 400
@@ -65,9 +68,11 @@ Feature: Verify Create badge traffic risk
   Scenario: Verify cannot create traffic risk if English LA
     * def result = callonce read('./oauth2-3rd-party-england.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "BIRM"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badge
     When method POST
     Then status 400
@@ -76,9 +81,11 @@ Feature: Verify Create badge traffic risk
   Scenario: Verify cannot create traffic risk if N Irish LA
     * def result = callonce read('./oauth2-3rd-party-nireland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * set badge.localAuthorityShortCode = "NIRE"
     Given path 'badges'
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     And request badge
     When method POST
     Then status 400

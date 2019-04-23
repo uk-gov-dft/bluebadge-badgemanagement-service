@@ -5,6 +5,7 @@ Feature: Verify retrieve badge details
     * url baseUrl
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
     * callonce read('./badge-create-person.feature')
 
   Scenario: Verify retrieve a badge

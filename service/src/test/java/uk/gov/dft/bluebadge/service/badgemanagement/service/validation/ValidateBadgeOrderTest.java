@@ -187,8 +187,8 @@ public class ValidateBadgeOrderTest {
 
   @Test
   public void null_stuff() {
-    BadgeEntity entity = getValidPersonBadgeEntity();
-    // Only other thing that can be null used in validation is dob.
+    BadgeEntity entity = getValidOrgBadgeEntity();
+    // Only other thing that can be null used in validation is dob for an org badge
     entity.setDob(null);
     validateBadgeOrder.validate(entity);
   }

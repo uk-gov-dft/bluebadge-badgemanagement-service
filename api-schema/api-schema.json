@@ -3,9 +3,9 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "1.0.5",
+    "version" : "1.0.5_BBB-1390",
     "contact" : {
-      "email" : "rob.smallwood@does.not.exist"
+      "email" : "bluebadge-support@valtech.com"
     },
     "license" : {
       "name" : "Apache 2.0",
@@ -224,6 +224,9 @@
         },
         "error" : {
           "$ref" : "#/definitions/Error"
+        },
+        "pagingInfo" : {
+          "$ref" : "#/definitions/PagingInfo"
         }
       }
     },
@@ -261,6 +264,31 @@
               }
             }
           }
+        }
+      }
+    },
+    "PagingInfo" : {
+      "type" : "object",
+      "properties" : {
+        "total" : {
+          "type" : "integer",
+          "description" : "The total number of results for the search."
+        },
+        "count" : {
+          "type" : "integer",
+          "description" : "The number of results included within the response"
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "The number of results per page. Equivalent to the page limit"
+        },
+        "pageNum" : {
+          "type" : "integer",
+          "description" : "The index of the first result included within the response, within the total results"
+        },
+        "pages" : {
+          "type" : "integer",
+          "description" : "Total number of pages for the given page limit"
         }
       }
     },
@@ -655,7 +683,7 @@
           "description" : "A short code from the GENDER group of reference data. e.g. MALE, FEMALE or UNSPECIFIE."
         }
       },
-      "required" : [ "badgeHolderName" ],
+      "required" : [ "badgeHolderName", "dob" ],
       "example" : {
         "badgeHolderName" : "Fred Bloggs",
         "nino" : "NY188796B",
@@ -681,7 +709,7 @@
         "fullName" : {
           "type" : "string",
           "maxLength" : 100,
-          "description" : "The administrative contact for the badge(s).",
+          "description" : "The administrative contact for the badge(s). Note - this is mandatory for Organisation badges",
           "example" : "June Whitfield"
         },
         "buildingStreet" : {

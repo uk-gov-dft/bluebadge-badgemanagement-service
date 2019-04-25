@@ -7,6 +7,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.Defa
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.DefaultVals.LOCAL_AUTHORITY_CODE_SCOTLAND;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.DefaultVals.LOCAL_AUTHORITY_CODE_WALES;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getMockRefDataApiClient;
+import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidOrgBadgeEntity;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidPersonBadgeEntity;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_ORGANISATION;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_NUMBER_OF_BADGES_PERSON;
@@ -247,5 +248,20 @@ public class ValidateBadgeOrderTest {
     ValidateBadgeOrder.validateDeliveryRules(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.deliverOptionCode");
+  }
+
+  @Test
+  public void validateOrganisationBadgeWithMissingContactName() {
+    BadgeEntity entity = getValidOrgBadgeEntity();
+    entity.setContactName(null);
+    try {
+      validateBadgeOrder.validate(entity);
+      fail("No Exception thrown");
+    } catch (BadRequestException e) {
+      List<ErrorErrors> errors =
+          Objects.requireNonNull(e.getResponse().getBody()).getError().getErrors();
+      assertThat(errors.size()).isEqualTo(1);
+      assertThat(errors.get(0).getMessage()).isEqualTo("NotNull.badge.party.contact.fullName");
+    }
   }
 }

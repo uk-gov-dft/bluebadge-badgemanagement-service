@@ -78,6 +78,7 @@ public class Person {
    */
   @ApiModelProperty(example = "1972-09-13", value = "Date of birth YYYY-MM-DD")
   @Valid
+  @NotNull
   public LocalDate getDob() {
     return dob;
   }

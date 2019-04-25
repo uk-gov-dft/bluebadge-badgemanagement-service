@@ -13,6 +13,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_LA_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.INVALID_PARTY_CODE;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_CONTACT_NAME_ORG;
+import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_DOB_PERSON;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_ELIGIBILITY_CODE_PERSON;
 
 import java.time.LocalDate;
@@ -64,6 +65,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     if (entity.isPerson()) {
       validateDobInPast(entity, errors);
       validateNotNull(NULL_ELIGIBILITY_CODE_PERSON, entity.getEligibilityCode(), errors);
+      validateNotNull(NULL_DOB_PERSON, entity.getDob(), errors);
       validateEligibilityAndNation(entity, errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
     } else {

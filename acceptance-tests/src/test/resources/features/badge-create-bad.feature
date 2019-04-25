@@ -229,7 +229,7 @@ Feature: Verify Create badge with 400
     And request badgeWithFutureDOB
     When method POST
     Then status 400
-    And match $.error.errors contains {"field":"party.person.dob","reason":"must not be null","message":"NotNull.badgeOrderRequest.party.person.dob","location":null,"locationType":null}
+    And match $.error.errors contains {"field":"dob","reason":"DOB must not be null","message":"NotNull.badge.party.person.dob","location":null,"locationType":null}
 
   Scenario: Verify bad request when ordering a organisation badge with null contact name
     * def badge =

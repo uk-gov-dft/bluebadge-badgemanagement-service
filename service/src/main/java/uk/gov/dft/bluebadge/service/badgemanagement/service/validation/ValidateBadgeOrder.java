@@ -68,7 +68,7 @@ public class ValidateBadgeOrder extends ValidateBase {
       validateNotNull(NULL_DOB_PERSON, entity.getDob(), errors);
       validateEligibilityAndNation(entity, errors);
       validateRefData(GENDER, INVALID_GENDER_CODE, entity.getGenderCode(), errors);
-    } else {
+    } else if (entity.isOrganisation()) {
       validateNotNull(NULL_CONTACT_NAME_ORG, entity.getContactName(), errors);
     }
 

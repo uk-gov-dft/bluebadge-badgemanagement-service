@@ -64,4 +64,8 @@ public class BadgeEntity implements Serializable {
   public boolean isPerson() {
     return "PERSON".equals(partyCode);
   }
+
+  public boolean isOrganisation() {
+    return "ORG".equals(partyCode);
+  }
 }

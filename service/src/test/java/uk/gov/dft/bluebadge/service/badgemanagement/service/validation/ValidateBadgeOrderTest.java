@@ -264,4 +264,20 @@ public class ValidateBadgeOrderTest {
       assertThat(errors.get(0).getMessage()).isEqualTo("NotNull.badge.party.contact.fullName");
     }
   }
+
+  @Test
+  public void validateInvalidPartyTypeWithMissingContactName() {
+    BadgeEntity entity = getValidOrgBadgeEntity();
+    entity.setPartyCode("WRONG");
+    entity.setContactName(null);
+    try {
+      validateBadgeOrder.validate(entity);
+      fail("No Exception thrown");
+    } catch (BadRequestException e) {
+      List<ErrorErrors> errors =
+          Objects.requireNonNull(e.getResponse().getBody()).getError().getErrors();
+      assertThat(errors.size()).isEqualTo(1);
+      assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.partyCode");
+    }
+  }
 }

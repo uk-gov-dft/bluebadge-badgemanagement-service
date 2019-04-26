@@ -16,6 +16,11 @@ public enum ValidationKeyEnum {
       "NotNull.badge.eligibilityCode",
       "Eligibility code is mandatory for Person badges.",
       Constants.ELIGIBILITY_CODE),
+  NULL_CONTACT_NAME_ORG(
+      "NotNull.badge.party.contact.fullName",
+      "Contact name is mandatory for organisation badges.",
+      "fullName"),
+  NULL_DOB_PERSON("NotNull.badge.party.person.dob", "DOB must not be null", "dob"),
   INVALID_DELIVER_TO_CODE(
       "Invalid.badge.deliverToCode", "Invalid deliver to code.", "deliverToCode"),
   INVALID_DELIVER_OPTION_CODE(

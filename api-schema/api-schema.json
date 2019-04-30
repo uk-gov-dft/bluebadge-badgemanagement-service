@@ -3,7 +3,7 @@
   "info" : {
     "title" : "Blue Badge Management Service",
     "description" : "External API for local authorities to manage Blue Badges.",
-    "version" : "1.0.5_BBB-1390",
+    "version" : "1.1.0",
     "contact" : {
       "email" : "bluebadge-support@valtech.com"
     },

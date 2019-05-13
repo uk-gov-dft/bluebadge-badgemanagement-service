@@ -1,15 +1,17 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice;
 
-import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
+
+import java.util.HashMap;
 
 @Slf4j
 @Service
@@ -22,20 +24,23 @@ public class PrintServiceApiClient {
     this.restTemplate = restTemplate;
   }
 
-  /** Send Print PrintBatchRequest Request. */
+  /**
+   * Send Print PrintBatchRequest Request.
+   */
   public void printBatch(PrintBatchRequest batch) {
     log.debug("Print batch.");
 
     String url =
-        UriComponentsBuilder.newInstance().path("/").pathSegment("printBatch").toUriString();
-    restTemplate.postForEntity(url, batch, CommonResponse.class);
+      UriComponentsBuilder.newInstance().path("/").pathSegment("printBatch").toUriString();
+    ResponseEntity<CommonResponse> commonResponseResponseEntity =
+      restTemplate.postForEntity(url, batch, CommonResponse.class);
   }
 
   public ProcessedBatchesResponse collectPrintBatchResults() {
     log.debug("Call collect batches print service endpoint.");
 
     String url =
-        UriComponentsBuilder.newInstance().path("/").pathSegment("processed-batches").toUriString();
+      UriComponentsBuilder.newInstance().path("/").pathSegment("processed-batches").toUriString();
     return restTemplate.getForEntity(url, ProcessedBatchesResponse.class).getBody();
   }
 
@@ -47,10 +52,10 @@ public class PrintServiceApiClient {
     HashMap<String, String> vars = new HashMap<>();
     vars.put("fileName", confirmationFileName);
     String url =
-        UriComponentsBuilder.newInstance()
-            .path("/")
-            .pathSegment("processed-batches", "{fileName}")
-            .toUriString();
+      UriComponentsBuilder.newInstance()
+        .path("/")
+        .pathSegment("processed-batches", "{fileName}")
+        .toUriString();
     restTemplate.delete(url, vars);
   }
 }

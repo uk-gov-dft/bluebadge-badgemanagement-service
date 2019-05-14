@@ -3,8 +3,10 @@ package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
@@ -34,6 +36,10 @@ public class PrintServiceApiClient {
       UriComponentsBuilder.newInstance().path("/").pathSegment("printBatch").toUriString();
     ResponseEntity<CommonResponse> commonResponseResponseEntity =
       restTemplate.postForEntity(url, batch, CommonResponse.class);
+    HttpStatus receivedStatus = commonResponseResponseEntity.getStatusCode();
+    Assert.isTrue(
+      commonResponseResponseEntity.getStatusCode() == HttpStatus.OK,
+      "Client Http Status received from print service must be 200 but was " + receivedStatus);
   }
 
   public ProcessedBatchesResponse collectPrintBatchResults() {

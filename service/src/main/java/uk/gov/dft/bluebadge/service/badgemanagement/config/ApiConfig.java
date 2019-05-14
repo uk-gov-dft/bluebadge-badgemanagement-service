@@ -47,10 +47,8 @@ public class ApiConfig {
   RestTemplate printServiceRestTemplate(
       ClientCredentialsResourceDetails clientCredentialsResourceDetails,
       ServiceConfiguration printServiceConfiguration) {
-    RestTemplate restTemplate =
-        RestTemplateFactory.getClientRestTemplate(
-            clientCredentialsResourceDetails, printServiceConfiguration);
-    return restTemplate;
+    return RestTemplateFactory.getClientRestTemplate(
+        clientCredentialsResourceDetails, printServiceConfiguration);
   }
 
   @Bean

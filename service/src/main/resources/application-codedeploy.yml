@@ -1,17 +1,17 @@
 blue-badge:
   auth-server:
-    url: https://api.${bb_env}.${url}/bb_auth
+    url: https://api-internal.${bb_env}.${url}/bb_auth
     client-id: bb_user_management_id
      ***REMOVED***
   reference-data-service:
     service-host:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /
   print-service:
     service-host:
-      host: api.${bb_env}.${url}
+      host: api-internal.${bb_env}.${url}
       port: 443
       scheme: https
       contextpath: /

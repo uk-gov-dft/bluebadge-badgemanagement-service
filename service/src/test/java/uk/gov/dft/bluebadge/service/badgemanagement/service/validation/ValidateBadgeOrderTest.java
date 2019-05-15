@@ -14,13 +14,11 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.START_EXPIRY_DATE_RANGE;
 
 import com.google.common.collect.Sets;
+
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
@@ -279,5 +277,50 @@ public class ValidateBadgeOrderTest {
       assertThat(errors.size()).isEqualTo(1);
       assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.partyCode");
     }
+  }
+
+  @Test
+  public void whenOrderIsForOrganisation_thenRejectAnyValueOfNotForReassessment() {
+    BadgeEntity entity = getValidOrgBadgeEntity();
+    entity.setNotForReassessment(new Random().nextBoolean());
+    try {
+      validateBadgeOrder.validate(entity);
+      fail("No Exception thrown");
+    } catch (BadRequestException e) {
+      List<ErrorErrors> errors = Objects.requireNonNull(
+          e.getResponse().getBody().getError().getErrors()
+      );
+      assertThat(errors.size()).isEqualTo(1);
+      assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.notForReassessment");
+    }
+  }
+
+  @Test
+  public void whenPersonIsAutomaticEligible_thenRejectAnyValueOfNotForReassessment() {
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    entity.setEligibilityCode(getRandomlyAutomaticEligibilityCode());
+    entity.setNotForReassessment(new Random().nextBoolean());
+    try {
+      validateBadgeOrder.validate(entity);
+      fail("No Exception thrown");
+    } catch (BadRequestException e) {
+      List<ErrorErrors> errors = Objects.requireNonNull(
+          e.getResponse().getBody().getError().getErrors()
+      );
+      assertThat(errors.size()).isEqualTo(1);
+      assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.notForReassessment");
+    }
+  }
+
+  private EligibilityType getRandomlyAutomaticEligibilityCode() {
+    final EligibilityType[] CODES = {
+        EligibilityType.PIP,
+        EligibilityType.DLA,
+        EligibilityType.BLIND,
+        EligibilityType.AFRFCS,
+        EligibilityType.WPMS
+    };
+
+    return CODES[new Random().nextInt(CODES.length)];
   }
 }

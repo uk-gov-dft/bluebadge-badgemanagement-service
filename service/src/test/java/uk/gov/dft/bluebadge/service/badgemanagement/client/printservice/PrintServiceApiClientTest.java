@@ -1,6 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.client.printservice;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.springframework.test.web.client.ExpectedCount.once;
@@ -15,8 +16,6 @@ import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +28,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Pr
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 
-@RunWith(MockitoJUnitRunner.class)
 public class PrintServiceApiClientTest extends ApplicationContextTests {
   private static final String TEST_URI = "http://justtesting:7777/test";
   private static final String BASE_ENDPOINT = TEST_URI + "/";
@@ -86,9 +84,35 @@ public class PrintServiceApiClientTest extends ApplicationContextTests {
       PrintBatchRequest request =
           PrintBatchRequest.builder().batchType(BATCH_TYPE).filename(FILENAME).badges(null).build();
       client.printBatch(request);
+      fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException ex) {
       assertThat(ex.getMessage())
           .isEqualTo("Client Http Status received from print service must be 200 but was 302");
+    }
+  }
+
+  @Test
+  @SneakyThrows
+  public void printBatch_shouldThrowIllegalArgumentException_when204IsReceived() {
+    CommonResponse response = new CommonResponse();
+    String responseBody = om.writeValueAsString(response);
+
+    mockServer
+        .expect(once(), requestTo(BASE_ENDPOINT + "printBatch"))
+        .andExpect(method(HttpMethod.POST))
+        .andExpect(jsonPath("batchType", equalTo(BATCH_TYPE)))
+        .andExpect(jsonPath("filename", equalTo(FILENAME)))
+        .andExpect(jsonPath("badges", nullValue()))
+        .andRespond(withStatus(HttpStatus.NO_CONTENT));
+
+    try {
+      PrintBatchRequest request =
+          PrintBatchRequest.builder().batchType(BATCH_TYPE).filename(FILENAME).badges(null).build();
+      client.printBatch(request);
+      fail("Should have thrown IllegalArgumentException");
+    } catch (IllegalArgumentException ex) {
+      assertThat(ex.getMessage())
+          .isEqualTo("Client Http Status received from print service must be 200 but was 204");
     }
   }
 

@@ -65,6 +65,6 @@
             FROM batch_badge bb JOIN batch b
               ON bb.batch_id = b.batch_id
             WHERE bb.badge_no = #{badgeNumber}
-              AND b.batch_purpose in ('ISSUED','REJECTED'));
+              AND b.batch_purpose in ('ISSUED','REJECTED'))
     </select>
 </mapper>

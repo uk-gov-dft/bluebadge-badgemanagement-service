@@ -75,4 +75,20 @@ public class BadgeOrderRequestConverterTest {
     BadgeOrderRequestConverter converter = new BadgeOrderRequestConverter();
     converter.convertToEntity(request);
   }
+
+  @Test
+  public void whenBadgeOrderRequestHasNotForReassessment_thenEntityMustAlsoHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setNotForReassessment(true);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertEquals(true, entity.isNotForReassessment());
+  }
+
+  @Test
+  public void whenBadgeOrderRequestDoesNotHaveNotForReassessment_thenEntityMustHaveItAsFalse() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setNotForReassessment(null);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertEquals(false, entity.isNotForReassessment());
+  }
 }

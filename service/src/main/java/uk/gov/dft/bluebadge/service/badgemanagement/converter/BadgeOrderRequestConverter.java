@@ -4,6 +4,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_PERSON_OBJECT;
 
 import java.time.LocalDate;
+
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
@@ -37,6 +38,11 @@ public class BadgeOrderRequestConverter
             .startDate(model.getStartDate())
             .expiryDate(model.getExpiryDate())
             .eligibilityCode(model.getEligibilityCode())
+            .notForReassessment(
+                model.isNotForReassessment() != null
+                    ? model.isNotForReassessment()
+                    : false
+            )
             .deliverToCode(model.getDeliverToCode())
             .deliverOptionCode(model.getDeliveryOptionCode())
             .contactName(contact.getFullName())

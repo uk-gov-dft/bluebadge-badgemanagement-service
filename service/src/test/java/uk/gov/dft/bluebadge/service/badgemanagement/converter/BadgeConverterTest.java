@@ -40,4 +40,12 @@ public class BadgeConverterTest {
     Assert.assertEquals(
         entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
   }
+
+  @Test
+  public void whenNotForReassessmentExistsinEntity_thenModelAlsoHasNotForReassessment() {
+    BadgeEntity entity = getValidPersonBadgeEntity();
+    Badge model = new BadgeConverter().convertToModel(entity);
+
+    Assert.assertEquals(entity.isNotForReassessment(), model.isNotForReassessment());
+  }
 }

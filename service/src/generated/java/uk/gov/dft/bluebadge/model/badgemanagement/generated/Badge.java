@@ -51,6 +51,9 @@ public class Badge {
   @JsonProperty("eligibilityCode")
   private String eligibilityCode = null;
 
+  @JsonProperty("notForReassessment")
+  private Boolean notForReassessment = null;
+
   @JsonProperty("imageLink")
   private String imageLink = null;
 
@@ -323,6 +326,27 @@ public class Badge {
 
   public void setEligibilityCode(String eligibilityCode) {
     this.eligibilityCode = eligibilityCode;
+  }
+
+  public Badge notForReassessment(Boolean notForReassessment) {
+    this.notForReassessment = notForReassessment;
+    return this;
+  }
+
+  /**
+   * Flag to indicate the need of reassessment
+   *
+   * @return true or false
+   */
+  @ApiModelProperty(
+    example = "true", value = "Need reassessment."
+  )
+  public Boolean isNotForReassessment() {
+    return this.notForReassessment;
+  }
+
+  public void setNotForReassessment(Boolean notForReassessment) {
+    this.notForReassessment = notForReassessment;
   }
 
   public Badge imageLink(String imageLink) {

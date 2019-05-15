@@ -16,9 +16,11 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_DOB_PERSON;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_ELIGIBILITY_CODE_PERSON;
 
+import java.lang.annotation.ElementType;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.EligibilityService;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.enums.Nation;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
@@ -60,6 +63,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     validateStartDateInFuture(entity, errors);
     validateExpiryDateInFuture(entity, errors);
     validateStartExpiryDateRange(entity, errors);
+    validateNotForReassessment(entity, errors);
 
     // Person specific validation
     if (entity.isPerson()) {
@@ -81,6 +85,30 @@ public class ValidateBadgeOrder extends ValidateBase {
       throw new BadRequestException(errors);
     }
     log.debug("Badge order passed validation.");
+  }
+
+  static void validateNotForReassessment(BadgeEntity entity, List<ErrorErrors> errors) {
+    if (entity.isOrganisation()) {
+      errors.add(
+          ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_ORG.getFieldErrorInstance()
+      );
+    } else {
+      if (isAutomaticEligibility(entity.getEligibilityCode())) {
+        errors.add(
+            ValidationKeyEnum
+                .INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY
+                .getFieldErrorInstance()
+        );
+      }
+    }
+  }
+
+  private static boolean isAutomaticEligibility(EligibilityType code) {
+    return code.equals(EligibilityType.PIP)
+        || code.equals(EligibilityType.DLA)
+        || code.equals(EligibilityType.BLIND)
+        || code.equals(EligibilityType.AFRFCS)
+        || code.equals(EligibilityType.WPMS);
   }
 
   void validateEligibilityAndNation(BadgeEntity entity, List<ErrorErrors> errors) {

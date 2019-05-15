@@ -11,6 +11,8 @@ import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
+import java.util.Random;
+
 public class BadgeOrderRequestConverterTest {
 
   @Test
@@ -79,9 +81,10 @@ public class BadgeOrderRequestConverterTest {
   @Test
   public void whenBadgeOrderRequestHasNotForReassessment_thenEntityMustAlsoHaveIt() {
     BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
-    request.setNotForReassessment(true);
+    final boolean randomNotForReassessment = new Random().nextBoolean();
+    request.setNotForReassessment(randomNotForReassessment);
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
-    Assert.assertEquals(true, entity.isNotForReassessment());
+    Assert.assertEquals(randomNotForReassessment, entity.isNotForReassessment());
   }
 
   @Test

@@ -291,7 +291,7 @@ public class ValidateBadgeOrderTest {
           e.getResponse().getBody().getError().getErrors()
       );
       assertThat(errors.size()).isEqualTo(1);
-      assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.notForReassessment");
+      assertThat(errors.get(0).getMessage()).isEqualTo("Organisation.invalid.badge.notForReassessment");
     }
   }
 
@@ -308,7 +308,7 @@ public class ValidateBadgeOrderTest {
           e.getResponse().getBody().getError().getErrors()
       );
       assertThat(errors.size()).isEqualTo(1);
-      assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.notForReassessment");
+      assertThat(errors.get(0).getMessage()).isEqualTo("Person.invalid.badge.notForReassessment");
     }
   }
 

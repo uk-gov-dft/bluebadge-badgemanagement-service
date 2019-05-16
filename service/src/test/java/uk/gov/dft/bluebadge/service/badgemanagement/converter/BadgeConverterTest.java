@@ -42,10 +42,10 @@ public class BadgeConverterTest {
   }
 
   @Test
-  public void whenNotForReassessmentExistsinEntity_thenModelAlsoHasNotForReassessment() {
+  public void whenNotForReassessmentExistsInEntity_thenModelAlsoHasNotForReassessment() {
     BadgeEntity entity = getValidPersonBadgeEntity();
     Badge model = new BadgeConverter().convertToModel(entity);
 
-    Assert.assertEquals(entity.isNotForReassessment(), model.isNotForReassessment());
+    Assert.assertEquals(entity.getNotForReassessment(), model.isNotForReassessment());
   }
 }

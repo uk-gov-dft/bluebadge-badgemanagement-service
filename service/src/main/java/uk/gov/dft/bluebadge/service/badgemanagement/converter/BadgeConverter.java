@@ -30,7 +30,7 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     badge.setRejectedReason(entity.getRejectedReason());
     badge.setIssuedDate(entity.getIssuedDate());
     badge.setSentPrintDate(entity.getPrintRequestDateTime());
-    badge.setNotForReassessment(entity.isNotForReassessment());
+    badge.setNotForReassessment(entity.getNotForReassessment());
     Party party = new Party();
     badge.setParty(party);
     Contact contact = new Contact();

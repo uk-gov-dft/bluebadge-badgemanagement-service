@@ -84,14 +84,14 @@ public class BadgeOrderRequestConverterTest {
     final boolean randomNotForReassessment = new Random().nextBoolean();
     request.setNotForReassessment(randomNotForReassessment);
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
-    Assert.assertEquals(randomNotForReassessment, entity.isNotForReassessment());
+    Assert.assertEquals(randomNotForReassessment, entity.getNotForReassessment());
   }
 
   @Test
-  public void whenBadgeOrderRequestDoesNotHaveNotForReassessment_thenEntityMustHaveItAsFalse() {
+  public void whenBadgeOrderRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
     BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
     request.setNotForReassessment(null);
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
-    Assert.assertEquals(false, entity.isNotForReassessment());
+    Assert.assertNull(entity.getNotForReassessment());
   }
 }

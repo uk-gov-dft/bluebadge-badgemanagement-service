@@ -13,7 +13,7 @@
         b.contact_building_street AS contactBuildingStreet, b.contact_line2 AS contactLine2, b.contact_town_city AS contactTownCity,
         b.contact_postcode AS contactPostcode, b.primary_phone_no AS primaryPhoneNo, b.secondary_phone_no AS secondaryPhoneNo,
         b.contact_email_address AS contactEmailAddress, b.cancel_reason_code as cancelReasonCode, b.replace_reason_code AS replaceReasonCode,
-        b.local_authority_short_code AS localAuthorityShortCode
+        b.local_authority_short_code AS localAuthorityShortCode, b.not_for_reassessment as notForReassessment
     </sql>
 
 
@@ -22,8 +22,8 @@
         (badge_no, badge_status, party_code,
         local_authority_short_code, local_authority_ref, app_date,
         app_channel_code, start_date, expiry_date,
-        eligibility_code, image_link, image_link_original, deliver_to_code,
-        deliver_option_code, holder_name, nino,
+        eligibility_code, not_for_reassessment, image_link, image_link_original,
+        deliver_to_code, deliver_option_code, holder_name, nino,
         dob, gender_code, contact_name,
         contact_building_street, contact_line2, contact_town_city,
         contact_postcode, primary_phone_no, secondary_phone_no,
@@ -33,8 +33,8 @@
         (#{badgeNo}, #{badgeStatus}, #{partyCode},
         #{localAuthorityShortCode}, #{localAuthorityRef}, #{appDate},
         #{appChannelCode}, #{startDate}, #{expiryDate},
-        #{eligibilityCode}, #{imageLink}, #{imageLinkOriginal}, #{deliverToCode},
-        #{deliverOptionCode}, #{holderName}, #{nino},
+        #{eligibilityCode}, #{notForReassessment}, #{imageLink}, #{imageLinkOriginal},
+        #{deliverToCode}, #{deliverOptionCode}, #{holderName}, #{nino},
         #{dob}, #{genderCode}, #{contactName},
         #{contactBuildingStreet}, #{contactLine2}, #{contactTownCity},
         #{contactPostcode}, #{primaryPhoneNo}, #{secondaryPhoneNo},
@@ -52,7 +52,8 @@
         badge_no AS badgeNo, badge_status AS badgeStatus, party_code AS partyCode,
         local_authority_ref As localAuthorityRef, app_date AS appDate,
         app_channel_code AS appChannelCode, start_date AS startDate, expiry_date AS expiryDate,
-        eligibility_code AS eligibilityCode, image_link AS imageLink, image_link_original AS imageLinkOriginal,
+        eligibility_code AS eligibilityCode, not_for_reassessment AS notForReassessment,
+        image_link AS imageLink, image_link_original AS imageLinkOriginal,
         deliver_to_code AS deliverToCode, deliver_option_code AS deliverOptionCode, holder_name AS holderName,
         nino AS nino, dob AS dob, gender_code AS genderCode, contact_name AS contactName,
         contact_building_street AS contactBuildingStreet, contact_line2 AS contactLine2, contact_town_city AS contactTownCity,
@@ -89,7 +90,7 @@
         b.badge_no AS badgeNo, b.badge_status AS badgeStatus, b.party_code AS partyCode,
         b.local_authority_ref As localAuthorityRef, to_char(b.app_date, 'YYYY-MM-DD') AS appDate,
         b.app_channel_code AS appChannelCode, to_char(b.start_date, 'YYYY-MM-DD') AS startDate, to_char(b.expiry_date, 'YYYY-MM-DD') AS expiryDate,
-        b.eligibility_code AS eligibilityCode,
+        b.eligibility_code AS eligibilityCode, b.not_for_reassessment AS notForReassessment,
         b.deliver_to_code AS deliverToCode, b.deliver_option_code AS deliverOptionCode,
         b.cancel_reason_code as cancelReasonCode,
         b.order_date AS orderDate, b.local_authority_short_code AS localAuthorityShortCode, b.replace_reason_code AS replaceReasonCode,
@@ -184,6 +185,7 @@
               , image_link_original = null
               , replace_reason_code = null
               , badge_hash = null
+              , not_for_reassessment = null
         WHERE badge_no = trim(upper(#{badgeNo}))
     </update>
 

@@ -34,7 +34,7 @@ public class BadgeTestFixture {
     public static final String LOCAL_AUTHORITY_CODE_N_IRELAND = "BELFAST";
     public static final String LOCAL_AUTHORITY_CODE_SCOTLAND = "ABERD";
     static final EligibilityType ELIGIBILITY_CODE = EligibilityType.PIP;
-    static final Boolean NOT_FOR_REASSESSMENT = false;
+    static final Boolean NOT_FOR_REASSESSMENT = null;
     static final String DELIVER_TO_CODE_HOME = "HOME";
     static final String DELIVER_TO_CODE_COUNCIL = "COUNCIL";
     static final String DELIVER_OPTION_CODE_FAST = "FAST";

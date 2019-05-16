@@ -16,11 +16,9 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_DOB_PERSON;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.NULL_ELIGIBILITY_CODE_PERSON;
 
-import java.lang.annotation.ElementType;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,12 +86,14 @@ public class ValidateBadgeOrder extends ValidateBase {
   }
 
   static void validateNotForReassessment(BadgeEntity entity, List<ErrorErrors> errors) {
-    if (entity.isOrganisation()) {
+    if (entity.isOrganisation() && entity.getNotForReassessment() != null) {
       errors.add(
-          ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_ORG.getFieldErrorInstance()
+          ValidationKeyEnum
+              .INVALID_NOT_FOR_REASSESSMENT_FOR_ORG
+              .getFieldErrorInstance()
       );
     } else {
-      if (isAutomaticEligibility(entity.getEligibilityCode())) {
+      if (isAutomaticEligibility(entity.getEligibilityCode()) && entity.getNotForReassessment() != null) {
         errors.add(
             ValidationKeyEnum
                 .INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY
@@ -104,11 +104,11 @@ public class ValidateBadgeOrder extends ValidateBase {
   }
 
   private static boolean isAutomaticEligibility(EligibilityType code) {
-    return code.equals(EligibilityType.PIP)
+    return code != null && (code.equals(EligibilityType.PIP)
         || code.equals(EligibilityType.DLA)
         || code.equals(EligibilityType.BLIND)
         || code.equals(EligibilityType.AFRFCS)
-        || code.equals(EligibilityType.WPMS);
+        || code.equals(EligibilityType.WPMS));
   }
 
   void validateEligibilityAndNation(BadgeEntity entity, List<ErrorErrors> errors) {

@@ -39,9 +39,7 @@ public class BadgeOrderRequestConverter
             .expiryDate(model.getExpiryDate())
             .eligibilityCode(model.getEligibilityCode())
             .notForReassessment(
-                model.isNotForReassessment() != null
-                    ? model.isNotForReassessment()
-                    : false
+                model.isNotForReassessment()
             )
             .deliverToCode(model.getDeliverToCode())
             .deliverOptionCode(model.getDeliveryOptionCode())

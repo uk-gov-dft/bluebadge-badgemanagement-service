@@ -65,7 +65,6 @@ public class BadgeOrderRequestConverter
       badgeEntity.setNotForReassessment(model.isNotForReassessment());
     }
 
-
     // Populate person/organisation specific data
     if (isPerson(model.getParty())) {
       Person person = model.getParty().getPerson();

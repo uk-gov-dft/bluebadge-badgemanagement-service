@@ -5,7 +5,6 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.Defa
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderOrgRequest;
 import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getValidBadgeOrderPersonRequest;
 
-import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
@@ -119,7 +118,8 @@ public class BadgeOrderRequestConverterTest {
   }
 
   @Test
-  public void whenAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
+  public void
+      whenAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
     BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
     request.setNotForReassessment(null);
     BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
@@ -127,7 +127,8 @@ public class BadgeOrderRequestConverterTest {
   }
 
   @Test
-  public void whenNonAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
+  public void
+      whenNonAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
     BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
     request.setEligibilityCode(EligibilityType.CHILDVEHIC);
     request.setNotForReassessment(null);

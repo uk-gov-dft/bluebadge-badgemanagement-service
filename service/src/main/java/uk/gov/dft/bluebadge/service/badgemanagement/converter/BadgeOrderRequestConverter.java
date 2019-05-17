@@ -2,9 +2,9 @@ package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_ORG_OBJECT;
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.MISSING_PERSON_OBJECT;
+import static uk.gov.dft.bluebadge.service.badgemanagement.utility.Utils.isAutomaticEligibility;
 
 import java.time.LocalDate;
-
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
@@ -38,9 +38,6 @@ public class BadgeOrderRequestConverter
             .startDate(model.getStartDate())
             .expiryDate(model.getExpiryDate())
             .eligibilityCode(model.getEligibilityCode())
-            .notForReassessment(
-                model.isNotForReassessment()
-            )
             .deliverToCode(model.getDeliverToCode())
             .deliverOptionCode(model.getDeliveryOptionCode())
             .contactName(contact.getFullName())
@@ -58,6 +55,16 @@ public class BadgeOrderRequestConverter
             .numberOfBadges(null == model.getNumberOfBadges() ? 1 : model.getNumberOfBadges())
             .orderDate(LocalDate.now())
             .build();
+
+    // Set not-for-reassessment
+    if (isPerson(model.getParty())
+        && !isAutomaticEligibility(model.getEligibilityCode())
+        && model.isNotForReassessment() == null) {
+      badgeEntity.setNotForReassessment(false);
+    } else {
+      badgeEntity.setNotForReassessment(model.isNotForReassessment());
+    }
+
 
     // Populate person/organisation specific data
     if (isPerson(model.getParty())) {

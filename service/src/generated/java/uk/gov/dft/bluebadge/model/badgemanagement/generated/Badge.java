@@ -338,9 +338,7 @@ public class Badge {
    *
    * @return true or false
    */
-  @ApiModelProperty(
-    example = "true", value = "Need reassessment."
-  )
+  @ApiModelProperty(example = "true", value = "Need reassessment.")
   public Boolean isNotForReassessment() {
     return this.notForReassessment;
   }

@@ -358,6 +358,7 @@ public class BadgeOrderRequest {
         && Objects.equals(this.startDate, badgeOrderRequest.startDate)
         && Objects.equals(this.expiryDate, badgeOrderRequest.expiryDate)
         && Objects.equals(this.eligibilityCode, badgeOrderRequest.eligibilityCode)
+        && Objects.equals(this.notForReassessment, badgeOrderRequest.notForReassessment)
         && Objects.equals(this.imageFile, badgeOrderRequest.imageFile)
         && Objects.equals(this.deliverToCode, badgeOrderRequest.deliverToCode)
         && Objects.equals(this.deliveryOptionCode, badgeOrderRequest.deliveryOptionCode)
@@ -375,6 +376,7 @@ public class BadgeOrderRequest {
         startDate,
         expiryDate,
         eligibilityCode,
+        notForReassessment,
         imageFile,
         deliverToCode,
         deliveryOptionCode,
@@ -398,6 +400,7 @@ public class BadgeOrderRequest {
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    expiryDate: ").append(toIndentedString(expiryDate)).append("\n");
     sb.append("    eligibilityCode: ").append(toIndentedString(eligibilityCode)).append("\n");
+    sb.append("    notForReassessment: ").append(toIndentedString(notForReassessment)).append("\n");
     sb.append("    imageFile: ").append(toIndentedString(imageFile)).append("\n");
     sb.append("    deliverToCode: ").append(toIndentedString(deliverToCode)).append("\n");
     sb.append("    deliveryOptionCode: ").append(toIndentedString(deliveryOptionCode)).append("\n");

@@ -10,8 +10,6 @@ Feature: Verify replace a badge
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * header Accept = jsonVersionHeader
-    * callonce read('./badge-create-person.feature')
-
 
   Scenario: Verify replace a badge will not alter not-for-reassessment flag being NULL
     Given path 'badges/EEEEEF/replacements'

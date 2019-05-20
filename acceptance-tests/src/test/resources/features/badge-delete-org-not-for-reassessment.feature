@@ -38,6 +38,7 @@ Feature: Verify delete a organisation badge with not-for-reassessment flag
     startDate: '#(futureDate)',
     expiryDate: '#(futureDatePlusYear)',
     eligibilityCode: 'CHILDBULK',
+    notForReassessment: null,
     imageFile: 'YWZpbGU=',
     deliverToCode: 'HOME',
     deliveryOptionCode: 'STAND',

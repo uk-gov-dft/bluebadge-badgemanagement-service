@@ -5,7 +5,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getV
 
 import org.junit.Assert;
 import org.junit.Test;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
@@ -24,6 +24,7 @@ public class BadgeConverterTest {
     Assert.assertEquals(
         model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
     Assert.assertEquals(BadgeTestFixture.DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
+    Assert.assertEquals(entity.getNotForReassessment(), model.getNotForReassessment());
   }
 
   @Test
@@ -39,13 +40,7 @@ public class BadgeConverterTest {
     // And contact details present.
     Assert.assertEquals(
         entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
-  }
+    Assert.assertEquals(entity.getNotForReassessment(), model.getNotForReassessment());
 
-  @Test
-  public void whenNotForReassessmentExistsInEntity_thenModelAlsoHasNotForReassessment() {
-    BadgeEntity entity = getValidPersonBadgeEntity();
-    Badge model = new BadgeConverter().convertToModel(entity);
-
-    Assert.assertEquals(entity.getNotForReassessment(), model.isNotForReassessment());
   }
 }

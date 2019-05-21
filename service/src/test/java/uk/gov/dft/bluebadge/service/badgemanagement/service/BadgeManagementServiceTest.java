@@ -40,7 +40,7 @@ import org.mockito.MockitoAnnotations;
 import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
@@ -405,7 +405,13 @@ public class BadgeManagementServiceTest {
       if (i == 0) {
         assertThat(sc.nextLine())
             .isEqualTo(
-                "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+                "badge_no,badge_status,party_code,\"local_authority_short_code\"," +
+                    "local_authority_ref,app_date,app_channel_code,start_date," +
+                    "expiry_date,eligibility_code,deliver_to_code,deliver_option_code," +
+                    "cancel_reason_code,replace_reason_code,order_date,rejected_reason," +
+                    "rejected_date_time,issued_date_time,print_request_date_time," +
+                    "not_for_reassessment"
+            );
       }
       // Should have line for badge.
       if (i == 1) {
@@ -435,7 +441,12 @@ public class BadgeManagementServiceTest {
       // Should have header line.
       assertThat(sc.nextLine())
           .isEqualTo(
-              "badge_no,badge_status,party_code,\"local_authority_short_code\",local_authority_ref,app_date,app_channel_code,start_date,expiry_date,eligibility_code,deliver_to_code,deliver_option_code,cancel_reason_code,replace_reason_code,order_date,rejected_reason,rejected_date_time,issued_date_time,print_request_date_time");
+              "badge_no,badge_status,party_code,\"local_authority_short_code\"," +
+                  "local_authority_ref,app_date,app_channel_code,start_date,expiry_date," +
+                  "eligibility_code,deliver_to_code,deliver_option_code,cancel_reason_code," +
+                  "replace_reason_code,order_date,rejected_reason,rejected_date_time," +
+                  "issued_date_time,print_request_date_time,not_for_reassessment"
+          );
       i++;
     }
     // Should not have any more lines.

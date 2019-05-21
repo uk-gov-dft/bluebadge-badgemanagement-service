@@ -28,7 +28,7 @@ import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeCancelRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumberResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeNumbersResponse;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeReplaceRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeResponse;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgesResponse;

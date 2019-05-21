@@ -1,7 +1,7 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.converter;
 
 import uk.gov.dft.bluebadge.common.converter.ToModelConverter;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.Badge;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
@@ -29,7 +29,7 @@ public class BadgeConverter implements ToModelConverter<BadgeEntity, Badge> {
     badge.setReplaceReasonCode(entity.getReplaceReasonCode());
     badge.setRejectedReason(entity.getRejectedReason());
     badge.setIssuedDate(entity.getIssuedDate());
-    badge.setSentPrintDate(entity.getPrintRequestDateTime());
+    badge.setPrintRequestDateTime(entity.getPrintRequestDateTime());
     badge.setNotForReassessment(entity.getNotForReassessment());
     Party party = new Party();
     badge.setParty(party);

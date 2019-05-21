@@ -18,7 +18,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import uk.gov.dft.bluebadge.common.logging.LogEventBuilder;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.enums.Nation;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData.LocalAuthorityMetaData;
@@ -99,7 +99,7 @@ public class BadgeAuditLoggerTest {
   }
 
   private BadgeOrderRequest getPopulatedBadgeOrderRequest() {
-    return new BadgeOrderRequest()
+    return new BadgeOrderRequest().builder()
         .applicationChannelCode("CHANNEL")
         .applicationDate(LocalDate.now())
         .eligibilityCode(EligibilityType.WALKD)
@@ -107,7 +107,8 @@ public class BadgeAuditLoggerTest {
         .expiryDate(LocalDate.now())
         .localAuthorityShortCode("ABC")
         .numberOfBadges(1)
-        .party(new Party().typeCode("ORG"));
+        .party(new Party().typeCode("ORG"))
+        .build();
   }
 
   private LocalAuthorityRefData getLocalAuthorityRefData() {

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 
 @Data

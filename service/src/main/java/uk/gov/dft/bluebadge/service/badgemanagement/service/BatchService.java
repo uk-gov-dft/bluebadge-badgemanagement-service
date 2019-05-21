@@ -28,6 +28,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Pr
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
@@ -151,7 +152,7 @@ public class BatchService {
 
   private PrintBatchBadgeRequest toBadgePrintRequest(BadgeEntity badgeEntity) {
     BadgeConverter converter = new BadgeConverter();
-    uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge badge =
+    Badge badge =
         converter.convertToModel(badgeEntity);
     return PrintBatchBadgeRequest.builder()
         .badgeNumber(badgeEntity.getBadgeNo())

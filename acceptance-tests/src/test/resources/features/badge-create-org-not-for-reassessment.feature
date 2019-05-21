@@ -9,122 +9,27 @@ Feature: Verify create badge with/without not-for-reassessment flag
     * def result = callonce read('./oauth2-3rd-party-scotland.feature')
     * header Authorization = 'Bearer ' + result.accessToken
     * header Accept = jsonVersionHeader
+    * def testData = read('classpath:test-data.json')
 
   Scenario: Verify invalid create organisation badge with the flag being TRUE
-    * def badge =
-    """
-    {
-    party: {
-    typeCode: 'ORG',
-    contact: {
-    fullName: 'June Whitfield',
-    buildingStreet: '65 Basil Chambers',
-    line2: 'Northern Quarter',
-    townCity: 'Manchester',
-    postCode: 'OR6 8GG',
-    primaryPhoneNumber: '01616548765',
-    secondaryPhoneNumber: '01616548765',
-    emailAddress: 'june@bigbrainknitting.com'
-    },
-    organisation: {
-    badgeHolderName: 'TestData ORGTEST1234'
-    }
-    },
-    localAuthorityShortCode: 'ABERD',
-    localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23',
-    applicationChannelCode: 'ONLINE',
-    startDate: '#(futureDate)',
-    expiryDate: '#(futureDatePlusYear)',
-    eligibilityCode: 'CHILDBULK',
-    notForReassessment: true,
-    imageFile: 'YWZpbGU=',
-    deliverToCode: 'HOME',
-    deliveryOptionCode: 'STAND',
-    numberOfBadges: 1
-    }
-    """
-
+    * set testData.orgBadge.notForReassessment = true
     Given path 'badges'
-    And request badge
+    And request testData.orgBadge
     When method POST
     Then status 400
+    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify invalid create organisation badge with the flag being FALSE
-    * def badge =
-    """
-    {
-    party: {
-    typeCode: 'ORG',
-    contact: {
-    fullName: 'June Whitfield',
-    buildingStreet: '65 Basil Chambers',
-    line2: 'Northern Quarter',
-    townCity: 'Manchester',
-    postCode: 'OR6 8GG',
-    primaryPhoneNumber: '01616548765',
-    secondaryPhoneNumber: '01616548765',
-    emailAddress: 'june@bigbrainknitting.com'
-    },
-    organisation: {
-    badgeHolderName: 'TestData ORGTEST1234'
-    }
-    },
-    localAuthorityShortCode: 'ABERD',
-    localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23',
-    applicationChannelCode: 'ONLINE',
-    startDate: '#(futureDate)',
-    expiryDate: '#(futureDatePlusYear)',
-    eligibilityCode: 'CHILDBULK',
-    notForReassessment: false,
-    imageFile: 'YWZpbGU=',
-    deliverToCode: 'HOME',
-    deliveryOptionCode: 'STAND',
-    numberOfBadges: 1
-    }
-    """
-
+    * set testData.orgBadge.notForReassessment = true
     Given path 'badges'
-    And request badge
+    And request testData.orgBadge
     When method POST
     Then status 400
+    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify create organisation badge without the flag and it will remain unset after that
-    * def badge =
-    """
-    {
-    party: {
-    typeCode: 'ORG',
-    contact: {
-    fullName: 'June Whitfield',
-    buildingStreet: '65 Basil Chambers',
-    line2: 'Northern Quarter',
-    townCity: 'Manchester',
-    postCode: 'OR6 8GG',
-    primaryPhoneNumber: '01616548765',
-    secondaryPhoneNumber: '01616548765',
-    emailAddress: 'june@bigbrainknitting.com'
-    },
-    organisation: {
-    badgeHolderName: 'TestData ORGTEST1234'
-    }
-    },
-    localAuthorityShortCode: 'ABERD',
-    localAuthorityRef: 'YOURCODE',
-    applicationDate: '2018-04-23',
-    applicationChannelCode: 'ONLINE',
-    startDate: '#(futureDate)',
-    expiryDate: '#(futureDatePlusYear)',
-    eligibilityCode: 'CHILDBULK',
-    imageFile: 'YWZpbGU=',
-    deliverToCode: 'HOME',
-    deliveryOptionCode: 'STAND',
-    numberOfBadges: 1
-    }
-    """
     Given path 'badges'
-    And request badge
+    And request testData.orgBadge
     When method POST
     Then status 200
     And match $.data[*] contains "#notnull"

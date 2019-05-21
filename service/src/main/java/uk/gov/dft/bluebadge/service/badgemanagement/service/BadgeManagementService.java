@@ -34,7 +34,7 @@ import uk.gov.dft.bluebadge.common.security.SecurityUtils;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.common.util.Base20;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeSummary;
 import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
@@ -136,11 +136,11 @@ public class BadgeManagementService {
 
     List<String> existing = repository.findBadgeHash(badgeHash);
     if (null != existing && !existing.isEmpty()) {
-      StringBuilder existingids = new StringBuilder();
+      StringBuilder existingIDs = new StringBuilder();
       for (String badgeNo : existing) {
-        existingids.append(";").append(badgeNo);
+        existingIDs.append(";").append(badgeNo);
       }
-      log.warn("Attempt to create badge with same hash as following {}", existingids.toString());
+      log.warn("Attempt to create badge with same hash as following {}", existingIDs.toString());
       throw new BadRequestException(
           new Error()
               .reason("Cannot order badge, this badge has already been ordered.")

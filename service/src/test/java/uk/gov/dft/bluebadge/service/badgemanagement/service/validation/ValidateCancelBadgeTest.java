@@ -5,46 +5,23 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getV
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 public class ValidateCancelBadgeTest {
 
-  ValidateCancelBadge validator;
+  private ValidateCancelBadge validator;
 
   public ValidateCancelBadgeTest() {
 
     validator =
         new ValidateCancelBadge(
             new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
-  }
-
-  @Test
-  public void validate_params_ok() {
-    // Given valid cancel params
-    CancelBadgeParams params =
-        CancelBadgeParams.builder()
-            .badgeNo("ABCABC")
-            .cancelReasonCode(BadgeTestFixture.DefaultVals.CANCEL_CODE_VALID)
-            .build();
-    // When validated
-    validator.validateRequest(params);
-    // Then no exception thrown
-  }
-
-  @Test(expected = BadRequestException.class)
-  public void validate_params_bad() {
-    // Given valid cancel params
-    CancelBadgeParams params =
-        CancelBadgeParams.builder().badgeNo("ABCABC").cancelReasonCode("INVALIDCODEXXX").build();
-    // When validated
-    validator.validateRequest(params);
-    // Then exception thrown
   }
 
   @Test(expected = NotFoundException.class)
@@ -66,7 +43,7 @@ public class ValidateCancelBadgeTest {
     try {
       validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
-      assertThat(e.getResponse().getBody().getError().getMessage())
+      assertThat(Objects.requireNonNull(e.getResponse().getBody()).getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.status");
       // Then 400 thrown
       throw e;
@@ -83,7 +60,7 @@ public class ValidateCancelBadgeTest {
     try {
       validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
-      assertThat(e.getResponse().getBody().getError().getMessage())
+      assertThat(Objects.requireNonNull(e.getResponse().getBody()).getError().getMessage())
           .isEqualTo("Invalid.badge.cancel.expiryDate");
       // Then 400 thrown
       throw e;
@@ -100,7 +77,7 @@ public class ValidateCancelBadgeTest {
     try {
       validator.validateAfterFailedCancel(badge);
     } catch (BadRequestException e) {
-      assertThat(e.getResponse().getBody().getError().getMessage())
+      assertThat(Objects.requireNonNull(e.getResponse().getBody()).getError().getMessage())
           .isEqualTo("Unexpected.cancel.fail");
       // Then 400 thrown
       throw e;

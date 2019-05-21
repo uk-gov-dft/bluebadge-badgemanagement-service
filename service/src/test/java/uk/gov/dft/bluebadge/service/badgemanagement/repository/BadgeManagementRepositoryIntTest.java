@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverOption;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverTo;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.ReplaceReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -38,7 +41,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   private static final DateTimeFormatter DATE_TIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  @Autowired BadgeManagementRepository badgeManagementRepository;
+  @Autowired private BadgeManagementRepository badgeManagementRepository;
 
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
@@ -109,7 +112,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -122,7 +125,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("NOTEXI")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -135,7 +138,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ANGL")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -178,16 +181,12 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     FindBadgeParams params = FindBadgeParams.builder().name("%ZZZZ%").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
 
-    Collections.sort(badgeEntityList, (b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
+    badgeEntityList.sort((b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
     List<BadgeEntity> expectedBadgeEntityList =
         badgeEntityList
             .stream()
             .limit(RESULTS_LIMIT)
-            .map(
-                b -> {
-                  b.setOrderDate(null);
-                  return b;
-                })
+            .peek(b -> b.setOrderDate(null))
             .collect(Collectors.toList());
 
     assertThat(badges).hasSize(RESULTS_LIMIT);
@@ -346,9 +345,9 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     ReplaceBadgeParams params =
         ReplaceBadgeParams.builder()
             .badgeNumber("KKKKKK")
-            .deliveryCode("HOME")
-            .deliveryOptionCode("FAST")
-            .reasonCode("DAMAGED")
+            .deliveryCode(DeliverTo.HOME)
+            .deliveryOptionCode(DeliverOption.FAST)
+            .reasonCode(ReplaceReason.DAMAGED)
             .startDate(LocalDate.now())
             .status(Status.REPLACED)
             .build();

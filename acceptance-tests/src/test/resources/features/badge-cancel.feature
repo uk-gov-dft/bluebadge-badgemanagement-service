@@ -14,7 +14,7 @@ Feature: Verify cancel a badge
 
   Scenario: Verify 404 response for cancel of unknown badge
     Given path 'badges/AAAAAA/cancellations'
-    And request {badgeNumber: "AAAAAA", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "AAAAAA", cancelReasonCode: "DECEASE"}
     When method POST
     Then status 404
 
@@ -23,36 +23,36 @@ Feature: Verify cancel a badge
     And request {badgeNumber: "#(badgeNo)", cancelReasonCode: "WRONGCODE"}
     When method POST
     Then status 400
-    And match $.error.errors[0].message == 'Invalid.badgeCancelRequest.cancelReasonCode'
+    And match $.error.errors[0].message == 'InvalidFormat.cancelReasonCode'
 
   Scenario: Verify cancel a badge success when newly created
     Given path 'badges/'+ badgeNo + '/cancellations'
-    And request {badgeNumber: "#(badgeNo)", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "#(badgeNo)", cancelReasonCode: "REVOKE"}
     When method POST
     Then status 200
 
   Scenario: Verify cancel fails for invalid status
     Given path 'badges/BBBBBD/cancellations'
-    And request {badgeNumber: "BBBBBD", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "BBBBBD", cancelReasonCode: "UNDELIVER"}
     When method POST
     Then status 400
     And match $.error.message == 'Invalid.badge.cancel.status'
 
   Scenario: Verify cancel a badge success when ISSUED
     Given path 'badges/BBBBBC/cancellations'
-    And request {badgeNumber: "BBBBBC", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "BBBBBC", cancelReasonCode: "LOST"}
     When method POST
     Then status 200
 
   Scenario: Verify cancel a badge success when ISSUED
     Given path 'badges/bbbbbe/cancellations'
-    And request {badgeNumber: "bbbbbe", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "bbbbbe", cancelReasonCode: "STOLE"}
     When method POST
     Then status 200
 
   Scenario: Verify cancel a badge with different path and body badge numbers
     Given path 'badges/'+ badgeNo + '/cancellations'
-    And request {badgeNumber: "BBBBBB", cancelReasonCode: "NOLONG"}
+    And request {badgeNumber: "BBBBBB", cancelReasonCode: "DAMAGED"}
     When method POST
     Then status 400
     And match $.error.errors[0].message == 'Invalid.badgeNumber'

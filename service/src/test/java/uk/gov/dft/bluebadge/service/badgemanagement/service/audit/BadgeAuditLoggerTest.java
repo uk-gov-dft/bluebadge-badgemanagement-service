@@ -22,6 +22,7 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData.LocalAuthorityMetaData;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
@@ -40,7 +41,10 @@ public class BadgeAuditLoggerTest {
   @Test
   public void logCancelAuditMessage() {
     badgeAuditLogger.logCancelAuditMessage(
-        CancelBadgeParams.builder().cancelReasonCode("DDD").localAuthorityShortCode("ABC").build(),
+        CancelBadgeParams.builder()
+            .cancelReasonCode(CancelReason.REVOKE)
+            .localAuthorityShortCode("ABC")
+            .build(),
         log);
     verify(log, times(1)).info(LogEventBuilder.AuditEvent.BADGE_CANCELLED.name());
   }
@@ -85,7 +89,7 @@ public class BadgeAuditLoggerTest {
             .cancelBadgeParams(
                 CancelBadgeParams.builder()
                     .localAuthorityShortCode("ABC")
-                    .cancelReasonCode("REASON")
+                    .cancelReasonCode(CancelReason.REVOKE)
                     .build())
             .build();
 

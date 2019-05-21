@@ -44,11 +44,10 @@ public class BadgeTestFixture {
     static final String PARTY_PERSON_CODE = "PERSON";
     static final String PARTY_PERSON_DESC = "Person";
     static final String PARTY_ORG_CODE = "ORG";
-    public static final String CANCEL_CODE_VALID = "NOLONG";
     public static final String REPLACE_REASON = "STOLE";
-    public static final String PRIMARY_PHONE_NUMBER = "1 2 3 4567 8901";
+    static final String PRIMARY_PHONE_NUMBER = "1 2 3 4567 8901";
     public static final String PRIMARY_PHONE_NUMBER_TRIMMED = "12345678901";
-    public static final String SECONDARY_PHONE_NUMBER = "+447777 77 77 9";
+    static final String SECONDARY_PHONE_NUMBER = "+447777 77 77 9";
     public static final String SECONDARY_PHONE_NUMBER_TRIMMED = "+44777777779";
   }
 
@@ -105,9 +104,6 @@ public class BadgeTestFixture {
         getNewRefDataItem(PARTY, DefaultVals.PARTY_PERSON_CODE, DefaultVals.PARTY_PERSON_DESC));
     referenceDataList.add(
         getNewRefDataItem(GENDER, DefaultVals.GENDER_CODE, DefaultVals.GENDER_DESC));
-    referenceDataList.add(
-        getNewRefDataItem(
-            RefDataGroupEnum.CANCEL, DefaultVals.CANCEL_CODE_VALID, "No longer needed."));
     referenceDataList.add(getNewRefDataItem(REPLACE, DefaultVals.REPLACE_REASON, null));
     return referenceDataList;
   }

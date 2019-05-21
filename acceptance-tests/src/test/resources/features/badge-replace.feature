@@ -11,31 +11,44 @@ Feature: Verify replace a badge
     * header Authorization = 'Bearer ' + result.accessToken
     * header Accept = jsonVersionHeader
     * callonce read('./badge-create-person.feature')
+    * def replaceRequest =
+      """
+      {
+        badgeNumber: '123456',
+        replaceReasonCode: 'STOLE',
+        deliverToCode: 'HOME',
+        deliveryOptionCode: 'FAST'
+      }
+      """
 
   Scenario: Verify 404 response for replace of unknown badge
+    * set replaceRequest $.badgeNumber = 'AAAAAA'
     Given path 'badges/AAAAAA/replacements'
-    And request {"badgeNumber": "AAAAAA","replaceReasonCode": "STOLEN","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request replaceRequest
     When method POST
     Then status 404
 
   Scenario: Verify replace already replaced badge
+    * set replaceRequest $.badgeNumber = 'CCCCCC'
     Given path 'badges/CCCCCC/replacements'
-    And request {"badgeNumber": "CCCCCC","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
+    And request replaceRequest
     When method POST
     Then status 400
     And match $.error.message == 'Invalid.badge.replace.badgeStatus'
 
   Scenario: Verify replace expired badge
+    * set replaceRequest $.badgeNumber = 'DDDDDD'
     Given path 'badges/DDDDDD/replacements'
-    And request {"badgeNumber": "DDDDDD","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
+    And request replaceRequest
     When method POST
     Then status 400
     And match $.error.message == 'Invalid.badge.replace.expiryDate'
 
-
   Scenario: Verify replace a badge success
+    * set replaceRequest $.badgeNumber = 'EEEEEF'
+    * set replaceRequest $.deliveryOptionCode = 'STAND'
     Given path 'badges/EEEEEF/replacements'
-    And request {badgeNumber: "EEEEEF","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request replaceRequest
     When method POST
     Then status 200
     * def newBadgeNo = $.data
@@ -71,8 +84,10 @@ Feature: Verify replace a badge
     * match newBadge.replace_reason_code == null
 
   Scenario: Verify replace a badge success with lower case badge number
+    * set replaceRequest $.badgeNumber = 'eeeeea'
+    * set replaceRequest $.deliverToCode = 'COUNCIL'
     Given path 'badges/eeeeea/replacements'
-    And request {badgeNumber: "EEEEEA","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request replaceRequest
     When method POST
     Then status 200
     * def newBadgeNo = $.data
@@ -88,8 +103,8 @@ Feature: Verify replace a badge
     * match replacedBadge.app_channel_code == newBadge.app_channel_code
     * match replacedBadge.eligibility_code == newBadge.eligibility_code
     * match replacedBadge.image_link == newBadge.image_link
-    * match newBadge.deliver_option_code == 'STAND'
-    * match newBadge.deliver_to_code == 'HOME'
+    * match newBadge.deliver_option_code == 'FAST'
+    * match newBadge.deliver_to_code == 'COUNCIL'
     * match replacedBadge.holder_name == newBadge.holder_name
     * match replacedBadge.nino == newBadge.nino
     * match replacedBadge.gender_code == newBadge.gender_code
@@ -108,14 +123,54 @@ Feature: Verify replace a badge
     * match newBadge.replace_reason_code == null
 
   Scenario: Verify replace a badge with different path and body badge numbers
+    * set replaceRequest $.badgeNumber = 'DDDDDD'
     Given path 'badges/'+ badgeNo + '/replacements'
-    And request {"badgeNumber": "DDDDDD","replaceReasonCode": "DAMAGED","deliverToCode": "HOME","deliveryOptionCode": "FAST"}
+    And request replaceRequest
     When method POST
     Then status 400
     And match $.error.message == 'Invalid.badgeNumber'
 
   Scenario: Verify replace a badge in a different local authority
+    * set replaceRequest $.badgeNumber = 'BBBBBB'
     Given path 'badges/BBBBBB/replacements'
-    And request {"badgeNumber": "BBBBBB","replaceReasonCode": "STOLE","deliverToCode": "HOME","deliveryOptionCode": "STAND"}
+    And request replaceRequest
     When method POST
     Then status 403
+
+  Scenario: Verify replace a badge with invalid deliver to enum value
+    * set replaceRequest $.deliverToCode = 'INVALID'
+    Given path 'badges/123456/replacements'
+    And request replaceRequest
+    When method POST
+    Then status 400
+    And match $.error.errors contains {field:'deliverToCode',reason:'#notnull',message:'InvalidFormat.deliverToCode',location:null,locationType:null}
+
+  Scenario: Verify replace a badge with invalid deliver option enum value
+    * set replaceRequest $.deliveryOptionCode = 'ARIBA'
+    Given path 'badges/123456/replacements'
+    And request replaceRequest
+    When method POST
+    Then status 400
+    And match $.error.errors contains {field:'deliveryOptionCode',reason:'#notnull',message:'InvalidFormat.deliveryOptionCode',location:null,locationType:null}
+
+  Scenario: Verify replace a badge with invalid replace reason enum value
+    * set replaceRequest $.replaceReasonCode = 'ARIBA'
+    Given path 'badges/123456/replacements'
+    And request replaceRequest
+    When method POST
+    Then status 400
+    And match $.error.errors contains {field:'replaceReasonCode',reason:'#notnull',message:'InvalidFormat.replaceReasonCode',location:null,locationType:null}
+
+  Scenario: Verify replace a badge with null params
+    * set replaceRequest $.replaceReasonCode = null
+    * set replaceRequest $.deliveryOptionCode = null
+    * set replaceRequest $.deliverToCode = null
+    * set replaceRequest $.badgeNumber = null
+    Given path 'badges/123456/replacements'
+    And request replaceRequest
+    When method POST
+    Then status 400
+    And match $.error.errors contains {field:'replaceReasonCode',reason:'#notnull',message:'NotNull.badgeReplaceRequest.replaceReasonCode',location:null,locationType:null}
+    And match $.error.errors contains {field:'deliverToCode',reason:'#notnull',message:'NotNull.badgeReplaceRequest.deliverToCode',location:null,locationType:null}
+    And match $.error.errors contains {field:'badgeNumber',reason:'#notnull',message:'NotNull.badgeReplaceRequest.badgeNumber',location:null,locationType:null}
+    And match $.error.errors contains {field:'deliveryOptionCode',reason:'#notnull',message:'NotNull.badgeReplaceRequest.deliveryOptionCode',location:null,locationType:null}

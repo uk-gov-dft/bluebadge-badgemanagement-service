@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

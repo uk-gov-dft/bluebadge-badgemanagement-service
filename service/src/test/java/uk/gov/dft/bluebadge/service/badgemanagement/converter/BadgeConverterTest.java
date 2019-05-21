@@ -5,7 +5,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getV
 
 import org.junit.Assert;
 import org.junit.Test;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.Badge;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 

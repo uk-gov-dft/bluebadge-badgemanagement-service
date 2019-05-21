@@ -18,7 +18,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import uk.gov.dft.bluebadge.common.logging.LogEventBuilder;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.enums.Nation;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.LocalAuthorityRefData.LocalAuthorityMetaData;

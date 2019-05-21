@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.enums.Nation;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;

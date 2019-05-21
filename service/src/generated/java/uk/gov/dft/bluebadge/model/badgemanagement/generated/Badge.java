@@ -1,4 +1,4 @@
-package uk.gov.dft.bluebadge.service.badgemanagement.model;
+package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

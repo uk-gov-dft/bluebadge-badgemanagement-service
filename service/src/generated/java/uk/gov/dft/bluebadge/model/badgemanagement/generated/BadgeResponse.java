@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.dft.bluebadge.common.api.model.CommonResponse;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.Badge;
 
 /** BadgeResponse */
 @Validated

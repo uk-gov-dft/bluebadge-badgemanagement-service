@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 
 public class BadgeOrderRequestConverterTest {

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import org.apache.commons.lang3.StringUtils;
 import uk.gov.dft.bluebadge.common.converter.ToEntityConverter;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
-import uk.gov.dft.bluebadge.service.badgemanagement.model.BadgeOrderRequest;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Contact;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Organisation;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.Party;

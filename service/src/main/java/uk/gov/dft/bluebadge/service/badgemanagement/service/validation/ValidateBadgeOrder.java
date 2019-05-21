@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -87,20 +86,14 @@ public class ValidateBadgeOrder extends ValidateBase {
 
   private void validateNotForReassessment(BadgeEntity entity, List<ErrorErrors> errors) {
     if (entity.isOrganisation() && entity.getNotForReassessment() != null) {
-      errors.add(
-          ValidationKeyEnum
-              .INVALID_NOT_FOR_REASSESSMENT_FOR_ORG
-              .getFieldErrorInstance()
-      );
+      errors.add(ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_ORG.getFieldErrorInstance());
     } else if (entity.isPerson()
         && entity.getEligibilityCode() != null
         && entity.getEligibilityCode().isAutomaticEligible()
         && entity.getNotForReassessment() != null) {
       errors.add(
-          ValidationKeyEnum
-              .INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY
-              .getFieldErrorInstance()
-      );
+          ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY
+              .getFieldErrorInstance());
     }
   }
 
@@ -161,7 +154,7 @@ public class ValidateBadgeOrder extends ValidateBase {
   static void validateStartExpiryDateRange(BadgeEntity entity, List<ErrorErrors> errors) {
     Assert.notNull(entity.getExpiryDate(), "Expiry date should not be null.");
     if (!(entity.getExpiryDate().minus(Period.ofYears(3)).minus(Period.ofDays(1)))
-        .isBefore(entity.getStartDate())
+            .isBefore(entity.getStartDate())
         || entity.getExpiryDate().isBefore(entity.getStartDate())) {
       errors.add(ValidationKeyEnum.START_EXPIRY_DATE_RANGE.getFieldErrorInstance());
     }

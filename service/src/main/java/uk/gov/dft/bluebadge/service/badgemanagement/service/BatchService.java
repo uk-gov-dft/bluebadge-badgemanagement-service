@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
+import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.PrintServiceApiClient;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchBadgeRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.PrintBatchRequest;
@@ -28,7 +29,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.Pr
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatch;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.printservice.model.ProcessedBatchesResponse;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeConverter;
-import uk.gov.dft.bluebadge.model.badgemanagement.generated.Badge;
 import uk.gov.dft.bluebadge.service.badgemanagement.model.BatchType;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BatchRepository;
@@ -152,8 +152,7 @@ public class BatchService {
 
   private PrintBatchBadgeRequest toBadgePrintRequest(BadgeEntity badgeEntity) {
     BadgeConverter converter = new BadgeConverter();
-    Badge badge =
-        converter.convertToModel(badgeEntity);
+    Badge badge = converter.convertToModel(badgeEntity);
     return PrintBatchBadgeRequest.builder()
         .badgeNumber(badgeEntity.getBadgeNo())
         .party(badge.getParty())

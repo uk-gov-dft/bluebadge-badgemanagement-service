@@ -1,73 +1,70 @@
 package uk.gov.dft.bluebadge.model.badgemanagement.generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-/**
- * Badge
- */
+/** Badge */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Badge {
   @JsonProperty("badgeNumber")
-  private String badgeNumber = null;
+  private String badgeNumber;
 
   @JsonProperty("party")
-  private Party party = null;
+  private Party party;
 
   @JsonProperty("localAuthorityShortCode")
-  private String localAuthorityShortCode = null;
+  private String localAuthorityShortCode;
 
   @JsonProperty("localAuthorityRef")
-  private String localAuthorityRef = null;
+  private String localAuthorityRef;
 
   @JsonProperty("applicationDate")
-  private LocalDate applicationDate = null;
+  private LocalDate applicationDate;
 
   @JsonProperty("applicationChannelCode")
-  private String applicationChannelCode = null;
+  private String applicationChannelCode;
 
   @JsonProperty("orderDate")
-  private LocalDate orderDate = null;
+  private LocalDate orderDate;
 
   @JsonProperty("issuedDate")
-  private LocalDateTime issuedDate = null;
+  private LocalDateTime issuedDate;
 
   @JsonProperty("printRequestDateTime")
-  private LocalDateTime printRequestDateTime = null;
+  private LocalDateTime printRequestDateTime;
 
   @JsonProperty("startDate")
-  private LocalDate startDate = null;
+  private LocalDate startDate;
 
   @JsonProperty("expiryDate")
-  private LocalDate expiryDate = null;
+  private LocalDate expiryDate;
 
   @JsonProperty("eligibilityCode")
-  private String eligibilityCode = null;
+  private String eligibilityCode;
 
   @JsonProperty("notForReassessment")
-  private Boolean notForReassessment = null;
+  private Boolean notForReassessment;
 
   @JsonProperty("imageLink")
-  private String imageLink = null;
+  private String imageLink;
 
   @JsonProperty("cancelReasonCode")
-  private String cancelReasonCode = null;
+  private String cancelReasonCode;
 
   @JsonProperty("replaceReasonCode")
-  private String replaceReasonCode = null;
+  private String replaceReasonCode;
 
   @JsonProperty("rejectedReason")
   private String rejectedReason;
 
   @JsonProperty("statusCode")
-  private String statusCode = null;
+  private String statusCode;
 }

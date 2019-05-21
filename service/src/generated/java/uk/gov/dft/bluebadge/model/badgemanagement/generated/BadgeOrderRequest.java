@@ -37,6 +37,9 @@ public class BadgeOrderRequest {
   @JsonProperty("eligibilityCode")
   private EligibilityType eligibilityCode = null;
 
+  @JsonProperty("notForReassessment")
+  private Boolean notForReassessment = null;
+
   @JsonProperty("imageFile")
   private String imageFile = null;
 
@@ -121,9 +124,9 @@ public class BadgeOrderRequest {
    * @return applicationDate
    */
   @ApiModelProperty(
-      example = "2017-07-21",
-      required = true,
-      value = "The date that the initial application was received by the issuing local authority."
+    example = "2017-07-21",
+    required = true,
+    value = "The date that the initial application was received by the issuing local authority."
   )
   @NotNull
   @Valid
@@ -146,10 +149,10 @@ public class BadgeOrderRequest {
    * @return applicationChannelCode
    */
   @ApiModelProperty(
-      example = "ONLINE",
-      required = true,
-      value =
-          "A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON."
+    example = "ONLINE",
+    required = true,
+    value =
+        "A short code from the APPSOURCE group of reference data. e.g.  ONLINE, PAPER, PHONE or INPERSON."
   )
   @NotNull
   @Size(max = 10)
@@ -193,9 +196,9 @@ public class BadgeOrderRequest {
    * @return expiryDate
    */
   @ApiModelProperty(
-      example = "2019-07-01",
-      required = true,
-      value = "The date the Blue Badge expires.  Must be within 3 years of start date. "
+    example = "2019-07-01",
+    required = true,
+    value = "The date the Blue Badge expires.  Must be within 3 years of start date. "
   )
   @NotNull
   @Valid
@@ -218,8 +221,8 @@ public class BadgeOrderRequest {
    * @return eligibilityCode
    */
   @ApiModelProperty(
-      example = "CHILDBULK",
-      value = "A short code from the ELIGIBILITY group of reference data. Reason for badge."
+    example = "CHILDBULK",
+    value = "A short code from the ELIGIBILITY group of reference data. Reason for badge."
   )
   public EligibilityType getEligibilityCode() {
     return eligibilityCode;
@@ -227,6 +230,23 @@ public class BadgeOrderRequest {
 
   public void setEligibilityCode(EligibilityType eligibilityCode) {
     this.eligibilityCode = eligibilityCode;
+  }
+
+  public BadgeOrderRequest notForReassessment(Boolean notForReassessment) {
+    this.notForReassessment = notForReassessment;
+    return this;
+  }
+
+  @ApiModelProperty(
+    example = "true",
+    value = "A flag to determine future reassessment is required."
+  )
+  public Boolean getNotForReassessment() {
+    return notForReassessment;
+  }
+
+  public void setNotForReassessment(Boolean notForReassessment) {
+    this.notForReassessment = notForReassessment;
   }
 
   public BadgeOrderRequest imageFile(String imageFile) {
@@ -240,7 +260,7 @@ public class BadgeOrderRequest {
    * @return imageFile
    */
   @ApiModelProperty(
-      value = "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
+    value = "Base64 encoded.  Must be between 50KB and 10MB, and of format JPG, PNG, or GIF."
   )
   public String getImageFile() {
     return imageFile;
@@ -261,9 +281,9 @@ public class BadgeOrderRequest {
    * @return deliverToCode
    */
   @ApiModelProperty(
-      example = "HOME",
-      required = true,
-      value = "A short code from the DELIVER group of reference data."
+    example = "HOME",
+    required = true,
+    value = "A short code from the DELIVER group of reference data."
   )
   @NotNull
   @Size(max = 10)
@@ -286,9 +306,9 @@ public class BadgeOrderRequest {
    * @return deliveryOptionCode
    */
   @ApiModelProperty(
-      example = "STAND",
-      required = true,
-      value = "A short code from the DELOP group of reference data. e.g. STAND or FAST"
+    example = "STAND",
+    required = true,
+    value = "A short code from the DELOP group of reference data. e.g. STAND or FAST"
   )
   @NotNull
   @Size(max = 10)
@@ -311,8 +331,8 @@ public class BadgeOrderRequest {
    * @return numberOfBadges
    */
   @ApiModelProperty(
-      example = "1",
-      value = "Must be 1 for a person, can be multiple for an organisation."
+    example = "1",
+    value = "Must be 1 for a person, can be multiple for an organisation."
   )
   @Min(1)
   @Max(999)
@@ -358,6 +378,7 @@ public class BadgeOrderRequest {
         startDate,
         expiryDate,
         eligibilityCode,
+        notForReassessment,
         imageFile,
         deliverToCode,
         deliveryOptionCode,

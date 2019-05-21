@@ -99,7 +99,7 @@ public class BadgeAuditLoggerTest {
   }
 
   private BadgeOrderRequest getPopulatedBadgeOrderRequest() {
-    return new BadgeOrderRequest().builder()
+    return new BadgeOrderRequest()
         .applicationChannelCode("CHANNEL")
         .applicationDate(LocalDate.now())
         .eligibilityCode(EligibilityType.WALKD)
@@ -107,8 +107,7 @@ public class BadgeAuditLoggerTest {
         .expiryDate(LocalDate.now())
         .localAuthorityShortCode("ABC")
         .numberOfBadges(1)
-        .party(new Party().typeCode("ORG"))
-        .build();
+        .party(new Party().typeCode("ORG"));
   }
 
   private LocalAuthorityRefData getLocalAuthorityRefData() {

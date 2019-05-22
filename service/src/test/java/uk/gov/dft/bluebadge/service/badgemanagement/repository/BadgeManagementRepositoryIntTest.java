@@ -446,7 +446,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void retrieveBadgesByLa() {
     List<BadgeZipEntity> results = badgeManagementRepository.retrieveBadgesByLa("FINDBYLA");
-    assertThat(results.size()).isEqualTo(3);
+    assertThat(results).extracting("badgeNo").contains("FINDA1", "FINDA3");
     for (BadgeZipEntity entity : results) {
       if (entity.getBadgeNo().equals("FINDA1")) {
         assertThat(entity.getBadgeStatus()).isEqualTo(Status.DELETED);
@@ -456,7 +456,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
         assertThat(entity.getNotForReassessment()).isEqualTo(true);
       } else {
         assertThat(entity.getBadgeStatus()).isEqualTo(Status.ISSUED);
-        // Should have issued/rejeced/printed data for the other badge.
+        // Should have issued/rejected/printed data for the other badge.
         assertThat(entity.getIssuedDateTime()).isNotEmpty();
         assertThat(entity.getRejectedDateTime()).isEqualTo("2010-02-03 15:16:17");
         assertThat(entity.getRejectedReason()).isEqualTo("rejected reason");

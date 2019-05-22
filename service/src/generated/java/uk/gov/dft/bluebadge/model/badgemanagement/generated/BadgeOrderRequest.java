@@ -27,6 +27,7 @@ public class BadgeOrderRequest {
   private String localAuthorityShortCode;
 
   @JsonProperty("localAuthorityRef")
+  @Size(max = 100)
   private String localAuthorityRef;
 
   @JsonProperty("applicationDate")
@@ -35,6 +36,7 @@ public class BadgeOrderRequest {
 
   @JsonProperty("applicationChannelCode")
   @NotNull
+  @Size(max = 10)
   private String applicationChannelCode;
 
   @JsonProperty("startDate")
@@ -46,6 +48,7 @@ public class BadgeOrderRequest {
   private LocalDate expiryDate;
 
   @JsonProperty("eligibilityCode")
+  @NotNull
   private EligibilityType eligibilityCode;
 
   @JsonProperty("notForReassessment")
@@ -56,10 +59,12 @@ public class BadgeOrderRequest {
 
   @JsonProperty("deliverToCode")
   @NotNull
+  @Size(max = 10)
   private String deliverToCode;
 
   @JsonProperty("deliveryOptionCode")
   @NotNull
+  @Size(max = 10)
   private String deliveryOptionCode;
 
   @JsonProperty("numberOfBadges")

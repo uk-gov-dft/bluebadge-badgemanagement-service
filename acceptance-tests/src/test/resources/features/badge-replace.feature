@@ -87,6 +87,7 @@ Feature: Verify replace a badge
   Scenario: Verify replace a badge success with lower case badge number
     * set replaceRequest $.badgeNumber = 'eeeeea'
     * set replaceRequest $.deliverToCode = 'COUNCIL'
+    * set replaceRequest $.deliveryOptionCode = 'STAND'
     Given path 'badges/eeeeea/replacements'
     And request replaceRequest
     When method POST
@@ -104,7 +105,7 @@ Feature: Verify replace a badge
     * match replacedBadge.app_channel_code == newBadge.app_channel_code
     * match replacedBadge.eligibility_code == newBadge.eligibility_code
     * match replacedBadge.image_link == newBadge.image_link
-    * match newBadge.deliver_option_code == 'FAST'
+    * match newBadge.deliver_option_code == 'STAND'
     * match newBadge.deliver_to_code == 'COUNCIL'
     * match replacedBadge.holder_name == newBadge.holder_name
     * match replacedBadge.nino == newBadge.nino

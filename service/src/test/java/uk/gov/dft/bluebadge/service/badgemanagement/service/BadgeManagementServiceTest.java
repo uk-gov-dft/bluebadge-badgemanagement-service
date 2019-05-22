@@ -57,9 +57,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeCancelRequestValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 
 public class BadgeManagementServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";

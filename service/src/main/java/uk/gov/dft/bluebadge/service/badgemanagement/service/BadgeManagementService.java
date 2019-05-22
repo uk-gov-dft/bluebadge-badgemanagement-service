@@ -48,9 +48,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeP
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeCancelRequestValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
 
 @SuppressWarnings("squid:S00107")
 @Slf4j

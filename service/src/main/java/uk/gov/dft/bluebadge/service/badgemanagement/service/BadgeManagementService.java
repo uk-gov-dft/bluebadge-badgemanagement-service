@@ -136,11 +136,11 @@ public class BadgeManagementService {
 
     List<String> existing = repository.findBadgeHash(badgeHash);
     if (null != existing && !existing.isEmpty()) {
-      StringBuilder existingids = new StringBuilder();
+      StringBuilder existingIDs = new StringBuilder();
       for (String badgeNo : existing) {
-        existingids.append(";").append(badgeNo);
+        existingIDs.append(";").append(badgeNo);
       }
-      log.warn("Attempt to create badge with same hash as following {}", existingids.toString());
+      log.warn("Attempt to create badge with same hash as following {}", existingIDs.toString());
       throw new BadRequestException(
           new Error()
               .reason("Cannot order badge, this badge has already been ordered.")

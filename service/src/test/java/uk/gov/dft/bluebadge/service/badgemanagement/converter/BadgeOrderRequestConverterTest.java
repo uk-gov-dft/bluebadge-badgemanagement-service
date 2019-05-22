@@ -7,6 +7,7 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture.getV
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
@@ -74,5 +75,64 @@ public class BadgeOrderRequestConverterTest {
     request.getParty().setOrganisation(null);
     BadgeOrderRequestConverter converter = new BadgeOrderRequestConverter();
     converter.convertToEntity(request);
+  }
+
+  @Test
+  public void whenPersonBadgeOrderRequestHasNotForReassessmentAsTrue_thenEntityMustAlsoHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setNotForReassessment(true);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertTrue(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void whenPersonBadgeOrderRequestHasNotForReassessmentAsFalse_thenEntityMustAlsoHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setNotForReassessment(false);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertFalse(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void whenOrgBadgeOrderRequestHasNotForReassessmentAsTrue_thenEntityMustAlsoHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderOrgRequest();
+    request.setNotForReassessment(true);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertTrue(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void whenOrgBadgeOrderRequestHasNotForReassessmentAsFalse_thenEntityMustAlsoHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderOrgRequest();
+    request.setNotForReassessment(false);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertFalse(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void whenOrgBadgeOrderRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderOrgRequest();
+    request.setNotForReassessment(null);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertNull(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void
+      whenAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setNotForReassessment(null);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertNull(entity.getNotForReassessment());
+  }
+
+  @Test
+  public void
+      whenNonAutomaticEligiblePersonRequestDoesNotHaveNotForReassessment_thenEntityMustNotHaveIt() {
+    BadgeOrderRequest request = getValidBadgeOrderPersonRequest();
+    request.setEligibilityCode(EligibilityType.CHILDVEHIC);
+    request.setNotForReassessment(null);
+    BadgeEntity entity = new BadgeOrderRequestConverter().convertToEntity(request);
+    Assert.assertFalse(entity.getNotForReassessment());
   }
 }

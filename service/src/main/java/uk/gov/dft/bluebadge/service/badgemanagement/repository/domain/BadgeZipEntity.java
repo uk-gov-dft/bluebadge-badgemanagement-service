@@ -41,6 +41,7 @@ public class BadgeZipEntity {
   private String startDate;
   private String expiryDate;
   private EligibilityType eligibilityCode;
+  private Boolean notForReassessment;
   private String deliverToCode;
   private String deliverOptionCode;
   private String cancelReasonCode;

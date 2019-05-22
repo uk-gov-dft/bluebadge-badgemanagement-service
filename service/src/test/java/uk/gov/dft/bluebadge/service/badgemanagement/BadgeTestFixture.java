@@ -34,6 +34,7 @@ public class BadgeTestFixture {
     public static final String LOCAL_AUTHORITY_CODE_N_IRELAND = "BELFAST";
     public static final String LOCAL_AUTHORITY_CODE_SCOTLAND = "ABERD";
     static final EligibilityType ELIGIBILITY_CODE = EligibilityType.PIP;
+    static final Boolean NOT_FOR_REASSESSMENT = null;
     static final String DELIVER_TO_CODE_HOME = "HOME";
     static final String DELIVER_TO_CODE_COUNCIL = "COUNCIL";
     static final String DELIVER_OPTION_CODE_FAST = "FAST";
@@ -128,6 +129,7 @@ public class BadgeTestFixture {
         .deliverToCode(DefaultVals.DELIVER_TO_CODE_HOME)
         .dob(LocalDate.now().minus(Period.ofYears(30)))
         .eligibilityCode(DefaultVals.ELIGIBILITY_CODE)
+        .notForReassessment(DefaultVals.NOT_FOR_REASSESSMENT)
         .expiryDate(LocalDate.now().plus(Period.ofYears(2)).plus(Period.ofMonths(1)))
         .genderCode(DefaultVals.GENDER_CODE)
         .holderName("Robert McRoberts")

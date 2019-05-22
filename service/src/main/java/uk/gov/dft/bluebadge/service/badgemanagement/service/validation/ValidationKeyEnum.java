@@ -4,6 +4,14 @@ import uk.gov.dft.bluebadge.common.api.model.Error;
 import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 
 public enum ValidationKeyEnum {
+  INVALID_NOT_FOR_REASSESSMENT_FOR_ORG(
+      "Organisation.invalid.badge.notForReassessment",
+      "Invalid value not for reassessment.",
+      "notForReassessment"),
+  INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY(
+      "Person.invalid.badge.notForReassessment",
+      "Invalid value not for reassessment.",
+      "notForReassessment"),
   APP_DATE_IN_PAST(
       "DateInPast.badge.applicationDate",
       "Application date must be in the past.",

@@ -24,6 +24,7 @@ public class BadgeConverterTest {
     Assert.assertEquals(
         model.getParty().getContact().getPrimaryPhoneNumber(), entity.getPrimaryPhoneNo());
     Assert.assertEquals(BadgeTestFixture.DefaultVals.REPLACE_REASON, model.getReplaceReasonCode());
+    Assert.assertEquals(entity.getNotForReassessment(), model.getNotForReassessment());
   }
 
   @Test
@@ -39,5 +40,6 @@ public class BadgeConverterTest {
     // And contact details present.
     Assert.assertEquals(
         entity.getPrimaryPhoneNo(), model.getParty().getContact().getPrimaryPhoneNumber());
+    Assert.assertEquals(entity.getNotForReassessment(), model.getNotForReassessment());
   }
 }

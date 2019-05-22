@@ -13,14 +13,14 @@ import uk.gov.dft.bluebadge.service.badgemanagement.BadgeTestFixture;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
-public class ValidateCancelBadgeTest {
+public class BadgeCancelRequestValidatorTest {
 
-  private ValidateCancelBadge validator;
+  private BadgeCancelRequestValidator validator;
 
-  public ValidateCancelBadgeTest() {
+  public BadgeCancelRequestValidatorTest() {
 
     validator =
-        new ValidateCancelBadge(
+        new BadgeCancelRequestValidator(
             new ReferenceDataService(BadgeTestFixture.getMockRefDataApiClient()));
   }
 

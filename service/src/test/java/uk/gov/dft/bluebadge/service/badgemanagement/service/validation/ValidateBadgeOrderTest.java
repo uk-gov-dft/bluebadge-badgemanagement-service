@@ -32,12 +32,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.Refere
 
 public class ValidateBadgeOrderTest {
 
-  private final ValidateBadgeOrder validateBadgeOrder;
+  private final BadgeOrderValidator validateBadgeOrder;
 
   public ValidateBadgeOrderTest() {
 
     validateBadgeOrder =
-        new ValidateBadgeOrder(new ReferenceDataService(getMockRefDataApiClient()));
+        new BadgeOrderValidator(new ReferenceDataService(getMockRefDataApiClient()));
   }
 
   @Test
@@ -115,7 +115,7 @@ public class ValidateBadgeOrderTest {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setDob(LocalDate.now().plus(Period.ofDays(1)));
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateDobInPast(entity, errors);
+    BadgeOrderValidator.validateDobInPast(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.DOB_IN_PAST.getKey());
   }
@@ -126,7 +126,7 @@ public class ValidateBadgeOrderTest {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setAppDate(LocalDate.now().plus(Period.ofDays(1)));
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateApplicationDateInPast(entity, errors);
+    BadgeOrderValidator.validateApplicationDateInPast(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.APP_DATE_IN_PAST.getKey());
   }
@@ -137,7 +137,7 @@ public class ValidateBadgeOrderTest {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setStartDate(LocalDate.now().minus(Period.ofDays(1)));
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateStartDateInFuture(entity, errors);
+    BadgeOrderValidator.validateStartDateInFuture(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo(ValidationKeyEnum.START_DATE_IN_PAST.getKey());
   }
@@ -149,12 +149,12 @@ public class ValidateBadgeOrderTest {
     entity.setStartDate(LocalDate.now().plusDays(10));
     entity.setExpiryDate(LocalDate.now().plusDays(20));
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateStartExpiryDateRange(entity, errors);
+    BadgeOrderValidator.validateStartExpiryDateRange(entity, errors);
     // Dates ok
     assertThat(errors.size()).isEqualTo(0);
 
     entity.setExpiryDate((entity.getStartDate().plus(Period.ofYears(3)).plus(Period.ofDays(1))));
-    ValidateBadgeOrder.validateStartExpiryDateRange(entity, errors);
+    BadgeOrderValidator.validateStartExpiryDateRange(entity, errors);
     // Dates within 3 years
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo(START_EXPIRY_DATE_RANGE.getKey());
@@ -166,7 +166,7 @@ public class ValidateBadgeOrderTest {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setExpiryDate(LocalDate.now().minus(Period.ofDays(1)));
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateExpiryDateInFuture(entity, errors);
+    BadgeOrderValidator.validateExpiryDateInFuture(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage())
         .isEqualTo(ValidationKeyEnum.EXPIRY_DATE_IN_PAST.getKey());
@@ -215,7 +215,7 @@ public class ValidateBadgeOrderTest {
     BadgeEntity entity = getValidPersonBadgeEntity();
     entity.setNumberOfBadges(10);
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateNumberOfBadges(entity, errors);
+    BadgeOrderValidator.validateNumberOfBadges(entity, errors);
     // Person badge must be 1
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo(INVALID_NUMBER_OF_BADGES_PERSON.getKey());
@@ -223,7 +223,7 @@ public class ValidateBadgeOrderTest {
     errors.remove(0);
     entity.setPartyCode("ORG");
     entity.setNumberOfBadges(0);
-    ValidateBadgeOrder.validateNumberOfBadges(entity, errors);
+    BadgeOrderValidator.validateNumberOfBadges(entity, errors);
     // Org number of badges between 1 and 999
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage())
@@ -231,7 +231,7 @@ public class ValidateBadgeOrderTest {
 
     errors.remove(0);
     entity.setNumberOfBadges(1000);
-    ValidateBadgeOrder.validateNumberOfBadges(entity, errors);
+    BadgeOrderValidator.validateNumberOfBadges(entity, errors);
     // Org number of badges between 1 and 999
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage())
@@ -245,7 +245,7 @@ public class ValidateBadgeOrderTest {
     entity.setDeliverToCode("COUNCIL");
     entity.setDeliverOptionCode("FAST");
     List<ErrorErrors> errors = new ArrayList<>();
-    ValidateBadgeOrder.validateDeliveryRules(entity, errors);
+    BadgeOrderValidator.validateDeliveryRules(entity, errors);
     assertThat(errors.size()).isEqualTo(1);
     assertThat(errors.get(0).getMessage()).isEqualTo("Invalid.badge.deliverOptionCode");
   }

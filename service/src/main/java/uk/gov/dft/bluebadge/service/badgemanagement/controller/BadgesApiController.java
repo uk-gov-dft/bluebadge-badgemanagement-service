@@ -36,6 +36,7 @@ import uk.gov.dft.bluebadge.service.badgemanagement.model.PrintBatchRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BadgeManagementService;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.BatchService;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeReplaceRequestValidator;
 
 @RestController
 @CommonResponseHandler
@@ -120,7 +121,7 @@ public class BadgesApiController extends CommonResponseEntityExceptionHandler im
     if (!badgeNumber.equalsIgnoreCase(request.getBadgeNumber())) {
       throw new BadRequestException(INVALID_BADGE_NUMBER.getSystemErrorInstance());
     }
-
+    BadgeReplaceRequestValidator.validate(request);
     ReplaceBadgeRequestConverter converter = new ReplaceBadgeRequestConverter();
     String newBadgeNumber = badgeService.replaceBadge(converter.convertToEntity(request));
 

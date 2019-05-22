@@ -161,6 +161,16 @@ Feature: Verify replace a badge
     Then status 400
     And match $.error.errors contains {field:'replaceReasonCode',reason:'#notnull',message:'InvalidFormat.replaceReasonCode',location:null,locationType:null}
 
+  Scenario: Verify replace a badge with invalid deliver to and options combination
+    * set replaceRequest $.deliveryOptionCode = 'FAST'
+    * set replaceRequest $.deliverToCode = 'COUNCIL'
+    * set replaceRequest $.badgeNumber = 'EEEEEF'
+    Given path 'badges/EEEEEF/replacements'
+    And request replaceRequest
+    When method POST
+    Then status 400
+    And match $.error.errors contains {field:'deliverToCode',reason:'#notnull',message:'Invalid.badge.deliverOptionCode',location:null,locationType:null}
+
   Scenario: Verify replace a badge with null params
     * set replaceRequest $.replaceReasonCode = null
     * set replaceRequest $.deliveryOptionCode = null

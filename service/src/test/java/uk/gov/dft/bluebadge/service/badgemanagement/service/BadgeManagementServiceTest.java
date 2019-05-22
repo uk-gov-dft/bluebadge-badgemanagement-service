@@ -58,15 +58,15 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeP
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeCancelRequestValidator;
 
 public class BadgeManagementServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository repositoryMock;
-  @Mock private ValidateBadgeOrder validateBadgeOrderMock;
-  @Mock private ValidateCancelBadge validateCancelBadgeMock;
+  @Mock private BadgeOrderValidator validateBadgeOrderMock;
+  @Mock private BadgeCancelRequestValidator validateCancelBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
   @Mock private PhotoService photoServiceMock;
   @Mock private BlacklistedCombinationsFilter blacklistFilter;

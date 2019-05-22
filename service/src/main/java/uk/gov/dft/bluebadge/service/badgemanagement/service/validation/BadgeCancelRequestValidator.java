@@ -20,12 +20,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.Refere
 
 @Slf4j
 @Component
-public class ValidateCancelBadge extends ValidateBase {
+public class BadgeCancelRequestValidator extends ValidateBase {
 
   private final ReferenceDataService referenceDataService;
 
   @Autowired
-  ValidateCancelBadge(ReferenceDataService referenceDataService) {
+  BadgeCancelRequestValidator(ReferenceDataService referenceDataService) {
     this.referenceDataService = referenceDataService;
   }
 

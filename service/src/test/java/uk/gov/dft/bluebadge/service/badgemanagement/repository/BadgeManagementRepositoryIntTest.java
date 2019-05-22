@@ -55,6 +55,27 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
 
     assertThat(badgeEntity.getImageLink()).isEqualTo("badge/KKKKKK/thumbnail.jpg");
     assertThat(badgeEntity.getImageLinkOriginal()).isEqualTo("badge/KKKKKK/original.jpg");
+    assertThat(badgeEntity.getNotForReassessment()).isEqualTo(true);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadge_shouldReturnNullForNotForReassessment() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKD").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getNotForReassessment()).isEqualTo(null);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadge_shouldReturnFalseForNotForReassessment() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("KKKKKC").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getNotForReassessment()).isEqualTo(false);
   }
 
   @Test
@@ -337,6 +358,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity.getSecondaryPhoneNo()).isNull();
     assertThat(badgeEntity.getContactEmailAddress()).isNull();
     assertThat(badgeEntity.getImageLinkOriginal()).isNull();
+    assertThat(badgeEntity.getNotForReassessment()).isNull();
   }
 
   @Test
@@ -423,17 +445,22 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Sql(scripts = "classpath:/test-data.sql")
   public void retrieveBadgesByLa() {
     List<BadgeZipEntity> results = badgeManagementRepository.retrieveBadgesByLa("FINDBYLA");
-    assertThat(results.size()).isEqualTo(2);
+    assertThat(results).extracting("badgeNo").contains("FINDA1", "FINDA3");
     for (BadgeZipEntity entity : results) {
       if (entity.getBadgeNo().equals("FINDA1")) {
         assertThat(entity.getBadgeStatus()).isEqualTo(Status.DELETED);
+        assertThat(entity.getNotForReassessment()).isEqualTo(false);
+      } else if (entity.getBadgeNo().equals("FINDA3")) {
+        assertThat(entity.getBadgeStatus()).isEqualTo(Status.ORDERED);
+        assertThat(entity.getNotForReassessment()).isEqualTo(true);
       } else {
         assertThat(entity.getBadgeStatus()).isEqualTo(Status.ISSUED);
-        // Should have issued/rejeced/printed data for the other badge.
+        // Should have issued/rejected/printed data for the other badge.
         assertThat(entity.getIssuedDateTime()).isNotEmpty();
         assertThat(entity.getRejectedDateTime()).isEqualTo("2010-02-03 15:16:17");
         assertThat(entity.getRejectedReason()).isEqualTo("rejected reason");
         assertThat(entity.getPrintRequestDateTime()).isEqualTo("2011-01-01 03:00:00");
+        assertThat(entity.getNotForReassessment()).isEqualTo(null);
       }
     }
   }

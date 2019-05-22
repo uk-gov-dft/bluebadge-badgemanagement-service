@@ -63,6 +63,7 @@ Feature: Verify replace a badge
     * match replacedBadge.local_authority_ref == newBadge.local_authority_ref
     * match replacedBadge.app_channel_code == newBadge.app_channel_code
     * match replacedBadge.eligibility_code == newBadge.eligibility_code
+    * match replacedBadge.not_for_reassessment == newBadge.not_for_reassessment
     * match replacedBadge.image_link == newBadge.image_link
     * match newBadge.deliver_option_code == 'STAND'
     * match newBadge.deliver_to_code == 'HOME'

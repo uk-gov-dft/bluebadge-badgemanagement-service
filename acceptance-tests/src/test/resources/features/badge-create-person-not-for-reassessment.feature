@@ -74,7 +74,7 @@ Feature: Verify create badge with/without not-for-reassessment flag
     And request testData.personBadge
     When method POST
     Then status 400
-    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Person.invalid.badge.notForReassessment","location":null,"locationType":null}}
+    And match $.error.errors contains {field:"notForReassessment", reason:"Not for reassessment not accepted for automatic eligibility criteria.", message:"Person.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify invalid create automatic person badge with the flag being FALSE
     * set testData.personBadge.eligibilityCode = 'PIP'
@@ -83,7 +83,7 @@ Feature: Verify create badge with/without not-for-reassessment flag
     And request testData.personBadge
     When method POST
     Then status 400
-    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Person.invalid.badge.notForReassessment","location":null,"locationType":null}}
+    And match $.error.errors contains {field:"notForReassessment", reason:"Not for reassessment not accepted for automatic eligibility criteria.", message:"Person.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify create automatic eligible person badge without the flag and it will remain unset after that
     * set testData.personBadge.party.person.nino = 'AB188796C'

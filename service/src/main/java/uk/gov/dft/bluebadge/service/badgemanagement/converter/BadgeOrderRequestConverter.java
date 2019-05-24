@@ -57,6 +57,7 @@ public class BadgeOrderRequestConverter
 
     // Set not-for-reassessment
     if (isPerson(model.getParty())
+        && model.getEligibilityCode() != null
         && !model.getEligibilityCode().isAutomaticEligible()
         && model.getNotForReassessment() == null) {
       badgeEntity.setNotForReassessment(false);

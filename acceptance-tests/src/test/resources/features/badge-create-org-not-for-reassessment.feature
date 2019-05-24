@@ -17,7 +17,7 @@ Feature: Verify create badge with/without not-for-reassessment flag
     And request testData.orgBadge
     When method POST
     Then status 400
-    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
+    And match $.error.errors contains {field:"notForReassessment", reason:"Not for reassessment not accepted for organisations.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify invalid create organisation badge with the flag being FALSE
     * set testData.orgBadge.notForReassessment = true
@@ -25,7 +25,7 @@ Feature: Verify create badge with/without not-for-reassessment flag
     And request testData.orgBadge
     When method POST
     Then status 400
-    And match $.error.errors contains {field:"notForReassessment", reason:"Invalid value not for reassessment.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
+    And match $.error.errors contains {field:"notForReassessment", reason:"Not for reassessment not accepted for organisations.", message:"Organisation.invalid.badge.notForReassessment","location":null,"locationType":null}}
 
   Scenario: Verify create organisation badge without the flag and it will remain unset after that
     Given path 'badges'

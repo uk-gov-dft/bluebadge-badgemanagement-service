@@ -46,9 +46,9 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
         ,('FINDA3', 'ORDERED', 'PERSON', 'FINDBYLA', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'WALKD', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
-        ,('DUPES1', 'ISSUED', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        ,('DUPES1', 'ISSUED', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
-        ,('DUPES2', 'REJECT', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        ,('DUPES2', 'REJECT', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
 ;
 

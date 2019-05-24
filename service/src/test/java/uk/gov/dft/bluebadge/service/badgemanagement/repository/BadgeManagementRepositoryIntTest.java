@@ -1,12 +1,13 @@
 package uk.gov.dft.bluebadge.service.badgemanagement.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.ISSUED;
+import static uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status.REJECT;
 
 import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverOption;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverTo;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.ReplaceReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -38,7 +43,9 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   private static final DateTimeFormatter DATE_TIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  @Autowired BadgeManagementRepository badgeManagementRepository;
+  @SuppressWarnings("unused")
+  @Autowired
+  private BadgeManagementRepository badgeManagementRepository;
 
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
@@ -48,7 +55,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity).isNotNull();
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("KKKKKK");
-    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(ISSUED);
 
     assertThat(badgeEntity.getImageLink()).isEqualTo("badge/KKKKKK/thumbnail.jpg");
     assertThat(badgeEntity.getImageLinkOriginal()).isEqualTo("badge/KKKKKK/original.jpg");
@@ -73,6 +80,38 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity).isNotNull();
 
     assertThat(badgeEntity.getNotForReassessment()).isEqualTo(false);
+  }
+
+  /**
+   * Should never be multiple issued batch_badge records, but if there are then need to still
+   * retrieve badge. This happened once due to a print confirmation file being processed twice. The
+   * retrieve badge query has nested selects. These returned multiple values - breaking sql.
+   * Grouping added to nested selects to defend against.
+   */
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadge_multipleConfirmtionBatches_ok() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("DUPES1").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("DUPES1");
+    assertThat(badgeEntity.getIssuedDate()).isEqualTo("2019-03-07T01:03");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(ISSUED);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void retrieveBadge_multipleRejectBatches_ok() {
+    RetrieveBadgeParams retrieveParams = RetrieveBadgeParams.builder().badgeNo("DUPES2").build();
+    BadgeEntity badgeEntity = badgeManagementRepository.retrieveBadge(retrieveParams);
+    assertThat(badgeEntity).isNotNull();
+
+    assertThat(badgeEntity.getBadgeNo()).isEqualTo("DUPES2");
+    assertThat(badgeEntity.getIssuedDate()).isNull();
+    assertThat(badgeEntity.getRejectedReason()).isEqualTo("help");
+    assertThat(badgeEntity.getPrintRequestDateTime()).isEqualTo("2011-01-01T03:00");
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(REJECT);
   }
 
   @Test
@@ -100,7 +139,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity).isNotNull();
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMH");
-    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(BadgeEntity.Status.ISSUED);
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(ISSUED);
     assertThat(badgeEntity.getPrintRequestDateTime())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:01:00", DATE_TIME_FORMAT));
     assertThat(badgeEntity.getIssuedDate())
@@ -117,7 +156,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     assertThat(badgeEntity).isNotNull();
 
     assertThat(badgeEntity.getBadgeNo()).isEqualTo("NNNJMF");
-    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(Status.REJECT);
+    assertThat(badgeEntity.getBadgeStatus()).isEqualTo(REJECT);
     assertThat(badgeEntity.getPrintRequestDateTime())
         .isEqualTo(LocalDateTime.parse("2019-03-07 01:03:00", DATE_TIME_FORMAT));
     assertThat(badgeEntity.getIssuedDate()).isNull();
@@ -130,7 +169,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -143,7 +182,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("NOTEXI")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -156,7 +195,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ANGL")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -175,7 +214,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
       BadgeEntity badgeEntity =
           BadgeEntity.builder()
               .badgeNo(String.valueOf(id))
-              .badgeStatus(BadgeEntity.Status.ISSUED)
+              .badgeStatus(ISSUED)
               .contactName("ZZZZ" + id)
               .partyCode("PAR")
               .localAuthorityShortCode("WINMD")
@@ -199,16 +238,12 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     FindBadgeParams params = FindBadgeParams.builder().name("%ZZZZ%").build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
 
-    Collections.sort(badgeEntityList, (b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
+    badgeEntityList.sort((b1, b2) -> b2.getStartDate().compareTo(b1.getStartDate()));
     List<BadgeEntity> expectedBadgeEntityList =
         badgeEntityList
             .stream()
             .limit(RESULTS_LIMIT)
-            .map(
-                b -> {
-                  b.setOrderDate(null);
-                  return b;
-                })
+            .peek(b -> b.setOrderDate(null))
             .collect(Collectors.toList());
 
     assertThat(badges).hasSize(RESULTS_LIMIT);
@@ -218,11 +253,11 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldSearchByStatus() {
-    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
+    Set<String> statuses = ImmutableSet.of(ISSUED.name());
     FindBadgeParams params = FindBadgeParams.builder().statuses(statuses).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
     assertThat(badges).isNotEmpty();
-    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
+    assertThat(badges).extracting("badgeStatus").containsOnly(ISSUED);
   }
 
   @Test
@@ -238,12 +273,12 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
   @Test
   @Sql(scripts = "classpath:/test-data.sql")
   public void findBadges_shouldSearchByStatusAndPostCode() {
-    Set<String> statuses = ImmutableSet.of(BadgeEntity.Status.ISSUED.name());
+    Set<String> statuses = ImmutableSet.of(ISSUED.name());
     FindBadgeParams params =
         FindBadgeParams.builder().postcode("S637FU").statuses(statuses).build();
     List<BadgeEntity> badges = badgeManagementRepository.findBadges(params, 1, 50);
     assertThat(badges).isNotEmpty();
-    assertThat(badges).extracting("badgeStatus").containsOnly(BadgeEntity.Status.ISSUED);
+    assertThat(badges).extracting("badgeStatus").containsOnly(ISSUED);
     assertThat(badges).extracting("contactPostcode").containsOnly("S637FU");
   }
 
@@ -368,9 +403,9 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     ReplaceBadgeParams params =
         ReplaceBadgeParams.builder()
             .badgeNumber("KKKKKK")
-            .deliveryCode("HOME")
-            .deliveryOptionCode("FAST")
-            .reasonCode("DAMAGED")
+            .deliveryCode(DeliverTo.HOME)
+            .deliveryOptionCode(DeliverOption.FAST)
+            .reasonCode(ReplaceReason.DAMAGED)
             .startDate(LocalDate.now())
             .status(Status.REPLACED)
             .build();
@@ -393,7 +428,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
             badgeManagementRepository.updateBadgeStatusFromStatus(
                 UpdateBadgeStatusParams.builder()
                     .badgeNumber("KKKKDA")
-                    .toStatus(Status.ISSUED)
+                    .toStatus(ISSUED)
                     .fromStatus(Status.PROCESSED)
                     .build()))
         .isEqualTo(1);
@@ -401,7 +436,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
             badgeManagementRepository
                 .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDA").build())
                 .getBadgeStatus())
-        .isEqualTo(Status.ISSUED);
+        .isEqualTo(ISSUED);
   }
 
   @Test
@@ -412,7 +447,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
             badgeManagementRepository.updateBadgeStatusFromStatus(
                 UpdateBadgeStatusParams.builder()
                     .badgeNumber("KKKKDB")
-                    .toStatus(Status.REJECT)
+                    .toStatus(REJECT)
                     .fromStatus(Status.PROCESSED)
                     .build()))
         .isEqualTo(1);
@@ -420,7 +455,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
             badgeManagementRepository
                 .retrieveBadge(RetrieveBadgeParams.builder().badgeNo("KKKKDB").build())
                 .getBadgeStatus())
-        .isEqualTo(Status.REJECT);
+        .isEqualTo(REJECT);
   }
 
   @Test
@@ -431,7 +466,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
             badgeManagementRepository.updateBadgeStatusFromStatus(
                 UpdateBadgeStatusParams.builder()
                     .badgeNumber("KKKKDC")
-                    .toStatus(Status.REJECT)
+                    .toStatus(REJECT)
                     .fromStatus(Status.PROCESSED)
                     .build()))
         .isEqualTo(0);

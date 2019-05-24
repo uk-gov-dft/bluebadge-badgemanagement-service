@@ -17,6 +17,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverOption;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverTo;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.ReplaceReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
@@ -30,7 +34,7 @@ public class BadgeManagementRepositoryTest {
 
   @Mock SqlSession sqlSession;
 
-  BadgeManagementRepository repository;
+  private BadgeManagementRepository repository;
 
   public BadgeManagementRepositoryTest() {
     MockitoAnnotations.initMocks(this);
@@ -67,7 +71,7 @@ public class BadgeManagementRepositoryTest {
   @Test
   public void cancelBadge() {
     CancelBadgeParams params =
-        CancelBadgeParams.builder().badgeNo("KKKKKK").cancelReasonCode("ABC").build();
+        CancelBadgeParams.builder().badgeNo("KKKKKK").cancelReasonCode(CancelReason.REVOKE).build();
     repository.cancelBadge(params);
     verify(sqlSession).update(eq(CANCEL), eq(params));
   }
@@ -84,9 +88,9 @@ public class BadgeManagementRepositoryTest {
     ReplaceBadgeParams params =
         ReplaceBadgeParams.builder()
             .badgeNumber("BAD789")
-            .deliveryCode("HOME")
-            .deliveryOptionCode("FAST")
-            .reasonCode("DAMAGED")
+            .deliveryCode(DeliverTo.HOME)
+            .deliveryOptionCode(DeliverOption.FAST)
+            .reasonCode(ReplaceReason.DAMAGED)
             .startDate(LocalDate.now())
             .status(Status.REPLACED)
             .build();

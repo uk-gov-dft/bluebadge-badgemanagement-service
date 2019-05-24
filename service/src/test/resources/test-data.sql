@@ -3,7 +3,7 @@ delete from badgemanagement.batch_badge where batch_id < 0;
 delete from badgemanagement.badge where badge_no in
 ('KKKKKK', 'KKKKKD', 'KKKKKA', 'KKKKKC', 'KKKKKE',
 'KKKKKB', 'KKKKDA', 'KKKKDB', 'KKKKDC', 'NNNJMJ',
-'NNNJMH', 'NNNJMF', 'FINDA1', 'FINDA2');
+'NNNJMH', 'NNNJMF', 'FINDA1', 'FINDA2', 'DUPES1');
 
 delete from badgemanagement.batch where batch_id < 0;
 
@@ -46,6 +46,10 @@ insert into badgemanagement.badge (badge_no, badge_status, party_code,
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
         ,('FINDA3', 'ORDERED', 'PERSON', 'FINDBYLA', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'WALKD', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
         '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('DUPES1', 'ISSUED', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
+        ,('DUPES2', 'REJECT', 'PERSON', 'DUPES', 'find badges by la', 'ONLINE', '2025-05-01', '2028-05-01', 'PIP', true, '', '', 'COUNCIL', 'STAND', 'Reginald Pai', '',
+        '1953-09-12', 'MALE', 'contact name', 'building and street', '', 'Town or city', 'S637EU', '020 7014 0800', null, 'test107@mailinator.com', 'REGINALD', '2018-07-24', ' 2018-06-01')
 ;
 
 insert into badgemanagement.batch (batch_id, batch_filename, batch_created_timestamp, batch_source, batch_purpose)
@@ -58,8 +62,15 @@ values (-1, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STANDARD')
 , (-7, 'printed.txt',       '2019-03-07 01:01:00', 'DFT', 'STANDARD')
 , (-8, 'toBeIssued.txt',    '2019-03-07 01:01:00', 'DFT', 'STANDARD')
 , (-9, 'issued.txt',        '2019-03-07 01:02:00', 'PRINTER', 'ISSUED')
-, (-10, 'toBeRejected.txt',  '2019-03-07 01:03:00', 'DFT', 'STANDARD')
-, (-11, 'rejected.txt',      '2019-03-07 01:04:00', 'PRINTER', 'REJECTED')
+, (-10, 'toBeRejected.txt', '2019-03-07 01:03:00', 'DFT', 'STANDARD')
+, (-11, 'rejected.txt',     '2019-03-07 01:04:00', 'PRINTER', 'REJECTED')
+, (-12, 'confirm_dupe.txt', '2019-03-07 01:04:00', 'PRINTER', 'ISSUED')
+, (-13, 'confirm_dupe2.txt', '2019-03-07 01:04:00', 'PRINTER', 'ISSUED')
+, (-14, 'reject_dupe.txt',  '2019-03-07 01:04:00', 'PRINTER', 'REJECTED')
+, (-15, 'reject_dupe2.txt', '2019-03-07 01:05:00', 'PRINTER', 'REJECTED')
+, (-16, 'filename.txt', '2011-01-01 03:00:00', 'DFT', 'STANDARD')
+, (-17, 'linkTest.txt', '2010-01-01 01:01:00', 'DFT', 'FASTTRACK')
+
 ;
 
 insert into badgemanagement.batch_badge (batch_id, badge_no, local_authority_short_code, issued_date_time, rejected_reason)
@@ -69,6 +80,13 @@ values (-1, 'KKKKKA', null, null, null)
 , (-9, 'NNNJMH', null, '2019-03-07 01:02:00', null)
 , (-10, 'NNNJMF', 'ABERD', null, null)
 , (-11, 'NNNJMF', null, null, 'my rejected reason')
+, (-12, 'DUPES1', null, '2019-03-07 01:03:00', null)
+, (-13, 'DUPES1', null, '2019-03-07 01:02:00', null)
+, (-14, 'DUPES2', null, null, 'help')
+, (-15, 'DUPES2', null, null, 'help')
+, (-16, 'DUPES2', 'ABERD', null, null)
+, (-17, 'DUPES2', 'ABERD', null, null)
+
 ;
 
 insert into badgemanagement.batch_badge (batch_id, badge_no) values (-5, 'FINDA2');

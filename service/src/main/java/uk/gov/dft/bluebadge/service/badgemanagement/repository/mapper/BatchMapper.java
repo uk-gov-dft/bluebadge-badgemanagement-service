@@ -15,4 +15,6 @@ public interface BatchMapper {
   void appendBadgesToBatch(Integer batchId, BatchType batchType);
 
   int linkBadgeToBatch(BatchBadgeLinkEntity params);
+
+  boolean badgeAlreadyProcessed(String badgeNumber);
 }

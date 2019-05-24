@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -44,6 +45,10 @@ import uk.gov.dft.bluebadge.model.badgemanagement.generated.BadgeOrderRequest;
 import uk.gov.dft.bluebadge.service.badgemanagement.controller.PagingParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeOrderRequestConverter;
 import uk.gov.dft.bluebadge.service.badgemanagement.converter.BadgeSummaryConverter;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverOption;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverTo;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.ReplaceReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.BadgeManagementRepository;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -52,18 +57,16 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.DeleteBadg
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeCancelRequestValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
 public class BadgeManagementServiceTest {
   private static final String LOCAL_AUTHORITY_SHORT_CODE = "ABERD";
 
   @Mock private BadgeManagementRepository repositoryMock;
-  @Mock private ValidateBadgeOrder validateBadgeOrderMock;
-  @Mock private ValidateCancelBadge validateCancelBadgeMock;
-  @Mock private ValidateReplaceBadge validateReplaceBadgeMock;
+  @Mock private BadgeOrderValidator validateBadgeOrderMock;
+  @Mock private BadgeCancelRequestValidator validateCancelBadgeMock;
   @Mock private SecurityUtils securityUtilsMock;
   @Mock private PhotoService photoServiceMock;
   @Mock private BlacklistedCombinationsFilter blacklistFilter;
@@ -86,7 +89,6 @@ public class BadgeManagementServiceTest {
             repositoryMock,
             validateBadgeOrderMock,
             validateCancelBadgeMock,
-            validateReplaceBadgeMock,
             securityUtilsMock,
             photoServiceMock,
             numberService,
@@ -207,11 +209,10 @@ public class BadgeManagementServiceTest {
   @Test
   public void cancelBadge_ok() {
     CancelBadgeParams params =
-        CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+        CancelBadgeParams.builder().cancelReasonCode(CancelReason.REVOKE).badgeNo("ABCABC").build();
     when(repositoryMock.cancelBadge(params)).thenReturn(1);
     service.cancelBadge(params);
 
-    verify(validateCancelBadgeMock, times(1)).validateRequest(params);
     verify(validateCancelBadgeMock, never()).validateAfterFailedCancel(any());
     verify(repositoryMock, times(1)).cancelBadge(params);
   }
@@ -219,11 +220,10 @@ public class BadgeManagementServiceTest {
   @Test
   public void cancelBadge_failed() {
     CancelBadgeParams params =
-        CancelBadgeParams.builder().cancelReasonCode("ABC").badgeNo("ABCABC").build();
+        CancelBadgeParams.builder().cancelReasonCode(CancelReason.REVOKE).badgeNo("ABCABC").build();
     when(repositoryMock.cancelBadge(params)).thenReturn(0);
     service.cancelBadge(params);
 
-    verify(validateCancelBadgeMock, times(1)).validateRequest(params);
     verify(validateCancelBadgeMock, times(1)).validateAfterFailedCancel(any());
     verify(repositoryMock, times(1)).cancelBadge(params);
   }
@@ -282,7 +282,8 @@ public class BadgeManagementServiceTest {
   @Test(expected = NotFoundException.class)
   public void replaceBadge_notFound() {
     String badgeNo = "BADGENO";
-    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+    ReplaceBadgeParams params =
+        replaceParams(badgeNo, DeliverTo.HOME, DeliverOption.FAST, ReplaceReason.LOST);
 
     when(repositoryMock.retrieveBadge(any())).thenReturn(null);
     service.replaceBadge(params);
@@ -291,7 +292,8 @@ public class BadgeManagementServiceTest {
   @Test(expected = NotFoundException.class)
   public void replaceBadge_alreadyDeleted() {
     String badgeNo = "BADGENO";
-    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+    ReplaceBadgeParams params =
+        replaceParams(badgeNo, DeliverTo.HOME, DeliverOption.FAST, ReplaceReason.LOST);
 
     BadgeEntity badge =
         BadgeEntity.builder().badgeNo(badgeNo).badgeStatus(BadgeEntity.Status.DELETED).build();
@@ -303,7 +305,8 @@ public class BadgeManagementServiceTest {
   @Test(expected = BadRequestException.class)
   public void replaceBadge_alreadyExpired() {
     String badgeNo = "BADGENO";
-    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+    ReplaceBadgeParams params =
+        replaceParams(badgeNo, DeliverTo.COUNCIL, DeliverOption.STAND, ReplaceReason.LOST);
 
     BadgeEntity badge =
         BadgeEntity.builder()
@@ -319,7 +322,8 @@ public class BadgeManagementServiceTest {
   @Test(expected = BadRequestException.class)
   public void replaceBadge_alreadyCancelledOrReplaced() {
     String badgeNo = "BADGENO";
-    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "LOST");
+    ReplaceBadgeParams params =
+        replaceParams(badgeNo, DeliverTo.HOME, DeliverOption.STAND, ReplaceReason.LOST);
 
     BadgeEntity badge =
         BadgeEntity.builder()
@@ -336,7 +340,8 @@ public class BadgeManagementServiceTest {
   public void replaceBadge_ok() {
     String badgeNo = "BAD234";
     String newBadgeNo = "BAD567";
-    ReplaceBadgeParams params = replaceParams(badgeNo, "HOME", "FAST", "DAMAGED");
+    ReplaceBadgeParams params =
+        replaceParams(badgeNo, DeliverTo.HOME, DeliverOption.FAST, ReplaceReason.DAMAGED);
 
     BadgeEntity badge =
         BadgeEntity.builder()
@@ -358,7 +363,7 @@ public class BadgeManagementServiceTest {
   }
 
   private ReplaceBadgeParams replaceParams(
-      String badgeNo, String deliveryCode, String deliveryOption, String reason) {
+      String badgeNo, DeliverTo deliveryCode, DeliverOption deliveryOption, ReplaceReason reason) {
     return ReplaceBadgeParams.builder()
         .badgeNumber(badgeNo)
         .deliveryCode(deliveryCode)
@@ -379,7 +384,7 @@ public class BadgeManagementServiceTest {
       service.checkBadgeHashUnique(BadgeEntity.builder().build());
       fail("Should have had bad request exception.");
     } catch (BadRequestException e) {
-      assertThat(e.getResponse().getBody().getError().getMessage())
+      assertThat(Objects.requireNonNull(e.getResponse().getBody()).getError().getMessage())
           .isEqualTo("AlreadyExists.badge");
     }
   }

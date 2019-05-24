@@ -8,54 +8,30 @@ import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.Va
 import static uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidationKeyEnum.CANCEL_STATUS_INVALID;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import uk.gov.dft.bluebadge.common.api.model.ErrorErrors;
 import uk.gov.dft.bluebadge.common.service.exception.BadRequestException;
 import uk.gov.dft.bluebadge.common.service.exception.NotFoundException;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
-import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.CancelBadgeParams;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.RefDataGroupEnum;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.ReferenceDataService;
 
 @Slf4j
 @Component
-public class ValidateCancelBadge extends ValidateBase {
+public class BadgeCancelRequestValidator extends ValidateBase {
 
   private final ReferenceDataService referenceDataService;
 
   @Autowired
-  public ValidateCancelBadge(ReferenceDataService referenceDataService) {
+  BadgeCancelRequestValidator(ReferenceDataService referenceDataService) {
     this.referenceDataService = referenceDataService;
   }
 
   @Override
   protected ReferenceDataService getReferenceDataService() {
     return referenceDataService;
-  }
-
-  /**
-   * Validate a cancel request. Throws exception resulting in 400 on failure.
-   *
-   * @param request Cancel request.
-   */
-  public void validateRequest(CancelBadgeParams request) {
-    log.debug("Validating cancel request for {}", request.getBadgeNo());
-    List<ErrorErrors> errors = new ArrayList<>();
-    validateRefData(
-        RefDataGroupEnum.CANCEL,
-        ValidationKeyEnum.INVALID_CANCEL_CODE,
-        request.getCancelReasonCode(),
-        errors);
-
-    if (!errors.isEmpty()) {
-      throw new BadRequestException(errors);
-    }
   }
 
   /**

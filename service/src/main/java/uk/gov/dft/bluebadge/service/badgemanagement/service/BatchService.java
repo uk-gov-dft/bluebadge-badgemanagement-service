@@ -78,7 +78,7 @@ public class BatchService {
   /**
    * Re-sends the batch contents again to the print-service without creating new batch records.
    *
-   * @param batchUuid
+   * @param batchUuid Seems to be an integer.
    */
   public void rePrintBatch(String batchUuid) {
 
@@ -96,8 +96,8 @@ public class BatchService {
   /**
    * Create a batch header row and child batch_badge rows for the chosen batchType.
    *
-   * @param batchType
-   * @return
+   * @param batchType e.g. LA, FASTTRACK, STANDARD
+   * @return Batch as created in DB with id.
    */
   private BatchEntity createBatchEntityForBatchType(BatchType batchType) {
     BatchEntity batchEntity =
@@ -112,7 +112,7 @@ public class BatchService {
   /**
    * Sends a print-batch defined by a BatchEntity to the print-service.
    *
-   * @param batchEntity
+   * @param batchEntity Batch to send.
    */
   private void sendBatchEntity(BatchEntity batchEntity) {
     FindBadgesForPrintBatchParams findBadgeParams =
@@ -191,34 +191,51 @@ public class BatchService {
     // Update each badge in the batch results file and link to new batch
     for (ProcessedBadge badge : batch.getProcessedBadges()) {
 
-      batchRepository.linkBadgeToBatch(
-          BatchBadgeLinkEntity.builder()
-              .badgeId(badge.getBadgeNumber())
-              .batchId(batchEntity.getId())
-              .cancellation(badge.getCancellation())
-              .rejectedReason(badge.getErrorMessage())
-              .issuedDateTime(
-                  null != badge.getDispatchedDate() ? badge.getDispatchedDate().toInstant() : null)
-              .build());
-      int result =
-          badgeRepository.updateBadgeStatusFromStatus(
-              UpdateBadgeStatusParams.builder()
-                  .badgeNumber(badge.getBadgeNumber())
-                  .toStatus(
-                      batchIsConfirmation(batch)
-                          ? BadgeEntity.Status.ISSUED
-                          : BadgeEntity.Status.REJECT)
-                  .fromStatus(BadgeEntity.Status.PROCESSED)
-                  .build());
-      if (0 == result) {
+      if (batchRepository.badgeAlreadyProcessed(badge.getBadgeNumber())) {
+        // Ensure badge has not already been Issued.
+        // To avoid double processing a badge and ending up with 2 link records
+        // in batch_badge.
         log.warn(
-            "Processing print batch {}, badge {} resulted in no badge status change. Perhaps was not expected status of PROCESSED.",
+            "Processing batch {}, badge {} already completed printing.  Skipping. Value of confirmation not being persisted: {}",
             batch.getFilename(),
-            badge.getBadgeNumber());
+            badge.getBadgeNumber(),
+            // There is no PII data in badge confirmation and unless logged it is gone forever.
+            badge);
+
+      } else {
+        linkBadgeToBatch(badge, batchEntity.getId(), batch);
       }
     }
     printServiceApiClient.deleteBatchConfirmation(batch.getFilename());
     log.info("Finished processing batch {}", batch.getFilename());
+  }
+
+  private void linkBadgeToBatch(ProcessedBadge badge, Integer newBatchId, ProcessedBatch batch) {
+    batchRepository.linkBadgeToBatch(
+        BatchBadgeLinkEntity.builder()
+            .badgeId(badge.getBadgeNumber())
+            .batchId(newBatchId)
+            .cancellation(badge.getCancellation())
+            .rejectedReason(badge.getErrorMessage())
+            .issuedDateTime(
+                null != badge.getDispatchedDate() ? badge.getDispatchedDate().toInstant() : null)
+            .build());
+    int result =
+        badgeRepository.updateBadgeStatusFromStatus(
+            UpdateBadgeStatusParams.builder()
+                .badgeNumber(badge.getBadgeNumber())
+                .toStatus(
+                    batchIsConfirmation(batch)
+                        ? BadgeEntity.Status.ISSUED
+                        : BadgeEntity.Status.REJECT)
+                .fromStatus(BadgeEntity.Status.PROCESSED)
+                .build());
+    if (0 == result) {
+      log.warn(
+          "Processing print batch {}, badge {} resulted in no badge status change. Perhaps was not expected status of PROCESSED.",
+          batch.getFilename(),
+          badge.getBadgeNumber());
+    }
   }
 
   private boolean batchIsConfirmation(ProcessedBatch batch) {
@@ -234,8 +251,8 @@ public class BatchService {
   /**
    * Validate done here temporarily as I expect the parameter will become a real UUID in time.
    *
-   * @param batchUuid
-   * @return
+   * @param batchUuid Really an integer!
+   * @return Parsed integer.
    */
   private Integer parseAndValidateBatchId(String batchUuid) {
     // Done like this for now as we don't have a UUID being passed in

@@ -69,6 +69,11 @@ public class DbUtils {
     return jdbc.queryForObject(statement, Integer.class);
   }
 
+  public Integer countBatchBadges(){
+    String statement = "SELECT count(*) FROM badgemanagement.batch_badge";
+    return jdbc.queryForObject(statement, Integer.class);
+  }
+
   public Integer getLastBatchId() {
     return jdbc.queryForObject("SELECT max(batch_id) FROM badgemanagement.batch", Integer.class);
   }

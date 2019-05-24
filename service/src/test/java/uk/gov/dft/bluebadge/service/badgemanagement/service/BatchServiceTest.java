@@ -186,6 +186,7 @@ public class BatchServiceTest {
             BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.ISSUED, "confirmation.xml"))
         .thenReturn(BatchEntity.builder().id(20).build());
     when(badgeRepositoryMock.updateBadgeStatusFromStatus(any())).thenReturn(1);
+    when(batchRepositoryMock.badgeAlreadyProcessed(any())).thenReturn(false);
 
     // Call the service...
     ProcessedBatchesResponse response = service.collectBatches();
@@ -266,5 +267,98 @@ public class BatchServiceTest {
     // And the 2 batch processing results are deleted
     verify(printServiceApiClientMock, times(1)).deleteBatchConfirmation("rejection.xml");
     verify(printServiceApiClientMock, times(1)).deleteBatchConfirmation("confirmation.xml");
+  }
+
+  @Test
+  public void processDuplicateBatch() {
+    ProcessedBadge rejectedBadge1 =
+        ProcessedBadge.builder().badgeNumber("REJDUP").errorMessage("No picture").build();
+    ProcessedBatch rejections =
+        ProcessedBatch.builder()
+            .filename("rejection_dupe.xml")
+            .fileType(ProcessedBatch.FileTypeEnum.REJECTION)
+            .processedBadges(newArrayList(rejectedBadge1))
+            .build();
+    ProcessedBadge confirmBadge1 =
+        ProcessedBadge.builder()
+            .badgeNumber("CONDUP")
+            .cancellation(ProcessedBadge.CancellationEnum.NO)
+            .dispatchedDate(
+                OffsetDateTime.of(LocalDateTime.of(2019, 1, 1, 14, 30, 59), ZoneOffset.UTC))
+            .build();
+    ProcessedBatch confirmations =
+        ProcessedBatch.builder()
+            .filename("confirmation_dupe.xml")
+            .fileType(ProcessedBatch.FileTypeEnum.CONFIRMATION)
+            .processedBadges(Lists.newArrayList(confirmBadge1))
+            .build();
+    when(printServiceApiClientMock.collectPrintBatchResults())
+        .thenReturn(
+            ProcessedBatchesResponse.builder()
+                .data(Lists.newArrayList(rejections, confirmations))
+                .build());
+    when(batchRepositoryMock.createBatch(
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED, "rejection_dupe.xml"))
+        .thenReturn(BatchEntity.builder().id(10).build());
+    when(batchRepositoryMock.createBatch(
+            BatchEntity.SourceEnum.PRINTER,
+            BatchEntity.PurposeEnum.ISSUED,
+            "confirmation_dupe.xml"))
+        .thenReturn(BatchEntity.builder().id(20).build());
+    when(badgeRepositoryMock.updateBadgeStatusFromStatus(any())).thenReturn(1);
+    when(batchRepositoryMock.badgeAlreadyProcessed(any())).thenReturn(true);
+    // Call the service...
+    ProcessedBatchesResponse response = service.collectBatches();
+    for (ProcessedBatch batch : response.getData()) {
+      service.processBatch(batch);
+    }
+
+    // Then 2 new batches are created
+    verify(batchRepositoryMock, times(1))
+        .createBatch(
+            BatchEntity.SourceEnum.PRINTER, BatchEntity.PurposeEnum.REJECTED, "rejection_dupe.xml");
+    verify(batchRepositoryMock, times(1))
+        .createBatch(
+            BatchEntity.SourceEnum.PRINTER,
+            BatchEntity.PurposeEnum.ISSUED,
+            "confirmation_dupe.xml");
+
+    // And the badges are NOT linked to the new batch.
+    verify(batchRepositoryMock, never())
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(10)
+                .badgeId("REJDUP")
+                .rejectedReason("No picture")
+                .build());
+    verify(batchRepositoryMock, never())
+        .linkBadgeToBatch(
+            BatchBadgeLinkEntity.builder()
+                .batchId(20)
+                .badgeId("CONDUP")
+                .issuedDateTime(LocalDateTime.of(2019, 1, 1, 14, 30, 59).toInstant(ZoneOffset.UTC))
+                .cancellation(ProcessedBadge.CancellationEnum.NO)
+                .build());
+
+    // And the 2 badges are Unchanged
+    verify(badgeRepositoryMock, never())
+        .updateBadgeStatusFromStatus(
+            UpdateBadgeStatusParams.builder()
+                .fromStatus(BadgeEntity.Status.PROCESSED)
+                .toStatus(BadgeEntity.Status.ISSUED)
+                .badgeNumber("CONDUP")
+                .build());
+
+    verify(badgeRepositoryMock, never())
+        .updateBadgeStatusFromStatus(
+            UpdateBadgeStatusParams.builder()
+                .fromStatus(BadgeEntity.Status.PROCESSED)
+                .toStatus(BadgeEntity.Status.REJECT)
+                .badgeNumber("REJDUP")
+                .build());
+
+    // And the 2 batch processing results are deleted
+    verify(printServiceApiClientMock, times(1)).deleteBatchConfirmation("rejection_dupe.xml");
+    verify(printServiceApiClientMock, times(1)).deleteBatchConfirmation("confirmation_dupe.xml");
   }
 }

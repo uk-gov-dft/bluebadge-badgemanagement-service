@@ -55,6 +55,15 @@ public class BadgeOrderRequestConverter
             .orderDate(LocalDate.now())
             .build();
 
+    // Set not-for-reassessment
+    if (isPerson(model.getParty())
+        && !model.getEligibilityCode().isAutomaticEligible()
+        && model.getNotForReassessment() == null) {
+      badgeEntity.setNotForReassessment(false);
+    } else {
+      badgeEntity.setNotForReassessment(model.getNotForReassessment());
+    }
+
     // Populate person/organisation specific data
     if (isPerson(model.getParty())) {
       Person person = model.getParty().getPerson();

@@ -60,6 +60,7 @@ public class ValidateBadgeOrder extends ValidateBase {
     validateStartDateInFuture(entity, errors);
     validateExpiryDateInFuture(entity, errors);
     validateStartExpiryDateRange(entity, errors);
+    validateNotForReassessment(entity, errors);
 
     // Person specific validation
     if (entity.isPerson()) {
@@ -81,6 +82,19 @@ public class ValidateBadgeOrder extends ValidateBase {
       throw new BadRequestException(errors);
     }
     log.debug("Badge order passed validation.");
+  }
+
+  private void validateNotForReassessment(BadgeEntity entity, List<ErrorErrors> errors) {
+    if (entity.isOrganisation() && entity.getNotForReassessment() != null) {
+      errors.add(ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_ORG.getFieldErrorInstance());
+    } else if (entity.isPerson()
+        && entity.getEligibilityCode() != null
+        && entity.getEligibilityCode().isAutomaticEligible()
+        && entity.getNotForReassessment() != null) {
+      errors.add(
+          ValidationKeyEnum.INVALID_NOT_FOR_REASSESSMENT_FOR_AUTOMATIC_ELIGIBILITY
+              .getFieldErrorInstance());
+    }
   }
 
   void validateEligibilityAndNation(BadgeEntity entity, List<ErrorErrors> errors) {

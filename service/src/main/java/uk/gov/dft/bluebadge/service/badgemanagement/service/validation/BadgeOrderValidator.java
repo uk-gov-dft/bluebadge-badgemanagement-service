@@ -34,12 +34,12 @@ import uk.gov.dft.bluebadge.service.badgemanagement.service.referencedata.Refere
 
 @Component
 @Slf4j
-public class ValidateBadgeOrder extends ValidateBase {
+public class BadgeOrderValidator extends ValidateBase {
 
   private final ReferenceDataService referenceDataService;
 
   @Autowired
-  ValidateBadgeOrder(ReferenceDataService referenceDataService) {
+  BadgeOrderValidator(ReferenceDataService referenceDataService) {
     this.referenceDataService = referenceDataService;
   }
 

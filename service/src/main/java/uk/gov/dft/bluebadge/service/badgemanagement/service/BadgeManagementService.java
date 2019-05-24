@@ -48,10 +48,9 @@ import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.FindBadgeP
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.ReplaceBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.RetrieveBadgeParams;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.audit.BadgeAuditLogger;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeCancelRequestValidator;
+import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BadgeOrderValidator;
 import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.BlacklistedCombinationsFilter;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateBadgeOrder;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateCancelBadge;
-import uk.gov.dft.bluebadge.service.badgemanagement.service.validation.ValidateReplaceBadge;
 
 @SuppressWarnings("squid:S00107")
 @Slf4j
@@ -66,9 +65,8 @@ public class BadgeManagementService {
   private static final String BADGE = "badge";
 
   private final BadgeManagementRepository repository;
-  private final ValidateBadgeOrder validateBadgeOrder;
-  private final ValidateCancelBadge validateCancelBadge;
-  private final ValidateReplaceBadge validateReplaceBadge;
+  private final BadgeOrderValidator validateBadgeOrder;
+  private final BadgeCancelRequestValidator validateCancelBadge;
   private final SecurityUtils securityUtils;
   private final PhotoService photoService;
   private final BlacklistedCombinationsFilter blacklistFilter;
@@ -79,9 +77,8 @@ public class BadgeManagementService {
   @Autowired
   BadgeManagementService(
       BadgeManagementRepository repository,
-      ValidateBadgeOrder validateBadgeOrder,
-      ValidateCancelBadge validateCancelBadge,
-      ValidateReplaceBadge validateReplaceBadge,
+      BadgeOrderValidator validateBadgeOrder,
+      BadgeCancelRequestValidator validateCancelBadge,
       SecurityUtils securityUtils,
       PhotoService photoService,
       BadgeNumberService badgeNumberService,
@@ -96,7 +93,6 @@ public class BadgeManagementService {
     this.badgeNumberService = badgeNumberService;
     this.blacklistFilter = blacklistFilter;
     this.badgeAuditLogger = badgeAuditLogger;
-    this.validateReplaceBadge = validateReplaceBadge;
     this.badgeSummaryConverter = badgeSummaryConverter;
   }
 
@@ -194,8 +190,6 @@ public class BadgeManagementService {
   }
 
   public void cancelBadge(CancelBadgeParams request) {
-    // Validate the request
-    validateCancelBadge.validateRequest(request);
 
     // Optimistically try cancel before validating to save reading badge data.
     int updates = repository.cancelBadge(request);
@@ -238,7 +232,6 @@ public class BadgeManagementService {
   public String replaceBadge(ReplaceBadgeParams replaceParams) {
     log.info("Replacing badge {}", replaceParams.getBadgeNumber());
 
-    validateReplaceBadge.validateRequest(replaceParams);
     RetrieveBadgeParams retrieveParams =
         RetrieveBadgeParams.builder().badgeNo(replaceParams.getBadgeNumber()).build();
     BadgeEntity badge = repository.retrieveBadge(retrieveParams);
@@ -251,8 +244,8 @@ public class BadgeManagementService {
     String newBadgeNumber = createNewBadgeNumber();
     badge.setBadgeNo(newBadgeNumber);
     badge.setOrderDate(replaceParams.getStartDate());
-    badge.setDeliverToCode(replaceParams.getDeliveryCode());
-    badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode());
+    badge.setDeliverToCode(replaceParams.getDeliveryCode().name());
+    badge.setDeliverOptionCode(replaceParams.getDeliveryOptionCode().name());
     badge.setBadgeStatus(BadgeEntity.Status.ORDERED);
     repository.createBadge(badge);
     log.info("Created replacement badge {}", newBadgeNumber);

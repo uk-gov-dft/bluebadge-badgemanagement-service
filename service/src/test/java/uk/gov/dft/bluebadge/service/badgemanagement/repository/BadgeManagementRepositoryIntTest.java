@@ -20,6 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.dft.bluebadge.common.service.enums.EligibilityType;
 import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.CancelReason;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverOption;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.DeliverTo;
+import uk.gov.dft.bluebadge.service.badgemanagement.model.ReplaceReason;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeEntity.Status;
 import uk.gov.dft.bluebadge.service.badgemanagement.repository.domain.BadgeZipEntity;
@@ -165,7 +169,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -178,7 +182,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("NOTEXI")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ABERD")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -191,7 +195,7 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     CancelBadgeParams params =
         CancelBadgeParams.builder()
             .badgeNo("KKKKKK")
-            .cancelReasonCode("reason")
+            .cancelReasonCode(CancelReason.REVOKE)
             .localAuthorityShortCode("ANGL")
             .build();
     int recordsAffected = badgeManagementRepository.cancelBadge(params);
@@ -399,9 +403,9 @@ public class BadgeManagementRepositoryIntTest extends ApplicationContextTests {
     ReplaceBadgeParams params =
         ReplaceBadgeParams.builder()
             .badgeNumber("KKKKKK")
-            .deliveryCode("HOME")
-            .deliveryOptionCode("FAST")
-            .reasonCode("DAMAGED")
+            .deliveryCode(DeliverTo.HOME)
+            .deliveryOptionCode(DeliverOption.FAST)
+            .reasonCode(ReplaceReason.DAMAGED)
             .startDate(LocalDate.now())
             .status(Status.REPLACED)
             .build();

@@ -11,8 +11,6 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -22,7 +20,6 @@ import uk.gov.dft.bluebadge.service.badgemanagement.ApplicationContextTests;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceData;
 import uk.gov.dft.bluebadge.service.badgemanagement.client.referencedataservice.model.ReferenceDataResponse;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ReferenceDataApiClientTest extends ApplicationContextTests {
   private static final String TEST_URI = "http://justtesting:7777/test/";
   private static final String BASE_ENDPOINT = TEST_URI + "reference-data";

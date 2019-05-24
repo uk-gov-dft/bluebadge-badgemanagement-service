@@ -24,6 +24,7 @@ public class BatchRepository implements BatchMapper {
     static final String APPEND_BADGES = "appendBadges";
     static final String LINK_BADGE_TO_BATCH = "linkBadgeToBatch";
     static final String RETRIEVE_BATCH = "retrieveBatch";
+    static final String BADGE_ALREADY_PROCESSED = "badgeProcessingComplete";
   }
 
   private final SqlSession sqlSession;
@@ -60,6 +61,11 @@ public class BatchRepository implements BatchMapper {
   @Override
   public int linkBadgeToBatch(BatchBadgeLinkEntity params) {
     return sqlSession.insert(Statements.LINK_BADGE_TO_BATCH, params);
+  }
+
+  @Override
+  public boolean badgeAlreadyProcessed(String badgeNumber) {
+    return sqlSession.selectOne(Statements.BADGE_ALREADY_PROCESSED, badgeNumber);
   }
 
   public BatchEntity retrieveBatchEntity(Integer batchId) {

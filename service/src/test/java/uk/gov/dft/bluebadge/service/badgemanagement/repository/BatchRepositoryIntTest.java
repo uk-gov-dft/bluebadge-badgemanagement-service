@@ -61,4 +61,11 @@ public class BatchRepositoryIntTest extends ApplicationContextTests {
     assertThat(batchEntity.getPurpose()).isEqualTo(BatchEntity.PurposeEnum.STANDARD);
     assertThat(batchEntity.getSource()).isEqualTo(BatchEntity.SourceEnum.DFT);
   }
+
+  @Test
+  @Sql(scripts = "classpath:/test-data.sql")
+  public void badgeIsIssued() {
+    assertThat(repository.badgeAlreadyProcessed("NNNJMH")).isTrue();
+    assertThat(repository.badgeAlreadyProcessed("ZXCVBN")).isFalse();
+  }
 }

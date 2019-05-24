@@ -51,6 +51,31 @@ Feature: Verify print a batch results processing
   # And the batch result files deleted
     * assert !s3.objectExists(inBucketName, 'ValidConfirmation2Badges.xml')
     * assert !s3.objectExists(inBucketName, 'ValidRejection2Badges.xml')
-    # Check a file with space in name too.
+  # Check a file with space in name too.
     * assert !s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')
 
+  # Verify batch repeat processing
+  # Not done as a separate scenario as want first pass completed before repeat
+    * header Authorization = 'Bearer ' + result.accessToken
+    * header Accept = jsonVersionHeader
+    * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidConfirmation2Badges.xml', 'ValidConfirmation2Badges.xml')
+    * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ValidRejection2Badges.xml', 'ValidRejection2Badges.xml')
+    * eval s3.putObject(inBucketName, '/processedbatchxmlfiles/ConfirmationBadgeNotExist (2).xml', 'ConfirmationBadgeNotExist (2).xml')
+    * assert s3.objectExists(inBucketName, 'ValidConfirmation2Badges.xml')
+    * assert s3.objectExists(inBucketName, 'ValidRejection2Badges.xml')
+    * assert s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')
+    * def batchCountBefore = db.countBatches()
+    * def batchBadgeCountBefore = db.countBatchBadges()
+    Given path 'badges/collect-batches'
+    And request {}
+    When method POST
+    Then status 200
+  # And a batch is created for each result file
+    * assert batchCountBefore + 3 == db.countBatches()
+  # And no duplicate batch_badge records created
+    * assert batchBadgeCountBefore == db.countBatchBadges()
+  # And the batch result files deleted
+    * assert !s3.objectExists(inBucketName, 'ValidConfirmation2Badges.xml')
+    * assert !s3.objectExists(inBucketName, 'ValidRejection2Badges.xml')
+  # Check a file with space in name too.
+    * assert !s3.objectExists(inBucketName, 'ConfirmationBadgeNotExist (2).xml')

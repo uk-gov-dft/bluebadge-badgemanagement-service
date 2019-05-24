@@ -65,17 +65,17 @@
         CASE
             WHEN badge_status = 'REJECT'
                 THEN
-                    (SELECT rejected_reason from badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
+                    (SELECT max(rejected_reason) from badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
                     WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'REJECTED')
                 ELSE null
         END rejectedReason
 
         ,
-        (SELECT bb.issued_date_time
+        (SELECT max(bb.issued_date_time)
             FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
             WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'PRINTER' AND bt.batch_purpose = 'ISSUED') issuedDate
         ,
-        (SELECT bt.batch_created_timestamp
+        (SELECT max(bt.batch_created_timestamp)
             FROM badgemanagement.batch_badge bb JOIN badgemanagement.batch bt ON bt.batch_id = bb.batch_id
             WHERE bb.badge_no = b.badge_no AND bt.batch_source = 'DFT') printRequestDateTime
 

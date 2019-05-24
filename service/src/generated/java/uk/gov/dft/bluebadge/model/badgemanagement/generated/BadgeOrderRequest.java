@@ -48,7 +48,6 @@ public class BadgeOrderRequest {
   private LocalDate expiryDate;
 
   @JsonProperty("eligibilityCode")
-  @NotNull
   private EligibilityType eligibilityCode;
 
   @JsonProperty("notForReassessment")
@@ -68,7 +67,6 @@ public class BadgeOrderRequest {
   private String deliveryOptionCode;
 
   @JsonProperty("numberOfBadges")
-  @NotNull
   @Valid
   @Min(1)
   @Max(999)
